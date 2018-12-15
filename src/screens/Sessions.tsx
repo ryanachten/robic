@@ -1,45 +1,34 @@
 import * as React from 'react';
-import { ScrollView, TextInput } from 'react-native';
+import { ScrollView } from 'react-native';
 import { ScreenHeader, SearchBar, SessionCard } from '../components';
-
-const sessions = [
-  {
-    date: '08/10/2018',
-    excerciseCount: 8,
-    title: 'Chest and back',
-  },
-  {
-    date: '07/10/2018',
-    excerciseCount: 10,
-    title: 'Legs',
-  },
-  {
-    date: '06/10/2018',
-    excerciseCount: 4,
-    title: 'Cardio 1',
-  },
-  {
-    date: '05/10/2018',
-    excerciseCount: 8,
-    title: 'Arms',
-  },
-];
+import mockData from '../mockData';
 
 class Sessions extends React.Component {
+
+  public static navigationOptions = {
+    title: 'Sessions',
+  };
 
   public render() {
     return (
       <ScrollView>
-        <ScreenHeader>Sessions</ScreenHeader>
         <SearchBar />
-        {sessions.map(session => (
+        {mockData.map(session => (
           <SessionCard
-            key={session.title}
+            key={session.id}
+            onPress={() => this.navigateToSession(session)}
             {...session}
           />
         ))}
       </ScrollView>
     );
+  }
+
+  private navigateToSession(session) {
+    this.props.navigation.navigate('Session', {
+      sessionId: session.id,
+      sessionTitle: session.title,
+    });
   }
 }
 

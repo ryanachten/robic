@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, Text } from 'react-native-elements';
 
 interface IProps {
@@ -9,19 +9,21 @@ interface IProps {
 }
 
 export const SessionCard = (props: IProps) => {
-  const { title, date, excerciseCount } = props;
+  const { title, date, excerciseCount, onPress } = props;
   return (
-    <Card>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.textWrapper}>
-        <Text style={styles.textLabel}>Last active: </Text>
-        <Text>{date}</Text>
-      </Text>
-      <Text style={styles.textWrapper}>
-        <Text style={styles.textLabel}>Number of exercises: </Text>
-        <Text>{excerciseCount}</Text>
-      </Text>
-    </Card>
+    <TouchableOpacity onPress={onPress}>
+      <Card>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.textWrapper}>
+          <Text style={styles.textLabel}>Last active: </Text>
+          <Text>{date}</Text>
+        </Text>
+        <Text style={styles.textWrapper}>
+          <Text style={styles.textLabel}>Number of exercises: </Text>
+          <Text>{excerciseCount}</Text>
+        </Text>
+      </Card>
+    </TouchableOpacity>
   );
 };
 

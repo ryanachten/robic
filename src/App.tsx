@@ -1,7 +1,7 @@
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import * as React from 'react';
 import AppNavigation from './navigation/AppNavigation';
-// import MaterialIcons from '../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf';
+import NavigationService from './navigation/NavigationService';
 
 class App extends React.Component {
 
@@ -21,7 +21,11 @@ class App extends React.Component {
       );
     }
     return (
-      <AppNavigation />
+      <AppNavigation
+        ref={(navigatorRef) => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+      />
     );
   }
 

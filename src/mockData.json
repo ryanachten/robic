@@ -1,0 +1,26 @@
+[
+  {
+    "date": "08/10/2018",
+    "excerciseCount": 8,
+    "id": "chest-and-back",
+    "title": "Chest and back",
+  },
+  {
+    "date": "07/10/2018",
+    "excerciseCount": 10,
+    "id": "legs",
+    "title": "Legs",
+  },
+  {
+    "date": "06/10/2018",
+    "excerciseCount": 4,
+    "id": "cardio-1",
+    "title": "Cardio 1",
+  },
+  {
+    "date": "05/10/2018",
+    "excerciseCount": 8,
+    "id": "arms",
+    "title": "Arms",
+  },
+];

@@ -5,10 +5,13 @@ import { ScreenHeader } from '../components';
 
 class Dashboard extends React.Component {
 
+  public static navigationOptions = {
+    title: 'Activity',
+  };
+
   public render() {
     return (
       <ScrollView>
-        <ScreenHeader>Activity</ScreenHeader>
         <Card>
           <Text>Stats</Text>
           <Text>Some line graph providing an overview of growth</Text>
