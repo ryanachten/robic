@@ -12,7 +12,8 @@
   "dependencies": {
     "expo": "^31.0.2",
     "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native-elements": "^0.19.1"
   },
   "devDependencies": {
     "@types/expo": "^31.0.2",
@@ -29,26 +30,26 @@
   },
   "private": true,
   "jest": {
-   "preset": "jest-expo",
-   "transform": {
-     "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
-     "^.+\\.tsx?$": "ts-jest"
-   },
-   "testMatch": [
-     "**/__tests__/**/*.ts?(x)",
-     "**/?(*.)+(spec|test).ts?(x)"
-   ],
-   "moduleFileExtensions": [
-     "js",
-     "ts",
-     "tsx"
-   ],
-   "globals": {
-     "ts-jest": {
-       "tsConfig": {
-         "jsx": "react"
-       }
-     }
-   }
- }
+    "preset": "jest-expo",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+      "**/__tests__/**/*.ts?(x)",
+      "**/?(*.)+(spec|test).ts?(x)"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "tsx"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfig": {
+          "jsx": "react"
+        }
+      }
+    }
+  }
 }
