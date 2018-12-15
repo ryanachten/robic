@@ -36,6 +36,7 @@ class Session extends React.Component {
       <ExerciseCard
         key={data.id}
         title={data.title}
+        onPress={() => this.navigateToExercise(data)}
       />
     );
   }
@@ -48,6 +49,13 @@ class Session extends React.Component {
         {exercises.map(currentExercise => this.renderExercise(currentExercise))}
       </ScrollView>
     );
+  }
+
+  private navigateToExercise(exercise) {
+    this.props.navigation.navigate('Exercise', {
+      exerciseId: exercise.id,
+      exerciseTitle: exercise.title,
+    });
   }
 }
 

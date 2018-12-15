@@ -6,6 +6,7 @@ import {
   createStackNavigator,
 } from 'react-navigation';
 import Dashboard from '../screens/Dashboard';
+import Exercise from '../screens/Exercise';
 import Login from '../screens/Login';
 import Session from '../screens/Session';
 import Sessions from '../screens/Sessions';
@@ -31,11 +32,17 @@ const ActivityStack = createStackNavigator(
 
 const SessionStack = createStackNavigator(
   {
+    Exercise,
     Session,
     Sessions,
   },
   {
-    initialRouteName: 'Sessions',
+    // initialRouteName: 'Sessions',
+    initialRouteName: 'Exercise',
+    initialRouteParams: {
+      exerciseId: 'benchpress',
+      exerciseTitle: 'Benchpress',
+    }
   },
 );
 
