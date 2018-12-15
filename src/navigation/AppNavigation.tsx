@@ -7,6 +7,7 @@ import {
 } from 'react-navigation';
 import Dashboard from '../screens/Dashboard';
 import Login from '../screens/Login';
+import Sessions from '../screens/Sessions';
 
 class StubScreen extends React.Component {
   public render() {
@@ -18,18 +19,28 @@ class StubScreen extends React.Component {
   }
 }
 
-const TabNavigator = createBottomTabNavigator({
-  Activity: Dashboard,
-  Sessions: StubScreen,
-  Settings: StubScreen,
-});
-
-const stack = createStackNavigator({
-  // auth: Login,
-  main: {
-    navigationOptions: { title: 'Robic' },
-    screen: TabNavigator,
+const MainNavigator = createBottomTabNavigator(
+  {
+    Activity: Dashboard,
+    Sessions,
+    Settings: StubScreen,
   },
-});
+  {
+    initialRouteName: 'Sessions',
+  },
+);
+
+const stack = createStackNavigator(
+  {
+    auth: Login,
+    main: {
+      navigationOptions: { title: 'Robic' },
+      screen: MainNavigator,
+    },
+  },
+  {
+    initialRouteName: 'main',
+  },
+);
 
 export default createAppContainer(stack);

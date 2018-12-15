@@ -1,17 +1,14 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { Card, Text } from 'react-native-elements';
+import { ScreenHeader } from '../components';
 
 class Dashboard extends React.Component {
 
-  public static navigationOptions = {
-    title: 'Acitvity',
-  };
-
   public render() {
     return (
-      <View>
-        <Text>Activity</Text>
+      <ScrollView>
+        <ScreenHeader>Activity</ScreenHeader>
         <Card>
           <Text>Stats</Text>
           <Text>Some line graph providing an overview of growth</Text>
@@ -24,7 +21,7 @@ class Dashboard extends React.Component {
           <Text>Recent PB's</Text>
           <Text>Areas of focus</Text>
         </Card>
-      </View>
+      </ScrollView>
     );
   }
 }
