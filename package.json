@@ -1,0 +1,54 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "test": "yarn run tslint && yarn run tsc-test && yarn run jest",
+    "tslint": "tslint --project .",
+    "tsc-test": "tsc --project . --noEmit",
+    "jest": "jest"
+  },
+  "dependencies": {
+    "expo": "^31.0.2",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz"
+  },
+  "devDependencies": {
+    "@types/expo": "^31.0.2",
+    "@types/jest": "^23.3.10",
+    "@types/react": "^16.7.17",
+    "@types/react-test-renderer": "^16.0.3",
+    "jest": "^23.6.0",
+    "jest-expo": "^31.0.0",
+    "react-test-renderer": "^16.6.3",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.2.2"
+  },
+  "private": true,
+  "jest": {
+   "preset": "jest-expo",
+   "transform": {
+     "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+     "^.+\\.tsx?$": "ts-jest"
+   },
+   "testMatch": [
+     "**/__tests__/**/*.ts?(x)",
+     "**/?(*.)+(spec|test).ts?(x)"
+   ],
+   "moduleFileExtensions": [
+     "js",
+     "ts",
+     "tsx"
+   ],
+   "globals": {
+     "ts-jest": {
+       "tsConfig": {
+         "jsx": "react"
+       }
+     }
+   }
+ }
+}
