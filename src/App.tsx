@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
-import Dashboard from './screens/Dashboard';
+import AppContainer from './navigation/AppNavigation';
 
 export default () => {
   return (
-    <Dashboard />
+    <AppContainer />
   );
 };
