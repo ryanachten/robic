@@ -743,6 +743,14 @@
     "@types/prop-types" "*"
     "@types/react" "*"
 
+"@types/react-navigation@^2.13.8":
+  version "2.13.8"
+  resolved "https://registry.yarnpkg.com/@types/react-navigation/-/react-navigation-2.13.8.tgz#fee0a225dcb4b43e0ccc9eb23b2ef88de83fef5e"
+  integrity sha512-QhJ+hVb9i8+2DheLbanJBLM6gkOpkMihns0O+JLRmZgYCAM9Fu7I95zz0NXn4vH9tChXGyTm0wpaHgMCWzFhLA==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-test-renderer@^16.0.3":
   version "16.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.0.3.tgz#cce5c983d66cc5c3582e7c2f44b274ab635a8acc"

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
-import { Card, SearchBar, Text } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import { ScreenHeader, SessionCard } from '../components';
 
 const sessions = [

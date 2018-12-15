@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import {
-  createAppContainer,
   createBottomTabNavigator,
+  createNavigationContainer,
   createStackNavigator,
 } from 'react-navigation';
 import Dashboard from '../screens/Dashboard';
@@ -43,4 +43,4 @@ const stack = createStackNavigator(
   },
 );
 
-export default createAppContainer(stack);
+export default createNavigationContainer(stack);
