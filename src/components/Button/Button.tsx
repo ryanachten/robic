@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Button as RNEButton } from 'react-native-elements';
 
 export const Button = (props) => {
-  const { iconName, title, containerStyle } = props;
+  const { containerStyle, iconName, title, onPress } = props;
   return (
     <RNEButton
       buttonStyle={styles.button}
@@ -12,6 +12,7 @@ export const Button = (props) => {
         color: 'black',
         name: iconName,
       }}
+      onPress={onPress}
       raised
       textStyle={styles.text}
       title={title}

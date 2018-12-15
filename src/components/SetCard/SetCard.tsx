@@ -1,43 +1,112 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Card, FormInput, Text } from 'react-native-elements';
-import { IconButton } from '..';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Card, Divider, FormInput } from 'react-native-elements';
+import { Button, IconButton } from '..';
 
-export const SetCard = (props) => {
-  const { reps, value, unit } = props;
-  return (
-    <Card wrapperStyle={styles.container}>
-      <View style={styles.section}>
-        <FormInput
-          containerStyle={styles.input}
-          placeholder="value"
-          value={value}
-        />
-        <Text style={styles.unit}>
-          {unit}
-        </Text>
-      </View>
-      <View style={styles.section}>
-        <FormInput
-          containerStyle={styles.input}
-          placeholder="reps"
-          value={reps}
-        />
-        <Text style={styles.unit}>
-          reps
-        </Text>
-      </View>
-      <IconButton
-        color="red"
-        name="remove"
-      />
-    </Card>
-  );
-};
+export class SetCard extends React.Component {
+
+  public renderDeleteCard() {
+    const { onCancel, onDelete } = this.props;
+    return (
+      <React.Fragment>
+        <View style={styles.buttonWrapper}>
+          <Button
+            iconName="delete"
+            onPress={onDelete}
+            title="Remove set"
+          />
+          <Button
+            iconName="close"
+            onPress={onCancel}
+            title="Cancel"
+          />
+        </View>
+      </React.Fragment>
+    );
+  }
+
+  public renderNormalCard() {
+    const { reps, setNumber, value, unit } = this.props;
+    return (
+      <React.Fragment>
+        <View style={styles.section}>
+          <FormInput
+            containerStyle={styles.input}
+            placeholder="value"
+            value={value}
+          />
+          <Text style={styles.unit}>
+            {unit}
+          </Text>
+          <IconButton
+            color="red"
+            name="remove"
+          />
+          <IconButton
+            color="green"
+            name="add"
+          />
+        </View>
+        <View style={styles.section}>
+          <FormInput
+            containerStyle={styles.input}
+            placeholder="reps"
+            value={reps}
+          />
+          <Text style={styles.unit}>
+            reps
+          </Text>
+          <IconButton
+            color="red"
+            name="remove"
+          />
+          <IconButton
+            color="green"
+            name="add"
+          />
+        </View>
+      </React.Fragment>
+    );
+  }
+
+  public render() {
+    const {
+      flipCard, flipped,
+      reps, setNumber,
+      value, unit,
+    } = this.props;
+    return (
+      <TouchableOpacity onLongPress={flipCard}>
+        <Card wrapperStyle={styles.container}>
+          <View style={styles.innerWrapper}>
+            <Text style={styles.title}>
+              {`Set ${setNumber + 1}`}
+            </Text>
+            <Divider style={styles.divider} />
+            {flipped && this.renderDeleteCard()}
+            {!flipped && this.renderNormalCard()}
+          </View>
+        </Card>
+      </TouchableOpacity>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
+  buttonWrapper: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
   container: {
     flexDirection: 'row',
+    height: 150,
+  },
+  divider: {
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  innerWrapper: {
+    flex: 1,
   },
   input: {
     flex: 1,
@@ -46,6 +115,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
+  },
+  title: {
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   unit: {
     flex: 1,

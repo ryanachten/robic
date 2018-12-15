@@ -13,12 +13,13 @@ class Exercise extends React.Component {
   }
 
   public state = {
+    flippedCard: null,
     sets: [
-      { setNumber: 0, reps: '5', unitValue: '75' },
-      { setNumber: 1, reps: '5', unitValue: '75' },
-      { setNumber: 2, reps: '5', unitValue: '75' },
-      { setNumber: 3, reps: '5', unitValue: '75' },
-      { setNumber: 4, reps: '5', unitValue: '75' },
+      { reps: '5', unitValue: '15' },
+      { reps: '5', unitValue: '25' },
+      { reps: '5', unitValue: '35' },
+      { reps: '5', unitValue: '45' },
+      { reps: '5', unitValue: '55' },
     ],
     title: '',
     unit: 'kg',
@@ -34,19 +35,47 @@ class Exercise extends React.Component {
     }
   }
 
+  public handleDeleteSet(index) {
+    const sets = this.state.sets;
+    sets.splice(index, 1);
+    this.setState({
+      flippedCard: null,
+      sets,
+    });
+  }
+
+  public handleFlipCard(index) {
+    this.setState({
+      flippedCard: index,
+    });
+  }
+
+  public cancelFlipCard() {
+    this.setState({
+      flippedCard: null,
+    });
+  }
+
   public render() {
-    const { title, sets, unit } = this.state;
+    const { title, sets, unit, flippedCard } = this.state;
     return (
       <ScrollView>
         <ScreenHeader>Sets</ScreenHeader>
-        {sets.map(({ reps, setNumber, unitValue }) => (
-          <SetCard
-            key={setNumber}
-            reps={reps}
-            value={unitValue}
-            unit={unit}
-          />
-        ))}
+        {sets.map(({ reps, unitValue }, index) => {
+          return (
+            <SetCard
+              flipCard={ () => this.handleFlipCard(index) }
+              flipped={flippedCard === index}
+              key={index}
+              onCancel={() => this.cancelFlipCard()}
+              onDelete={() => this.handleDeleteSet(index)}
+              reps={reps}
+              setNumber={index}
+              unit={unit}
+              value={unitValue}
+            />
+          );
+        })}
         <Button
           iconName="add"
           title="Add new set"
