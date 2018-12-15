@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
 import { ScreenHeader, SearchBar, SessionCard } from '../components';
-import mockData from '../mockData';
+import sessions from '../mock_data/sessions';
 
 class Sessions extends React.Component {
 
@@ -13,7 +13,7 @@ class Sessions extends React.Component {
     return (
       <ScrollView>
         <SearchBar />
-        {mockData.map(session => (
+        {sessions.map(session => (
           <SessionCard
             key={session.id}
             onPress={() => this.navigateToSession(session)}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "chest-and-back",
+    "date": "08/10/2018",
+    "excerciseCount": 8,
+    "title": "Chest and back",
+    "exercises": [
+      { "id": "benchpress" },
+      { "id": "incline_butterfly" }
+    ]
+  },
+  {
+    "id": "legs",
+    "date": "07/10/2018",
+    "excerciseCount": 10,
+    "title": "Legs",
+    "exercises": [
+      { "id": "leg_press" },
+      { "id": "leg_extensions" }
+    ]
+  },
+  {
+    "id": "cardio-1",
+    "date": "06/10/2018",
+    "excerciseCount": 4,
+    "title": "Cardio 1",
+    "exercises": [
+      { "id": "ropes" },
+      { "id": "sled_pull" }
+    ]
+  },
+  {
+    "date": "05/10/2018",
+    "excerciseCount": 8,
+    "id": "arms",
+    "title": "Squats and Arms",
+    "exercises": [
+      { "id": "back_squat" },
+      { "id": "bent_over_row" }
+    ]
+  },
+];

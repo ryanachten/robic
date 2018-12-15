@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
-import { ScreenHeader } from '../components';
-import mockData from '../mockData';
+import { ExerciseCard, ScreenHeader } from '../components';
+import mockExercises from '../mock_data/exercises';
+import sessions from '../mock_data/sessions';
 
 class Session extends React.Component {
 
@@ -13,23 +14,38 @@ class Session extends React.Component {
   }
 
   public state = {
+    exercises: null,
     title: '',
   };
 
   public componentWillMount() {
     const currentId = this.props.navigation.getParam('sessionId');
-    const currentSession = mockData.filter(session => session.id === currentId)[0];
+    const currentSession = sessions.filter(session => session.id === currentId)[0];
     if (currentSession) {
       this.setState({
+        exercises: currentSession.exercises,
         title: currentSession.title,
       });
     }
   }
 
+  public renderExercise(exercise) {
+    const data = mockExercises.filter(_exercise => _exercise.id === exercise.id)[0];
+    if (!data) return null;
+    return (
+      <ExerciseCard
+        key={data.id}
+        title={data.title}
+      />
+    );
+  }
+
   public render() {
+    const { title, exercises } = this.state;
     return (
       <ScrollView>
-        <ScreenHeader>Session Name</ScreenHeader>
+        <ScreenHeader>{title}</ScreenHeader>
+        {exercises.map(currentExercise => this.renderExercise(currentExercise))}
       </ScrollView>
     );
   }
