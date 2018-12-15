@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { ScrollView } from 'react-native';
-import { SearchBar } from 'react-native-elements';
-import { ScreenHeader, SessionCard } from '../components';
+import { ScrollView, TextInput } from 'react-native';
+import { ScreenHeader, SearchBar, SessionCard } from '../components';
 
 const sessions = [
   {
@@ -32,9 +31,12 @@ class Sessions extends React.Component {
     return (
       <ScrollView>
         <ScreenHeader>Sessions</ScreenHeader>
-        {/* <SearchBar /> */}
+        <SearchBar />
         {sessions.map(session => (
-          <SessionCard {...session}/>
+          <SessionCard
+            key={session.title}
+            {...session}
+          />
         ))}
       </ScrollView>
     );
