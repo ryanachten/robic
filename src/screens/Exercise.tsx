@@ -35,6 +35,39 @@ class Exercise extends React.Component {
     }
   }
 
+  public handleValueChange({ index, field, newValue }) {
+    const sets = this.state.sets;
+    switch (newValue) {
+      case 'increment': {
+        const value = parseFloat(sets[index][field]) + 1;
+        sets[index][field] = value.toString();
+        break;
+      }
+      case 'decrement': {
+        const value = parseFloat(sets[index][field]) - 1;
+        sets[index][field] = value.toString();
+        break;
+      }
+      default: {
+        if (!isNaN(newValue)) {
+          sets[index][field] = newValue;
+        }
+        break;
+      }
+    }
+    this.setState({
+      sets,
+    });
+  }
+
+  public handleAddSet() {
+    const sets = this.state.sets;
+    sets.push(sets[sets.length - 1]);
+    this.setState({
+      sets,
+    });
+  }
+
   public handleDeleteSet(index) {
     const sets = this.state.sets;
     sets.splice(index, 1);
@@ -69,6 +102,16 @@ class Exercise extends React.Component {
               key={index}
               onCancel={() => this.cancelFlipCard()}
               onDelete={() => this.handleDeleteSet(index)}
+              onUnitValueChange={
+                newValue => this.handleValueChange({
+                  field: 'unitValue', index, newValue,
+                })
+              }
+              onRepValueChange={
+                newValue => this.handleValueChange({
+                  field: 'reps', index, newValue,
+                })
+              }
               reps={reps}
               setNumber={index}
               unit={unit}
@@ -77,11 +120,12 @@ class Exercise extends React.Component {
           );
         })}
         <Button
-          iconName="add"
-          title="Add new set"
           containerStyle={{
             marginTop: 20,
           }}
+          iconName="add"
+          onPress={() => this.handleAddSet()}
+          title="Add new set"
         />
       </ScrollView>
     );

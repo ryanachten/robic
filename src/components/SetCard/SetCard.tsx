@@ -26,12 +26,13 @@ export class SetCard extends React.Component {
   }
 
   public renderNormalCard() {
-    const { reps, setNumber, value, unit } = this.props;
+    const { onRepValueChange, onUnitValueChange, reps, setNumber, value, unit } = this.props;
     return (
       <React.Fragment>
         <View style={styles.section}>
           <FormInput
             containerStyle={styles.input}
+            onChangeText={text => onUnitValueChange(text)}
             placeholder="value"
             value={value}
           />
@@ -41,15 +42,18 @@ export class SetCard extends React.Component {
           <IconButton
             color="red"
             name="remove"
+            onPress={() => onUnitValueChange('decrement')}
           />
           <IconButton
             color="green"
             name="add"
+            onPress={() => onUnitValueChange('increment')}
           />
         </View>
         <View style={styles.section}>
           <FormInput
             containerStyle={styles.input}
+            onChangeText={text => onRepValueChange(text)}
             placeholder="reps"
             value={reps}
           />
@@ -59,10 +63,12 @@ export class SetCard extends React.Component {
           <IconButton
             color="red"
             name="remove"
+            onPress={() => onRepValueChange('decrement')}
           />
           <IconButton
             color="green"
             name="add"
+            onPress={() => onRepValueChange('increment')}
           />
         </View>
       </React.Fragment>
