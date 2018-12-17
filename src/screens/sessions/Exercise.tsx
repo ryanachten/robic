@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
-import { Button, ExerciseCard, ScreenHeader, SetCard } from '../components';
-import exercises from '../mock_data/exercises';
+import { Button, ExerciseCard, ScreenHeader, SetCard } from '../../components';
+import exercises from '../../mock_data/exercises';
 
 class Exercise extends React.Component {
 

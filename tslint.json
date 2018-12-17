@@ -7,6 +7,7 @@
     "no-any": true,
     "prefer-array-literal": [true, { "allow-type-parameters": true }],
     "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
-    "object-shorthand-properties-first": false
+    "object-shorthand-properties-first": false,
+    "object-literal-sort-keys": false
   }
 }

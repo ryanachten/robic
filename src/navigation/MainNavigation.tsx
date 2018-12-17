@@ -6,10 +6,9 @@ import {
   createStackNavigator,
 } from 'react-navigation';
 import Dashboard from '../screens/Dashboard';
-import Exercise from '../screens/Exercise';
 import Login from '../screens/Login';
-import Session from '../screens/Session';
-import Sessions from '../screens/Sessions';
+import ExercisesStack from './ExercisesStack';
+import SessionsStack from './SessionsStack';
 
 class StubScreen extends React.Component {
   public render() {
@@ -30,27 +29,11 @@ const ActivityStack = createStackNavigator(
   },
 );
 
-const SessionStack = createStackNavigator(
-  {
-    Exercise,
-    Session,
-    Sessions,
-  },
-  {
-    // initialRouteName: 'Sessions',
-    initialRouteName: 'Exercise',
-    initialRouteParams: {
-      exerciseId: 'benchpress',
-      exerciseTitle: 'Benchpress',
-    }
-  },
-);
-
 const MainNavigator = createBottomTabNavigator(
   {
     Activity: ActivityStack,
-    Sessions: SessionStack,
-    Settings: StubScreen,
+    Sessions: SessionsStack,
+    Exercises: ExercisesStack,
   },
   {
     initialRouteName: 'Sessions',

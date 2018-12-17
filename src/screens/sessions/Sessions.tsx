@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
-import { ScreenHeader, SearchBar, SessionCard } from '../components';
-import sessions from '../mock_data/sessions';
+import { ScreenHeader, SearchBar, SessionCard } from '../../components';
+import sessions from '../../mock_data/sessions';
 
 class Sessions extends React.Component {
 
