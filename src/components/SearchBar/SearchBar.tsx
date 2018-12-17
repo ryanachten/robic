@@ -2,13 +2,15 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SearchBar as RNESearchBar } from 'react-native-elements';
 
-export const SearchBar = () => {
+export const SearchBar = (props) => {
+  const { placeholder } = props;
   return (
     <RNESearchBar
       lightTheme
-      icon={{ type: 'material', color: 'black', name: 'search' }}
       containerStyle={styles.container}
+      icon={{ type: 'material', color: 'black', name: 'search' }}
       inputStyle={styles.input}
+      placeholder={placeholder}
     />
   );
 };

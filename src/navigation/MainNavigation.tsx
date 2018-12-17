@@ -36,7 +36,7 @@ const MainNavigator = createBottomTabNavigator(
     Exercises: ExercisesStack,
   },
   {
-    initialRouteName: 'Sessions',
+    initialRouteName: 'Exercises',
   },
 );
 

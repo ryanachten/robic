@@ -1,14 +1,89 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Card, Text } from 'react-native-elements';
+import { Button, IconButton, ScreenHeader, SearchBar, SessionCard } from '../../components';
+import sessions from '../../mock_data/sessions';
 
 class Exercises extends React.Component {
-  public render() {
+
+  public static navigationOptions = {
+    title: 'Exercises',
+  };
+
+  public state = {
+    showSearchBar: false,
+  };
+
+  public toggleSearchBar() {
+    this.setState(prevState => ({
+      showSearchBar: !prevState.showSearchBar,
+    }));
+  }
+
+  public renderButtons() {
+    const { showSearchBar } = this.state;
+    if (showSearchBar) {
+      return (
+        <View style={styles.buttonContainer}>
+          <SearchBar
+            placeholder="Find exercise"
+          />
+          <IconButton
+            color="red"
+            name="clear"
+            onPress={() => this.toggleSearchBar()}
+          />
+        </View>
+      );
+    }
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Exercise screen</Text>
+      <View style={styles.buttonContainer}>
+        <IconButton
+          color="black"
+          name="search"
+          onPress={() => this.toggleSearchBar()}
+        />
+        <IconButton
+          color="green"
+          name="add"
+          onPress={() => console.log('Add new exercise')}
+        />
       </View>
     );
   }
+
+  public render() {
+    return (
+      <ScrollView>
+        <View style={styles.searchContainer}>
+          {this.renderButtons()}
+        </View>
+      </ScrollView>
+    );
+  }
+
+  // private navigateToSession(session) {
+  //   this.props.navigation.navigate('Session', {
+  //     sessionId: session.id,
+  //     sessionTitle: session.title,
+  //   });
+  // }
 }
 
 export default Exercises;
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  cancelButton: {
+    marginTop: 20,
+  },
+  searchContainer: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    flex: 1,
+    marginTop: 20,
+  },
+});
