@@ -5,16 +5,16 @@ import Sessions from '../screens/sessions/Sessions';
 
 export default createStackNavigator(
   {
-    Exercise,
+    SessionExercise: Exercise,
     Session,
     Sessions,
   },
   {
-    // initialRouteName: 'Sessions',
-    initialRouteName: 'Exercise',
-    initialRouteParams: {
-      exerciseId: 'benchpress',
-      exerciseTitle: 'Benchpress',
-    },
+    initialRouteName: 'Sessions',
+    // initialRouteName: 'SessionExercise',
+    // initialRouteParams: {
+    //   exerciseId: 'benchpress',
+    //   exerciseTitle: 'Benchpress',
+    // },
   },
 );

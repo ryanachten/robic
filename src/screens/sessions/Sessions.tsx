@@ -12,6 +12,7 @@ class Sessions extends React.Component {
   public render() {
     return (
       <ScrollView>
+        <ScreenHeader>Start new session</ScreenHeader>
         <SearchBar />
         {sessions.map(session => (
           <SessionCard

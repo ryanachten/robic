@@ -52,7 +52,7 @@ class Session extends React.Component {
   }
 
   private navigateToExercise(exercise) {
-    this.props.navigation.navigate('Exercise', {
+    this.props.navigation.navigate('SessionExercise', {
       exerciseId: exercise.id,
       exerciseTitle: exercise.title,
     });
