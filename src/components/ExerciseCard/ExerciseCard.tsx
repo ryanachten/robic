@@ -3,26 +3,60 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, Text } from 'react-native-elements';
 
 interface IProps {
-  // date: string;
+  date: string;
+  lastSession?: object;
+  personalBest?: object;
   title: string;
 }
 
-export const ExerciseCard = (props: IProps) => {
-  const { title, date, onPress } = props;
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <Card>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.textWrapper}>
-          <Text style={styles.textLabel}>Last active: </Text>
-        </Text>
-        <Text style={styles.textWrapper}>
-          <Text style={styles.textLabel}>Number of exercises: </Text>
-        </Text>
-      </Card>
-    </TouchableOpacity>
-  );
-};
+export class ExerciseCard extends React.Component {
+
+  public renderLastSession() {
+    const lastSession = this.props.lastSession;
+    if (!lastSession) return null;
+
+    const reps = lastSession.reps;
+    const sets = lastSession.sets;
+    return (
+      <Text style={styles.textWrapper}>
+        <Text style={styles.textLabel}>Last session: </Text>
+        <Text>{reps} reps</Text>
+        <Text>{sets} sets</Text>
+      </Text>
+    );
+  }
+
+  public renderPersonalBest() {
+    const personalBest = this.props.personalBest;
+    if (!personalBest) return null;
+
+    const reps = personalBest.reps;
+    const sets = personalBest.sets;
+    return (
+      <Text style={styles.textWrapper}>
+        <Text style={styles.textLabel}>Personal best: </Text>
+        <Text>{reps} reps</Text>
+        <Text>{sets} sets</Text>
+      </Text>
+    );
+  }
+
+  public render() {
+    const { title, date, onPress } = this.props;
+    return (
+        <TouchableOpacity onPress={onPress}>
+          <Card>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.textWrapper}>
+              <Text style={styles.textLabel}>Last active: </Text>
+            </Text>
+            { this.renderLastSession() }
+            { this.renderPersonalBest() }
+          </Card>
+        </TouchableOpacity>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   textLabel: {
