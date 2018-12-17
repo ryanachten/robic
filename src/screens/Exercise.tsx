@@ -37,18 +37,21 @@ class Exercise extends React.Component {
 
   public handleValueChange({ index, field, newValue }) {
     const sets = this.state.sets;
+    // Increment by 1 for reps and 2.5 for weights
+    const incrementValue = field === 'reps' ? 1 : 2.5;
     switch (newValue) {
       case 'increment': {
-        const value = parseFloat(sets[index][field]) + 1;
+        const value = parseFloat(sets[index][field]) + incrementValue;
         sets[index][field] = value.toString();
         break;
       }
       case 'decrement': {
-        const value = parseFloat(sets[index][field]) - 1;
+        const value = parseFloat(sets[index][field]) - incrementValue;
         sets[index][field] = value.toString();
         break;
       }
       default: {
+        // Prevent non-numeric values being added via text field
         if (!isNaN(newValue)) {
           sets[index][field] = newValue;
         }
