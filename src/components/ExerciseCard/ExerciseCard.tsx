@@ -21,13 +21,13 @@ export class ExerciseCard extends React.Component {
       <Text style={styles.textWrapper}>
         <Text style={styles.textLabel}>Last session: </Text>
         {sign === 'positive' && (
-            <Text>+{delta}{unit}</Text>
+            <Text style={styles.positiveChange}>+{delta}{unit}</Text>
         )}
         {sign === 'negative' && (
-            <Text>-{delta}{unit}</Text>
+            <Text style={styles.negativeChange}>-{delta}{unit}</Text>
         )}
         {sign === 'noChange' && (
-            <Text>No Change</Text>
+            <Text style={styles.noChange}>No Change</Text>
         )}
       </Text>
     );
@@ -42,7 +42,9 @@ export class ExerciseCard extends React.Component {
       <Text style={styles.textWrapper}>
         <Text style={styles.textLabel}>Personal best: </Text>
         <Text>{value}{unit} </Text>
-        <Text>{`${reps} ${reps === 1 ? 'rep' : 'reps'}`}</Text>
+        {reps && (
+          <Text>{`${reps} ${reps === 1 ? 'rep' : 'reps'}`}</Text>
+        )}
       </Text>
     );
   }
@@ -66,6 +68,15 @@ export class ExerciseCard extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  positiveChange: {
+    color: 'green'
+  },
+  negativeChange: {
+    color: 'red'
+  },
+  noChange: {
+    color: 'orange'
+  },
   textLabel: {
     fontWeight: 'bold',
     marginRight: 20,

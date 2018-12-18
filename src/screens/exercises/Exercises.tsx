@@ -22,8 +22,21 @@ class Exercises extends React.Component {
     exercises: [
       {
         title: 'Benchpress',
+        date: 'Yesterday',
         lastWeightChange: { delta: 10, sign: 'positive', unit: 'kg' },
         personalBest: { reps: 1, value: 95, unit: 'kg' },
+      },
+      {
+        title: 'Deadlift',
+        date: '10 days ago',
+        lastWeightChange: { sign: 'noChange' },
+        personalBest: { reps: 1, value: 95, unit: 'kg' },
+      },
+      {
+        title: 'Plank',
+        date: '3 months ago',
+        lastWeightChange: { delta: 10.5, sign: 'negative', unit: 'sec' },
+        personalBest: { value: 60, unit: 'sec' },
       },
     ],
   };
@@ -62,25 +75,32 @@ class Exercises extends React.Component {
           name="add"
           onPress={() => console.log('Add new exercise')}
         />
+        <IconButton
+          color="black"
+          name="settings"
+          onPress={() => console.log('Show settings')}
+        />
       </View>
     );
   }
 
   public render() {
-    const { lastWeightChange, personalBest, title } = this.state.exercises[0];
+    const exercises = this.state.exercises;
     return (
       <ScrollView>
         <View style={styles.searchContainer}>
           {this.renderButtons()}
         </View>
-        <ExerciseCard
-          key={title}
-          date="07/10/2018"
-          personalBest={personalBest}
-          lastWeightChange={lastWeightChange}
-          onPress={() => console.log('exerise pressed', title)}
-          title={title}
-        />
+        {exercises.map(({ title, date, lastWeightChange, personalBest }) => (
+          <ExerciseCard
+            key={title}
+            date={date}
+            personalBest={personalBest}
+            lastWeightChange={lastWeightChange}
+            onPress={() => console.log('exerise pressed', title)}
+            title={title}
+          />
+        ))}
       </ScrollView>
     );
   }
@@ -97,8 +117,11 @@ export default Exercises;
 
 const styles = StyleSheet.create({
   buttonContainer: {
+    alignSelf: 'center',
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    width: '100%',
   },
   cancelButton: {
     marginTop: 20,
@@ -108,5 +131,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     marginTop: 20,
+    width: '100%',
   },
 });
