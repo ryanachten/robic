@@ -1,7 +1,14 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-elements';
-import { Button, IconButton, ScreenHeader, SearchBar, SessionCard } from '../../components';
+import {
+  Button,
+  ExerciseCard,
+  IconButton,
+  ScreenHeader,
+  SearchBar,
+  SessionCard,
+} from '../../components';
 import sessions from '../../mock_data/sessions';
 
 class Exercises extends React.Component {
@@ -12,6 +19,13 @@ class Exercises extends React.Component {
 
   public state = {
     showSearchBar: false,
+    exercises: [
+      {
+        title: 'Benchpress',
+        lastWeightChange: { delta: 10, sign: 'positive', unit: 'kg' },
+        personalBest: { reps: 1, value: 95, unit: 'kg' },
+      },
+    ],
   };
 
   public toggleSearchBar() {
@@ -53,11 +67,20 @@ class Exercises extends React.Component {
   }
 
   public render() {
+    const { lastWeightChange, personalBest, title } = this.state.exercises[0];
     return (
       <ScrollView>
         <View style={styles.searchContainer}>
           {this.renderButtons()}
         </View>
+        <ExerciseCard
+          key={title}
+          date="07/10/2018"
+          personalBest={personalBest}
+          lastWeightChange={lastWeightChange}
+          onPress={() => console.log('exerise pressed', title)}
+          title={title}
+        />
       </ScrollView>
     );
   }

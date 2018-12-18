@@ -4,7 +4,7 @@ import { Card, Text } from 'react-native-elements';
 
 interface IProps {
   date: string;
-  lastSession?: object;
+  lastWeightChange?: object;
   personalBest?: object;
   title: string;
 }
@@ -12,16 +12,23 @@ interface IProps {
 export class ExerciseCard extends React.Component {
 
   public renderLastSession() {
-    const lastSession = this.props.lastSession;
-    if (!lastSession) return null;
+    // Delta = net weight amount changed, sign = 'positive' / 'negative'
+    const lastWeightChange = this.props.lastWeightChange;
+    if (!lastWeightChange) return null;
 
-    const reps = lastSession.reps;
-    const sets = lastSession.sets;
+    const { delta, sign, unit } = lastWeightChange;
     return (
       <Text style={styles.textWrapper}>
         <Text style={styles.textLabel}>Last session: </Text>
-        <Text>{reps} reps</Text>
-        <Text>{sets} sets</Text>
+        {sign === 'positive' && (
+            <Text>+{delta}{unit}</Text>
+        )}
+        {sign === 'negative' && (
+            <Text>-{delta}{unit}</Text>
+        )}
+        {sign === 'noChange' && (
+            <Text>No Change</Text>
+        )}
       </Text>
     );
   }
@@ -30,13 +37,12 @@ export class ExerciseCard extends React.Component {
     const personalBest = this.props.personalBest;
     if (!personalBest) return null;
 
-    const reps = personalBest.reps;
-    const sets = personalBest.sets;
+    const { reps, value, unit } = personalBest;
     return (
       <Text style={styles.textWrapper}>
         <Text style={styles.textLabel}>Personal best: </Text>
-        <Text>{reps} reps</Text>
-        <Text>{sets} sets</Text>
+        <Text>{value}{unit} </Text>
+        <Text>{`${reps} ${reps === 1 ? 'rep' : 'reps'}`}</Text>
       </Text>
     );
   }
@@ -49,6 +55,7 @@ export class ExerciseCard extends React.Component {
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.textWrapper}>
               <Text style={styles.textLabel}>Last active: </Text>
+              <Text>{date}</Text>
             </Text>
             { this.renderLastSession() }
             { this.renderPersonalBest() }
