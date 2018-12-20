@@ -41,6 +41,7 @@ class App extends React.Component {
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         'Material Icons': require('../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf'),
+        'MaterialIcons': require('../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf'),
         // 'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       }),
     ]);
