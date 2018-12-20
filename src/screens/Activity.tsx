@@ -11,13 +11,33 @@ class Dashboard extends React.Component {
   public state = {
     exercises: [
       {
-        exercise: "Benchpress",
-        highestNetValue: 1812.5,
-        lowestNetValue: 1087.5,
+        title: "Benchpress",
+        highestNetValue: 72.5 * 5 * 5,
         recentSessions: [
-          { date: "07/10/2017", value: 1087.5 },
-          { date: "08/10/2017", value: 1450 },
-          { date: "09/10/2017", value: 1812.5 }
+          { date: new Date(2018, 11, 29), value: 70 * 5 * 5 },
+          { date: new Date(2018, 12, 6), value: 72.5 * 3 * 5 },
+          { date: new Date(2018, 12, 13), value: 72.5 * 4 * 5 },
+          { date: new Date(2018, 12, 20), value: 72.5 * 5 * 5 }
+        ]
+      },
+      {
+        title: "Incline Butterfly",
+        highestNetValue: 22 * 8 * 4,
+        recentSessions: [
+          { date: new Date(2018, 11, 29), value: 20 * 8 * 4 },
+          { date: new Date(2018, 12, 6), value: 22 * 6 * 4 },
+          { date: new Date(2018, 12, 13), value: 22 * 7 * 4 },
+          { date: new Date(2018, 12, 20), value: 22 * 8 * 4 }
+        ]
+      },
+      {
+        title: "Z-Curl",
+        highestNetValue: 14 * 10 * 4,
+        recentSessions: [
+          { date: new Date(2018, 11, 29), value: 10 * 10 * 4 },
+          { date: new Date(2018, 12, 6), value: 12 * 10 * 4 },
+          { date: new Date(2018, 12, 13), value: 12 * 10 * 4 },
+          { date: new Date(2018, 12, 20), value: 14 * 10 * 4 }
         ]
       }
     ]
@@ -28,7 +48,7 @@ class Dashboard extends React.Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <ActivityChart data={exercises} />
+          <ActivityChart exercises={exercises} />
         </View>
         <Card>
           <Text>Stats</Text>

@@ -5,53 +5,65 @@ import {
   VictoryVoronoiContainer
 } from "victory-native";
 
-const data = [
-  { quarter: 1, earnings: 13000 },
-  { quarter: 2, earnings: 16500 },
-  { quarter: 3, earnings: 14250 },
-  { quarter: 4, earnings: 19000 }
-];
-
 /*
   Charts changes in netWeight / record values over a period of time (6 months?)
 */
 
-// normalisedValue = ( highest netWeight or record / lowest netWeight or record );
-// valuePercent = normalisedValue * 100;
+export class ActivityChart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      totalNumberOfExercises: props.exercises.length,
+      lowestValue: 100
+    };
+  }
 
-export const ActivityChart = () => (
-  <VictoryChart
-    scale={{ x: "time", y: "linear" }}
-    domain={{ y: [0, 100] }}
-    containerComponent={
-      <VictoryVoronoiContainer voronoiDimension="x" labels={d => `y: ${d.y}`} />
-    }
-  >
-    <VictoryLine
-      style={{ data: { stroke: "red" }, labels: { fill: "red" } }}
-      data={[
-        { x: new Date(2010, 9, 2), y: 80 },
-        { x: new Date(2010, 10, 2), y: 50 },
-        { x: new Date(2010, 11, 2), y: 44 },
-        { x: new Date(2010, 12, 2), y: 20 }
-      ]}
-    />
-    <VictoryLine
-      data={[
-        { x: new Date(2010, 9, 2), y: 60 },
-        { x: new Date(2010, 10, 2), y: 20 },
-        { x: new Date(2010, 11, 2), y: 64 },
-        { x: new Date(2010, 12, 2), y: 20 }
-      ]}
-    />
-    <VictoryLine
-      style={{ data: { stroke: "green" }, labels: { fill: "green" } }}
-      data={[
-        { x: new Date(2010, 9, 2), y: 90 },
-        { x: new Date(2010, 10, 2), y: 30 },
-        { x: new Date(2010, 11, 2), y: 24 },
-        { x: new Date(2010, 12, 2), y: 80 }
-      ]}
-    />
-  </VictoryChart>
-);
+  public renderLines(exercise: object, index: int) {
+    const { title, highestNetValue, recentSessions } = exercise;
+    const { lowestValue, totalNumberOfExercises } = this.state;
+
+    const colour = `hsl(${(255 / totalNumberOfExercises) * index}, 100%, 50%)`;
+
+    const sessionGraphData = recentSessions.map(session => {
+      // normalisedPercent = ( netWeight or record / lowest netWeight or record ) * 100;
+      const normalisedPercent = (session.value / highestNetValue) * 100;
+      if (lowestValue > normalisedPercent) {
+        this.setState({ lowestValue: normalisedPercent });
+      }
+      return {
+        x: session.date,
+        y: normalisedPercent
+      };
+    });
+    return (
+      <VictoryLine
+        key={title}
+        style={{
+          data: { stroke: colour },
+          labels: { fill: colour }
+        }}
+        data={sessionGraphData}
+      />
+    );
+  }
+
+  public render() {
+    const exercises = this.props.exercises;
+    const lowestValue = this.state.lowestValue;
+    return (
+      <VictoryChart
+        scale={{ x: "time", y: "linear" }}
+        domain={{ y: [lowestValue, 100] }}
+        containerComponent={
+          <VictoryVoronoiContainer
+            voronoiDimension="x"
+            labels={d => `y: ${d.y.toFixed(2)}`}
+          />
+        }
+      >
+        {exercises &&
+          exercises.map((exercise, index) => this.renderLines(exercise, index))}
+      </VictoryChart>
+    );
+  }
+}
