@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Card, Text } from 'react-native-elements';
+import * as React from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { Card, Text } from "react-native-elements";
 
 interface IProps {
   date: string;
@@ -10,7 +10,6 @@ interface IProps {
 }
 
 export class ExerciseCard extends React.Component {
-
   public renderLastSession() {
     // Delta = net weight amount changed, sign = 'positive' / 'negative'
     const lastWeightChange = this.props.lastWeightChange;
@@ -20,15 +19,19 @@ export class ExerciseCard extends React.Component {
     return (
       <Text style={styles.textWrapper}>
         <Text style={styles.textLabel}>Last session: </Text>
-        {sign === 'positive' && (
-            <Text style={styles.positiveChange}>+{delta}{unit}</Text>
+        {sign === "positive" && (
+          <Text style={styles.positiveChange}>
+            +{delta}
+            {unit}
+          </Text>
         )}
-        {sign === 'negative' && (
-            <Text style={styles.negativeChange}>-{delta}{unit}</Text>
+        {sign === "negative" && (
+          <Text style={styles.negativeChange}>
+            -{delta}
+            {unit}
+          </Text>
         )}
-        {sign === 'noChange' && (
-            <Text style={styles.noChange}>No Change</Text>
-        )}
+        {sign === "noChange" && <Text style={styles.noChange}>No Change</Text>}
       </Text>
     );
   }
@@ -41,10 +44,11 @@ export class ExerciseCard extends React.Component {
     return (
       <Text style={styles.textWrapper}>
         <Text style={styles.textLabel}>Personal best: </Text>
-        <Text>{value}{unit} </Text>
-        {reps && (
-          <Text>{`${reps} ${reps === 1 ? 'rep' : 'reps'}`}</Text>
-        )}
+        <Text>
+          {value}
+          {unit}{" "}
+        </Text>
+        {reps && <Text>{`${reps} ${reps === 1 ? "rep" : "reps"}`}</Text>}
       </Text>
     );
   }
@@ -52,41 +56,41 @@ export class ExerciseCard extends React.Component {
   public render() {
     const { title, date, onPress } = this.props;
     return (
-        <TouchableOpacity onPress={onPress}>
-          <Card>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.textWrapper}>
-              <Text style={styles.textLabel}>Last active: </Text>
-              <Text>{date}</Text>
-            </Text>
-            { this.renderLastSession() }
-            { this.renderPersonalBest() }
-          </Card>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
+        <Card>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.textWrapper}>
+            <Text style={styles.textLabel}>Last active: </Text>
+            <Text>{date}</Text>
+          </Text>
+          {this.renderLastSession()}
+          {this.renderPersonalBest()}
+        </Card>
+      </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
   positiveChange: {
-    color: 'green'
+    color: "green"
   },
   negativeChange: {
-    color: 'red'
+    color: "red"
   },
   noChange: {
-    color: 'orange'
+    color: "orange"
   },
   textLabel: {
-    fontWeight: 'bold',
-    marginRight: 20,
+    fontWeight: "bold",
+    marginRight: 20
   },
   textWrapper: {
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center"
   },
   title: {
     marginBottom: 10,
-    textAlign: 'center',
-  },
+    textAlign: "center"
+  }
 });

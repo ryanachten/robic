@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { SearchBar as RNESearchBar } from 'react-native-elements';
+import * as React from "react";
+import { StyleSheet, View } from "react-native";
+import { SearchBar as RNESearchBar } from "react-native-elements";
 
-export const SearchBar = (props) => {
+export const SearchBar = props => {
   const { placeholder } = props;
   return (
     <RNESearchBar
       lightTheme
       containerStyle={styles.container}
-      icon={{ type: 'material', color: 'black', name: 'search' }}
+      icon={{ type: "material", color: "black", name: "search" }}
       inputStyle={styles.input}
       placeholder={placeholder}
     />
@@ -17,10 +17,10 @@ export const SearchBar = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'transparent',
-    borderTopWidth: 0,
+    backgroundColor: "transparent",
+    borderTopWidth: 0
   },
   input: {
-    backgroundColor: 'white',
-  },
+    backgroundColor: "white"
+  }
 });

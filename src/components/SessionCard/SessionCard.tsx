@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Card, Text } from 'react-native-elements';
+import * as React from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { Card, Text } from "react-native-elements";
 
 interface IProps {
   date: string;
@@ -29,15 +29,15 @@ export const SessionCard = (props: IProps) => {
 
 const styles = StyleSheet.create({
   textLabel: {
-    fontWeight: 'bold',
-    marginRight: 20,
+    fontWeight: "bold",
+    marginRight: 20
   },
   textWrapper: {
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center"
   },
   title: {
     marginBottom: 10,
-    textAlign: 'center',
-  },
+    textAlign: "center"
+  }
 });

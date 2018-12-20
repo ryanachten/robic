@@ -1,12 +1,11 @@
-import * as React from 'react';
-import { ScrollView } from 'react-native';
-import { ScreenHeader, SearchBar, SessionCard } from '../../components';
-import sessions from '../../mock_data/sessions';
+import * as React from "react";
+import { ScrollView } from "react-native";
+import { ScreenHeader, SearchBar, SessionCard } from "../../components";
+import sessions from "../../mock_data/sessions";
 
 class Sessions extends React.Component {
-
   public static navigationOptions = {
-    title: 'Sessions',
+    title: "Sessions"
   };
 
   public render() {
@@ -26,9 +25,9 @@ class Sessions extends React.Component {
   }
 
   private navigateToSession(session) {
-    this.props.navigation.navigate('Session', {
+    this.props.navigation.navigate("Session", {
       sessionId: session.id,
-      sessionTitle: session.title,
+      sessionTitle: session.title
     });
   }
 }

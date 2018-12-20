@@ -1,9 +1,9 @@
-import { createStackNavigator } from 'react-navigation';
-import Exercises from '../screens/exercises/Exercises';
+import { createStackNavigator } from "react-navigation";
+import Exercises from "../screens/exercises/Exercises";
 
 export default createStackNavigator(
   {
-    Exercises,
+    Exercises
   },
   {
     // initialRouteName: 'Exercise',
@@ -11,5 +11,5 @@ export default createStackNavigator(
     //   exerciseId: 'benchpress',
     //   exerciseTitle: 'Benchpress',
     // },
-  },
+  }
 );

@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import { Button as RNEButton } from 'react-native-elements';
+import * as React from "react";
+import { StyleSheet } from "react-native";
+import { Button as RNEButton } from "react-native-elements";
 
-export const Button = (props) => {
+export const Button = props => {
   const { containerStyle, iconName, title, onPress } = props;
   return (
     <RNEButton
       buttonStyle={styles.button}
       containerViewStyle={containerStyle}
       icon={{
-        color: 'black',
-        name: iconName,
+        color: "black",
+        name: iconName
       }}
       onPress={onPress}
       raised
@@ -22,9 +22,9 @@ export const Button = (props) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'white',
+    backgroundColor: "white"
   },
   text: {
-    color: 'black',
-  },
+    color: "black"
+  }
 });

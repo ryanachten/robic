@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Icon } from 'react-native-elements';
+import * as React from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { Icon } from "react-native-elements";
 
-export const IconButton = (props) => {
+export const IconButton = props => {
   const { color, name, onPress } = props;
   return (
     <TouchableOpacity onPress={onPress}>
@@ -20,6 +20,6 @@ export const IconButton = (props) => {
 const styles = StyleSheet.create({
   container: {
     height: 40,
-    width: 40,
-  },
+    width: 40
+  }
 });

@@ -1,49 +1,48 @@
-import * as React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Card, Text } from 'react-native-elements';
+import * as React from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Card, Text } from "react-native-elements";
 import {
   Button,
   ExerciseCard,
   IconButton,
   ScreenHeader,
   SearchBar,
-  SessionCard,
-} from '../../components';
-import sessions from '../../mock_data/sessions';
+  SessionCard
+} from "../../components";
+import sessions from "../../mock_data/sessions";
 
 class Exercises extends React.Component {
-
   public static navigationOptions = {
-    title: 'Exercises',
+    title: "Exercises"
   };
 
   public state = {
     showSearchBar: false,
     exercises: [
       {
-        title: 'Benchpress',
-        date: 'Yesterday',
-        lastWeightChange: { delta: 10, sign: 'positive', unit: 'kg' },
-        personalBest: { reps: 1, value: 95, unit: 'kg' },
+        title: "Benchpress",
+        date: "Yesterday",
+        lastWeightChange: { delta: 10, sign: "positive", unit: "kg" },
+        personalBest: { reps: 1, value: 95, unit: "kg" }
       },
       {
-        title: 'Deadlift',
-        date: '10 days ago',
-        lastWeightChange: { sign: 'noChange' },
-        personalBest: { reps: 1, value: 95, unit: 'kg' },
+        title: "Deadlift",
+        date: "10 days ago",
+        lastWeightChange: { sign: "noChange" },
+        personalBest: { reps: 1, value: 95, unit: "kg" }
       },
       {
-        title: 'Plank',
-        date: '3 months ago',
-        lastWeightChange: { delta: 10.5, sign: 'negative', unit: 'sec' },
-        personalBest: { value: 60, unit: 'sec' },
-      },
-    ],
+        title: "Plank",
+        date: "3 months ago",
+        lastWeightChange: { delta: 10.5, sign: "negative", unit: "sec" },
+        personalBest: { value: 60, unit: "sec" }
+      }
+    ]
   };
 
   public toggleSearchBar() {
     this.setState(prevState => ({
-      showSearchBar: !prevState.showSearchBar,
+      showSearchBar: !prevState.showSearchBar
     }));
   }
 
@@ -52,9 +51,7 @@ class Exercises extends React.Component {
     if (showSearchBar) {
       return (
         <View style={styles.buttonContainer}>
-          <SearchBar
-            placeholder="Find exercise"
-          />
+          <SearchBar placeholder="Find exercise" />
           <IconButton
             color="red"
             name="clear"
@@ -73,12 +70,12 @@ class Exercises extends React.Component {
         <IconButton
           color="green"
           name="add"
-          onPress={() => console.log('Add new exercise')}
+          onPress={() => console.log("Add new exercise")}
         />
         <IconButton
           color="black"
           name="settings"
-          onPress={() => console.log('Show settings')}
+          onPress={() => console.log("Show settings")}
         />
       </View>
     );
@@ -88,16 +85,14 @@ class Exercises extends React.Component {
     const exercises = this.state.exercises;
     return (
       <ScrollView>
-        <View style={styles.searchContainer}>
-          {this.renderButtons()}
-        </View>
+        <View style={styles.searchContainer}>{this.renderButtons()}</View>
         {exercises.map(({ title, date, lastWeightChange, personalBest }) => (
           <ExerciseCard
             key={title}
             date={date}
             personalBest={personalBest}
             lastWeightChange={lastWeightChange}
-            onPress={() => console.log('exerise pressed', title)}
+            onPress={() => console.log("exerise pressed", title)}
             title={title}
           />
         ))}
@@ -117,20 +112,20 @@ export default Exercises;
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    alignSelf: 'center',
+    alignSelf: "center",
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%"
   },
   cancelButton: {
-    marginTop: 20,
+    marginTop: 20
   },
   searchContainer: {
-    alignSelf: 'center',
-    alignItems: 'center',
+    alignSelf: "center",
+    alignItems: "center",
     flex: 1,
     marginTop: 20,
-    width: '100%',
-  },
+    width: "100%"
+  }
 });

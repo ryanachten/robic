@@ -1,36 +1,37 @@
-import * as React from 'react';
-import { ScrollView } from 'react-native';
-import { Button, ExerciseCard, ScreenHeader, SetCard } from '../../components';
-import exercises from '../../mock_data/exercises';
+import * as React from "react";
+import { ScrollView } from "react-native";
+import { Button, ExerciseCard, ScreenHeader, SetCard } from "../../components";
+import exercises from "../../mock_data/exercises";
 
 class Exercise extends React.Component {
-
   public static navigationOptions = ({ navigation }) => {
     const exerciseTitle = navigation.state.params.exerciseTitle;
     return {
-      title: exerciseTitle ? exerciseTitle : 'Exercise',
+      title: exerciseTitle ? exerciseTitle : "Exercise"
     };
-  }
+  };
 
   public state = {
     flippedCard: null,
     sets: [
-      { reps: '5', unitValue: '15' },
-      { reps: '5', unitValue: '25' },
-      { reps: '5', unitValue: '35' },
-      { reps: '5', unitValue: '45' },
-      { reps: '5', unitValue: '55' },
+      { reps: "5", unitValue: "15" },
+      { reps: "5", unitValue: "25" },
+      { reps: "5", unitValue: "35" },
+      { reps: "5", unitValue: "45" },
+      { reps: "5", unitValue: "55" }
     ],
-    title: '',
-    unit: 'kg',
+    title: "",
+    unit: "kg"
   };
 
   public componentWillMount() {
-    const currentId = this.props.navigation.getParam('exerciseId');
-    const currentExercise = exercises.filter(excersise => excersise.id === currentId)[0];
+    const currentId = this.props.navigation.getParam("exerciseId");
+    const currentExercise = exercises.filter(
+      excersise => excersise.id === currentId
+    )[0];
     if (currentExercise) {
       this.setState({
-        title: currentExercise.title,
+        title: currentExercise.title
       });
     }
   }
@@ -38,14 +39,14 @@ class Exercise extends React.Component {
   public handleValueChange({ index, field, newValue }) {
     const sets = this.state.sets;
     // Increment by 1 for reps and 2.5 for weights
-    const incrementValue = field === 'reps' ? 1 : 2.5;
+    const incrementValue = field === "reps" ? 1 : 2.5;
     switch (newValue) {
-      case 'increment': {
+      case "increment": {
         const value = parseFloat(sets[index][field]) + incrementValue;
         sets[index][field] = value.toString();
         break;
       }
-      case 'decrement': {
+      case "decrement": {
         const value = parseFloat(sets[index][field]) - incrementValue;
         sets[index][field] = value.toString();
         break;
@@ -59,7 +60,7 @@ class Exercise extends React.Component {
       }
     }
     this.setState({
-      sets,
+      sets
     });
   }
 
@@ -67,7 +68,7 @@ class Exercise extends React.Component {
     const sets = this.state.sets;
     sets.push(sets[sets.length - 1]);
     this.setState({
-      sets,
+      sets
     });
   }
 
@@ -76,19 +77,19 @@ class Exercise extends React.Component {
     sets.splice(index, 1);
     this.setState({
       flippedCard: null,
-      sets,
+      sets
     });
   }
 
   public handleFlipCard(index) {
     this.setState({
-      flippedCard: index,
+      flippedCard: index
     });
   }
 
   public cancelFlipCard() {
     this.setState({
-      flippedCard: null,
+      flippedCard: null
     });
   }
 
@@ -100,19 +101,23 @@ class Exercise extends React.Component {
         {sets.map(({ reps, unitValue }, index) => {
           return (
             <SetCard
-              flipCard={ () => this.handleFlipCard(index) }
+              flipCard={() => this.handleFlipCard(index)}
               flipped={flippedCard === index}
               key={index}
               onCancel={() => this.cancelFlipCard()}
               onDelete={() => this.handleDeleteSet(index)}
-              onUnitValueChange={
-                newValue => this.handleValueChange({
-                  field: 'unitValue', index, newValue,
+              onUnitValueChange={newValue =>
+                this.handleValueChange({
+                  field: "unitValue",
+                  index,
+                  newValue
                 })
               }
-              onRepValueChange={
-                newValue => this.handleValueChange({
-                  field: 'reps', index, newValue,
+              onRepValueChange={newValue =>
+                this.handleValueChange({
+                  field: "reps",
+                  index,
+                  newValue
                 })
               }
               reps={reps}
@@ -124,7 +129,7 @@ class Exercise extends React.Component {
         })}
         <Button
           containerStyle={{
-            marginTop: 20,
+            marginTop: 20
           }}
           iconName="add"
           onPress={() => this.handleAddSet()}

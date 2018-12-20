@@ -1,19 +1,19 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
+import * as React from "react";
+import { Text, View } from "react-native";
 import {
   createBottomTabNavigator,
   createNavigationContainer,
-  createStackNavigator,
-} from 'react-navigation';
-import Activity from '../screens/Activity';
-import Login from '../screens/Login';
-import ExercisesStack from './ExercisesStack';
-import SessionsStack from './SessionsStack';
+  createStackNavigator
+} from "react-navigation";
+import Activity from "../screens/Activity";
+import Login from "../screens/Login";
+import ExercisesStack from "./ExercisesStack";
+import SessionsStack from "./SessionsStack";
 
 class StubScreen extends React.Component {
   public render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>Placeholder screen</Text>
       </View>
     );
@@ -22,22 +22,22 @@ class StubScreen extends React.Component {
 
 const ActivityStack = createStackNavigator(
   {
-    Activity,
+    Activity
   },
   {
-    initialRouteName: 'Activity',
-  },
+    initialRouteName: "Activity"
+  }
 );
 
 const MainNavigator = createBottomTabNavigator(
   {
     Activity: ActivityStack,
     Sessions: SessionsStack,
-    Exercises: ExercisesStack,
+    Exercises: ExercisesStack
   },
   {
-    initialRouteName: 'Activity',
-  },
+    initialRouteName: "Activity"
+  }
 );
 
 export default MainNavigator;
