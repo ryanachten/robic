@@ -51,6 +51,7 @@ export class ActivityChart extends React.Component {
         lowestLineValue = normalisedPercent;
       }
       return {
+        title,
         x: session.date,
         y: normalisedPercent
       };
@@ -88,7 +89,7 @@ export class ActivityChart extends React.Component {
         containerComponent={
           <VictoryVoronoiContainer
             voronoiDimension="x"
-            labels={d => `y: ${d.y.toFixed(2)}`}
+            labels={d => `${d.title}: ${d.y.toFixed(2)}`}
           />
         }
       >
