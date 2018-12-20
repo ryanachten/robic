@@ -5,7 +5,7 @@ import {
   createNavigationContainer,
   createStackNavigator,
 } from 'react-navigation';
-import Dashboard from '../screens/Dashboard';
+import Activity from '../screens/Activity';
 import Login from '../screens/Login';
 import ExercisesStack from './ExercisesStack';
 import SessionsStack from './SessionsStack';
@@ -22,7 +22,7 @@ class StubScreen extends React.Component {
 
 const ActivityStack = createStackNavigator(
   {
-    Activity: Dashboard,
+    Activity,
   },
   {
     initialRouteName: 'Activity',
@@ -36,7 +36,7 @@ const MainNavigator = createBottomTabNavigator(
     Exercises: ExercisesStack,
   },
   {
-    initialRouteName: 'Exercises',
+    initialRouteName: 'Activity',
   },
 );
 
