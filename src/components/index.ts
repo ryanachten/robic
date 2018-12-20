@@ -1,3 +1,4 @@
+export * from "./ActivityChart/ActivityChart";
 export * from "./Button/Button";
 export * from "./ExerciseCard/ExerciseCard";
 export * from "./IconButton/IconButton";

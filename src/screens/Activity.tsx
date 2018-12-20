@@ -1,28 +1,34 @@
 import * as React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-elements";
-import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
-import { ScreenHeader } from "../components";
+import { ActivityChart, ScreenHeader } from "../components";
 
 class Dashboard extends React.Component {
   public static navigationOptions = {
     title: "Activity"
   };
 
-  public render() {
-    const data = [
-      { quarter: 1, earnings: 13000 },
-      { quarter: 2, earnings: 16500 },
-      { quarter: 3, earnings: 14250 },
-      { quarter: 4, earnings: 19000 }
-    ];
+  public state = {
+    exercises: [
+      {
+        exercise: "Benchpress",
+        highestNetValue: 1812.5,
+        lowestNetValue: 1087.5,
+        recentSessions: [
+          { date: "07/10/2017", value: 1087.5 },
+          { date: "08/10/2017", value: 1450 },
+          { date: "09/10/2017", value: 1812.5 }
+        ]
+      }
+    ]
+  };
 
+  public render() {
+    const { exercises } = this.state;
     return (
       <ScrollView>
         <View style={styles.container}>
-          <VictoryChart width={350} theme={VictoryTheme.material}>
-            <VictoryBar data={data} x="quarter" y="earnings" />
-          </VictoryChart>
+          <ActivityChart data={exercises} />
         </View>
         <Card>
           <Text>Stats</Text>
