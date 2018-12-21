@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Card, Divider, FormInput } from "react-native-elements";
 import { Button, IconButton } from "..";
 
-export class SetCard extends React.Component {
+export class SetControls extends React.Component {
   public renderDeleteCard() {
     const { onCancel, onDelete } = this.props;
     return (

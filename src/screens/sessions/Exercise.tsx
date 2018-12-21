@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ScrollView } from "react-native";
-import { Button, ScreenHeader, SetCard } from "../../components";
+import { Button, ScreenHeader, SetControls } from "../../components";
 import exercises from "../../mock_data/exercises";
 
 class Exercise extends React.Component {
@@ -100,7 +100,7 @@ class Exercise extends React.Component {
         <ScreenHeader>Sets</ScreenHeader>
         {sets.map(({ reps, unitValue }, index) => {
           return (
-            <SetCard
+            <SetControls
               flipCard={() => this.handleFlipCard(index)}
               flipped={flippedCard === index}
               key={index}

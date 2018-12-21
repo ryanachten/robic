@@ -5,4 +5,4 @@ export * from "./IconButton/IconButton";
 export * from "./ScreenHeader/ScreenHeader";
 export * from "./SearchBar/SearchBar";
 export * from "./SessionCard/SessionCard";
-export * from "./SetCard/SetCard";
+export * from "./SetControls/SetControls";
