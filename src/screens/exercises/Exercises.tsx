@@ -9,7 +9,6 @@ import {
   SearchBar,
   SessionCard
 } from "../../components";
-import sessions from "../../mock_data/sessions";
 
 class Exercises extends React.Component {
   public static navigationOptions = {
@@ -89,7 +88,7 @@ class Exercises extends React.Component {
         {exercises.map(({ title, date, lastWeightChange, personalBest }) => (
           <ExerciseCard
             key={title}
-            date={date}
+            lastActive={date}
             personalBest={personalBest}
             lastWeightChange={lastWeightChange}
             onPress={() => console.log("exerise pressed", title)}

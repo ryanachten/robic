@@ -54,14 +54,14 @@ export class ExerciseCard extends React.Component {
   }
 
   public render() {
-    const { title, date, onPress } = this.props;
+    const { title, lastActive, onPress } = this.props;
     return (
       <TouchableOpacity onPress={onPress}>
         <Card>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.textWrapper}>
             <Text style={styles.textLabel}>Last active: </Text>
-            <Text>{date}</Text>
+            <Text>{lastActive}</Text>
           </Text>
           {this.renderLastSession()}
           {this.renderPersonalBest()}

@@ -22,13 +22,12 @@ export class ActivityChart extends React.Component {
   public componentDidMount() {
     const exercises = this.props.exercises;
 
-    // Yeah, I mean not great, but for some reason I can't use setState inside of the following map statement
+    // Yeah, I mean not great: but for some reason I can't use setState inside of the following map statement
+    // so we gotta extract the lowest value for each line and then get the lowest overall value...
     let lowestOverallValue = 100;
     const lineData = exercises.map((exercise, index) => {
       const { line, lowestLineValue } = this.getLineData(exercise, index);
-      if (lowestOverallValue > lowestLineValue) {
-        lowestOverallValue = lowestLineValue;
-      }
+      lowestOverallValue = Math.min(lowestLineValue, lowestOverallValue);
       return line;
     });
     this.setState({
@@ -47,9 +46,7 @@ export class ActivityChart extends React.Component {
     const sessionGraphData = recentSessions.map(session => {
       // normalisedPercent = ( netWeight or record / lowest netWeight or record ) * 100;
       const normalisedPercent = (session.value / highestNetValue) * 100;
-      if (lowestLineValue > normalisedPercent) {
-        lowestLineValue = normalisedPercent;
-      }
+      lowestLineValue = Math.min(normalisedPercent, lowestLineValue);
       return {
         title,
         x: session.date,
