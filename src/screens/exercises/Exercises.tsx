@@ -19,18 +19,21 @@ class Exercises extends React.Component {
     showSearchBar: false,
     exercises: [
       {
+        id: "benchpress",
         title: "Benchpress",
         date: "Yesterday",
         lastWeightChange: { delta: 10, sign: "positive", unit: "kg" },
         personalBest: { reps: 1, value: 95, unit: "kg" }
       },
       {
+        id: "deadlift",
         title: "Deadlift",
         date: "10 days ago",
         lastWeightChange: { sign: "noChange" },
         personalBest: { reps: 1, value: 95, unit: "kg" }
       },
       {
+        id: "plank",
         title: "Plank",
         date: "3 months ago",
         lastWeightChange: { delta: 10.5, sign: "negative", unit: "sec" },
@@ -85,26 +88,28 @@ class Exercises extends React.Component {
     return (
       <ScrollView>
         <View style={styles.searchContainer}>{this.renderButtons()}</View>
-        {exercises.map(({ title, date, lastWeightChange, personalBest }) => (
-          <ExerciseCard
-            key={title}
-            lastActive={date}
-            personalBest={personalBest}
-            lastWeightChange={lastWeightChange}
-            onPress={() => console.log("exerise pressed", title)}
-            title={title}
-          />
-        ))}
+        {exercises.map(
+          ({ id, title, date, lastWeightChange, personalBest }) => (
+            <ExerciseCard
+              key={title}
+              lastActive={date}
+              personalBest={personalBest}
+              lastWeightChange={lastWeightChange}
+              onPress={() => this.navigateToExercise(id, title)}
+              title={title}
+            />
+          )
+        )}
       </ScrollView>
     );
   }
 
-  // private navigateToSession(session) {
-  //   this.props.navigation.navigate('Session', {
-  //     sessionId: session.id,
-  //     sessionTitle: session.title,
-  //   });
-  // }
+  private navigateToExercise(id, title) {
+    this.props.navigation.navigate("ExerciseRecord", {
+      exerciseId: id,
+      exerciseTitle: title
+    });
+  }
 }
 
 export default Exercises;

@@ -4,11 +4,11 @@ import Exercises from "../screens/exercises/Exercises";
 
 export default createStackNavigator(
   {
-    Exercise,
+    ExerciseRecord: Exercise,
     Exercises
   },
   {
-    initialRouteName: "Exercise",
+    initialRouteName: "Exercises",
     initialRouteParams: {
       exerciseId: "benchpress",
       exerciseTitle: "Benchpress"
