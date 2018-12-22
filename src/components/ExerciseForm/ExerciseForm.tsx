@@ -4,15 +4,26 @@ import { Card, FormInput, FormLabel, Text } from "react-native-elements";
 import { Button, IconButton } from "../../components";
 
 export class ExerciseForm extends React.Component {
-  public state = {
-    title: "",
-    unit: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "",
+      unit: ""
+    };
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
   public handleFieldUpdate(fieldName, value) {
     const state = {};
     state[fieldName] = value;
     this.setState(state);
+  }
+
+  public onSubmit() {
+    const { title, unit } = this.state;
+    if (!title || !unit) return;
+    const submitExerciseForm = this.props.submitExerciseForm;
+    return submitExerciseForm(title, unit);
   }
 
   public render() {
@@ -30,7 +41,7 @@ export class ExerciseForm extends React.Component {
         />
         <FormLabel>Unit</FormLabel>
         <FormInput
-          autoCapitalize={false}
+          autoCapitalize="none"
           containerStyle={styles.input}
           onChangeText={text => this.handleFieldUpdate("unit", text)}
           placeholder="Unit (kg/sec/lb/etc)"
@@ -38,7 +49,7 @@ export class ExerciseForm extends React.Component {
         />
         <View style={styles.buttonWrapper}>
           <IconButton color="red" name="close" onPress={onFormClose} />
-          <IconButton color="green" name="done" onPress={onFormClose} />
+          <IconButton color="green" name="done" onPress={this.onSubmit} />
         </View>
       </Card>
     );

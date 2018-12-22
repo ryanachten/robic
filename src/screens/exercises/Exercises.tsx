@@ -75,6 +75,9 @@ class Exercises extends React.Component {
         <ExerciseForm
           containerStyle={styles.createExerciseForm}
           onFormClose={() => this.toggleCreateExerciseForm()}
+          submitExerciseForm={(title, unit) =>
+            console.log("submitExerciseForm", title, unit)
+          }
         />
       </View>
     );
