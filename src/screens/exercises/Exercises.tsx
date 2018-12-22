@@ -19,7 +19,7 @@ class Exercises extends React.Component {
 
   public state = {
     showCreateExerciseForm: false,
-    showFilterForm: true,
+    showFilterForm: false,
     exercises: [
       {
         id: "benchpress",

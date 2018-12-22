@@ -36,6 +36,7 @@ export class ExerciseFilter extends React.Component {
     const sortBy = this.state.sortBy;
     return (
       <Card containerStyle={[styles.formContainer, containerStyle]}>
+        <Text style={styles.formHeader}>Filter Exercises</Text>
         <FormLabel>Search</FormLabel>
         <View style={styles.searchWrapper}>
           <Icon name="search" />
