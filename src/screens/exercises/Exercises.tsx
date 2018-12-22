@@ -17,7 +17,7 @@ class Exercises extends React.Component {
   };
 
   public state = {
-    showCreateExerciseForm: true,
+    showCreateExerciseForm: false,
     showSearchBar: false,
     exercises: [
       {
@@ -150,10 +150,8 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   createExerciseForm: {
-    // alignSelf: "stretch",
-    marginLeft: 20,
-    marginRight: 20
-    // width: "100%"
+    marginLeft: 15,
+    marginRight: 15
   },
   headerContainer: {
     marginTop: 20

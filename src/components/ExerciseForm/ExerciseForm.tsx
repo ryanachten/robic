@@ -1,11 +1,12 @@
 import * as React from "react";
 import { ScrollView, StyleSheet, TextInput, View } from "react-native";
-import { Card, FormInput, Text } from "react-native-elements";
+import { Card, FormInput, FormLabel, Text } from "react-native-elements";
 import { Button, IconButton } from "../../components";
 
 export class ExerciseForm extends React.Component {
   public state = {
-    title: ""
+    title: "",
+    unit: ""
   };
 
   public handleFieldUpdate(fieldName, value) {
@@ -15,29 +16,50 @@ export class ExerciseForm extends React.Component {
   }
 
   public render() {
-    const { title } = this.state;
+    const { title, unit } = this.state;
     const { containerStyle, onFormClose } = this.props;
     return (
-      <Card containerStyle={{ margin: 20, flex: 1 }}>
+      <Card containerStyle={[styles.formContainer, containerStyle]}>
+        <Text style={styles.formHeader}>Create Exercise</Text>
+        <FormLabel>Name</FormLabel>
         <FormInput
-          //containerStyle={{ width: "50%" }}
-          //onChangeText={text => onRepValueChange(text)}
-          placeholder="Title"
+          containerStyle={styles.input}
+          onChangeText={text => this.handleFieldUpdate("title", text)}
+          placeholder="Name"
           value={title}
         />
-        <IconButton color="red" name="close" onPress={onFormClose} />
+        <FormLabel>Unit</FormLabel>
+        <FormInput
+          autoCapitalize={false}
+          containerStyle={styles.input}
+          onChangeText={text => this.handleFieldUpdate("unit", text)}
+          placeholder="Unit (kg/sec/lb/etc)"
+          value={unit}
+        />
+        <View style={styles.buttonWrapper}>
+          <IconButton color="red" name="close" onPress={onFormClose} />
+          <IconButton color="green" name="done" onPress={onFormClose} />
+        </View>
       </Card>
     );
   }
 }
 
-// const styles = StyleSheet.create({
-//   input: {
-//     flex: 1
-//   },
-//   section: {
-//     alignItems: "center",
-//     flex: 1,
-//     flexDirection: "row"
-//   }
-// });
+const styles = StyleSheet.create({
+  buttonWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20
+  },
+  formContainer: {
+    flex: 1
+  },
+  formHeader: {
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center"
+  },
+  input: {
+    marginTop: 15
+  }
+});
