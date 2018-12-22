@@ -3,10 +3,10 @@ import { StyleSheet } from "react-native";
 import { Button as RNEButton } from "react-native-elements";
 
 export const Button = props => {
-  const { containerStyle, iconName, title, onPress } = props;
+  const { buttonStyle, containerStyle, iconName, title, onPress } = props;
   return (
     <RNEButton
-      buttonStyle={styles.button}
+      buttonStyle={[styles.button, buttonStyle]}
       containerViewStyle={containerStyle}
       icon={{
         color: "black",

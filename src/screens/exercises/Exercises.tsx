@@ -4,6 +4,7 @@ import { Card, Text } from "react-native-elements";
 import {
   Button,
   ExerciseCard,
+  ExerciseFilter,
   ExerciseForm,
   IconButton,
   ScreenHeader,
@@ -18,7 +19,7 @@ class Exercises extends React.Component {
 
   public state = {
     showCreateExerciseForm: false,
-    showSearchBar: false,
+    showFilterForm: true,
     exercises: [
       {
         id: "benchpress",
@@ -44,42 +45,38 @@ class Exercises extends React.Component {
     ]
   };
 
-  public toggleSearchBar() {
-    this.setState(prevState => ({
-      showSearchBar: !prevState.showSearchBar
-    }));
-  }
-
   public toggleCreateExerciseForm() {
     this.setState(prevState => ({
       showCreateExerciseForm: !prevState.showCreateExerciseForm
     }));
   }
 
-  public renderSearchBar() {
-    return (
-      <View style={styles.buttonContainer}>
-        <SearchBar placeholder="Find exercise" />
-        <IconButton
-          color="red"
-          name="clear"
-          onPress={() => this.toggleSearchBar()}
-        />
-      </View>
-    );
+  public toggleFilterForm() {
+    this.setState(prevState => ({
+      showFilterForm: !prevState.showFilterForm
+    }));
   }
 
   public renderExerciseForm() {
     return (
-      <View>
-        <ExerciseForm
-          containerStyle={styles.createExerciseForm}
-          onFormClose={() => this.toggleCreateExerciseForm()}
-          submitExerciseForm={(title, unit) =>
-            console.log("submitExerciseForm", title, unit)
-          }
-        />
-      </View>
+      <ExerciseForm
+        containerStyle={styles.createExerciseForm}
+        onFormClose={() => this.toggleCreateExerciseForm()}
+        submitExerciseForm={(title, unit) =>
+          console.log("submitExerciseForm", title, unit)
+        }
+      />
+    );
+  }
+
+  public renderFilterForm() {
+    return (
+      <ExerciseFilter
+        onFormClose={() => this.toggleFilterForm()}
+        submitExerciseFilter={({ searchTerm, sortBy }) =>
+          console.log("submitExerciseFilter", searchTerm, sortBy)
+        }
+      />
     );
   }
 
@@ -89,30 +86,32 @@ class Exercises extends React.Component {
         <IconButton
           color="black"
           name="search"
-          onPress={() => this.toggleSearchBar()}
+          onPress={() => this.toggleFilterForm()}
         />
         <IconButton
           color="green"
           name="add"
           onPress={() => this.toggleCreateExerciseForm()}
         />
-        <IconButton
-          color="black"
-          name="settings"
-          onPress={() => console.log("Show settings")}
-        />
       </View>
     );
   }
 
   public render() {
-    const { exercises, showCreateExerciseForm, showSearchBar } = this.state;
-    const showButtons = !showCreateExerciseForm && !showSearchBar;
+    const {
+      exercises,
+      showCreateExerciseForm,
+      showSearchBar,
+      showFilterForm
+    } = this.state;
+    const showButtons =
+      !showCreateExerciseForm && !showSearchBar && !showFilterForm;
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
           {showCreateExerciseForm && this.renderExerciseForm()}
           {showSearchBar && this.renderSearchBar()}
+          {showFilterForm && this.renderFilterForm()}
           {showButtons && this.renderButtons()}
         </View>
         {exercises.map(
