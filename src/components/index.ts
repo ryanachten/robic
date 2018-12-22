@@ -1,6 +1,7 @@
 export * from "./ActivityChart/ActivityChart";
 export * from "./Button/Button";
 export * from "./ExerciseCard/ExerciseCard";
+export * from "./ExerciseForm/ExerciseForm";
 export * from "./IconButton/IconButton";
 export * from "./ScreenHeader/ScreenHeader";
 export * from "./SearchBar/SearchBar";

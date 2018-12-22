@@ -4,6 +4,7 @@ import { Card, Text } from "react-native-elements";
 import {
   Button,
   ExerciseCard,
+  ExerciseForm,
   IconButton,
   ScreenHeader,
   SearchBar,
@@ -16,6 +17,7 @@ class Exercises extends React.Component {
   };
 
   public state = {
+    showCreateExerciseForm: true,
     showSearchBar: false,
     exercises: [
       {
@@ -48,20 +50,37 @@ class Exercises extends React.Component {
     }));
   }
 
+  public toggleCreateExerciseForm() {
+    this.setState(prevState => ({
+      showCreateExerciseForm: !prevState.showCreateExerciseForm
+    }));
+  }
+
+  public renderSearchBar() {
+    return (
+      <View style={styles.buttonContainer}>
+        <SearchBar placeholder="Find exercise" />
+        <IconButton
+          color="red"
+          name="clear"
+          onPress={() => this.toggleSearchBar()}
+        />
+      </View>
+    );
+  }
+
+  public renderExerciseForm() {
+    return (
+      <View>
+        <ExerciseForm
+          containerStyle={styles.createExerciseForm}
+          onFormClose={() => this.toggleCreateExerciseForm()}
+        />
+      </View>
+    );
+  }
+
   public renderButtons() {
-    const { showSearchBar } = this.state;
-    if (showSearchBar) {
-      return (
-        <View style={styles.buttonContainer}>
-          <SearchBar placeholder="Find exercise" />
-          <IconButton
-            color="red"
-            name="clear"
-            onPress={() => this.toggleSearchBar()}
-          />
-        </View>
-      );
-    }
     return (
       <View style={styles.buttonContainer}>
         <IconButton
@@ -72,7 +91,7 @@ class Exercises extends React.Component {
         <IconButton
           color="green"
           name="add"
-          onPress={() => console.log("Add new exercise")}
+          onPress={() => this.toggleCreateExerciseForm()}
         />
         <IconButton
           color="black"
@@ -84,10 +103,15 @@ class Exercises extends React.Component {
   }
 
   public render() {
-    const exercises = this.state.exercises;
+    const { exercises, showCreateExerciseForm, showSearchBar } = this.state;
+    const showButtons = !showCreateExerciseForm && !showSearchBar;
     return (
       <ScrollView>
-        <View style={styles.searchContainer}>{this.renderButtons()}</View>
+        <View style={styles.headerContainer}>
+          {showCreateExerciseForm && this.renderExerciseForm()}
+          {showSearchBar && this.renderSearchBar()}
+          {showButtons && this.renderButtons()}
+        </View>
         {exercises.map(
           ({ id, title, date, lastWeightChange, personalBest }) => (
             <ExerciseCard
@@ -125,11 +149,13 @@ const styles = StyleSheet.create({
   cancelButton: {
     marginTop: 20
   },
-  searchContainer: {
-    alignSelf: "center",
-    alignItems: "center",
-    flex: 1,
-    marginTop: 20,
-    width: "100%"
+  createExerciseForm: {
+    // alignSelf: "stretch",
+    marginLeft: 20,
+    marginRight: 20
+    // width: "100%"
+  },
+  headerContainer: {
+    marginTop: 20
   }
 });

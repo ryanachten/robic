@@ -14,30 +14,30 @@ class Dashboard extends React.Component {
         title: "Benchpress",
         highestNetValue: 72.5 * 5 * 5,
         recentSessions: [
-          { date: new Date(2018, 11, 29), value: 70 * 5 * 5 },
-          { date: new Date(2018, 12, 6), value: 72.5 * 3 * 5 },
-          { date: new Date(2018, 12, 13), value: 72.5 * 4 * 5 },
-          { date: new Date(2018, 12, 20), value: 72.5 * 5 * 5 }
+          { date: new Date(2018, 11, 29), netValue: 70 * 5 * 5 },
+          { date: new Date(2018, 12, 6), netValue: 72.5 * 3 * 5 },
+          { date: new Date(2018, 12, 13), netValue: 72.5 * 4 * 5 },
+          { date: new Date(2018, 12, 20), netValue: 72.5 * 5 * 5 }
         ]
       },
       {
         title: "Incline Butterfly",
         highestNetValue: 22 * 8 * 4,
         recentSessions: [
-          { date: new Date(2018, 11, 29), value: 20 * 8 * 4 },
-          { date: new Date(2018, 12, 6), value: 22 * 6 * 4 },
-          { date: new Date(2018, 12, 13), value: 22 * 7 * 4 },
-          { date: new Date(2018, 12, 20), value: 22 * 8 * 4 }
+          { date: new Date(2018, 11, 29), netValue: 20 * 8 * 4 },
+          { date: new Date(2018, 12, 6), netValue: 22 * 6 * 4 },
+          { date: new Date(2018, 12, 13), netValue: 22 * 7 * 4 },
+          { date: new Date(2018, 12, 20), netValue: 22 * 8 * 4 }
         ]
       },
       {
         title: "Z-Curl",
         highestNetValue: 14 * 10 * 4,
         recentSessions: [
-          { date: new Date(2018, 11, 29), value: 10 * 10 * 4 },
-          { date: new Date(2018, 12, 6), value: 12 * 10 * 4 },
-          { date: new Date(2018, 12, 13), value: 12 * 10 * 4 },
-          { date: new Date(2018, 12, 20), value: 14 * 10 * 4 }
+          { date: new Date(2018, 11, 29), netValue: 10 * 10 * 4 },
+          { date: new Date(2018, 12, 6), netValue: 12 * 10 * 4 },
+          { date: new Date(2018, 12, 13), netValue: 12 * 10 * 4 },
+          { date: new Date(2018, 12, 20), netValue: 14 * 10 * 4 }
         ]
       }
     ]

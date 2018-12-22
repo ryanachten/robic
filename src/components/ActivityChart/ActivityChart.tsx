@@ -45,7 +45,7 @@ export class ActivityChart extends React.Component {
     let lowestLineValue = 100;
     const sessionGraphData = recentSessions.map(session => {
       // normalisedPercent = ( netWeight or record / lowest netWeight or record ) * 100;
-      const normalisedPercent = (session.value / highestNetValue) * 100;
+      const normalisedPercent = (session.netValue / highestNetValue) * 100;
       lowestLineValue = Math.min(normalisedPercent, lowestLineValue);
       return {
         title,
