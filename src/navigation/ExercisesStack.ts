@@ -8,7 +8,7 @@ export default createStackNavigator(
     Exercises
   },
   {
-    initialRouteName: "Exercises",
+    initialRouteName: "ExerciseRecord",
     initialRouteParams: {
       exerciseId: "benchpress",
       exerciseTitle: "Benchpress"

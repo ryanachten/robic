@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ScrollView } from "react-native";
 import { Card, Text } from "react-native-elements";
-import { Button, ScreenHeader } from "../../components";
+import { Button, ExerciseSessionCard, ScreenHeader } from "../../components";
 import exercises from "../../mock_data/exercises";
 
 class Exercise extends React.Component {
@@ -18,6 +18,17 @@ class Exercise extends React.Component {
     history: [
       {
         date: "07/10/2018",
+        netWeight: 72.5 * 5 * 4,
+        setCount: 4,
+        sets: [
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 }
+        ]
+      },
+      {
+        date: "06/10/2018",
         netWeight: 72.5 * 5 * 4,
         setCount: 4,
         sets: [
@@ -47,19 +58,12 @@ class Exercise extends React.Component {
     return (
       <ScrollView>
         {history.map(({ date, netWeight, sets }) => (
-          <Card>
-            <Text>{date}</Text>
-            <Text>{`Net weight: ${netWeight} ${unit}`}</Text>
-            {sets.map(({ reps, value }, index) => (
-              <Card>
-                <Text>Set {index}</Text>
-                <Text>Reps: {reps}</Text>
-                <Text>
-                  Value: {value} {unit}
-                </Text>
-              </Card>
-            ))}
-          </Card>
+          <ExerciseSessionCard
+            date={date}
+            netWeight={netWeight}
+            unit={unit}
+            sets={sets}
+          />
         ))}
       </ScrollView>
     );
