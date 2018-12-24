@@ -1,7 +1,7 @@
 import * as React from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Card, Text } from "react-native-elements";
-import { Button, ExerciseSessionCard, ScreenHeader } from "../../components";
+import { ExerciseSessionCard, ExerciseSessionChart } from "../../components";
 import exercises from "../../mock_data/exercises";
 
 class Exercise extends React.Component {
@@ -15,12 +15,28 @@ class Exercise extends React.Component {
   public state = {
     title: "",
     unit: "kg",
+    personBest: {
+      highestSetCount: 5,
+      highestNetValue: 75 * 5 * 5,
+      highestTotalReps: 25
+    },
     history: [
       {
         date: "07/10/2018",
-        netWeight: 72.5 * 5 * 4,
-        setCount: 4,
+        netWeight: 75 * 3 * 5,
         sets: [
+          { reps: 3, value: 75 },
+          { reps: 3, value: 75 },
+          { reps: 3, value: 75 },
+          { reps: 3, value: 75 },
+          { reps: 3, value: 75 }
+        ]
+      },
+      {
+        date: "06/10/2018",
+        netWeight: 72.5 * 5 * 5,
+        sets: [
+          { reps: 5, value: 72.5 },
           { reps: 5, value: 72.5 },
           { reps: 5, value: 72.5 },
           { reps: 5, value: 72.5 },
@@ -29,13 +45,13 @@ class Exercise extends React.Component {
       },
       {
         date: "06/10/2018",
-        netWeight: 72.5 * 5 * 4,
-        setCount: 4,
+        netWeight: 72.5 * 4 * 5,
         sets: [
-          { reps: 5, value: 72.5 },
-          { reps: 5, value: 72.5 },
-          { reps: 5, value: 72.5 },
-          { reps: 5, value: 72.5 }
+          { reps: 4, value: 72.5 },
+          { reps: 4, value: 72.5 },
+          { reps: 4, value: 72.5 },
+          { reps: 4, value: 72.5 },
+          { reps: 4, value: 72.5 }
         ]
       }
     ]
@@ -54,11 +70,21 @@ class Exercise extends React.Component {
   }
 
   public render() {
-    const { title, history, unit } = this.state;
+    const { title, history, unit, personBest } = this.state;
     return (
       <ScrollView>
+        <View
+          style={{
+            alignItems: "center",
+            flex: 1,
+            justifyContent: "center"
+          }}
+        >
+          <ExerciseSessionChart personBest={personBest} sessions={history} />
+        </View>
         {history.map(({ date, netWeight, sets }) => (
           <ExerciseSessionCard
+            key={date}
             date={date}
             netWeight={netWeight}
             unit={unit}
