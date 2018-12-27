@@ -17,12 +17,35 @@ class Exercise extends React.Component {
     unit: "kg",
     personBest: {
       highestSetCount: 5,
-      highestNetValue: 75 * 5 * 5,
-      highestTotalReps: 25
+      highestTotalReps: 25,
+      highestValue: 90,
+      highestNetValue: 75 * 5 * 5
     },
     history: [
       {
-        date: "07/10/2018",
+        date: "03/10/2018",
+        netWeight: 72.5 * 4 * 5,
+        sets: [
+          { reps: 4, value: 72.5 },
+          { reps: 4, value: 72.5 },
+          { reps: 4, value: 72.5 },
+          { reps: 4, value: 72.5 },
+          { reps: 4, value: 72.5 }
+        ]
+      },
+      {
+        date: "04/10/2018",
+        netWeight: 72.5 * 5 * 5,
+        sets: [
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 }
+        ]
+      },
+      {
+        date: "05/10/2018",
         netWeight: 75 * 3 * 5,
         sets: [
           { reps: 3, value: 75 },
@@ -34,17 +57,6 @@ class Exercise extends React.Component {
       },
       {
         date: "06/10/2018",
-        netWeight: 72.5 * 5 * 5,
-        sets: [
-          { reps: 5, value: 72.5 },
-          { reps: 5, value: 72.5 },
-          { reps: 5, value: 72.5 },
-          { reps: 5, value: 72.5 },
-          { reps: 5, value: 72.5 }
-        ]
-      },
-      {
-        date: "06/10/2018",
         netWeight: 72.5 * 4 * 5,
         sets: [
           { reps: 4, value: 72.5 },
@@ -52,6 +64,17 @@ class Exercise extends React.Component {
           { reps: 4, value: 72.5 },
           { reps: 4, value: 72.5 },
           { reps: 4, value: 72.5 }
+        ]
+      },
+      {
+        date: "07/10/2018",
+        netWeight: 72.5 * 5 * 5,
+        sets: [
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 },
+          { reps: 5, value: 72.5 }
         ]
       }
     ]
