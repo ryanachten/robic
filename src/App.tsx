@@ -1,7 +1,13 @@
+import ApolloClient from "apollo-boost";
 import { AppLoading, Asset, Font, Icon } from "expo";
 import * as React from "react";
+import { ApolloProvider } from "react-apollo";
 import AppNavigation from "./navigation/AppNavigation";
 import NavigationService from "./navigation/NavigationService";
+
+const client = new ApolloClient({
+  uri: "https://robic-server.herokuapp.com/graphql"
+});
 
 class App extends React.Component {
   public state = {
@@ -19,11 +25,13 @@ class App extends React.Component {
       );
     }
     return (
-      <AppNavigation
-        ref={navigatorRef => {
-          NavigationService.setTopLevelNavigator(navigatorRef);
-        }}
-      />
+      <ApolloProvider client={client}>
+        <AppNavigation
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
+      </ApolloProvider>
     );
   }
 

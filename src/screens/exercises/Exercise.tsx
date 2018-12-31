@@ -1,4 +1,6 @@
+import graphqlTag from "graphql-tag";
 import * as React from "react";
+import { graphql } from "react-apollo";
 import { ScrollView, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { ExerciseSessionCard, ExerciseSessionChart } from "../../components";
@@ -93,6 +95,8 @@ class Exercise extends React.Component {
   }
 
   public render() {
+    const songs = this.props.data.songs;
+    console.log("songs", songs);
     const { title, history, unit, personBest } = this.state;
     return (
       <ScrollView>
@@ -119,4 +123,13 @@ class Exercise extends React.Component {
   }
 }
 
-export default Exercise;
+const query = graphqlTag`
+  {
+    songs {
+      id
+      title
+    }
+  }
+`;
+
+export default graphql(query)(Exercise);
