@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { Button, FormInput } from "../../components";
 
@@ -36,6 +36,10 @@ class Register extends React.Component {
       email: "",
       password: ""
     });
+  }
+
+  public navigateToLogin() {
+    this.props.navigation.navigate("Login");
   }
 
   public render() {
@@ -82,6 +86,11 @@ class Register extends React.Component {
             onPress={() => this.clearFields()}
           />
         </View>
+        <TouchableOpacity onPress={() => this.navigateToLogin()}>
+          <Text style={styles.link}>
+            Already have an account?{"\n"}Click here to login
+          </Text>
+        </TouchableOpacity>
       </Card>
     );
   }
@@ -100,6 +109,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     textAlign: "center"
+  },
+  link: {
+    alignSelf: "center",
+    textAlign: "center",
+    marginTop: 20
   }
 });
 

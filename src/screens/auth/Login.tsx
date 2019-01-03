@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { Button, FormInput } from "../../components";
 
@@ -25,6 +25,10 @@ class Login extends React.Component {
   public submitLogin() {
     const { email, password } = this.state;
     console.log(email, password);
+  }
+
+  public navigateToRegistration() {
+    this.props.navigation.navigate("Register");
   }
 
   public clearFields() {
@@ -66,6 +70,11 @@ class Login extends React.Component {
             onPress={() => this.clearFields()}
           />
         </View>
+        <TouchableOpacity onPress={() => this.navigateToRegistration()}>
+          <Text style={styles.link}>
+            Don't have an account?{"\n"}Click here to register
+          </Text>
+        </TouchableOpacity>
       </Card>
     );
   }
@@ -84,6 +93,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     textAlign: "center"
+  },
+  link: {
+    alignSelf: "center",
+    textAlign: "center",
+    marginTop: 20
   }
 });
 
