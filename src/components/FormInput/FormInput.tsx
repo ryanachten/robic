@@ -11,7 +11,8 @@ import { Button } from "../components";
 export class FormInput extends React.Component {
   public render() {
     const {
-      autoCorrect,
+      autoCapitalize = "none",
+      autoCorrect = false,
       label,
       onChangeText,
       placeholder,
@@ -22,6 +23,7 @@ export class FormInput extends React.Component {
       <React.Fragment>
         <FormLabel>{label}</FormLabel>
         <RNEFormInput
+          autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
           containerStyle={styles.input}
           onChangeText={onChangeText}

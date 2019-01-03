@@ -3,14 +3,16 @@ import { StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { Button, FormInput } from "../../components";
 
-class Login extends React.Component {
+class Register extends React.Component {
   public static navigationOptions = {
-    title: "Login"
+    title: "Register"
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      firstName: "",
+      lastName: "",
       email: "",
       password: ""
     };
@@ -22,32 +24,46 @@ class Login extends React.Component {
     this.setState(state);
   }
 
-  public submitLogin() {
-    const { email, password } = this.state;
-    console.log(email, password);
+  public submitRegistration() {
+    const { firstName, lastName, email, password } = this.state;
+    console.log(firstName, lastName, email, password);
   }
 
   public clearFields() {
     this.setState({
+      firstName: "",
+      lastName: "",
       email: "",
       password: ""
     });
   }
 
   public render() {
-    const { email, password } = this.state;
+    const { firstName, lastName, email, password } = this.state;
 
     return (
       <Card containerStyle={styles.formContainer}>
         <FormInput
-          autoCorrect={false}
+          autoCapitalize="words"
+          onChangeText={text => this.handleFieldUpdate("firstName", text)}
+          label="First Name"
+          placeholder="First Name"
+          value={firstName}
+        />
+        <FormInput
+          autoCapitalize="words"
+          label="Last Name"
+          onChangeText={text => this.handleFieldUpdate("lastName", text)}
+          placeholder="Last Name"
+          value={lastName}
+        />
+        <FormInput
           label="Email"
           onChangeText={text => this.handleFieldUpdate("email", text)}
           placeholder="example@email.com"
           value={email}
         />
         <FormInput
-          autoCorrect={false}
           label="Password"
           onChangeText={text => this.handleFieldUpdate("password", text)}
           placeholder="At least 6 characters"
@@ -58,7 +74,7 @@ class Login extends React.Component {
           <Button
             iconName="done"
             title="Submit"
-            onPress={() => this.submitLogin()}
+            onPress={() => this.submitRegistration()}
           />
           <Button
             iconName="clear"
@@ -87,4 +103,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Login;
+export default Register;
