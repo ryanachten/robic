@@ -6,7 +6,6 @@ import {
   createStackNavigator
 } from "react-navigation";
 import Activity from "../screens/Activity";
-import Login from "../screens/Login";
 import ExercisesStack from "./ExercisesStack";
 import SessionsStack from "./SessionsStack";
 

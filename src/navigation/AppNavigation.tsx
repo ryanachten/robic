@@ -3,17 +3,26 @@ import {
   createNavigationContainer,
   createStackNavigator
 } from "react-navigation";
-import Login from "../screens/Login";
+import Login from "../screens/auth/Login";
 import MainNavigation from "./MainNavigation";
+
+const AuthNavigation = createStackNavigator(
+  {
+    Login
+  },
+  {
+    initialRouteName: "Login"
+  }
+);
 
 const stack = createStackNavigator(
   {
-    auth: Login,
+    auth: AuthNavigation,
     main: MainNavigation
   },
   {
     headerMode: "none",
-    initialRouteName: "main"
+    initialRouteName: "auth"
   }
 );
 
