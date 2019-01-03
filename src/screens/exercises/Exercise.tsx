@@ -1,4 +1,4 @@
-import graphqlTag from "graphql-tag";
+import gql from "graphql-tag";
 import * as React from "react";
 import { graphql } from "react-apollo";
 import { ScrollView, View } from "react-native";
@@ -123,7 +123,7 @@ class Exercise extends React.Component {
   }
 }
 
-const query = graphqlTag`
+const query = gql`
   {
     songs {
       id

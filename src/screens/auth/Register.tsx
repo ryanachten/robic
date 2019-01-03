@@ -105,11 +105,6 @@ const styles = StyleSheet.create({
   formContainer: {
     flex: 1
   },
-  formHeader: {
-    fontWeight: "bold",
-    fontSize: 16,
-    textAlign: "center"
-  },
   link: {
     alignSelf: "center",
     textAlign: "center",

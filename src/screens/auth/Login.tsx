@@ -1,4 +1,6 @@
+import gql from "graphql-tag";
 import * as React from "react";
+import { graphql } from "react-apollo";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { Button, FormInput } from "../../components";
@@ -24,7 +26,16 @@ class Login extends React.Component {
 
   public submitLogin() {
     const { email, password } = this.state;
-    console.log(email, password);
+    if (!email || !password) return;
+
+    // Executes the login mutation with the following query parameters
+    const request = this.props.mutate({
+      variables: {
+        email,
+        password
+      }
+    });
+    request.then(token => console.log("token", token));
   }
 
   public navigateToRegistration() {
@@ -89,11 +100,6 @@ const styles = StyleSheet.create({
   formContainer: {
     flex: 1
   },
-  formHeader: {
-    fontWeight: "bold",
-    fontSize: 16,
-    textAlign: "center"
-  },
   link: {
     alignSelf: "center",
     textAlign: "center",
@@ -101,4 +107,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Login;
+const mutation = gql`
+  mutation LoginUser($email: String!, $password: String!) {
+    loginUser(email: $email, password: $password)
+  }
+`;
+
+export default graphql(mutation)(Login);
