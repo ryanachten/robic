@@ -1,6 +1,7 @@
+import { SecureStore } from "expo";
 import gql from "graphql-tag";
 import * as React from "react";
-import { graphql } from "react-apollo";
+import { compose, graphql } from "react-apollo";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { Button, FormInput } from "../../components";
@@ -24,18 +25,21 @@ class Login extends React.Component {
     this.setState(state);
   }
 
-  public submitLogin() {
+  public async submitLogin() {
     const { email, password } = this.state;
     if (!email || !password) return;
 
     // Executes the login mutation with the following query parameters
-    const request = this.props.mutate({
+    const loginResponse = await this.props.mutate({
       variables: {
         email,
         password
       }
     });
-    request.then(token => console.log("token", token));
+    const token = loginResponse.data.loginUser;
+    if (token) {
+      SecureStore.setItemAsync("token", token);
+    }
   }
 
   public navigateToRegistration() {
@@ -51,6 +55,7 @@ class Login extends React.Component {
 
   public render() {
     const { email, password } = this.state;
+    console.log("props", this.props);
 
     return (
       <Card containerStyle={styles.formContainer}>
@@ -113,4 +118,18 @@ const mutation = gql`
   }
 `;
 
-export default graphql(mutation)(Login);
+const query = gql`
+  {
+    currentUser {
+      id
+      email
+      firstName
+      lastName
+    }
+  }
+`;
+
+export default compose(
+  graphql(mutation),
+  graphql(query)
+)(Login);
