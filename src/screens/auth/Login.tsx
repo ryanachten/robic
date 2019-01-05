@@ -58,7 +58,6 @@ class Login extends React.Component {
 
   public render() {
     const { email, password } = this.state;
-    console.log("props", this.props);
 
     return (
       <Card containerStyle={styles.formContainer}>

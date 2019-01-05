@@ -1,4 +1,6 @@
+import gql from "graphql-tag";
 import * as React from "react";
+import { compose, graphql } from "react-apollo";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { ActivityChart, LogOutButton, ScreenHeader } from "../components";
@@ -46,9 +48,14 @@ class Dashboard extends React.Component {
 
   public render() {
     const { exercises } = this.state;
+    const { currentUser } = this.props.data;
+
     return (
       <ScrollView>
         <View style={styles.container}>
+          <Text style={styles.welcomeMessage}>{`${
+            currentUser.firstName
+          }'s recent activity`}</Text>
           <ActivityChart exercises={exercises} />
         </View>
         <Card>
@@ -68,12 +75,24 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
+const query = gql`
+  {
+    currentUser {
+      firstName
+    }
+  }
+`;
+
+export default graphql(query)(Dashboard);
 
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     flex: 1,
     justifyContent: "center"
+  },
+  welcomeMessage: {
+    fontSize: 18,
+    marginTop: 25
   }
 });
