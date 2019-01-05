@@ -8,10 +8,10 @@ export default createStackNavigator(
     Exercises
   },
   {
-    initialRouteName: "ExerciseRecord",
-    initialRouteParams: {
-      exerciseId: "benchpress",
-      exerciseTitle: "Benchpress"
-    }
+    initialRouteName: "Exercises"
+    // initialRouteParams: {
+    //   exerciseId: "benchpress",
+    //   exerciseTitle: "Benchpress"
+    // }
   }
 );

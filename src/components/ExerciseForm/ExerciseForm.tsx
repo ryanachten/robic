@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ScrollView, StyleSheet, TextInput, View } from "react-native";
-import { Card, FormInput, FormLabel, Text } from "react-native-elements";
-import { Button, IconButton } from "../../components";
+import { Card, FormLabel, Text } from "react-native-elements";
+import { Button, FormInput, IconButton } from "../../components";
 
 export class ExerciseForm extends React.Component {
   constructor(props) {
@@ -32,15 +32,15 @@ export class ExerciseForm extends React.Component {
     return (
       <Card containerStyle={[styles.formContainer, containerStyle]}>
         <Text style={styles.formHeader}>Create Exercise</Text>
-        <FormLabel>Name</FormLabel>
         <FormInput
+          label="Name"
           containerStyle={styles.input}
           onChangeText={text => this.handleFieldUpdate("title", text)}
           placeholder="Name"
           value={title}
         />
-        <FormLabel>Unit</FormLabel>
         <FormInput
+          label="Unit"
           autoCapitalize="none"
           containerStyle={styles.input}
           onChangeText={text => this.handleFieldUpdate("unit", text)}

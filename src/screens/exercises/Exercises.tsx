@@ -1,4 +1,6 @@
+import gql from "graphql-tag";
 import * as React from "react";
+import { compose, graphql } from "react-apollo";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import {
@@ -17,32 +19,19 @@ class Exercises extends React.Component {
     title: "Exercises"
   };
 
+  /*
+  {
+    id: "benchpress",
+    title: "Benchpress",
+    date: "Yesterday",
+    lastWeightChange: { delta: 10, sign: "positive", unit: "kg" },
+    personalBest: { reps: 1, value: 95, unit: "kg" }
+  },
+  */
+
   public state = {
     showCreateExerciseForm: false,
-    showFilterForm: false,
-    exercises: [
-      {
-        id: "benchpress",
-        title: "Benchpress",
-        date: "Yesterday",
-        lastWeightChange: { delta: 10, sign: "positive", unit: "kg" },
-        personalBest: { reps: 1, value: 95, unit: "kg" }
-      },
-      {
-        id: "deadlift",
-        title: "Deadlift",
-        date: "10 days ago",
-        lastWeightChange: { sign: "noChange" },
-        personalBest: { reps: 1, value: 95, unit: "kg" }
-      },
-      {
-        id: "plank",
-        title: "Plank",
-        date: "3 months ago",
-        lastWeightChange: { delta: 10.5, sign: "negative", unit: "sec" },
-        personalBest: { value: 60, unit: "sec" }
-      }
-    ]
+    showFilterForm: false
   };
 
   public toggleCreateExerciseForm() {
@@ -57,13 +46,23 @@ class Exercises extends React.Component {
     }));
   }
 
+  public async submitExerciseDefinition(title, unit) {
+    const exerciseResponse = await this.props.mutate({
+      variables: {
+        title,
+        unit
+      }
+    });
+    // TODO: add error handling to form submission
+  }
+
   public renderExerciseForm() {
     return (
       <ExerciseForm
         containerStyle={styles.createExerciseForm}
         onFormClose={() => this.toggleCreateExerciseForm()}
         submitExerciseForm={(title, unit) =>
-          console.log("submitExerciseForm", title, unit)
+          this.submitExerciseDefinition(title, unit)
         }
       />
     );
@@ -99,13 +98,15 @@ class Exercises extends React.Component {
 
   public render() {
     const {
-      exercises,
       showCreateExerciseForm,
       showSearchBar,
       showFilterForm
     } = this.state;
     const showButtons =
       !showCreateExerciseForm && !showSearchBar && !showFilterForm;
+
+    const exercises = this.props.data.exerciseDefinitions;
+
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
@@ -114,18 +115,17 @@ class Exercises extends React.Component {
           {showFilterForm && this.renderFilterForm()}
           {showButtons && this.renderButtons()}
         </View>
-        {exercises.map(
-          ({ id, title, date, lastWeightChange, personalBest }) => (
+        {exercises &&
+          exercises.map(({ id, title, date, personalBest }) => (
             <ExerciseCard
               key={title}
               lastActive={date}
-              personalBest={personalBest}
-              lastWeightChange={lastWeightChange}
+              //personalBest={personalBest}
+              //lastWeightChange={lastWeightChange}
               onPress={() => this.navigateToExercise(id, title)}
               title={title}
             />
-          )
-        )}
+          ))}
       </ScrollView>
     );
   }
@@ -137,8 +137,6 @@ class Exercises extends React.Component {
     });
   }
 }
-
-export default Exercises;
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -159,3 +157,43 @@ const styles = StyleSheet.create({
     marginTop: 20
   }
 });
+
+const mutation = gql`
+  mutation AddExerciseDefinition($title: String!, $unit: String!) {
+    addExerciseDefinition(title: $title, unit: $unit) {
+      id
+    }
+  }
+`;
+
+const query = gql`
+  {
+    exerciseDefinitions {
+      id
+      title
+      unit
+      personalBest {
+        value {
+          value
+        }
+        setCount {
+          value
+        }
+        totalReps {
+          value
+        }
+        netValue {
+          value
+        }
+        timeTaken {
+          value
+        }
+      }
+    }
+  }
+`;
+
+export default compose(
+  graphql(mutation),
+  graphql(query)
+)(Exercises);
