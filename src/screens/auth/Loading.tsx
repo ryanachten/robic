@@ -10,8 +10,13 @@ class Loading extends React.Component {
 
   public componentDidUpdate() {
     const currentUser = this.props.data.currentUser;
+    // If user is already logged in, navigate them to the activity screen
     if (currentUser) {
       this.props.navigation.navigate("Activity");
+    }
+    // If user is not logged in, navigate them to login screen
+    if (currentUser === null) {
+      this.props.navigation.navigate("Login");
     }
   }
 

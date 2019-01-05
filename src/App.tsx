@@ -1,22 +1,9 @@
-import ApolloClient from "apollo-boost";
-import { AppLoading, Asset, Font, Icon, SecureStore } from "expo";
+import { AppLoading, Asset, Font, Icon } from "expo";
 import * as React from "react";
 import { ApolloProvider } from "react-apollo";
+import ApolloClient from "./ApolloClient";
 import AppNavigation from "./navigation/AppNavigation";
 import NavigationService from "./navigation/NavigationService";
-
-const client = new ApolloClient({
-  // uri: "https://robic-server.herokuapp.com/graphql",
-  uri: "http://localhost:4000/graphql",
-  request: async operation => {
-    const token = await SecureStore.getItemAsync("token");
-    operation.setContext({
-      headers: {
-        authorization: token
-      }
-    });
-  }
-});
 
 class App extends React.Component {
   public state = {
@@ -34,7 +21,7 @@ class App extends React.Component {
       );
     }
     return (
-      <ApolloProvider client={client}>
+      <ApolloProvider client={ApolloClient}>
         <AppNavigation
           ref={navigatorRef => {
             NavigationService.setTopLevelNavigator(navigatorRef);

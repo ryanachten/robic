@@ -7,6 +7,7 @@ export * from "./ExerciseSessionCard/ExerciseSessionCard";
 export * from "./ExerciseSessionChart/ExerciseSessionChart";
 export * from "./FormInput/FormInput";
 export * from "./IconButton/IconButton";
+export * from "./LogOutButton/LogOutButton";
 export * from "./ScreenHeader/ScreenHeader";
 export * from "./SearchBar/SearchBar";
 export * from "./SessionCard/SessionCard";

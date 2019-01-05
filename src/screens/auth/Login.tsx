@@ -8,7 +8,8 @@ import { Button, FormInput } from "../../components";
 
 class Login extends React.Component {
   public static navigationOptions = {
-    title: "Login"
+    title: "Login",
+    headerLeft: null
   };
 
   constructor(props) {
@@ -38,7 +39,9 @@ class Login extends React.Component {
     });
     const token = loginResponse.data.loginUser;
     if (token) {
-      SecureStore.setItemAsync("token", token);
+      await SecureStore.setItemAsync("token", token);
+      this.clearFields();
+      this.props.navigation.navigate("Activity");
     }
   }
 

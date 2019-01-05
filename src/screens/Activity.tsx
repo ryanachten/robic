@@ -1,10 +1,11 @@
 import * as React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-elements";
-import { ActivityChart, ScreenHeader } from "../components";
+import { ActivityChart, LogOutButton, ScreenHeader } from "../components";
 
 class Dashboard extends React.Component {
   public static navigationOptions = {
+    headerRight: <LogOutButton />,
     title: "Activity"
   };
 
