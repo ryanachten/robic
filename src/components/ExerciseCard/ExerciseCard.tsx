@@ -1,5 +1,6 @@
+import moment from "moment";
 import * as React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 
 interface IProps {
@@ -37,34 +38,56 @@ export class ExerciseCard extends React.Component {
   }
 
   public renderPersonalBest() {
-    const personalBest = this.props.personalBest;
+    const { personalBest, unit } = this.props;
     if (!personalBest) return null;
 
-    const { reps, value, unit } = personalBest;
+    const { value, totalReps, setCount, netValue, timeTaken } = personalBest;
+    const reps = totalReps.value;
+    const sets = setCount.value;
+    const netWeight = netValue.value;
+    const maxWeight = value.value;
+    const maxTimeTaken = timeTaken.value;
     return (
-      <Text style={styles.textWrapper}>
-        <Text style={styles.textLabel}>Personal best: </Text>
-        <Text>
-          {value}
-          {unit}{" "}
+      <View>
+        <Text style={styles.textLabel}>Personal bests: </Text>
+        <Text style={styles.textWrapper}>
+          <Text style={styles.text}>{`${maxWeight}${unit} max weight`}</Text>
+          <Text style={styles.text}>{` | ${reps} total ${
+            reps === 1 ? "rep" : "reps"
+          }`}</Text>
+          <Text style={styles.text}>{` | ${sets} ${
+            sets === 1 ? "set" : "sets"
+          }`}</Text>
+          <Text style={styles.text}>{` | ${netWeight}${unit} net weight`}</Text>
+          <Text style={styles.text}>{` | ${maxTimeTaken}min time taken`}</Text>
         </Text>
-        {reps && <Text>{`${reps} ${reps === 1 ? "rep" : "reps"}`}</Text>}
-      </Text>
+      </View>
+    );
+  }
+
+  public renderDate() {
+    const lastActive = this.props.lastActive;
+    if (lastActive === null) {
+      return <Text>Not yet attempted</Text>;
+    }
+    const daysElapsed = moment().diff(moment(lastActive), "days");
+    return (
+      <Text>{`${daysElapsed} ${daysElapsed === 1 ? "day" : "days"} ago`}</Text>
     );
   }
 
   public render() {
-    const { title, lastActive, onPress } = this.props;
+    const { title, onPress, lastActive } = this.props;
     return (
       <TouchableOpacity onPress={onPress}>
         <Card>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.textWrapper}>
             <Text style={styles.textLabel}>Last active: </Text>
-            <Text>{lastActive}</Text>
+            {this.renderDate()}
           </Text>
-          {this.renderLastSession()}
-          {this.renderPersonalBest()}
+          {!lastActive === null && this.renderLastSession()}
+          {!lastActive === null && this.renderPersonalBest()}
         </Card>
       </TouchableOpacity>
     );
@@ -83,9 +106,15 @@ const styles = StyleSheet.create({
   },
   textLabel: {
     fontWeight: "bold",
-    marginRight: 20
+    marginRight: 20,
+    fontSize: 12,
+    textAlign: "center"
   },
   textWrapper: {
+    fontSize: 12,
+    textAlign: "center"
+  },
+  text: {
     fontSize: 12,
     textAlign: "center"
   },

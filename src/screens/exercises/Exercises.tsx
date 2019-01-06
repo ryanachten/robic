@@ -106,6 +106,7 @@ class Exercises extends React.Component {
       !showCreateExerciseForm && !showSearchBar && !showFilterForm;
 
     const exercises = this.props.data.exerciseDefinitions;
+    console.log("exercises", exercises);
 
     return (
       <ScrollView>
@@ -116,16 +117,24 @@ class Exercises extends React.Component {
           {showButtons && this.renderButtons()}
         </View>
         {exercises &&
-          exercises.map(({ id, title, date, personalBest }) => (
-            <ExerciseCard
-              key={title}
-              lastActive={date}
-              //personalBest={personalBest}
-              //lastWeightChange={lastWeightChange}
-              onPress={() => this.navigateToExercise(id, title)}
-              title={title}
-            />
-          ))}
+          exercises.map(({ id, unit, title, history, personalBest }) => {
+            // if there is a history, assign last active to latest session date
+            const lastActive =
+              history.length > 0
+                ? history[history.length - 1].session.date
+                : null;
+            return (
+              <ExerciseCard
+                key={title}
+                unit={unit}
+                lastActive={lastActive}
+                personalBest={personalBest}
+                //lastWeightChange={lastWeightChange}
+                onPress={() => this.navigateToExercise(id, title)}
+                title={title}
+              />
+            );
+          })}
       </ScrollView>
     );
   }
@@ -172,6 +181,11 @@ const query = gql`
       id
       title
       unit
+      history {
+        session {
+          date
+        }
+      }
       personalBest {
         value {
           value
