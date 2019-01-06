@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import {
   Button,
@@ -96,6 +96,44 @@ class Exercises extends React.Component {
     );
   }
 
+  public renderExercises() {
+    const { exerciseDefinitions, loading } = this.props.data;
+    if (loading) {
+      return (
+        <View style={styles.noExercisesContainer}>
+          <ActivityIndicator size="small" />
+        </View>
+      );
+    }
+    const exercises = exerciseDefinitions;
+    if (exercises.length === 0) {
+      return (
+        <View style={styles.noExercisesContainer}>
+          <Text style={styles.noExercisesMessage}>
+            Oops, looks like you don't have any exercises yet. Click the add
+            button above to get started
+          </Text>
+        </View>
+      );
+    }
+    return exercises.map(({ id, unit, title, history, personalBest }) => {
+      // if there is a history, assign last active to latest session date
+      const lastActive =
+        history.length > 0 ? history[history.length - 1].session.date : null;
+      return (
+        <ExerciseCard
+          key={title}
+          unit={unit}
+          lastActive={lastActive}
+          personalBest={personalBest}
+          //lastWeightChange={lastWeightChange}
+          onPress={() => this.navigateToExercise(id, title)}
+          title={title}
+        />
+      );
+    });
+  }
+
   public render() {
     const {
       showCreateExerciseForm,
@@ -105,9 +143,6 @@ class Exercises extends React.Component {
     const showButtons =
       !showCreateExerciseForm && !showSearchBar && !showFilterForm;
 
-    const exercises = this.props.data.exerciseDefinitions;
-    console.log("exercises", exercises);
-
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
@@ -116,25 +151,7 @@ class Exercises extends React.Component {
           {showFilterForm && this.renderFilterForm()}
           {showButtons && this.renderButtons()}
         </View>
-        {exercises &&
-          exercises.map(({ id, unit, title, history, personalBest }) => {
-            // if there is a history, assign last active to latest session date
-            const lastActive =
-              history.length > 0
-                ? history[history.length - 1].session.date
-                : null;
-            return (
-              <ExerciseCard
-                key={title}
-                unit={unit}
-                lastActive={lastActive}
-                personalBest={personalBest}
-                //lastWeightChange={lastWeightChange}
-                onPress={() => this.navigateToExercise(id, title)}
-                title={title}
-              />
-            );
-          })}
+        {this.renderExercises()}
       </ScrollView>
     );
   }
@@ -164,6 +181,12 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     marginTop: 20
+  },
+  noExercisesContainer: {
+    margin: 20
+  },
+  noExercisesMessage: {
+    textAlign: "center"
   }
 });
 
