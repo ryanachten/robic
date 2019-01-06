@@ -51,7 +51,11 @@ class Exercises extends React.Component {
       variables: {
         title,
         unit
-      }
+      },
+      refetchQueries: [{ query }]
+    });
+    this.setState({
+      showCreateExerciseForm: false
     });
     // TODO: add error handling to form submission
   }
