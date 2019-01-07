@@ -1,18 +1,19 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
-import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-elements";
 import {
   Button,
-  ExerciseCard,
   ExerciseFilter,
   ExerciseForm,
+  ExerciseList,
   IconButton,
   ScreenHeader,
   SearchBar,
   SessionCard
 } from "../../components";
+import { exerciseDefinitionsQuery } from "../../queries";
 
 class Exercises extends React.Component {
   public static navigationOptions = {
@@ -53,7 +54,7 @@ class Exercises extends React.Component {
         unit
       },
       // Refresh the exercise definition data in cache after mutation
-      refetchQueries: [{ query }]
+      refetchQueries: [{ query: exerciseDefinitionsQuery }]
     });
     this.setState({
       showCreateExerciseForm: false
@@ -101,44 +102,6 @@ class Exercises extends React.Component {
     );
   }
 
-  public renderExercises() {
-    const { exerciseDefinitions, loading } = this.props.data;
-    if (loading) {
-      return (
-        <View style={styles.noExercisesContainer}>
-          <ActivityIndicator size="small" />
-        </View>
-      );
-    }
-    const exercises = exerciseDefinitions;
-    if (exercises.length === 0) {
-      return (
-        <View style={styles.noExercisesContainer}>
-          <Text style={styles.noExercisesMessage}>
-            Oops, looks like you don't have any exercises yet. Click the add
-            button above to get started
-          </Text>
-        </View>
-      );
-    }
-    return exercises.map(({ id, unit, title, history, personalBest }) => {
-      // if there is a history, assign last active to latest session date
-      const lastActive =
-        history.length > 0 ? history[history.length - 1].session.date : null;
-      return (
-        <ExerciseCard
-          key={title}
-          unit={unit}
-          lastActive={lastActive}
-          personalBest={personalBest}
-          //lastWeightChange={lastWeightChange}
-          onPress={() => this.navigateToExercise(id, title)}
-          title={title}
-        />
-      );
-    });
-  }
-
   public render() {
     const {
       showCreateExerciseForm,
@@ -147,6 +110,7 @@ class Exercises extends React.Component {
     } = this.state;
     const showButtons =
       !showCreateExerciseForm && !showSearchBar && !showFilterForm;
+    const { exerciseDefinitions, loading } = this.props.data;
 
     return (
       <ScrollView>
@@ -156,7 +120,11 @@ class Exercises extends React.Component {
           {showFilterForm && this.renderFilterForm()}
           {showButtons && this.renderButtons()}
         </View>
-        {this.renderExercises()}
+        <ExerciseList
+          exerciseDefinitions={exerciseDefinitions}
+          loading={loading}
+          onExercisePress={(id, title) => this.navigateToExercise(id, title)}
+        />
       </ScrollView>
     );
   }
@@ -203,39 +171,7 @@ const mutation = gql`
   }
 `;
 
-const query = gql`
-  {
-    exerciseDefinitions {
-      id
-      title
-      unit
-      history {
-        session {
-          date
-        }
-      }
-      personalBest {
-        value {
-          value
-        }
-        setCount {
-          value
-        }
-        totalReps {
-          value
-        }
-        netValue {
-          value
-        }
-        timeTaken {
-          value
-        }
-      }
-    }
-  }
-`;
-
 export default compose(
   graphql(mutation),
-  graphql(query)
+  graphql(exerciseDefinitionsQuery)
 )(Exercises);

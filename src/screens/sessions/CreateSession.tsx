@@ -2,9 +2,10 @@ import { SecureStore } from "expo";
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-elements";
-import { Button, FormInput, SearchBar } from "../../components";
+import { ExerciseList, FormInput, IconButton } from "../../components";
+import { exerciseDefinitionsQuery } from "../../queries";
 
 class CreateSession extends React.Component {
   public static navigationOptions = {
@@ -52,28 +53,25 @@ class CreateSession extends React.Component {
 
   public render() {
     const { title, exercises } = this.state;
+    const { exerciseDefinitions, loading } = this.props.data;
 
     return (
       <Card containerStyle={styles.formContainer}>
         <FormInput
-          autoCorrect={false}
-          label="Title"
-          onChangeText={text => this.handleFieldUpdate("title", text)}
-          placeholder="Session title"
-          value={title}
+          label="Name"
+          containerStyle={styles.input}
+          //onChangeText={text => this.handleFieldUpdate("title", text)}
+          placeholder="Name"
+          //value={title}
         />
-        <SearchBar />
+        <ExerciseList
+          exerciseDefinitions={exerciseDefinitions}
+          loading={loading}
+          onExercisePress={(id, title) => console.log(id, title)}
+        />
         <View style={styles.buttonWrapper}>
-          <Button
-            iconName="done"
-            title="Submit"
-            onPress={() => this.submitSession()}
-          />
-          <Button
-            iconName="clear"
-            title="Clear"
-            onPress={() => this.clearFields()}
-          />
+          <IconButton color="red" name="close" /*onPress={onFormClose}*/ />
+          <IconButton color="green" name="done" /*onPress={this.onSubmit}*/ />
         </View>
       </Card>
     );
@@ -88,6 +86,9 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1
+  },
+  input: {
+    marginTop: 15
   }
 });
 
@@ -97,18 +98,7 @@ const mutation = gql`
   }
 `;
 
-const query = gql`
-  {
-    currentUser {
-      id
-      email
-      firstName
-      lastName
-    }
-  }
-`;
-
 export default compose(
   graphql(mutation),
-  graphql(query)
+  graphql(exerciseDefinitionsQuery)
 )(CreateSession);

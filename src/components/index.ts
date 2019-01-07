@@ -1,6 +1,7 @@
 export * from "./ActivityChart/ActivityChart";
 export * from "./Button/Button";
 export * from "./ExerciseCard/ExerciseCard";
+export * from "./ExerciseList/ExerciseList";
 export * from "./ExerciseFilter/ExerciseFilter";
 export * from "./ExerciseForm/ExerciseForm";
 export * from "./ExerciseSessionCard/ExerciseSessionCard";
