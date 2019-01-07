@@ -19,32 +19,13 @@ class Sessions extends React.Component {
   };
 
   public state = {
-    showCreateSessionForm: false,
     showFilterForm: false
   };
-
-  public toggleCreateSessionForm() {
-    this.setState(prevState => ({
-      showCreateSessionForm: !prevState.showCreateSessionForm
-    }));
-  }
 
   public toggleFilterForm() {
     this.setState(prevState => ({
       showFilterForm: !prevState.showFilterForm
     }));
-  }
-
-  public renderSessionForm() {
-    return (
-      <ExerciseForm
-        containerStyle={styles.createSessionForm}
-        onFormClose={() => this.toggleCreateSessionForm()}
-        submitExerciseForm={(title, unit) =>
-          this.submitExerciseDefinition(title, unit)
-        }
-      />
-    );
   }
 
   public renderFilterForm() {
@@ -69,7 +50,7 @@ class Sessions extends React.Component {
         <IconButton
           color="green"
           name="add"
-          onPress={() => this.toggleCreateSessionForm()}
+          onPress={() => this.onCreateSession()}
         />
       </View>
     );
@@ -94,14 +75,12 @@ class Sessions extends React.Component {
   }
 
   public render() {
-    const { showCreateSessionForm, showSearchBar, showFilterForm } = this.state;
-    const showButtons =
-      !showCreateSessionForm && !showSearchBar && !showFilterForm;
+    const { showSearchBar, showFilterForm } = this.state;
+    const showButtons = !showSearchBar && !showFilterForm;
 
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
-          {showCreateSessionForm && this.renderSessionForm()}
           {showSearchBar && this.renderSearchBar()}
           {showFilterForm && this.renderFilterForm()}
           {showButtons && this.renderButtons()}
@@ -129,10 +108,6 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     marginTop: 20
-  },
-  createSessionForm: {
-    marginLeft: 15,
-    marginRight: 15
   },
   headerContainer: {
     marginTop: 20
