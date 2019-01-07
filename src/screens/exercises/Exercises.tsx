@@ -52,6 +52,7 @@ class Exercises extends React.Component {
         title,
         unit
       },
+      // Refresh the exercise definition data in cache after mutation
       refetchQueries: [{ query }]
     });
     this.setState({

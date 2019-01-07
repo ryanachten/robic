@@ -1,7 +1,10 @@
 import * as React from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   Button,
+  ExerciseFilter,
+  ExerciseForm,
+  IconButton,
   LogOutButton,
   ScreenHeader,
   SearchBar,
@@ -15,21 +18,66 @@ class Sessions extends React.Component {
     headerRight: <LogOutButton />
   };
 
-  public onCreateSession() {
-    this.props.navigation.navigate("CreateSession");
+  public state = {
+    showCreateSessionForm: false,
+    showFilterForm: false
+  };
+
+  public toggleCreateSessionForm() {
+    this.setState(prevState => ({
+      showCreateSessionForm: !prevState.showCreateSessionForm
+    }));
   }
 
-  public render() {
+  public toggleFilterForm() {
+    this.setState(prevState => ({
+      showFilterForm: !prevState.showFilterForm
+    }));
+  }
+
+  public renderSessionForm() {
     return (
-      <ScrollView>
-        <ScreenHeader>Start a session</ScreenHeader>
-        <SearchBar />
-        <Button
-          containerStyle={styles.createSessionButton}
-          iconName="add"
-          title="Create new session"
-          onPress={() => this.onCreateSession()}
+      <ExerciseForm
+        containerStyle={styles.createSessionForm}
+        onFormClose={() => this.toggleCreateSessionForm()}
+        submitExerciseForm={(title, unit) =>
+          this.submitExerciseDefinition(title, unit)
+        }
+      />
+    );
+  }
+
+  public renderFilterForm() {
+    return (
+      <ExerciseFilter
+        onFormClose={() => this.toggleFilterForm()}
+        submitExerciseFilter={({ searchTerm, sortBy }) =>
+          console.log("submitExerciseFilter", searchTerm, sortBy)
+        }
+      />
+    );
+  }
+
+  public renderButtons() {
+    return (
+      <View style={styles.buttonContainer}>
+        <IconButton
+          color="black"
+          name="search"
+          onPress={() => this.toggleFilterForm()}
         />
+        <IconButton
+          color="green"
+          name="add"
+          onPress={() => this.toggleCreateSessionForm()}
+        />
+      </View>
+    );
+  }
+
+  public renderSessions() {
+    return (
+      <View>
         {sessions.map(session => (
           <SessionCard
             key={session.id}
@@ -37,6 +85,28 @@ class Sessions extends React.Component {
             {...session}
           />
         ))}
+      </View>
+    );
+  }
+
+  public onCreateSession() {
+    this.props.navigation.navigate("CreateSession");
+  }
+
+  public render() {
+    const { showCreateSessionForm, showSearchBar, showFilterForm } = this.state;
+    const showButtons =
+      !showCreateSessionForm && !showSearchBar && !showFilterForm;
+
+    return (
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          {showCreateSessionForm && this.renderSessionForm()}
+          {showSearchBar && this.renderSearchBar()}
+          {showFilterForm && this.renderFilterForm()}
+          {showButtons && this.renderButtons()}
+        </View>
+        {this.renderSessions()}
       </ScrollView>
     );
   }
@@ -50,7 +120,21 @@ class Sessions extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  createSessionButton: {
+  buttonContainer: {
+    alignSelf: "center",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%"
+  },
+  cancelButton: {
+    marginTop: 20
+  },
+  createSessionForm: {
+    marginLeft: 15,
+    marginRight: 15
+  },
+  headerContainer: {
     marginTop: 20
   }
 });
