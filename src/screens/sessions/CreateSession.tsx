@@ -16,14 +16,25 @@ class CreateSession extends React.Component {
     super(props);
     this.state = {
       title: "",
+      availableExercises: [],
       exercises: []
     };
   }
 
-  public handleFieldUpdate(fieldName, value) {
-    const state = {};
-    state[fieldName] = value;
-    this.setState(state);
+  public componentDidUpdate() {
+    const { availableExercises, exercises } = this.state;
+    const exerciseDefinitions = this.props.data.exerciseDefinitions;
+    if (!exerciseDefinitions) return;
+    // Only update exercises from query on initial query load
+    if (
+      exerciseDefinitions.length > 0 &&
+      availableExercises.length === 0 &&
+      exercises.length === 0
+    ) {
+      this.setState({
+        availableExercises: exerciseDefinitions
+      });
+    }
   }
 
   public async submitSession() {
@@ -58,21 +69,23 @@ class CreateSession extends React.Component {
   }
 
   public addExerciseToSessionList(exercise) {
-    const { exercises, title } = this.state;
-    // Prevent duplicate exercises being added to the active list
-    // TODO: should probably store exerciseDefs in state and remove from available
-    const alreadyExists = exercises.filter(
-      existingExercise => existingExercise.id === exercise.id
+    const { availableExercises, exercises, title } = this.state;
+
+    // Remove selected exercise from available exercises
+    const newAvailableExercises = availableExercises.filter(
+      availableExercise => availableExercise.id !== exercise.id
     );
-    if (alreadyExists.length > 0) return;
+
+    // Update exercises w/ new item
     this.setState(prevState => ({
-      exercises: [...prevState.exercises, exercise]
+      exercises: [...prevState.exercises, exercise],
+      availableExercises: newAvailableExercises
     }));
   }
 
   public render() {
-    const { title, exercises } = this.state;
-    const { exerciseDefinitions, loading } = this.props.data;
+    const { title, exercises, availableExercises } = this.state;
+    const { loading } = this.props.data;
 
     return (
       <ScrollView>
@@ -88,7 +101,7 @@ class CreateSession extends React.Component {
           <ExerciseList exerciseDefinitions={exercises} loading={loading} />
           <FormLabel>Available Exercises</FormLabel>
           <ExerciseList
-            exerciseDefinitions={exerciseDefinitions}
+            exerciseDefinitions={availableExercises}
             loading={loading}
             onExercisePress={exercise =>
               this.addExerciseToSessionList(exercise)
