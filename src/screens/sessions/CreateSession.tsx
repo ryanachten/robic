@@ -2,8 +2,8 @@ import { SecureStore } from "expo";
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
-import { StyleSheet, View } from "react-native";
-import { Card, Text } from "react-native-elements";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Card, FormLabel, Text } from "react-native-elements";
 import { ExerciseList, FormInput, IconButton } from "../../components";
 import { exerciseDefinitionsQuery } from "../../queries";
 
@@ -51,29 +51,49 @@ class CreateSession extends React.Component {
     });
   }
 
+  public addExerciseToSessionList(exercise) {
+    const exercises = this.state.exercises;
+    // Prevent duplicate exercises being added to the active list
+    // TODO: should probably store exerciseDefs in state and remove from available
+    const alreadyExists = exercises.filter(
+      existingExercise => existingExercise.id === exercise.id
+    );
+    if (alreadyExists.length > 0) return;
+    this.setState(prevState => ({
+      exercises: [...prevState.exercises, exercise]
+    }));
+  }
+
   public render() {
     const { title, exercises } = this.state;
     const { exerciseDefinitions, loading } = this.props.data;
 
     return (
-      <Card containerStyle={styles.formContainer}>
-        <FormInput
-          label="Name"
-          containerStyle={styles.input}
-          //onChangeText={text => this.handleFieldUpdate("title", text)}
-          placeholder="Name"
-          //value={title}
-        />
-        <ExerciseList
-          exerciseDefinitions={exerciseDefinitions}
-          loading={loading}
-          onExercisePress={exercise => console.log(exercise)}
-        />
-        <View style={styles.buttonWrapper}>
-          <IconButton color="red" name="close" /*onPress={onFormClose}*/ />
-          <IconButton color="green" name="done" /*onPress={this.onSubmit}*/ />
-        </View>
-      </Card>
+      <ScrollView>
+        <Card containerStyle={styles.formContainer}>
+          <FormInput
+            label="Session Name"
+            containerStyle={styles.input}
+            //onChangeText={text => this.handleFieldUpdate("title", text)}
+            placeholder="Name"
+            //value={title}
+          />
+          <FormLabel>Session Exercises</FormLabel>
+          <ExerciseList exerciseDefinitions={exercises} loading={loading} />
+          <FormLabel>Available Exercises</FormLabel>
+          <ExerciseList
+            exerciseDefinitions={exerciseDefinitions}
+            loading={loading}
+            onExercisePress={exercise =>
+              this.addExerciseToSessionList(exercise)
+            }
+          />
+          <View style={styles.buttonWrapper}>
+            <IconButton color="red" name="close" /*onPress={onFormClose}*/ />
+            <IconButton color="green" name="done" /*onPress={this.onSubmit}*/ />
+          </View>
+        </Card>
+      </ScrollView>
     );
   }
 }
