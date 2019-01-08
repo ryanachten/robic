@@ -67,7 +67,7 @@ class CreateSession extends React.Component {
         <ExerciseList
           exerciseDefinitions={exerciseDefinitions}
           loading={loading}
-          onExercisePress={(id, title) => console.log(id, title)}
+          onExercisePress={exercise => console.log(exercise)}
         />
         <View style={styles.buttonWrapper}>
           <IconButton color="red" name="close" /*onPress={onFormClose}*/ />

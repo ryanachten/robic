@@ -123,7 +123,9 @@ class Exercises extends React.Component {
         <ExerciseList
           exerciseDefinitions={exerciseDefinitions}
           loading={loading}
-          onExercisePress={(id, title) => this.navigateToExercise(id, title)}
+          onExercisePress={exercise =>
+            this.navigateToExercise(exercise.id, exercise.title)
+          }
         />
       </ScrollView>
     );
