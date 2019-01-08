@@ -39,6 +39,9 @@ class CreateSession extends React.Component {
 
   public async submitSession() {
     const { title, exercises } = this.state;
+    // TODO: add proper form feedback
+    if (!title || exercises.length === 0) return;
+    console.log("title", title, "exercises", exercises);
 
     // // Executes the login mutation with the following query parameters
     // const loginResponse = await this.props.mutate({
@@ -91,6 +94,7 @@ class CreateSession extends React.Component {
       <ScrollView>
         <Card containerStyle={styles.formContainer}>
           <FormInput
+            autoCapitalize="words"
             label="Session Name"
             containerStyle={styles.input}
             onChangeText={text => this.updateSessionName(text)}
@@ -113,7 +117,11 @@ class CreateSession extends React.Component {
               name="close"
               onPress={() => this.clearFields()}
             />
-            <IconButton color="green" name="done" /*onPress={this.onSubmit}*/ />
+            <IconButton
+              color="green"
+              name="done"
+              onPress={() => this.submitSession()}
+            />
           </View>
         </Card>
       </ScrollView>
