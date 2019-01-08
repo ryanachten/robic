@@ -44,6 +44,12 @@ class CreateSession extends React.Component {
     // }
   }
 
+  public updateSessionName(title) {
+    this.setState({
+      title
+    });
+  }
+
   public clearFields() {
     this.setState({
       title: "",
@@ -52,7 +58,7 @@ class CreateSession extends React.Component {
   }
 
   public addExerciseToSessionList(exercise) {
-    const exercises = this.state.exercises;
+    const { exercises, title } = this.state;
     // Prevent duplicate exercises being added to the active list
     // TODO: should probably store exerciseDefs in state and remove from available
     const alreadyExists = exercises.filter(
@@ -74,9 +80,9 @@ class CreateSession extends React.Component {
           <FormInput
             label="Session Name"
             containerStyle={styles.input}
-            //onChangeText={text => this.handleFieldUpdate("title", text)}
+            onChangeText={text => this.updateSessionName(text)}
             placeholder="Name"
-            //value={title}
+            value={title}
           />
           <FormLabel>Session Exercises</FormLabel>
           <ExerciseList exerciseDefinitions={exercises} loading={loading} />
@@ -89,7 +95,11 @@ class CreateSession extends React.Component {
             }
           />
           <View style={styles.buttonWrapper}>
-            <IconButton color="red" name="close" /*onPress={onFormClose}*/ />
+            <IconButton
+              color="red"
+              name="close"
+              onPress={() => this.clearFields()}
+            />
             <IconButton color="green" name="done" /*onPress={this.onSubmit}*/ />
           </View>
         </Card>
