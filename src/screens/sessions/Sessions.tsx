@@ -1,4 +1,6 @@
+import gql from "graphql-tag";
 import * as React from "react";
+import { compose, graphql } from "react-apollo";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   Button,
@@ -90,7 +92,14 @@ class Sessions extends React.Component {
 
   public async submitSession(title) {
     console.log("submitSession", title);
-    // await submission
+    const sessionResponse = await this.props.mutate({
+      variables: {
+        title
+      }
+      // Refresh the exercise definition data in cache after mutation
+      // refetchQueries: [{ query: exerciseDefinitionsQuery }]
+    });
+    console.log("sessionResponse", sessionResponse);
     this.toggleCreateSessionForm();
   }
 
@@ -140,4 +149,12 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Sessions;
+const mutation = gql`
+  mutation AddSessionDefinition($title: String!) {
+    addSessionDefinition(title: $title) {
+      id
+    }
+  }
+`;
+
+export default compose(graphql(mutation))(Sessions);
