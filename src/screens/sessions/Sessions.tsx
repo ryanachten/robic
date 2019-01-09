@@ -77,6 +77,9 @@ class Sessions extends React.Component {
   }
 
   public renderSessions() {
+    const { sessionDefinitions, loading } = this.props.data;
+    if (loading) return;
+    console.log("sessionDefinitions", sessionDefinitions);
     return (
       <View>
         {sessions.map(session => (
@@ -91,7 +94,6 @@ class Sessions extends React.Component {
   }
 
   public async submitSession(title) {
-    console.log("submitSession", title);
     const sessionResponse = await this.props.mutate({
       variables: {
         title
@@ -99,7 +101,6 @@ class Sessions extends React.Component {
       // Refresh the exercise definition data in cache after mutation
       // refetchQueries: [{ query: exerciseDefinitionsQuery }]
     });
-    console.log("sessionResponse", sessionResponse);
     this.toggleCreateSessionForm();
   }
 
@@ -157,4 +158,22 @@ const mutation = gql`
   }
 `;
 
-export default compose(graphql(mutation))(Sessions);
+const query = gql`
+  {
+    sessionDefinitions {
+      id
+      title
+      history {
+        date
+        exercises {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export default compose(
+  graphql(mutation),
+  graphql(query)
+)(Sessions);
