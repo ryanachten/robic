@@ -8,7 +8,8 @@ import {
   LogOutButton,
   ScreenHeader,
   SearchBar,
-  SessionCard
+  SessionCard,
+  SessionForm
 } from "../../components";
 import sessions from "../../mock_data/sessions";
 
@@ -19,13 +20,30 @@ class Sessions extends React.Component {
   };
 
   public state = {
-    showFilterForm: false
+    showFilterForm: false,
+    showCreateSessionForm: false
   };
+
+  public toggleCreateSessionForm() {
+    this.setState(prevState => ({
+      showCreateSessionForm: !prevState.showCreateSessionForm
+    }));
+  }
 
   public toggleFilterForm() {
     this.setState(prevState => ({
       showFilterForm: !prevState.showFilterForm
     }));
+  }
+
+  public renderSessionForm() {
+    return (
+      <SessionForm
+        containerStyle={styles.createSessionForm}
+        onFormClose={() => this.toggleCreateSessionForm()}
+        submitSessionForm={title => this.submitSession(title)}
+      />
+    );
   }
 
   public renderFilterForm() {
@@ -50,7 +68,7 @@ class Sessions extends React.Component {
         <IconButton
           color="green"
           name="add"
-          onPress={() => this.onCreateSession()}
+          onPress={() => this.toggleCreateSessionForm()}
         />
       </View>
     );
@@ -70,17 +88,21 @@ class Sessions extends React.Component {
     );
   }
 
-  public onCreateSession() {
-    this.props.navigation.navigate("CreateSession");
+  public async submitSession(title) {
+    console.log("submitSession", title);
+    // await submission
+    this.toggleCreateSessionForm();
   }
 
   public render() {
-    const { showSearchBar, showFilterForm } = this.state;
-    const showButtons = !showSearchBar && !showFilterForm;
+    const { showCreateSessionForm, showSearchBar, showFilterForm } = this.state;
+    const showButtons =
+      !showCreateSessionForm && !showSearchBar && !showFilterForm;
 
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
+          {showCreateSessionForm && this.renderSessionForm()}
           {showSearchBar && this.renderSearchBar()}
           {showFilterForm && this.renderFilterForm()}
           {showButtons && this.renderButtons()}
@@ -108,6 +130,10 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     marginTop: 20
+  },
+  createSessionForm: {
+    marginLeft: 15,
+    marginRight: 15
   },
   headerContainer: {
     marginTop: 20
