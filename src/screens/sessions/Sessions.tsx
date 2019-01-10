@@ -1,6 +1,4 @@
-import gql from "graphql-tag";
 import * as React from "react";
-import { compose, graphql } from "react-apollo";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   Button,
@@ -10,8 +8,7 @@ import {
   LogOutButton,
   ScreenHeader,
   SearchBar,
-  SessionCard,
-  SessionForm
+  SessionCard
 } from "../../components";
 import sessions from "../../mock_data/sessions";
 
@@ -22,30 +19,13 @@ class Sessions extends React.Component {
   };
 
   public state = {
-    showFilterForm: false,
-    showCreateSessionForm: false
+    showFilterForm: false
   };
-
-  public toggleCreateSessionForm() {
-    this.setState(prevState => ({
-      showCreateSessionForm: !prevState.showCreateSessionForm
-    }));
-  }
 
   public toggleFilterForm() {
     this.setState(prevState => ({
       showFilterForm: !prevState.showFilterForm
     }));
-  }
-
-  public renderSessionForm() {
-    return (
-      <SessionForm
-        containerStyle={styles.createSessionForm}
-        onFormClose={() => this.toggleCreateSessionForm()}
-        submitSessionForm={title => this.submitSession(title)}
-      />
-    );
   }
 
   public renderFilterForm() {
@@ -70,16 +50,13 @@ class Sessions extends React.Component {
         <IconButton
           color="green"
           name="add"
-          onPress={() => this.toggleCreateSessionForm()}
+          onPress={() => this.onCreateSession()}
         />
       </View>
     );
   }
 
   public renderSessions() {
-    const { sessionDefinitions, loading } = this.props.data;
-    if (loading) return;
-    console.log("sessionDefinitions", sessionDefinitions);
     return (
       <View>
         {sessions.map(session => (
@@ -93,26 +70,17 @@ class Sessions extends React.Component {
     );
   }
 
-  public async submitSession(title) {
-    const sessionResponse = await this.props.mutate({
-      variables: {
-        title
-      }
-      // Refresh the exercise definition data in cache after mutation
-      // refetchQueries: [{ query: exerciseDefinitionsQuery }]
-    });
-    this.toggleCreateSessionForm();
+  public onCreateSession() {
+    this.props.navigation.navigate("CreateSession");
   }
 
   public render() {
-    const { showCreateSessionForm, showSearchBar, showFilterForm } = this.state;
-    const showButtons =
-      !showCreateSessionForm && !showSearchBar && !showFilterForm;
+    const { showSearchBar, showFilterForm } = this.state;
+    const showButtons = !showSearchBar && !showFilterForm;
 
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
-          {showCreateSessionForm && this.renderSessionForm()}
           {showSearchBar && this.renderSearchBar()}
           {showFilterForm && this.renderFilterForm()}
           {showButtons && this.renderButtons()}
@@ -141,39 +109,9 @@ const styles = StyleSheet.create({
   cancelButton: {
     marginTop: 20
   },
-  createSessionForm: {
-    marginLeft: 15,
-    marginRight: 15
-  },
   headerContainer: {
     marginTop: 20
   }
 });
 
-const mutation = gql`
-  mutation AddSessionDefinition($title: String!) {
-    addSessionDefinition(title: $title) {
-      id
-    }
-  }
-`;
-
-const query = gql`
-  {
-    sessionDefinitions {
-      id
-      title
-      history {
-        date
-        exercises {
-          id
-        }
-      }
-    }
-  }
-`;
-
-export default compose(
-  graphql(mutation),
-  graphql(query)
-)(Sessions);
+export default Sessions;
