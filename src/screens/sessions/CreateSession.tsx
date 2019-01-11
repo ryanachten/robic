@@ -1,4 +1,3 @@
-import { SecureStore } from "expo";
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
@@ -41,21 +40,17 @@ class CreateSession extends React.Component {
     const { title, exercises } = this.state;
     // TODO: add proper form feedback
     if (!title || exercises.length === 0) return;
-    console.log("title", title, "exercises", exercises);
 
-    // // Executes the login mutation with the following query parameters
-    // const loginResponse = await this.props.mutate({
-    //   variables: {
-    //     email,
-    //     password
-    //   }
-    // });
-    // const token = loginResponse.data.loginUser;
-    // if (token) {
-    //   await SecureStore.setItemAsync("token", token);
-    //   this.clearFields();
-    //   this.props.navigation.navigate("Activity");
-    // }
+    const exerciseIds = exercises.map(exercise => exercise.id);
+
+    // Executes the login mutation with the following query parameters
+    const sessionResponse = await this.props.mutate({
+      variables: {
+        title,
+        exercises: exerciseIds
+      }
+    });
+    console.log("sessionResponse", sessionResponse);
   }
 
   public updateSessionName(title) {
@@ -144,8 +139,10 @@ const styles = StyleSheet.create({
 });
 
 const mutation = gql`
-  mutation LoginUser($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password)
+  mutation AddSessionDefinition($title: String!, $exercises: [ID!]) {
+    addSessionDefinition(title: $title, exercises: $exercises) {
+      id
+    }
   }
 `;
 
