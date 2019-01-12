@@ -12,7 +12,7 @@ import {
   SearchBar,
   SessionList
 } from "../../components";
-import sessions from "../../mock_data/sessions";
+import { sessionDefinitionsQuery } from "../../queries";
 
 class Sessions extends React.Component {
   public static navigationOptions = {
@@ -108,19 +108,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const query = gql`
-  {
-    sessionDefinitions {
-      id
-      title
-      exercises {
-        title
-      }
-      history {
-        date
-      }
-    }
-  }
-`;
-
-export default graphql(query)(Sessions);
+export default graphql(sessionDefinitionsQuery)(Sessions);

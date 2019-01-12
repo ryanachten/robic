@@ -31,3 +31,18 @@ export const exerciseDefinitionsQuery = gql`
     }
   }
 `;
+
+export const sessionDefinitionsQuery = gql`
+  {
+    sessionDefinitions {
+      id
+      title
+      exercises {
+        title
+      }
+      history {
+        date
+      }
+    }
+  }
+`;

@@ -4,7 +4,10 @@ import { compose, graphql } from "react-apollo";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, FormLabel, Text } from "react-native-elements";
 import { ExerciseList, FormInput, IconButton } from "../../components";
-import { exerciseDefinitionsQuery } from "../../queries";
+import {
+  exerciseDefinitionsQuery,
+  sessionDefinitionsQuery
+} from "../../queries";
 
 class CreateSession extends React.Component {
   public static navigationOptions = {
@@ -48,9 +51,11 @@ class CreateSession extends React.Component {
       variables: {
         title,
         exercises: exerciseIds
-      }
+      },
+      // Refresh the exercise definition data in cache after mutation
+      refetchQueries: [{ query: sessionDefinitionsQuery }]
     });
-    console.log("sessionResponse", sessionResponse);
+    this.props.navigation.navigate("Sessions");
   }
 
   public updateSessionName(title) {
