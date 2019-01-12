@@ -12,5 +12,6 @@ export * from "./LogOutButton/LogOutButton";
 export * from "./ScreenHeader/ScreenHeader";
 export * from "./SearchBar/SearchBar";
 export * from "./SessionCard/SessionCard";
+export * from "./SessionList/SessionList";
 export * from "./SessionForm/SessionForm";
 export * from "./SetControls/SetControls";

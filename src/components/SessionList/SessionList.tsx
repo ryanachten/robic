@@ -2,11 +2,9 @@ import * as React from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { Button, FormInput, IconButton, SearchBar, SessionCard } from "..";
 
-import { exerciseDefinitionsQuery } from "../../../queries";
-
 export class SessionList extends React.Component {
   public render() {
-    const { sessionDefinitions, loading, onExercisePress } = this.props;
+    const { loading, onSessionPress, sessionDefinitions } = this.props;
     if (loading) {
       return (
         <View style={styles.noSessionsContainer}>
@@ -25,20 +23,17 @@ export class SessionList extends React.Component {
         </View>
       );
     }
-    return sessions.map(exercise => {
-      const { history, title, unit, personalBest } = exercise;
+    return sessions.map(session => {
+      const { exercises, history, title } = session;
       // if there is a history, assign last active to latest session date
       const lastActive =
         history.length > 0 ? history[history.length - 1].session.date : null;
-      return null;
       return (
         <SessionCard
+          excerciseCount={exercises.length}
           key={title}
-          unit={unit}
           lastActive={lastActive}
-          personalBest={personalBest}
-          //lastWeightChange={lastWeightChange}
-          onPress={() => onExercisePress(exercise)}
+          onPress={() => onSessionPress(session)}
           title={title}
         />
       );

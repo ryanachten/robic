@@ -1,4 +1,6 @@
+import gql from "graphql-tag";
 import * as React from "react";
+import { graphql } from "react-apollo";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   Button,
@@ -8,7 +10,7 @@ import {
   LogOutButton,
   ScreenHeader,
   SearchBar,
-  SessionCard
+  SessionList
 } from "../../components";
 import sessions from "../../mock_data/sessions";
 
@@ -56,20 +58,6 @@ class Sessions extends React.Component {
     );
   }
 
-  public renderSessions() {
-    return (
-      <View>
-        {sessions.map(session => (
-          <SessionCard
-            key={session.id}
-            onPress={() => this.navigateToSession(session)}
-            {...session}
-          />
-        ))}
-      </View>
-    );
-  }
-
   public onCreateSession() {
     this.props.navigation.navigate("CreateSession");
   }
@@ -78,6 +66,8 @@ class Sessions extends React.Component {
     const { showSearchBar, showFilterForm } = this.state;
     const showButtons = !showSearchBar && !showFilterForm;
 
+    const { loading, sessionDefinitions } = this.props.data;
+
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
@@ -85,7 +75,11 @@ class Sessions extends React.Component {
           {showFilterForm && this.renderFilterForm()}
           {showButtons && this.renderButtons()}
         </View>
-        {this.renderSessions()}
+        <SessionList
+          loading={loading}
+          sessionDefinitions={sessionDefinitions}
+          onSessionPress={session => console.log("session", session)}
+        />
       </ScrollView>
     );
   }
@@ -114,4 +108,19 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Sessions;
+const query = gql`
+  {
+    sessionDefinitions {
+      id
+      title
+      exercises {
+        title
+      }
+      history {
+        date
+      }
+    }
+  }
+`;
+
+export default graphql(query)(Sessions);
