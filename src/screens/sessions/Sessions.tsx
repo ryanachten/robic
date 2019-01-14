@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import * as React from "react";
-import { graphql } from "react-apollo";
+import { compose, graphql } from "react-apollo";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   Button,
@@ -78,15 +78,20 @@ class Sessions extends React.Component {
         <SessionList
           loading={loading}
           sessionDefinitions={sessionDefinitions}
-          onSessionPress={session => console.log("session", session)}
+          onSessionPress={session => this.navigateToSession(session)}
         />
       </ScrollView>
     );
   }
 
-  private navigateToSession(session) {
+  private async navigateToSession(session) {
+    const newSession = await this.props.mutate({
+      variables: {
+        definitionId: session.id
+      }
+    });
     this.props.navigation.navigate("Session", {
-      sessionId: session.id,
+      sessionId: newSession.id,
       sessionTitle: session.title
     });
   }
@@ -108,4 +113,15 @@ const styles = StyleSheet.create({
   }
 });
 
-export default graphql(sessionDefinitionsQuery)(Sessions);
+const mutation = gql`
+  mutation AddSession($definitionId: ID!) {
+    addSession(definitionId: $definitionId) {
+      id
+    }
+  }
+`;
+
+export default compose(
+  graphql(mutation),
+  graphql(sessionDefinitionsQuery)
+)(Sessions);

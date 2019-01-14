@@ -27,7 +27,7 @@ export class SessionList extends React.Component {
       const { exercises, history, title } = session;
       // if there is a history, assign last active to latest session date
       const lastActive =
-        history.length > 0 ? history[history.length - 1].session.date : null;
+        history.length > 0 ? history[history.length - 1].date : null;
       return (
         <SessionCard
           excerciseCount={exercises.length}
