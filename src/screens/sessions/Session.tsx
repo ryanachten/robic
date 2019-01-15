@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
-import { ScrollView } from "react-native";
-import { ExerciseCard, ScreenHeader } from "../../components";
+import { ActivityIndicator, ScrollView } from "react-native";
+import { ExerciseList, ScreenHeader } from "../../components";
 import mockExercises from "../../mock_data/exercises";
 import sessions from "../../mock_data/sessions";
 
@@ -19,31 +19,12 @@ class Session extends React.Component {
     title: ""
   };
 
-  public componentWillMount() {
-    const currentId = this.props.navigation.getParam("sessionId");
-  }
-
-  // public renderExercise(exercise) {
-  //   const data = mockExercises.filter(
-  //     _exercise => _exercise.id === exercise.id
-  //   )[0];
-  //   if (!data) return null;
-  //   return (
-  //     <ExerciseCard
-  //       key={data.id}
-  //       title={data.title}
-  //       onPress={() => this.navigateToExercise(data)}
-  //     />
-  //   );
-  // }
-
   public render() {
-    const { title, exercises } = this.state;
-    console.log("session", this.props.data.session);
+    const { loading, session } = this.props.data;
+    const exercises = session ? session.definition.exercises : [];
     return (
       <ScrollView>
-        <ScreenHeader>{title}</ScreenHeader>
-        {/* {exercises.map(currentExercise => this.renderExercise(currentExercise))} */}
+        <ExerciseList exerciseDefinitions={exercises} loading={loading} />
       </ScrollView>
     );
   }
@@ -68,9 +49,17 @@ const query = gql`
   query GetSession($sessionId: ID!) {
     session(id: $sessionId) {
       id
-      exercises {
-        definition {
+      definition {
+        title
+        exercises {
           id
+          title
+          history {
+            session {
+              date
+            }
+          }
+          unit
         }
       }
     }
