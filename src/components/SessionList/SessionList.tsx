@@ -24,14 +24,14 @@ export class SessionList extends React.Component {
       );
     }
     return sessions.map(session => {
-      const { exercises, history, title } = session;
+      const { exercises, history, id, title } = session;
       // if there is a history, assign last active to latest session date
       const lastActive =
         history.length > 0 ? history[history.length - 1].date : null;
       return (
         <SessionCard
           excerciseCount={exercises.length}
-          key={title}
+          key={id}
           lastActive={lastActive}
           onPress={() => onSessionPress(session)}
           title={title}
