@@ -1,7 +1,8 @@
+import gql from "graphql-tag";
 import * as React from "react";
-import { ScrollView } from "react-native";
+import { compose, graphql } from "react-apollo";
+import { ActivityIndicator, ScrollView } from "react-native";
 import { Button, ScreenHeader, SetControls } from "../../components";
-import exercises from "../../mock_data/exercises";
 
 class Exercise extends React.Component {
   public static navigationOptions = ({ navigation }) => {
@@ -12,29 +13,8 @@ class Exercise extends React.Component {
   };
 
   public state = {
-    flippedCard: null,
-    sets: [
-      { reps: "5", unitValue: "15" },
-      { reps: "5", unitValue: "25" },
-      { reps: "5", unitValue: "35" },
-      { reps: "5", unitValue: "45" },
-      { reps: "5", unitValue: "55" }
-    ],
-    title: "",
-    unit: "kg"
+    flippedCard: null
   };
-
-  public componentWillMount() {
-    const currentId = this.props.navigation.getParam("exerciseId");
-    const currentExercise = exercises.filter(
-      excersise => excersise.id === currentId
-    )[0];
-    if (currentExercise) {
-      this.setState({
-        title: currentExercise.title
-      });
-    }
-  }
 
   public handleValueChange({ index, field, newValue }) {
     const sets = this.state.sets;
@@ -94,7 +74,12 @@ class Exercise extends React.Component {
   }
 
   public render() {
-    const { title, sets, unit, flippedCard } = this.state;
+    const { flippedCard } = this.state;
+    const { exercise, loading } = this.props.data;
+    if (loading) return <ActivityIndicator size="small" />;
+    console.log("exercise", exercise);
+    const { definition, sets } = exercise;
+    const { unit } = definition;
     return (
       <ScrollView>
         <ScreenHeader>Sets</ScreenHeader>
@@ -140,4 +125,38 @@ class Exercise extends React.Component {
   }
 }
 
-export default Exercise;
+const mutation = gql`
+  mutation AddSession($definitionId: ID!) {
+    addSession(definitionId: $definitionId) {
+      id
+    }
+  }
+`;
+
+const query = gql`
+  query GetExercise($exerciseId: ID!) {
+    exercise(id: $exerciseId) {
+      id
+      definition {
+        title
+        unit
+        history {
+          id
+        }
+      }
+      sets {
+        reps
+        value
+      }
+    }
+  }
+`;
+
+export default compose(
+  graphql(mutation),
+  graphql(query, {
+    options: props => ({
+      variables: { exerciseId: props.navigation.state.params.exerciseId }
+    })
+  })
+)(Exercise);

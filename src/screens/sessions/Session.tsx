@@ -59,7 +59,7 @@ const mutation = gql`
 `;
 
 const query = gql`
-  query GetDefinitionExercises($sessionId: ID!) {
+  query GetExercises($sessionId: ID!) {
     session(id: $sessionId) {
       id
       exercises {

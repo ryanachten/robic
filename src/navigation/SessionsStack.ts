@@ -12,10 +12,10 @@ export default createStackNavigator(
     SessionExercise: Exercise
   },
   {
-    initialRouteName: "Session",
+    initialRouteName: "SessionExercise",
     initialRouteParams: {
-      sessionId: "5c43c89a8b685940f4bfb759",
-      sessionTitle: "Test"
+      exerciseId: "5c43c89a8b685940f4bfb75a",
+      exerciseTitle: "Benchpress"
     }
   }
 );
