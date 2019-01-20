@@ -13,11 +13,16 @@ class Exercise extends React.Component {
   };
 
   public state = {
+    loading: true,
+    unit: "",
+    sets: [],
     flippedCard: null
   };
 
   public handleValueChange({ index, field, newValue }) {
     const sets = this.state.sets;
+    console.log("sets", sets);
+    console.log("index, field, newValue", index, field, newValue);
     // Increment by 1 for reps and 2.5 for weights
     const incrementValue = field === "reps" ? 1 : 2.5;
     switch (newValue) {
@@ -44,8 +49,36 @@ class Exercise extends React.Component {
     });
   }
 
+  public componentDidUpdate(prevProps, prevState) {
+    const { flippedCard } = this.state;
+    const { exercise, loading } = this.props.data;
+    // If done loading, and haven't previously loaded data
+    if (prevState.loading && !loading) {
+      const { definition, sets } = exercise;
+      const { unit } = definition;
+      this.setState({
+        loading: false,
+        unit,
+        sets
+      });
+    }
+  }
+
   public handleAddSet() {
-    const sets = this.state.sets;
+    const { sets, unit } = this.state;
+    // If no sets have been assigned, create empty set
+    //  TODO: init set should be based on definition history
+    if (sets.length === 0) {
+      return this.setState({
+        sets: [
+          {
+            unit,
+            reps: "0",
+            value: "0"
+          }
+        ]
+      });
+    }
     sets.push(sets[sets.length - 1]);
     this.setState({
       sets
@@ -74,16 +107,12 @@ class Exercise extends React.Component {
   }
 
   public render() {
-    const { flippedCard } = this.state;
-    const { exercise, loading } = this.props.data;
+    const { exercise, flippedCard, loading, unit, sets } = this.state;
     if (loading) return <ActivityIndicator size="small" />;
-    console.log("exercise", exercise);
-    const { definition, sets } = exercise;
-    const { unit } = definition;
     return (
       <ScrollView>
         <ScreenHeader>Sets</ScreenHeader>
-        {sets.map(({ reps, unitValue }, index) => {
+        {sets.map(({ reps, value }, index) => {
           return (
             <SetControls
               flipCard={() => this.handleFlipCard(index)}
@@ -93,7 +122,7 @@ class Exercise extends React.Component {
               onDelete={() => this.handleDeleteSet(index)}
               onUnitValueChange={newValue =>
                 this.handleValueChange({
-                  field: "unitValue",
+                  field: "value",
                   index,
                   newValue
                 })
@@ -108,7 +137,7 @@ class Exercise extends React.Component {
               reps={reps}
               setNumber={index}
               unit={unit}
-              value={unitValue}
+              value={value}
             />
           );
         })}
