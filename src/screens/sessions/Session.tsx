@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
-import { ActivityIndicator, ScrollView } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text } from "react-native";
 import { ExerciseList, ScreenHeader } from "../../components";
 import mockExercises from "../../mock_data/exercises";
 import sessions from "../../mock_data/sessions";
@@ -21,10 +21,23 @@ class Session extends React.Component {
 
   public render() {
     const { loading, session } = this.props.data;
-    const exercises = session ? session.definition.exercises : [];
+    // Transform exercise to comply w/ ExerciseList API
+    const exercises =
+      session &&
+      session.exercises.map(exercise => {
+        return {
+          id: exercise.id,
+          title: exercise.definition.title,
+          history: exercise.definition.history
+        };
+      });
     return (
       <ScrollView>
-        <ExerciseList exerciseDefinitions={exercises} loading={loading} />
+        <ExerciseList
+          exerciseDefinitions={exercises}
+          loading={loading}
+          onExercisePress={exercise => this.navigateToExercise(exercise)}
+        />
       </ScrollView>
     );
   }
@@ -46,25 +59,23 @@ const mutation = gql`
 `;
 
 const query = gql`
-  query GetSession($sessionId: ID!) {
+  query GetDefinitionExercises($sessionId: ID!) {
     session(id: $sessionId) {
       id
-      definition {
-        title
-        exercises {
-          id
+      exercises {
+        id
+        definition {
           title
           history {
-            session {
-              date
-            }
+            id
           }
-          unit
         }
       }
     }
   }
 `;
+
+const styles = StyleSheet.create({});
 
 export default compose(
   graphql(mutation),

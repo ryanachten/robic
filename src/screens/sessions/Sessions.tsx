@@ -85,13 +85,14 @@ class Sessions extends React.Component {
   }
 
   private async navigateToSession(session) {
-    const newSession = await this.props.mutate({
+    const response = await this.props.mutate({
       variables: {
         definitionId: session.id
       }
     });
+    const newSessionId = response.data.addSession;
     this.props.navigation.navigate("Session", {
-      sessionId: newSession.id,
+      sessionId: newSessionId,
       sessionTitle: session.title
     });
   }

@@ -14,8 +14,8 @@ export default createStackNavigator(
   {
     initialRouteName: "Session",
     initialRouteParams: {
-      sessionId: "5c3c2b07a45a34fd7915c58b",
-      sessionTitle: "Arms"
+      sessionId: "5c43c89a8b685940f4bfb759",
+      sessionTitle: "Test"
     }
   }
 );
