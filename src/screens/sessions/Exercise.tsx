@@ -21,8 +21,6 @@ class Exercise extends React.Component {
 
   public handleValueChange({ index, field, newValue }) {
     const sets = this.state.sets;
-    console.log("sets", sets);
-    console.log("index, field, newValue", index, field, newValue);
     // Increment by 1 for reps and 2.5 for weights
     const incrementValue = field === "reps" ? 1 : 2.5;
     switch (newValue) {
@@ -79,7 +77,9 @@ class Exercise extends React.Component {
         ]
       });
     }
-    sets.push(sets[sets.length - 1]);
+    sets.push({
+      ...sets[sets.length - 1]
+    });
     this.setState({
       sets
     });
