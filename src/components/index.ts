@@ -15,3 +15,4 @@ export * from "./SessionCard/SessionCard";
 export * from "./SessionList/SessionList";
 export * from "./SessionForm/SessionForm";
 export * from "./SetControls/SetControls";
+export * from "./Stopwatch/Stopwatch";

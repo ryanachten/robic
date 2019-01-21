@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
-import { ActivityIndicator, ScrollView } from "react-native";
-import { Button, ScreenHeader, SetControls } from "../../components";
+import { ActivityIndicator, ScrollView, Text } from "react-native";
+import { Button, ScreenHeader, SetControls, Stopwatch } from "../../components";
 
 class Exercise extends React.Component {
   public static navigationOptions = ({ navigation }) => {
@@ -17,8 +17,26 @@ class Exercise extends React.Component {
     unit: "",
     sets: [],
     expandedCard: 0,
-    flippedCard: null
+    flippedCard: null,
+    startTime: null,
+    clock: null,
+    timerRunning: false
   };
+
+  public componentDidUpdate(prevProps, prevState) {
+    const { flippedCard } = this.state;
+    const { exercise, loading } = this.props.data;
+    // If done loading, and haven't previously loaded data
+    if (prevState.loading && !loading) {
+      const { definition, sets } = exercise;
+      const { unit } = definition;
+      this.setState({
+        loading: false,
+        unit,
+        sets
+      });
+    }
+  }
 
   public handleValueChange({ index, field, newValue }) {
     const sets = this.state.sets;
@@ -46,21 +64,6 @@ class Exercise extends React.Component {
     this.setState({
       sets
     });
-  }
-
-  public componentDidUpdate(prevProps, prevState) {
-    const { flippedCard } = this.state;
-    const { exercise, loading } = this.props.data;
-    // If done loading, and haven't previously loaded data
-    if (prevState.loading && !loading) {
-      const { definition, sets } = exercise;
-      const { unit } = definition;
-      this.setState({
-        loading: false,
-        unit,
-        sets
-      });
-    }
   }
 
   public handleAddSet() {
@@ -113,6 +116,28 @@ class Exercise extends React.Component {
     });
   }
 
+  public toggleTimer() {
+    // if (!this.stopwatch.running) {
+    //   return this.stopwatch.start();
+    // }
+    // return this.stopwatch.stop();
+  }
+
+  public renderTimerButton() {
+    const timerRunning = false;
+    return (
+      <Button
+        buttonStyle={{ backgroundColor: timerRunning ? "red" : "green" }}
+        containerStyle={{
+          marginTop: 20
+        }}
+        iconName={timerRunning ? "timer-off" : "timer"}
+        onPress={() => this.toggleTimer()}
+        title={timerRunning ? "Stop" : "Start"}
+      />
+    );
+  }
+
   public render() {
     const {
       exercise,
@@ -126,6 +151,7 @@ class Exercise extends React.Component {
     return (
       <ScrollView>
         <ScreenHeader>Sets</ScreenHeader>
+        <Stopwatch />
         {sets.map(({ reps, value }, index) => {
           return (
             <SetControls
@@ -165,6 +191,7 @@ class Exercise extends React.Component {
           onPress={() => this.handleAddSet()}
           title="Add new set"
         />
+        {this.renderTimerButton()}
       </ScrollView>
     );
   }
