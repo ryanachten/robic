@@ -70,15 +70,28 @@ export class SetControls extends React.Component {
   }
 
   public render() {
-    const { flipCard, flipped, reps, setNumber, value, unit } = this.props;
+    const {
+      expanded,
+      expandCard,
+      flipCard,
+      flipped,
+      reps,
+      setNumber,
+      value,
+      unit
+    } = this.props;
     return (
-      <TouchableOpacity onLongPress={flipCard}>
+      <TouchableOpacity onPress={expandCard} onLongPress={flipCard}>
         <Card wrapperStyle={styles.container}>
           <View style={styles.innerWrapper}>
             <Text style={styles.title}>{`Set ${setNumber + 1}`}</Text>
-            <Divider style={styles.divider} />
-            {flipped && this.renderDeleteCard()}
-            {!flipped && this.renderNormalCard()}
+            {expanded && (
+              <View>
+                <Divider style={styles.divider} />
+                {flipped && this.renderDeleteCard()}
+                {!flipped && this.renderNormalCard()}
+              </View>
+            )}
           </View>
         </Card>
       </TouchableOpacity>
@@ -92,8 +105,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   container: {
-    flexDirection: "row",
-    height: 150
+    flexDirection: "row"
   },
   divider: {
     marginBottom: 10,

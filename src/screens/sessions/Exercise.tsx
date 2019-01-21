@@ -16,6 +16,7 @@ class Exercise extends React.Component {
     loading: true,
     unit: "",
     sets: [],
+    expandedCard: 0,
     flippedCard: null
   };
 
@@ -94,6 +95,12 @@ class Exercise extends React.Component {
     });
   }
 
+  public handleExpandedCard(index) {
+    this.setState({
+      expandedCard: index
+    });
+  }
+
   public handleFlipCard(index) {
     this.setState({
       flippedCard: index
@@ -107,7 +114,14 @@ class Exercise extends React.Component {
   }
 
   public render() {
-    const { exercise, flippedCard, loading, unit, sets } = this.state;
+    const {
+      exercise,
+      expandedCard,
+      flippedCard,
+      loading,
+      unit,
+      sets
+    } = this.state;
     if (loading) return <ActivityIndicator size="small" />;
     return (
       <ScrollView>
@@ -115,6 +129,8 @@ class Exercise extends React.Component {
         {sets.map(({ reps, value }, index) => {
           return (
             <SetControls
+              expanded={expandedCard === index}
+              expandCard={() => this.handleExpandedCard(index)}
               flipCard={() => this.handleFlipCard(index)}
               flipped={flippedCard === index}
               key={index}
