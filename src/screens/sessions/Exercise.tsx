@@ -30,6 +30,15 @@ class Exercise extends React.Component {
     if (prevState.loading && !loading) {
       const { definition, sets } = exercise;
       const { unit } = definition;
+      //  TODO: init set should be based on definition history
+      // If no sets have been assigned, create empty set
+      if (sets.length === 0) {
+        sets.push({
+          unit,
+          reps: "0",
+          value: "0"
+        });
+      }
       this.setState({
         loading: false,
         unit,
@@ -68,19 +77,6 @@ class Exercise extends React.Component {
 
   public handleAddSet() {
     const { sets, unit } = this.state;
-    // If no sets have been assigned, create empty set
-    //  TODO: init set should be based on definition history
-    if (sets.length === 0) {
-      return this.setState({
-        sets: [
-          {
-            unit,
-            reps: "0",
-            value: "0"
-          }
-        ]
-      });
-    }
     sets.push({
       ...sets[sets.length - 1]
     });
