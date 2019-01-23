@@ -117,14 +117,21 @@ class Exercise extends React.Component {
   }
 
   public toggleTimer() {
-    // if (!this.stopwatch.running) {
-    //   return this.stopwatch.start();
-    // }
-    // return this.stopwatch.stop();
+    const { timerRunning } = this.state;
+    if (timerRunning) {
+      this.stopwatch.stop();
+      return this.setState({
+        timerRunning: false
+      });
+    }
+    this.stopwatch.start();
+    return this.setState({
+      timerRunning: true
+    });
   }
 
   public renderTimerButton() {
-    const timerRunning = false;
+    const timerRunning = this.state.timerRunning;
     return (
       <Button
         buttonStyle={{ backgroundColor: timerRunning ? "red" : "green" }}
@@ -151,7 +158,11 @@ class Exercise extends React.Component {
     return (
       <ScrollView>
         <ScreenHeader>Sets</ScreenHeader>
-        <Stopwatch />
+        <Stopwatch
+          ref={stopwatch => {
+            this.stopwatch = stopwatch;
+          }}
+        />
         {sets.map(({ reps, value }, index) => {
           return (
             <SetControls

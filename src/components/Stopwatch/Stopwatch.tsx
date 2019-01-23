@@ -1,3 +1,5 @@
+// Time functionality via https://codepen.io/_Billy_Brown/pen/dbJeh
+
 import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -14,8 +16,8 @@ export class Stopwatch extends React.Component {
 
   public componentDidMount() {
     this.reset();
-    this.print(this.times);
-    this.start();
+    // this.print(this.times);
+    // this.start();
   }
 
   public reset() {
