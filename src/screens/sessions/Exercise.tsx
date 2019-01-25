@@ -108,6 +108,8 @@ class Exercise extends React.Component {
   }
 
   public handleFlipCard(index) {
+    // Prevent removing card when there is ony one set left
+    if (this.state.sets.length === 1) return;
     this.setState({
       flippedCard: index
     });
@@ -150,20 +152,31 @@ class Exercise extends React.Component {
         return "Continue";
       }
       if (timerRunning) {
-        return "Pause";
+        return "Stop";
       }
       return "Start";
+    };
+    const color = () => {
+      if (!timerRunning && timerStarted) {
+        return "white";
+      }
+      if (timerRunning) {
+        return "red";
+      }
+      return "green";
     };
     return (
       <View style={styles.timerButtonWrapper}>
         <Button
-          buttonStyle={{ backgroundColor: timerRunning ? "orange" : "green" }}
-          iconName={timerRunning ? "pause" : "play-arrow"}
+          buttonStyle={{ backgroundColor: color() }}
+          containerStyle={styles.timerButton}
+          iconName={timerRunning ? "stop" : "play-arrow"}
           onPress={() => this.toggleTimer()}
           title={label()}
         />
         {timerStarted && !timerRunning && (
           <Button
+            containerStyle={styles.timerButton}
             iconName="replay"
             onPress={() => this.restartTimer()}
             title="Restart"
@@ -180,9 +193,13 @@ class Exercise extends React.Component {
       flippedCard,
       loading,
       unit,
-      sets
+      sets,
+      timerRunning,
+      timerStarted
     } = this.state;
     if (loading) return <ActivityIndicator size="small" />;
+    const showSubmitButton = !timerRunning && timerStarted;
+
     return (
       <ScrollView>
         <ScreenHeader>Sets</ScreenHeader>
@@ -231,12 +248,25 @@ class Exercise extends React.Component {
           title="Add new set"
         />
         {this.renderTimerButton()}
+        {showSubmitButton && (
+          <Button
+            buttonStyle={{ backgroundColor: "green" }}
+            containerStyle={{
+              marginTop: 20
+            }}
+            onPress={() => console.log("submit")}
+            title="Complete Exercise"
+          />
+        )}
       </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  timerButton: {
+    flexGrow: 1
+  },
   timerButtonWrapper: {
     flexDirection: "row",
     justifyContent: "center",
