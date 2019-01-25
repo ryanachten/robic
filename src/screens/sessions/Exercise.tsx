@@ -88,6 +88,7 @@ class Exercise extends React.Component {
       ...sets[sets.length - 1]
     });
     this.setState({
+      expandedCard: sets.length - 1,
       sets
     });
   }
