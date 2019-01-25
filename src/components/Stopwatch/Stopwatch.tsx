@@ -16,8 +16,6 @@ export class Stopwatch extends React.Component {
 
   public componentDidMount() {
     this.reset();
-    // this.print(this.times);
-    // this.start();
   }
 
   public reset() {

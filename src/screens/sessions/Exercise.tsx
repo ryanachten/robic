@@ -42,8 +42,8 @@ class Exercise extends React.Component {
       if (sets.length === 0) {
         sets.push({
           unit,
-          reps: "0",
-          value: "0"
+          reps: 0,
+          value: 0
         });
       }
       this.setState({
@@ -56,18 +56,18 @@ class Exercise extends React.Component {
 
   public handleValueChange({ index, field, newValue }) {
     const sets = this.state.sets;
+    console.log("sets", sets);
     // Increment by 1 for reps and 2.5 for weights
     const incrementValue = field === "reps" ? 1 : 2.5;
     switch (newValue) {
       case "increment": {
-        const value = parseFloat(sets[index][field]) + incrementValue;
-        sets[index][field] = value.toString();
+        sets[index][field] = sets[index][field] + incrementValue;
         break;
       }
       case "decrement": {
-        let value = parseFloat(sets[index][field]) - incrementValue;
+        let value = sets[index][field] - incrementValue;
         if (value < 0) value = 0;
-        sets[index][field] = value.toString();
+        sets[index][field] = value;
         break;
       }
       default: {
@@ -147,10 +147,16 @@ class Exercise extends React.Component {
     });
   }
 
+  public submitExercise() {
+    const { sets } = this.state;
+    // const timeTaken = this.stopwatch.time;
+    console.log("sets", sets);
+  }
+
   public renderTimerButton() {
     const { timerRunning, timerStarted, sets } = this.state;
     // Disallow timer if value or set hasn't been added
-    if (sets[0].value === "0" || sets[0].reps === "0") {
+    if (sets[0].value === 0 || sets[0].reps === 0) {
       return null;
     }
     const label = () => {
@@ -197,12 +203,12 @@ class Exercise extends React.Component {
     // Disallow submit if timer hasn't started
     if (!timerStarted) return null;
     // Disallow submit if value or set hasn't been added
-    if (sets[0].value === "0" || sets[0].reps === "0") return null;
+    if (sets[0].value === 0 || sets[0].reps === 0) return null;
     return (
       <Button
         buttonStyle={{ backgroundColor: "green" }}
         containerStyle={styles.button}
-        onPress={() => console.log("submit")}
+        onPress={() => this.submitExercise()}
         title="Complete exercise"
       />
     );
@@ -222,7 +228,7 @@ class Exercise extends React.Component {
 
     if (loading) return <ActivityIndicator size="small" />;
 
-    const showAddSetButton = sets[0].value !== "0" && sets[0].reps !== "0";
+    const showAddSetButton = sets[0].value !== 0 && sets[0].reps !== 0;
 
     return (
       <ScrollView>
@@ -256,10 +262,10 @@ class Exercise extends React.Component {
                   newValue
                 })
               }
-              reps={reps}
+              reps={reps.toString()}
               setNumber={index}
               unit={unit}
-              value={value}
+              value={value.toString()}
             />
           );
         })}
@@ -299,8 +305,20 @@ const styles = StyleSheet.create({
 });
 
 const mutation = gql`
-  mutation AddSession($definitionId: ID!) {
-    addSession(definitionId: $definitionId) {
+  type Set {
+    value: float
+    reps: int
+  }
+  mutation UpdateExercise(
+    $definitionId: ID!
+    $sets: [Set]!
+    $timeTaken: string!
+  ) {
+    updateExercise(
+      definitionId: $definitionId
+      sets: $sets
+      timeTaken: $timeTaken
+    ) {
       id
     }
   }
