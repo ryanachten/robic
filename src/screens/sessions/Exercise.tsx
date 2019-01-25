@@ -56,7 +56,6 @@ class Exercise extends React.Component {
 
   public handleValueChange({ index, field, newValue }) {
     const sets = this.state.sets;
-    console.log("sets", sets);
     // Increment by 1 for reps and 2.5 for weights
     const incrementValue = field === "reps" ? 1 : 2.5;
     switch (newValue) {
@@ -149,8 +148,23 @@ class Exercise extends React.Component {
 
   public submitExercise() {
     const { sets } = this.state;
-    // const timeTaken = this.stopwatch.time;
-    console.log("sets", sets);
+    const time = this.stopwatch.getTime();
+    const finishTime = new Date(
+      null, // year
+      null, // month
+      null, // day
+      null, // hour
+      time[0], // min
+      time[1], // sec
+      time[2] // millisec
+    );
+    const baseDate = new Date(null, null, null, null, null, null, null);
+    // Returns total time in millisconds
+    const timeTaken = finishTime - baseDate;
+    this.stopwatch.stop();
+    this.setState({
+      timerRunning: false
+    });
   }
 
   public renderTimerButton() {

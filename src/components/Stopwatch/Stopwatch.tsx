@@ -94,6 +94,10 @@ export class Stopwatch extends React.Component {
     });
   }
 
+  public getTime() {
+    return this.state.times;
+  }
+
   public print() {
     return this.format(this.state.times);
   }
