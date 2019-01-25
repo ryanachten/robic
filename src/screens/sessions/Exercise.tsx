@@ -65,7 +65,8 @@ class Exercise extends React.Component {
         break;
       }
       case "decrement": {
-        const value = parseFloat(sets[index][field]) - incrementValue;
+        let value = parseFloat(sets[index][field]) - incrementValue;
+        if (value < 0) value = 0;
         sets[index][field] = value.toString();
         break;
       }
@@ -148,7 +149,7 @@ class Exercise extends React.Component {
 
   public renderTimerButton() {
     const { timerRunning, timerStarted, sets } = this.state;
-    // Disallow submit if value or set hasn't been added
+    // Disallow timer if value or set hasn't been added
     if (sets[0].value === "0" || sets[0].reps === "0") {
       return null;
     }
@@ -157,7 +158,7 @@ class Exercise extends React.Component {
         return "Continue";
       }
       if (timerRunning) {
-        return "Stop";
+        return "Pause";
       }
       return "Start";
     };
@@ -166,7 +167,7 @@ class Exercise extends React.Component {
         return "white";
       }
       if (timerRunning) {
-        return "red";
+        return "orange";
       }
       return "green";
     };
@@ -175,7 +176,7 @@ class Exercise extends React.Component {
         <Button
           buttonStyle={{ backgroundColor: color() }}
           containerStyle={styles.timerButton}
-          iconName={timerRunning ? "stop" : "play-arrow"}
+          iconName={timerRunning ? "pause" : "play-arrow"}
           onPress={() => this.toggleTimer()}
           title={label()}
         />
@@ -192,17 +193,17 @@ class Exercise extends React.Component {
   }
 
   public renderSubmitButton() {
-    const { timerStarted } = this.state;
+    const { sets, timerStarted } = this.state;
     // Disallow submit if timer hasn't started
     if (!timerStarted) return null;
+    // Disallow submit if value or set hasn't been added
+    if (sets[0].value === "0" || sets[0].reps === "0") return null;
     return (
       <Button
         buttonStyle={{ backgroundColor: "green" }}
-        containerStyle={{
-          marginTop: 20
-        }}
+        containerStyle={styles.button}
         onPress={() => console.log("submit")}
-        title="Complete Exercise"
+        title="Complete exercise"
       />
     );
   }
@@ -264,9 +265,7 @@ class Exercise extends React.Component {
         })}
         {showAddSetButton && (
           <Button
-            containerStyle={{
-              marginTop: 20
-            }}
+            containerStyle={styles.button}
             iconName="add"
             onPress={() => this.handleAddSet()}
             title="Add new set"
@@ -274,12 +273,21 @@ class Exercise extends React.Component {
         )}
         {this.renderTimerButton()}
         {this.renderSubmitButton()}
+        <Button
+          buttonStyle={{ backgroundColor: "red" }}
+          containerStyle={styles.button}
+          onPress={() => console.log("discard")}
+          title="Discard exercise"
+        />
       </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  button: {
+    marginTop: 20
+  },
   timerButton: {
     flexGrow: 1
   },
