@@ -1,7 +1,13 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { compose, graphql } from "react-apollo";
-import { ActivityIndicator, ScrollView, Text } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from "react-native";
 import { Button, ScreenHeader, SetControls, Stopwatch } from "../../components";
 
 class Exercise extends React.Component {
@@ -20,6 +26,7 @@ class Exercise extends React.Component {
     flippedCard: null,
     startTime: null,
     clock: null,
+    timerStarted: false,
     timerRunning: false
   };
 
@@ -113,31 +120,56 @@ class Exercise extends React.Component {
   }
 
   public toggleTimer() {
-    const { timerRunning } = this.state;
+    const { timerRunning, timerStarted } = this.state;
     if (timerRunning) {
       this.stopwatch.stop();
       return this.setState({
         timerRunning: false
       });
     }
-    this.stopwatch.start();
-    return this.setState({
+    const state = {
       timerRunning: true
+    };
+    if (!timerStarted) state.timerStarted = true;
+    this.stopwatch.start();
+    return this.setState(state);
+  }
+
+  public restartTimer() {
+    this.stopwatch.reset();
+    this.setState({
+      timerRunning: false,
+      timerStarted: false
     });
   }
 
   public renderTimerButton() {
-    const timerRunning = this.state.timerRunning;
+    const { timerRunning, timerStarted } = this.state;
+    const label = () => {
+      if (!timerRunning && timerStarted) {
+        return "Continue";
+      }
+      if (timerRunning) {
+        return "Pause";
+      }
+      return "Start";
+    };
     return (
-      <Button
-        buttonStyle={{ backgroundColor: timerRunning ? "red" : "green" }}
-        containerStyle={{
-          marginTop: 20
-        }}
-        iconName={timerRunning ? "timer-off" : "timer"}
-        onPress={() => this.toggleTimer()}
-        title={timerRunning ? "Stop" : "Start"}
-      />
+      <View style={styles.timerButtonWrapper}>
+        <Button
+          buttonStyle={{ backgroundColor: timerRunning ? "orange" : "green" }}
+          iconName={timerRunning ? "pause" : "play-arrow"}
+          onPress={() => this.toggleTimer()}
+          title={label()}
+        />
+        {timerStarted && !timerRunning && (
+          <Button
+            iconName="replay"
+            onPress={() => this.restartTimer()}
+            title="Restart"
+          />
+        )}
+      </View>
     );
   }
 
@@ -203,6 +235,14 @@ class Exercise extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  timerButtonWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20
+  }
+});
 
 const mutation = gql`
   mutation AddSession($definitionId: ID!) {
