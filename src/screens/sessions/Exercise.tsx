@@ -146,7 +146,11 @@ class Exercise extends React.Component {
   }
 
   public renderTimerButton() {
-    const { timerRunning, timerStarted } = this.state;
+    const { timerRunning, timerStarted, sets } = this.state;
+    // Disallow submit if value or set hasn't been added
+    if (sets[0].value === "0" || sets[0].reps === "0") {
+      return null;
+    }
     const label = () => {
       if (!timerRunning && timerStarted) {
         return "Continue";
@@ -186,6 +190,22 @@ class Exercise extends React.Component {
     );
   }
 
+  public renderSubmitButton() {
+    const { timerStarted } = this.state;
+    // Disallow submit if timer hasn't started
+    if (!timerStarted) return null;
+    return (
+      <Button
+        buttonStyle={{ backgroundColor: "green" }}
+        containerStyle={{
+          marginTop: 20
+        }}
+        onPress={() => console.log("submit")}
+        title="Complete Exercise"
+      />
+    );
+  }
+
   public render() {
     const {
       exercise,
@@ -197,8 +217,10 @@ class Exercise extends React.Component {
       timerRunning,
       timerStarted
     } = this.state;
+
     if (loading) return <ActivityIndicator size="small" />;
-    const showSubmitButton = !timerRunning && timerStarted;
+
+    const showAddSetButton = sets[0].value !== "0" && sets[0].reps !== "0";
 
     return (
       <ScrollView>
@@ -239,25 +261,18 @@ class Exercise extends React.Component {
             />
           );
         })}
-        <Button
-          containerStyle={{
-            marginTop: 20
-          }}
-          iconName="add"
-          onPress={() => this.handleAddSet()}
-          title="Add new set"
-        />
-        {this.renderTimerButton()}
-        {showSubmitButton && (
+        {showAddSetButton && (
           <Button
-            buttonStyle={{ backgroundColor: "green" }}
             containerStyle={{
               marginTop: 20
             }}
-            onPress={() => console.log("submit")}
-            title="Complete Exercise"
+            iconName="add"
+            onPress={() => this.handleAddSet()}
+            title="Add new set"
           />
         )}
+        {this.renderTimerButton()}
+        {this.renderSubmitButton()}
       </ScrollView>
     );
   }
