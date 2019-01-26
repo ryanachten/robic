@@ -70,7 +70,6 @@ export class Stopwatch extends React.Component {
     this.setState({
       time: timestamp
     });
-    this.print();
     requestAnimationFrame(this.step.bind(this));
   }
 
@@ -96,17 +95,6 @@ export class Stopwatch extends React.Component {
 
   public getTime() {
     return this.state.times;
-  }
-
-  public print() {
-    return this.format(this.state.times);
-  }
-
-  public format(times) {
-    return `\
-${pad0(times[0], 2)}:
-${pad0(times[1], 2)}:
-${pad0(Math.floor(times[2]), 2)}`;
   }
 
   public render() {
