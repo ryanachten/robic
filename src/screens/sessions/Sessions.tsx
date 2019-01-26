@@ -90,7 +90,7 @@ class Sessions extends React.Component {
         definitionId: session.id
       }
     });
-    const newSessionId = response.data.addSession;
+    const newSessionId = response.data.addSession.id;
     this.props.navigation.navigate("Session", {
       sessionId: newSessionId,
       sessionTitle: session.title
