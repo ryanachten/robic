@@ -117,7 +117,7 @@ function pad0(value, count) {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 20
+    fontSize: 30
   },
   textWrapper: {
     alignSelf: "center",

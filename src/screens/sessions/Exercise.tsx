@@ -8,7 +8,7 @@ import {
   Text,
   View
 } from "react-native";
-import { Button, ScreenHeader, SetControls, Stopwatch } from "../../components";
+import { Button, SetControls, Stopwatch } from "../../components";
 
 class Exercise extends React.Component {
   public static navigationOptions = ({ navigation }) => {
@@ -41,7 +41,6 @@ class Exercise extends React.Component {
       // If no sets have been assigned, create empty set
       if (sets.length === 0) {
         sets.push({
-          unit,
           reps: 0,
           value: 0
         });
@@ -146,8 +145,9 @@ class Exercise extends React.Component {
     });
   }
 
-  public submitExercise() {
+  public async submitExercise() {
     const { sets } = this.state;
+    const { exercise } = this.props.data;
     const time = this.stopwatch.getTime();
     const finishTime = new Date(
       null, // year
@@ -165,6 +165,19 @@ class Exercise extends React.Component {
     this.setState({
       timerRunning: false
     });
+
+    console.log("sets", sets);
+
+    const exerciseResponse = await this.props.mutate({
+      variables: {
+        exerciseId: exercise.id,
+        sets,
+        timeTaken
+      }
+      // Refresh the exercise definition data in cache after mutation
+      // refetchQueries: [{ query: sessionDefinitionsQuery }]
+    });
+    console.log("exerciseResponse", exerciseResponse);
   }
 
   public renderTimerButton() {
@@ -245,8 +258,7 @@ class Exercise extends React.Component {
     const showAddSetButton = sets[0].value !== 0 && sets[0].reps !== 0;
 
     return (
-      <ScrollView>
-        <ScreenHeader>Sets</ScreenHeader>
+      <ScrollView contentContainerStyle={styles.container}>
         <Stopwatch
           ref={stopwatch => {
             this.stopwatch = stopwatch;
@@ -308,6 +320,9 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 20
   },
+  container: {
+    paddingTop: 20
+  },
   timerButton: {
     flexGrow: 1
   },
@@ -319,17 +334,13 @@ const styles = StyleSheet.create({
 });
 
 const mutation = gql`
-  type Set {
-    value: float
-    reps: int
-  }
   mutation UpdateExercise(
-    $definitionId: ID!
-    $sets: [Set]!
-    $timeTaken: string!
+    $exerciseId: ID!
+    $sets: [SetInput]!
+    $timeTaken: Int!
   ) {
     updateExercise(
-      definitionId: $definitionId
+      exerciseId: $exerciseId
       sets: $sets
       timeTaken: $timeTaken
     ) {
@@ -343,6 +354,7 @@ const query = gql`
     exercise(id: $exerciseId) {
       id
       definition {
+        id
         title
         unit
         history {
