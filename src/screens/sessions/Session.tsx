@@ -69,6 +69,9 @@ const query = gql`
           title
           history {
             id
+            session {
+              date
+            }
           }
         }
       }

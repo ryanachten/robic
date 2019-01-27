@@ -39,7 +39,7 @@ export class ExerciseList extends React.Component {
         <ExerciseCard
           key={id}
           unit={unit}
-          lastActive={lastActive}
+          lastActive={lastActive()}
           personalBest={personalBest}
           //lastWeightChange={lastWeightChange}
           onPress={() => onExercisePress(exercise)}

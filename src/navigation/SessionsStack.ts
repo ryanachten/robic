@@ -12,14 +12,14 @@ export default createStackNavigator(
     SessionExercise: Exercise
   },
   {
-    initialRouteName: "SessionExercise",
-    // initialRouteParams: {
-    //   sessionId: "5c43c89a8b685940f4bfb759",
-    //   sessionTitle: "Test"
-    // }
+    initialRouteName: "Session",
     initialRouteParams: {
-      exerciseId: "5c43c89a8b685940f4bfb75a",
-      exerciseTitle: "Benchpress"
+      sessionId: "5c43c89a8b685940f4bfb759",
+      sessionTitle: "Test"
     }
+    // initialRouteParams: {
+    //   exerciseId: "5c43c89a8b685940f4bfb75a",
+    //   exerciseTitle: "Benchpress"
+    // }
   }
 );
