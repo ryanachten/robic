@@ -47,8 +47,9 @@ class Exercise extends React.Component {
       }
       this.setState({
         loading: false,
-        unit,
-        sets
+        // Remove type definition prop query payload
+        sets: sets.map(set => ({ value: set.value, reps: set.reps })),
+        unit
       });
     }
   }
@@ -166,18 +167,27 @@ class Exercise extends React.Component {
       timerRunning: false
     });
 
-    console.log("sets", sets);
-
     const exerciseResponse = await this.props.mutate({
       variables: {
         exerciseId: exercise.id,
         sets,
         timeTaken
-      }
+      },
       // Refresh the exercise definition data in cache after mutation
-      // refetchQueries: [{ query: sessionDefinitionsQuery }]
+      refetchQueries: [
+        {
+          query,
+          variables: {
+            exerciseId: exercise.id
+          }
+        }
+      ]
     });
-    console.log("exerciseResponse", exerciseResponse);
+    const session = this.props.data.exercise.session;
+    this.props.navigation.navigate("Session", {
+      sessionId: session.id,
+      sessionTitle: session.definition.title
+    });
   }
 
   public renderTimerButton() {
@@ -359,6 +369,13 @@ const query = gql`
         unit
         history {
           id
+        }
+      }
+      session {
+        id
+        definition {
+          id
+          title
         }
       }
       sets {

@@ -28,8 +28,13 @@ export class ExerciseList extends React.Component {
     return exercises.map(exercise => {
       const { history, id, title, unit, personalBest } = exercise;
       // if there is a history, assign last active to latest session date
-      const lastActive =
-        history.length > 0 ? history[history.length - 1].session.date : null;
+      const lastActive = () => {
+        if (!history) return null;
+        return history.length > 0
+          ? history[history.length - 1].session.date
+          : null;
+      };
+
       return (
         <ExerciseCard
           key={id}

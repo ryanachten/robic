@@ -65,6 +65,7 @@ const query = gql`
       exercises {
         id
         definition {
+          id
           title
           history {
             id
