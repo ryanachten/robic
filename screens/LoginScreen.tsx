@@ -11,10 +11,16 @@ type State = {
 };
 
 export default function LoginScreen() {
-  const [user, update]: [State, Dispatch<SetStateAction<State>>] = useState({
-    email: 'meow',
+  const [user, setUser]: [State, Dispatch<SetStateAction<State>>] = useState({
+    email: '',
     password: '',
   });
+
+  const updateUser = (property: 'email' | 'password', value: string) => {
+    const updatedUser = { ...user };
+    updatedUser[property] = value;
+    setUser(updatedUser);
+  };
 
   return (
     <View style={styles.container}>
@@ -24,12 +30,15 @@ export default function LoginScreen() {
         placeholder="robic@user.com"
         leftIcon={<Icon name="envelope" size={24} color="black" />}
         value={user.email}
+        onChange={(e) => updateUser('email', e.nativeEvent.text)}
       />
       <Input
         label="Password"
-        placeholder="***********"
+        placeholder="••••••••••••"
         leftIcon={<Icon name="user" size={24} color="black" />}
         value={user.password}
+        secureTextEntry={true}
+        onChange={(e) => updateUser('password', e.nativeEvent.text)}
       />
       <View
         style={styles.separator}
