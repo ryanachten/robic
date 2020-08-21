@@ -21,7 +21,7 @@ export default function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="Login"
-        component={TabOneNavigator}
+        component={LoginNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
@@ -49,17 +49,17 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<LoginParamList>();
+const LoginStack = createStackNavigator<LoginParamList>();
 
-function TabOneNavigator() {
+function LoginNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
+    <LoginStack.Navigator>
+      <LoginStack.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{ headerTitle: 'Robic Login' }}
       />
-    </TabOneStack.Navigator>
+    </LoginStack.Navigator>
   );
 }
 
