@@ -4,65 +4,42 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "test": "yarn run tslint && yarn run tsc-test && yarn run jest",
-    "tslint": "tslint --project .",
-    "tsc-test": "tsc --project . --noEmit",
-    "jest": "jest"
+    "web": "expo start --web",
+    "eject": "expo eject",
+    "test": "jest --watchAll"
+  },
+  "jest": {
+    "preset": "jest-expo"
   },
   "dependencies": {
-    "@types/react-navigation": "^2.13.8",
-    "apollo-boost": "^0.1.23",
-    "expo": "^31.0.2",
-    "graphql": "^14.0.2",
-    "graphql-tag": "^2.10.0",
-    "moment": "^2.23.0",
-    "react": "16.5.0",
-    "react-apollo": "^2.3.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
-    "react-native-elements": "^0.19.1",
-    "react-navigation": "^3.0.8",
-    "victory-native": "^31.0.0"
+    "@expo/vector-icons": "^10.0.0",
+    "@react-native-community/masked-view": "0.1.10",
+    "@react-navigation/bottom-tabs": "^5.6.1",
+    "@react-navigation/native": "^5.6.1",
+    "@react-navigation/stack": "^5.6.2",
+    "expo": "~38.0.8",
+    "expo-asset": "~8.1.7",
+    "expo-constants": "~9.1.1",
+    "expo-font": "~8.2.1",
+    "expo-linking": "^1.0.1",
+    "expo-splash-screen": "~0.3.1",
+    "expo-status-bar": "^1.0.2",
+    "expo-web-browser": "~8.3.1",
+    "react": "~16.11.0",
+    "react-dom": "~16.11.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+    "react-native-gesture-handler": "~1.6.0",
+    "react-native-safe-area-context": "~3.0.7",
+    "react-native-screens": "~2.9.0",
+    "react-native-web": "~0.11.7"
   },
   "devDependencies": {
-    "@types/expo": "^31.0.2",
-    "@types/jest": "^23.3.10",
-    "@types/react": "^16.7.17",
-    "@types/react-test-renderer": "^16.0.3",
-    "jest": "^23.6.0",
-    "jest-expo": "^31.0.0",
-    "prettier": "1.15.3",
-    "react-test-renderer": "^16.6.3",
-    "ts-jest": "^23.10.5",
-    "tslint": "^5.11.0",
-    "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-prettier": "^1.17.0",
-    "typescript": "^3.2.2"
+    "@babel/core": "^7.8.6",
+    "@types/react": "~16.9.23",
+    "@types/react-native": "~0.62.13",
+    "babel-preset-expo": "~8.1.0",
+    "jest-expo": "~38.0.0",
+    "typescript": "~3.9.5"
   },
-  "resolutions": {
-    "react-native-svg": "8.0.10"
-  },
-  "private": true,
-  "jest": {
-    "preset": "jest-expo",
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testMatch": [
-      "**/__tests__/**/*.ts?(x)",
-      "**/?(*.)+(spec|test).ts?(x)"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "ts",
-      "tsx"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfig": {
-          "jsx": "react"
-        }
-      }
-    }
-  }
+  "private": true
 }
