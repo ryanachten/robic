@@ -5,7 +5,7 @@ import { Input } from 'react-native-elements';
 
 import { Text, View } from '../components/Themed';
 
-export default function TabOneScreen() {
+export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
