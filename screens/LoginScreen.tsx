@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Input } from 'react-native-elements';
-
+import { Button, Input } from 'react-native-elements';
+import { Axios } from '../constants/Api';
 import { Text, View } from '../components/Themed';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const submitLogin = async () => {
+    try {
+      const response = await Axios.post('/api/auth/login', {
+        email,
+        password,
+      });
+      console.log('response', response);
+    } catch (error) {
+      console.log('error', JSON.stringify(error));
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>Login</Text>
       <Input
         label="Email"
         placeholder="robic@user.com"
@@ -27,6 +39,7 @@ export default function LoginScreen() {
         secureTextEntry={true}
         onChange={(e) => setPassword(e.nativeEvent.text)}
       />
+      <Button title="Login" onPress={submitLogin} />
       <View
         style={styles.separator}
         lightColor="#eee"
