@@ -6,12 +6,16 @@ import * as React from 'react';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import LoginScreen from '../screens/LoginScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, LoginParamList, TabTwoParamList } from '../types';
+import RegisterScreen from '../screens/RegisterScreen';
+import {
+  BottomTabParamList,
+  LoginParamList,
+  RegisterParamList,
+} from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
+export default function UnauthenticatedNavigator() {
   const colorScheme = useColorScheme();
 
   return (
@@ -29,8 +33,8 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Register"
+        component={RegisterNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
@@ -57,22 +61,22 @@ function LoginNavigator() {
       <LoginStack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{ headerTitle: 'Robic Login' }}
+        options={{ headerTitle: 'Login' }}
       />
     </LoginStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const RegisterStack = createStackNavigator<RegisterParamList>();
 
-function TabTwoNavigator() {
+function RegisterNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+    <RegisterStack.Navigator>
+      <RegisterStack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{ headerTitle: 'Register' }}
       />
-    </TabTwoStack.Navigator>
+    </RegisterStack.Navigator>
   );
 }

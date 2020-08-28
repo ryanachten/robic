@@ -11,9 +11,9 @@ export default {
               LoginScreen: 'login',
             },
           },
-          TabTwo: {
+          Register: {
             screens: {
-              TabTwoScreen: 'two',
+              RegisterScreen: 'register',
             },
           },
         },
