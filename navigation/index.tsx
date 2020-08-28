@@ -11,6 +11,7 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
 import UnauthenticatedNavigator from './UnauthenticatedNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import AuthenticatedNavigator from './AuthenticatedNavigator';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -37,7 +38,7 @@ function RootNavigator() {
   const authenticated = true;
   return authenticated ? (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={UnauthenticatedNavigator} />
+      <Stack.Screen name="Root" component={AuthenticatedNavigator} />
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}

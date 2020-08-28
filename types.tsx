@@ -3,7 +3,11 @@ export type RootStackParamList = {
   NotFound: undefined;
 };
 
-export type BottomTabParamList = {
+export type AuthenticatedParamList = {
+  Home: undefined;
+};
+
+export type UnauthenticatedParamList = {
   Login: undefined;
   Register: undefined;
 };
@@ -14,4 +18,8 @@ export type LoginParamList = {
 
 export type RegisterParamList = {
   Register: undefined;
+};
+
+export type HomeParamList = {
+  HomeScreen: undefined;
 };

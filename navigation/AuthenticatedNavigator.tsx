@@ -6,35 +6,21 @@ import * as React from 'react';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import LoginScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
-import {
-  UnauthenticatedParamList,
-  LoginParamList,
-  RegisterParamList,
-} from '../types';
+import { AuthenticatedParamList, HomeParamList } from '../types';
 
-const BottomTab = createBottomTabNavigator<UnauthenticatedParamList>();
+const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
-export default function UnauthenticatedNavigator() {
+export default function AuthenticatedNavigator() {
   const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Login"
+      initialRouteName="Home"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
     >
       <BottomTab.Screen
-        name="Login"
-        component={LoginNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name="Register"
-        component={RegisterNavigator}
+        name="Home"
+        component={HomeNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
@@ -53,30 +39,16 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const LoginStack = createStackNavigator<LoginParamList>();
+const HomeStack = createStackNavigator<HomeParamList>();
 
-function LoginNavigator() {
+function HomeNavigator() {
   return (
-    <LoginStack.Navigator>
-      <LoginStack.Screen
-        name="LoginScreen"
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="HomeScreen"
         component={LoginScreen}
-        options={{ headerTitle: 'Login' }}
+        options={{ headerTitle: 'Home' }}
       />
-    </LoginStack.Navigator>
-  );
-}
-
-const RegisterStack = createStackNavigator<RegisterParamList>();
-
-function RegisterNavigator() {
-  return (
-    <RegisterStack.Navigator>
-      <RegisterStack.Screen
-        name="Register"
-        component={RegisterScreen}
-        options={{ headerTitle: 'Register' }}
-      />
-    </RegisterStack.Navigator>
+    </HomeStack.Navigator>
   );
 }
