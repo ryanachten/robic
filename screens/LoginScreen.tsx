@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Button, Input } from 'react-native-elements';
+import { Button, Input, Card } from 'react-native-elements';
 import { Axios } from '../constants/Api';
 import { Text, View } from '../components/Themed';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const submitLogin = async () => {
     try {
@@ -17,7 +18,7 @@ export default function LoginScreen() {
       });
       console.log('response', response);
     } catch (error) {
-      console.log('error', JSON.stringify(error));
+      setError(error.message);
     }
   };
 
@@ -39,6 +40,11 @@ export default function LoginScreen() {
         secureTextEntry={true}
         onChange={(e) => setPassword(e.nativeEvent.text)}
       />
+      {error ? (
+        <Card containerStyle={styles.error} title="Oops!">
+          <Text>{error}</Text>
+        </Card>
+      ) : null}
       <Button title="Login" onPress={submitLogin} />
       <View
         style={styles.separator}
@@ -54,6 +60,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  error: {
+    marginBottom: 30,
   },
   title: {
     fontSize: 20,
