@@ -12,6 +12,8 @@ import { RootStackParamList } from '../types';
 import UnauthenticatedNavigator from './UnauthenticatedNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import AuthenticatedNavigator from './AuthenticatedNavigator';
+import { getItem } from '../utils/storage';
+import { useState, useEffect } from 'react';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -35,7 +37,17 @@ export default function Navigation({
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const authenticated = true;
+  const [token, setToken] = useState('');
+  const getToken = async () => {
+    const token = await getItem('token');
+    setToken(token || '');
+  };
+  useEffect(() => {
+    getToken();
+  }, []);
+
+  const authenticated = Boolean(token);
+
   return authenticated ? (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Root" component={AuthenticatedNavigator} />

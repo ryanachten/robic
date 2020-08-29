@@ -4,6 +4,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input, Card } from 'react-native-elements';
 import { Axios } from '../constants/Api';
 import { Text, View } from '../components/Themed';
+import { AxiosResponse } from 'axios';
+import { User } from '../constants/Interfaces';
+import { setItem } from '../utils/storage';
+
+type LoginPayload = {
+  token: string;
+  userDetails: User;
+};
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -12,11 +20,15 @@ export default function LoginScreen() {
 
   const submitLogin = async () => {
     try {
-      const response = await Axios.post('/api/auth/login', {
-        email,
-        password,
-      });
-      console.log('response', response);
+      const { data }: AxiosResponse<LoginPayload> = await Axios.post(
+        '/api/auth/login',
+        {
+          email,
+          password,
+        }
+      );
+      const { token, userDetails } = data;
+      await setItem('token', token);
     } catch (error) {
       setError(error.message);
     }

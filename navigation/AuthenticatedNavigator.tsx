@@ -5,8 +5,8 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import LoginScreen from '../screens/LoginScreen';
 import { AuthenticatedParamList, HomeParamList } from '../types';
+import HomeScreen from '../screens/HomeScreen';
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -46,7 +46,7 @@ function HomeNavigator() {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="HomeScreen"
-        component={LoginScreen}
+        component={HomeScreen}
         options={{ headerTitle: 'Home' }}
       />
     </HomeStack.Navigator>
