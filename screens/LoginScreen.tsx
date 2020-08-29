@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input, Card } from 'react-native-elements';
@@ -7,16 +7,24 @@ import { Text, View } from '../components/Themed';
 import { AxiosResponse } from 'axios';
 import { User } from '../constants/Interfaces';
 import { setItem } from '../utils/storage';
+import { userActions, UserAction } from '../reducers/user';
+import { UserContext } from '../context/user-context';
 
 type LoginPayload = {
   token: string;
   userDetails: User;
 };
 
+type Context = {
+  user: User;
+  userDispatch: React.Dispatch<UserAction>;
+};
+
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { userDispatch } = useContext(UserContext) as Context;
 
   const submitLogin = async () => {
     try {
@@ -29,6 +37,7 @@ export default function LoginScreen() {
       );
       const { token, userDetails } = data;
       await setItem('token', token);
+      userDispatch(userActions.loginUser(userDetails));
     } catch (error) {
       setError(error.message);
     }
