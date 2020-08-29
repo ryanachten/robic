@@ -14,6 +14,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 import AuthenticatedNavigator from './AuthenticatedNavigator';
 import { getItem } from '../utils/storage';
 import { useState, useEffect } from 'react';
+import LoadingScreen from '../screens/LoadingScreen';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -38,17 +39,23 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(true);
+
   const getToken = async () => {
     const token = await getItem('token');
     setToken(token || '');
+    setLoading(false);
   };
+
   useEffect(() => {
     getToken();
   }, []);
 
-  const authenticated = Boolean(token);
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
-  return authenticated ? (
+  return Boolean(token) ? (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Root" component={AuthenticatedNavigator} />
       <Stack.Screen
