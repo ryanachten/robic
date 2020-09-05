@@ -23,15 +23,38 @@ export type AuthAction = Partial<AuthState> & {
 };
 
 export type AuthActions = {
+  restoreToken: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => void;
   signUp: () => Promise<void>;
+};
+
+export const initialAuthState: AuthState = {
+  isLoading: true,
+  isSignout: false,
+  token: null,
+  error: null,
 };
 
 export const authActions = (
   dispatch: React.Dispatch<AuthAction>,
   userDispatch: React.Dispatch<UserAction>
 ): AuthActions => ({
+  restoreToken: async () => {
+    let userToken = null;
+
+    try {
+      userToken = await AsyncStorage.getItem('userToken');
+    } catch (e) {
+      // Restoring token failed
+    }
+
+    // After restoring token, we may need to validate it in production apps
+
+    // This will switch to the App screen or Auth screen and this loading
+    // screen will be unmounted and thrown away.
+    dispatch({ type: authTypes.RESTORE_TOKEN, token: userToken });
+  },
   signIn: async (email, password) => {
     try {
       const {
