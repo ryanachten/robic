@@ -3,18 +3,11 @@ import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input, Card } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
-import { User } from '../constants/Interfaces';
-import { UserContext, AuthContext } from '../services/context';
-
-type Context = {
-  user: User;
-  userDispatch: React.Dispatch<UserAction>;
-};
+import { AuthContext } from '../services/context';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { userDispatch } = useContext(UserContext) as Context;
   const {
     state: { error },
     actions: { signIn },

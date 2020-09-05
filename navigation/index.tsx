@@ -14,12 +14,10 @@ import LinkingConfiguration from './LinkingConfiguration';
 import AuthenticatedNavigator from './AuthenticatedNavigator';
 import { useEffect, useReducer, useMemo } from 'react';
 import LoadingScreen from '../screens/LoadingScreen';
-import { userReducer } from '../reducers/user';
+import { userReducer, userActions } from '../reducers/user';
 import { UserContext, AuthContext } from '../services/context';
 import { authTypes, authReducer, authActions } from '../reducers/auth';
 
-// If you are not familiar with React Navigation, we recommend going through the
-// "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 export default function Navigation({
   colorScheme,
 }: {
@@ -35,12 +33,10 @@ export default function Navigation({
   );
 }
 
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const [user, userDispatch] = useReducer(userReducer, null);
+  const [user, userDispatch] = useReducer(userReducer, {});
 
   const [auth, authDispatch] = useReducer(authReducer, {
     isLoading: true,
@@ -49,7 +45,11 @@ function RootNavigator() {
     error: null,
   });
 
-  const authContext = useMemo(() => authActions(authDispatch), []);
+  const userContext = useMemo(() => userActions(userDispatch), []);
+  const authContext = useMemo(
+    () => authActions(authDispatch, userDispatch),
+    []
+  );
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -74,7 +74,7 @@ function RootNavigator() {
 
   return (
     <AuthContext.Provider value={{ state: auth, actions: authContext }}>
-      <UserContext.Provider value={{ user, userDispatch }}>
+      <UserContext.Provider value={{ state: user, actions: userContext }}>
         {auth.token ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Root" component={AuthenticatedNavigator} />

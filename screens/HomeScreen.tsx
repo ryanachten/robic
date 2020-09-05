@@ -2,15 +2,19 @@ import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { Button } from 'react-native-elements';
-import { AuthContext } from '../services/context';
+import { AuthContext, UserContext } from '../services/context';
 
 export default function HomeScreen() {
   const {
     actions: { signOut },
   } = useContext(AuthContext);
+  const {
+    state: { firstName },
+  } = useContext(UserContext);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
+      <Text style={styles.title}>{firstName}</Text>
       <Button title="Log out" onPress={signOut}>
         Log out
       </Button>

@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import { User } from '../constants/Interfaces';
 import { Axios } from '../constants/Api';
 import { AsyncStorage } from 'react-native';
+import { UserAction, userTypes } from './user';
 
 export enum authTypes {
   RESTORE_TOKEN = 'RESTORE_TOKEN',
@@ -28,13 +29,10 @@ export type AuthActions = {
 };
 
 export const authActions = (
-  dispatch: React.Dispatch<AuthAction>
+  dispatch: React.Dispatch<AuthAction>,
+  userDispatch: React.Dispatch<UserAction>
 ): AuthActions => ({
   signIn: async (email, password) => {
-    // In a production app, we need to send some data (usually username, password) to server and get a token
-    // We will also need to handle errors if sign in failed
-    // After getting token, we need to persist the token using `AsyncStorage`
-    // In the example, we'll use a dummy token
     try {
       const {
         data,
@@ -48,6 +46,7 @@ export const authActions = (
       const { token, userDetails } = data;
       await AsyncStorage.setItem('userToken', token);
       dispatch({ type: authTypes.SIGN_IN, token });
+      userDispatch({ type: userTypes.LOGIN_USER, user: userDetails });
     } catch (error) {
       dispatch({ type: authTypes.ERROR, error: error.message });
     }
@@ -66,39 +65,38 @@ export const authActions = (
   },
 });
 
-export const authReducer = (
-  prevState: Partial<AuthState>,
-  action: AuthAction
-) => {
+export const authReducer = (state: Partial<AuthState>, action: AuthAction) => {
   switch (action.type) {
     case authTypes.RESTORE_TOKEN:
       return {
-        ...prevState,
+        ...state,
         token: action.token,
         isLoading: false,
         error: null,
       };
     case authTypes.SIGN_IN:
       return {
-        ...prevState,
+        ...state,
         isSignout: false,
         token: action.token,
         error: null,
       };
     case authTypes.SIGN_OUT:
       return {
-        ...prevState,
+        ...state,
         isSignout: true,
         error: null,
         token: null,
       };
     case authTypes.ERROR:
       return {
-        ...prevState,
+        ...state,
         isSignout: true,
         isLoading: false,
         error: action.error,
         token: null,
       };
+    default:
+      return state;
   }
 };
