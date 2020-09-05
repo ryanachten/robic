@@ -14,9 +14,11 @@ type Context = {
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const { userDispatch } = useContext(UserContext) as Context;
-  const { signIn } = useContext(AuthContext);
+  const {
+    state: { error },
+    actions: { signIn },
+  } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>

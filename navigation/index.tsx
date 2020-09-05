@@ -42,10 +42,11 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const [user, userDispatch] = useReducer(userReducer, null);
 
-  const [state, authDispatch] = useReducer(authReducer, {
+  const [auth, authDispatch] = useReducer(authReducer, {
     isLoading: true,
     isSignout: false,
     token: null,
+    error: null,
   });
 
   const authContext = useMemo(() => authActions(authDispatch), []);
@@ -72,9 +73,9 @@ function RootNavigator() {
   }, []);
 
   return (
-    <AuthContext.Provider value={authContext}>
+    <AuthContext.Provider value={{ state: auth, actions: authContext }}>
       <UserContext.Provider value={{ user, userDispatch }}>
-        {state.token ? (
+        {auth.token ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Root" component={AuthenticatedNavigator} />
             <Stack.Screen
