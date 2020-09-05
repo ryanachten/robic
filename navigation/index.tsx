@@ -17,7 +17,10 @@ import { useState, useEffect, useReducer, useMemo } from 'react';
 import LoadingScreen from '../screens/LoadingScreen';
 import { userReducer } from '../reducers/user';
 import { UserContext, AuthContext } from '../services/context';
-import { authTypes, authReducer } from '../reducers/auth';
+import { authTypes, authReducer, authActions } from '../reducers/auth';
+import { AxiosResponse } from 'axios';
+import { User } from '../constants/Interfaces';
+import { Axios } from '../constants/Api';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -43,34 +46,15 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const [user, userDispatch] = useReducer(userReducer, null);
 
-  const [state, dispatch] = useReducer(authReducer, {
+  const [state, authDispatch] = useReducer(authReducer, {
     isLoading: true,
     isSignout: false,
     token: null,
   });
 
-  const authContext = useMemo(
-    () => ({
-      signIn: async (email: string, password: string) => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
+  console.log('authDispatch', authDispatch);
 
-        dispatch({ type: authTypes.SIGN_IN, token: 'dummy-auth-token' });
-      },
-      signOut: () => dispatch({ type: authTypes.SIGN_OUT }),
-      signUp: async (data) => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({ type: authTypes.SIGN_IN, token: 'dummy-auth-token' });
-      },
-    }),
-    []
-  );
+  const authContext = useMemo(() => authActions(authDispatch), []);
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -81,13 +65,14 @@ function RootNavigator() {
         userToken = await AsyncStorage.getItem('userToken');
       } catch (e) {
         // Restoring token failed
+        console.log('Login error!', e);
       }
 
       // After restoring token, we may need to validate it in production apps
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: authTypes.RESTORE_TOKEN, token: userToken });
+      authDispatch({ type: authTypes.RESTORE_TOKEN, token: userToken });
     };
 
     bootstrapAsync();
