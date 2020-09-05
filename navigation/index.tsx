@@ -12,15 +12,11 @@ import { RootStackParamList } from '../types';
 import UnauthenticatedNavigator from './UnauthenticatedNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import AuthenticatedNavigator from './AuthenticatedNavigator';
-import { getItem } from '../services/storage';
-import { useState, useEffect, useReducer, useMemo } from 'react';
+import { useEffect, useReducer, useMemo } from 'react';
 import LoadingScreen from '../screens/LoadingScreen';
 import { userReducer } from '../reducers/user';
 import { UserContext, AuthContext } from '../services/context';
 import { authTypes, authReducer, authActions } from '../reducers/auth';
-import { AxiosResponse } from 'axios';
-import { User } from '../constants/Interfaces';
-import { Axios } from '../constants/Api';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -52,20 +48,17 @@ function RootNavigator() {
     token: null,
   });
 
-  console.log('authDispatch', authDispatch);
-
   const authContext = useMemo(() => authActions(authDispatch), []);
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let userToken;
+      let userToken = null;
 
       try {
         userToken = await AsyncStorage.getItem('userToken');
       } catch (e) {
         // Restoring token failed
-        console.log('Login error!', e);
       }
 
       // After restoring token, we may need to validate it in production apps
@@ -77,8 +70,6 @@ function RootNavigator() {
 
     bootstrapAsync();
   }, []);
-
-  console.log('state.token ', state.token);
 
   return (
     <AuthContext.Provider value={authContext}>

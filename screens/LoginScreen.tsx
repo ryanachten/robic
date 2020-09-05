@@ -2,18 +2,9 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input, Card } from 'react-native-elements';
-import { Axios } from '../constants/Api';
 import { Text, View } from '../components/Themed';
-import { AxiosResponse } from 'axios';
 import { User } from '../constants/Interfaces';
-import { setItem } from '../services/storage';
-import { userActions, UserAction } from '../reducers/user';
 import { UserContext, AuthContext } from '../services/context';
-
-type LoginPayload = {
-  token: string;
-  userDetails: User;
-};
 
 type Context = {
   user: User;
@@ -26,23 +17,6 @@ export default function LoginScreen() {
   const [error, setError] = useState('');
   const { userDispatch } = useContext(UserContext) as Context;
   const { signIn } = useContext(AuthContext);
-
-  // const submitLogin = async () => {
-  //   try {
-  //     const { data }: AxiosResponse<LoginPayload> = await Axios.post(
-  //       '/api/auth/login',
-  //       {
-  //         email,
-  //         password,
-  //       }
-  //     );
-  //     const { token, userDetails } = data;
-  //     await setItem('token', token);
-  //     userDispatch(userActions.loginUser(userDetails));
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
 
   return (
     <View style={styles.container}>
