@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { Button } from 'react-native-elements';
-import { deleteItem } from '../utils/storage';
+import { deleteItem } from '../services/storage';
 
 export default function HomeScreen() {
   const onLogOut = () => deleteItem('token');

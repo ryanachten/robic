@@ -5,7 +5,7 @@ enum types {
 }
 
 export type UserAction = {
-  type: string;
+  type: types;
   user: User;
 };
 

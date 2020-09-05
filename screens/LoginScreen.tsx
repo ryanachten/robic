@@ -6,9 +6,9 @@ import { Axios } from '../constants/Api';
 import { Text, View } from '../components/Themed';
 import { AxiosResponse } from 'axios';
 import { User } from '../constants/Interfaces';
-import { setItem } from '../utils/storage';
+import { setItem } from '../services/storage';
 import { userActions, UserAction } from '../reducers/user';
-import { UserContext } from '../context/user-context';
+import { UserContext, AuthContext } from '../services/context';
 
 type LoginPayload = {
   token: string;
@@ -25,23 +25,24 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { userDispatch } = useContext(UserContext) as Context;
+  const { signIn } = useContext(AuthContext);
 
-  const submitLogin = async () => {
-    try {
-      const { data }: AxiosResponse<LoginPayload> = await Axios.post(
-        '/api/auth/login',
-        {
-          email,
-          password,
-        }
-      );
-      const { token, userDetails } = data;
-      await setItem('token', token);
-      userDispatch(userActions.loginUser(userDetails));
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+  // const submitLogin = async () => {
+  //   try {
+  //     const { data }: AxiosResponse<LoginPayload> = await Axios.post(
+  //       '/api/auth/login',
+  //       {
+  //         email,
+  //         password,
+  //       }
+  //     );
+  //     const { token, userDetails } = data;
+  //     await setItem('token', token);
+  //     userDispatch(userActions.loginUser(userDetails));
+  //   } catch (error) {
+  //     setError(error.message);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -66,7 +67,7 @@ export default function LoginScreen() {
           <Text>{error}</Text>
         </Card>
       ) : null}
-      <Button title="Login" onPress={submitLogin} />
+      <Button title="Login" onPress={() => signIn(email, password)} />
       <View
         style={styles.separator}
         lightColor="#eee"
