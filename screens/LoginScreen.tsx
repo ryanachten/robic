@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button, Input, Card } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
 import { AuthContext } from '../services/context';
@@ -17,16 +16,15 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <Input
+        autoCapitalize="none"
         label="Email"
         placeholder="robic@user.com"
-        leftIcon={<Icon name="envelope" size={24} color="black" />}
         value={email}
         onChange={(e) => setEmail(e.nativeEvent.text)}
       />
       <Input
         label="Password"
         placeholder="••••••••••••"
-        leftIcon={<Icon name="user" size={24} color="black" />}
         value={password}
         secureTextEntry={true}
         onChange={(e) => setPassword(e.nativeEvent.text)}

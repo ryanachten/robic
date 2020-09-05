@@ -1,7 +1,6 @@
 import { createContext } from 'react';
 import { AuthActions, AuthState } from '../reducers/auth';
-import { User } from '../constants/Interfaces';
-import { UserActions } from '../reducers/user';
+import { UserActions, UserState } from '../reducers/user';
 
 export const AuthContext = createContext<{
   state: Partial<AuthState>;
@@ -9,6 +8,6 @@ export const AuthContext = createContext<{
 }>({});
 
 export const UserContext = createContext<{
-  state: Partial<User>;
+  state: Partial<UserState>;
   actions: UserActions;
 }>({});

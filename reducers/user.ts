@@ -4,24 +4,26 @@ export enum userTypes {
   LOGIN_USER = 'LOGIN_USER',
 }
 
+export type UserState = User;
+
 export type UserAction = {
   type: userTypes;
-  user: User;
+  user: UserState;
 };
 
 export type UserActions = {
-  loginUser: (user: User) => void;
+  loginUser: (user: UserState) => void;
 };
 
 export const userActions = (
   dispatch: React.Dispatch<UserAction>
 ): UserActions => ({
-  loginUser: (user: User) => {
+  loginUser: (user: UserState) => {
     dispatch({ type: userTypes.LOGIN_USER, user });
   },
 });
 
-export const userReducer = (state: Partial<User>, action: UserAction) => {
+export const userReducer = (state: Partial<UserState>, action: UserAction) => {
   switch (action.type) {
     case userTypes.LOGIN_USER:
       return { ...action.user };

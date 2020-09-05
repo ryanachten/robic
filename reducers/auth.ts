@@ -8,12 +8,13 @@ export enum authTypes {
   RESTORE_TOKEN = 'RESTORE_TOKEN',
   SIGN_IN = 'SIGN_IN',
   SIGN_OUT = 'SIGN_OUT',
-  ERROR = 'AUTH_ERROR',
+  ERROR = 'ERROR',
+  LOADING = 'LOADING',
 }
 
 export type AuthState = {
-  isLoading: boolean;
-  isSignout: boolean;
+  loading: boolean;
+  signedOut: boolean;
   token: string | null;
   error: string | null;
 };
@@ -30,8 +31,8 @@ export type AuthActions = {
 };
 
 export const initialAuthState: AuthState = {
-  isLoading: true,
-  isSignout: false,
+  loading: true,
+  signedOut: false,
   token: null,
   error: null,
 };
@@ -56,6 +57,7 @@ export const authActions = (
     dispatch({ type: authTypes.RESTORE_TOKEN, token: userToken });
   },
   signIn: async (email, password) => {
+    dispatch({ type: authTypes.LOADING });
     try {
       const {
         data,
@@ -66,6 +68,7 @@ export const authActions = (
         email,
         password,
       });
+
       const { token, userDetails } = data;
       await AsyncStorage.setItem('userToken', token);
       dispatch({ type: authTypes.SIGN_IN, token });
@@ -94,29 +97,39 @@ export const authReducer = (state: Partial<AuthState>, action: AuthAction) => {
       return {
         ...state,
         token: action.token,
-        isLoading: false,
+        loading: false,
         error: null,
       };
     case authTypes.SIGN_IN:
       return {
         ...state,
-        isSignout: false,
+        signedOut: false,
+        loading: false,
         token: action.token,
         error: null,
       };
     case authTypes.SIGN_OUT:
       return {
         ...state,
-        isSignout: true,
+        signedOut: true,
+        loading: false,
         error: null,
         token: null,
       };
     case authTypes.ERROR:
       return {
         ...state,
-        isSignout: true,
-        isLoading: false,
+        signedOut: true,
+        loading: false,
         error: action.error,
+        token: null,
+      };
+    case authTypes.LOADING:
+      return {
+        ...state,
+        signedOut: true,
+        loading: true,
+        error: null,
         token: null,
       };
     default:

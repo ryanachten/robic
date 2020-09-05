@@ -16,12 +16,7 @@ import { useEffect, useReducer, useMemo } from 'react';
 import LoadingScreen from '../screens/LoadingScreen';
 import { userReducer, userActions } from '../reducers/user';
 import { UserContext, AuthContext } from '../services/context';
-import {
-  authTypes,
-  authReducer,
-  authActions,
-  initialAuthState,
-} from '../reducers/auth';
+import { authReducer, authActions, initialAuthState } from '../reducers/auth';
 
 export default function Navigation({
   colorScheme,
@@ -53,6 +48,10 @@ function RootNavigator() {
   useEffect(() => {
     authContext.restoreToken();
   }, []);
+
+  if (auth.loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <AuthContext.Provider value={{ state: auth, actions: authContext }}>
