@@ -1,15 +1,39 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, Button } from 'react-native';
 import { Text, View } from '../components/Themed';
+import { Input, Card } from 'react-native-elements';
+import { AuthContext } from '../services/context';
 
-export default function TabTwoScreen() {
+export default function RegisterScreen() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const {
+    state: { error },
+    actions: { signUp },
+  } = useContext(AuthContext);
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <Text style={styles.title}>Register</Text>
+      <Input
+        autoCapitalize="none"
+        label="Email"
+        placeholder="robic@user.com"
+        value={email}
+        onChange={(e) => setEmail(e.nativeEvent.text)}
+      />
+      <Input
+        label="Password"
+        placeholder="••••••••••••"
+        value={password}
+        secureTextEntry={true}
+        onChange={(e) => setPassword(e.nativeEvent.text)}
+      />
+      {error ? (
+        <Card containerStyle={styles.error} title="Oops!">
+          <Text>{error}</Text>
+        </Card>
+      ) : null}
+      <Button title="Register" onPress={() => signUp(email, password)} />
     </View>
   );
 }
@@ -20,13 +44,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  error: {
+    marginBottom: 30,
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });

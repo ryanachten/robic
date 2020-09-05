@@ -1,12 +1,13 @@
 import { AxiosResponse } from 'axios';
 import { User } from '../constants/Interfaces';
-import { Axios } from '../constants/Api';
+import { Axios, LOGIN_URL, REGISTER_URL } from '../constants/Api';
 import { AsyncStorage } from 'react-native';
 import { UserAction, userTypes } from './user';
 
 export enum authTypes {
   RESTORE_TOKEN = 'RESTORE_TOKEN',
   SIGN_IN = 'SIGN_IN',
+  SIGN_UP = 'SIGN_UP',
   SIGN_OUT = 'SIGN_OUT',
   ERROR = 'ERROR',
   LOADING = 'LOADING',
@@ -27,7 +28,7 @@ export type AuthActions = {
   restoreToken: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => void;
-  signUp: () => Promise<void>;
+  signUp: (user: UserForRegister) => Promise<void>;
 };
 
 export const initialAuthState: AuthState = {
@@ -36,6 +37,8 @@ export const initialAuthState: AuthState = {
   token: null,
   error: null,
 };
+
+type UserForRegister = Partial<User> & { email: string; password: string };
 
 export const authActions = (
   dispatch: React.Dispatch<AuthAction>,
@@ -64,7 +67,7 @@ export const authActions = (
       }: AxiosResponse<{
         token: string;
         userDetails: User;
-      }> = await Axios.post('/api/auth/login', {
+      }> = await Axios.post(LOGIN_URL, {
         email,
         password,
       });
@@ -81,13 +84,18 @@ export const authActions = (
     AsyncStorage.removeItem('userToken');
     dispatch({ type: authTypes.SIGN_OUT });
   },
-  signUp: async () => {
-    // In a production app, we need to send user data to server and get a token
-    // We will also need to handle errors if sign up failed
-    // After getting token, we need to persist the token using `AsyncStorage`
-    // In the example, we'll use a dummy token
-
-    dispatch({ type: authTypes.SIGN_IN, token: 'dummy-auth-token' });
+  signUp: async ({ firstName, lastName, email, password }: UserForRegister) => {
+    try {
+      await Axios.post(REGISTER_URL, {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+      dispatch({ type: authTypes.SIGN_UP });
+    } catch (error) {
+      dispatch({ type: authTypes.ERROR, error: error.message });
+    }
   },
 });
 
@@ -106,6 +114,14 @@ export const authReducer = (state: Partial<AuthState>, action: AuthAction) => {
         signedOut: false,
         loading: false,
         token: action.token,
+        error: null,
+      };
+    case authTypes.SIGN_UP:
+      return {
+        ...state,
+        signedOut: true,
+        loading: false,
+        token: null,
         error: null,
       };
     case authTypes.SIGN_OUT:
