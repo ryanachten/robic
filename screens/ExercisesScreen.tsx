@@ -7,13 +7,17 @@ import { ExercisesParamList } from '../types';
 import {
   exerciseDefinitionReducer,
   exerciseDefinitionActions,
+  initialExerciseDefinitionState,
 } from '../reducers/exerciseDefinition';
 import { ExerciseDefinition } from '../constants/Interfaces';
 
 type Props = StackScreenProps<ExercisesParamList, 'ExerciseDetailScreen'>;
 
 export default function ExercisesScreen({ navigation }: Props) {
-  const [state, definitionDispatch] = useReducer(exerciseDefinitionReducer, {});
+  const [state, definitionDispatch] = useReducer(
+    exerciseDefinitionReducer,
+    initialExerciseDefinitionState
+  );
 
   useEffect(() => {
     exerciseDefinitionActions(definitionDispatch).getDefinitions();

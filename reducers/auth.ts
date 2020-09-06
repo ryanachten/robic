@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import { User } from '../constants/Interfaces';
 import { Axios, LOGIN_URL, REGISTER_URL } from '../constants/Api';
@@ -46,16 +46,15 @@ export const authActions = (
   userDispatch: React.Dispatch<UserAction>
 ): AuthActions => ({
   restoreToken: async () => {
-    let userToken = null;
+    let token = null;
     try {
-      userToken = await AsyncStorage.getItem(StorageKeys.Token);
+      // TODO: After restoring token, we may need to validate it in production apps
+      token = await AsyncStorage.getItem(StorageKeys.Token);
+      axios.defaults.headers.common['Authorization'] = `bearer ${token}`;
+      dispatch({ type: authTypes.RESTORE_TOKEN, token });
     } catch (e) {
       dispatch({ type: authTypes.ERROR, error: e.message });
     }
-
-    // After restoring token, we may need to validate it in production apps
-
-    dispatch({ type: authTypes.RESTORE_TOKEN, token: userToken });
   },
   signIn: async (email, password) => {
     dispatch({ type: authTypes.LOADING });
@@ -73,6 +72,7 @@ export const authActions = (
 
       // Dispatch and serialise token
       await AsyncStorage.setItem(StorageKeys.Token, token);
+      axios.defaults.headers.common['Authorization'] = `bearer ${token}`;
       dispatch({ type: authTypes.SIGN_IN, token });
 
       // Dispatch and serialise user

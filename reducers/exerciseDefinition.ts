@@ -10,13 +10,16 @@ export type ExerciseDefinitionState = {
   definitions: ExerciseDefinition[];
 };
 
-export type ExerciseDefinitionAction = {
+export type ExerciseDefinitionAction = ExerciseDefinitionState & {
   type: exerciseDefinitionTypes;
-  // definitions: ExerciseDefinitionState;
 };
 
 export type ExerciseDefinitionActions = {
   getDefinitions: () => Promise<void>;
+};
+
+export const initialExerciseDefinitionState = {
+  definitions: [],
 };
 
 export const exerciseDefinitionActions = (
@@ -24,9 +27,11 @@ export const exerciseDefinitionActions = (
 ): ExerciseDefinitionActions => ({
   getDefinitions: async () => {
     try {
-      const res = await Axios.get(EXERCISE_DEFINITION_URL);
-      dispatch({ type: exerciseDefinitionTypes.GET_DEFINITIONS });
-      console.log('res', res);
+      const { data } = await Axios.get(EXERCISE_DEFINITION_URL);
+      dispatch({
+        type: exerciseDefinitionTypes.GET_DEFINITIONS,
+        definitions: data,
+      });
     } catch (e) {
       console.log('error getting definitions', e);
     }
@@ -39,8 +44,10 @@ export const exerciseDefinitionReducer = (
 ) => {
   switch (action.type) {
     case exerciseDefinitionTypes.GET_DEFINITIONS:
-      // return { ...action.definitions };
-      return state;
+      return {
+        ...state,
+        definitions: [...action.definitions],
+      };
     default:
       return state;
   }
