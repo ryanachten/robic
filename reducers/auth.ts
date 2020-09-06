@@ -1,8 +1,9 @@
 import { AxiosResponse } from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 import { User } from '../constants/Interfaces';
 import { Axios, LOGIN_URL, REGISTER_URL } from '../constants/Api';
-import { AsyncStorage } from 'react-native';
 import { UserAction, userTypes } from './user';
+import { StorageKeys } from '../constants/StorageKeys';
 
 export enum authTypes {
   RESTORE_TOKEN = 'RESTORE_TOKEN',
@@ -46,17 +47,14 @@ export const authActions = (
 ): AuthActions => ({
   restoreToken: async () => {
     let userToken = null;
-
     try {
-      userToken = await AsyncStorage.getItem('userToken');
+      userToken = await AsyncStorage.getItem(StorageKeys.Token);
     } catch (e) {
       // Restoring token failed
     }
 
     // After restoring token, we may need to validate it in production apps
 
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
     dispatch({ type: authTypes.RESTORE_TOKEN, token: userToken });
   },
   signIn: async (email, password) => {
@@ -73,15 +71,18 @@ export const authActions = (
       });
 
       const { token, userDetails } = data;
-      await AsyncStorage.setItem('userToken', token);
+      // Dispatch and serialise token
+      await AsyncStorage.setItem(StorageKeys.Token, token);
       dispatch({ type: authTypes.SIGN_IN, token });
+      // Dispatch and serialise user
+      await AsyncStorage.setItem(StorageKeys.User, JSON.stringify(userDetails));
       userDispatch({ type: userTypes.LOGIN_USER, user: userDetails });
     } catch (error) {
       dispatch({ type: authTypes.ERROR, error: error.message });
     }
   },
   signOut: () => {
-    AsyncStorage.removeItem('userToken');
+    AsyncStorage.multiRemove([StorageKeys.Token, StorageKeys.User]);
     dispatch({ type: authTypes.SIGN_OUT });
   },
   signUp: async ({ firstName, lastName, email, password }: UserForRegister) => {

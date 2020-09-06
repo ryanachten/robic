@@ -47,6 +47,7 @@ function RootNavigator() {
 
   useEffect(() => {
     authContext.restoreToken();
+    userContext.restoreUser();
   }, []);
 
   if (auth.loading) {
