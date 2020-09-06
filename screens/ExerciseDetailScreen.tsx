@@ -1,14 +1,9 @@
 import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { Button } from 'react-native-elements';
 import { AuthContext, UserContext } from '../services/context';
-import { StackScreenProps } from '@react-navigation/stack';
-import { ExercisesParamList } from '../types';
 
-type Props = StackScreenProps<ExercisesParamList, 'ExerciseDetailScreen'>;
-
-export default function ExercisesScreen({ navigation }: Props) {
+export default function ExerciseDetailScreen() {
   const {
     actions: { signOut },
   } = useContext(AuthContext);
@@ -18,13 +13,7 @@ export default function ExercisesScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Exercises</Text>
-      {exercises?.map((exercise) => (
-        <Button
-          title={exercise}
-          onPress={() => navigation.navigate('ExerciseDetailScreen')}
-        ></Button>
-      ))}
+      <Text style={styles.title}>Exercises Detail</Text>
     </View>
   );
 }

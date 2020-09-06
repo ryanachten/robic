@@ -27,4 +27,5 @@ export type HomeParamList = {
 
 export type ExercisesParamList = {
   ExercisesScreen: undefined;
+  ExerciseDetailScreen: undefined;
 };

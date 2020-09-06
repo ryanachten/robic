@@ -12,6 +12,7 @@ import {
 } from '../types';
 import HomeScreen from '../screens/HomeScreen';
 import ExercisesScreen from '../screens/ExercisesScreen';
+import ExerciseDetailScreen from '../screens/ExerciseDetailScreen';
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -75,6 +76,11 @@ function ExerciseNavigator() {
         name="ExercisesScreen"
         component={ExercisesScreen}
         options={{ headerTitle: 'Exercises' }}
+      />
+      <ExercisesStack.Screen
+        name="ExerciseDetailScreen"
+        component={ExerciseDetailScreen}
+        options={{ headerTitle: 'Exercise Detail' }}
       />
     </ExercisesStack.Navigator>
   );
