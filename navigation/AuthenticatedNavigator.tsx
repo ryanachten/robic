@@ -5,8 +5,13 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import { AuthenticatedParamList, HomeParamList } from '../types';
+import {
+  AuthenticatedParamList,
+  HomeParamList,
+  ExercisesParamList,
+} from '../types';
 import HomeScreen from '../screens/HomeScreen';
+import ExercisesScreen from '../screens/ExercisesScreen';
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -27,6 +32,15 @@ export default function AuthenticatedNavigator() {
           ),
         }}
       />
+      <BottomTab.Screen
+        name="Exercises"
+        component={ExerciseNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          ),
+        }}
+      />
     </BottomTab.Navigator>
   );
 }
@@ -40,6 +54,7 @@ function TabBarIcon(props: { name: string; color: string }) {
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const HomeStack = createStackNavigator<HomeParamList>();
+const ExercisesStack = createStackNavigator<ExercisesParamList>();
 
 function HomeNavigator() {
   return (
@@ -50,5 +65,17 @@ function HomeNavigator() {
         options={{ headerTitle: 'Home' }}
       />
     </HomeStack.Navigator>
+  );
+}
+
+function ExerciseNavigator() {
+  return (
+    <ExercisesStack.Navigator>
+      <ExercisesStack.Screen
+        name="ExercisesScreen"
+        component={ExercisesScreen}
+        options={{ headerTitle: 'Exercises' }}
+      />
+    </ExercisesStack.Navigator>
   );
 }

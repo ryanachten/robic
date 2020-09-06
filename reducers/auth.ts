@@ -50,7 +50,7 @@ export const authActions = (
     try {
       userToken = await AsyncStorage.getItem(StorageKeys.Token);
     } catch (e) {
-      // Restoring token failed
+      dispatch({ type: authTypes.ERROR, error: e.message });
     }
 
     // After restoring token, we may need to validate it in production apps
@@ -69,11 +69,12 @@ export const authActions = (
         email,
         password,
       });
-
       const { token, userDetails } = data;
+
       // Dispatch and serialise token
       await AsyncStorage.setItem(StorageKeys.Token, token);
       dispatch({ type: authTypes.SIGN_IN, token });
+
       // Dispatch and serialise user
       await AsyncStorage.setItem(StorageKeys.User, JSON.stringify(userDetails));
       userDispatch({ type: userTypes.LOGIN_USER, user: userDetails });

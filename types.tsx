@@ -5,6 +5,7 @@ export type RootStackParamList = {
 
 export type AuthenticatedParamList = {
   Home: undefined;
+  Exercises: undefined;
 };
 
 export type UnauthenticatedParamList = {
@@ -22,4 +23,8 @@ export type RegisterParamList = {
 
 export type HomeParamList = {
   HomeScreen: undefined;
+};
+
+export type ExercisesParamList = {
+  ExercisesScreen: undefined;
 };
