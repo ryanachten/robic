@@ -1,27 +1,31 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { Button } from 'react-native-elements';
-import { AuthContext, UserContext } from '../services/context';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ExercisesParamList } from '../types';
+import {
+  exerciseDefinitionReducer,
+  exerciseDefinitionActions,
+} from '../reducers/exerciseDefinition';
+import { ExerciseDefinition } from '../constants/Interfaces';
 
 type Props = StackScreenProps<ExercisesParamList, 'ExerciseDetailScreen'>;
 
 export default function ExercisesScreen({ navigation }: Props) {
-  const {
-    actions: { signOut },
-  } = useContext(AuthContext);
-  const {
-    state: { exercises },
-  } = useContext(UserContext);
+  const [state, definitionDispatch] = useReducer(exerciseDefinitionReducer, {});
+
+  useEffect(() => {
+    exerciseDefinitionActions(definitionDispatch).getDefinitions();
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Exercises</Text>
-      {exercises?.map((exercise) => (
+      {state.definitions?.map((defintion: ExerciseDefinition) => (
         <Button
-          title={exercise}
+          key={defintion.id}
+          title={defintion.title}
           onPress={() => navigation.navigate('ExerciseDetailScreen')}
         ></Button>
       ))}
