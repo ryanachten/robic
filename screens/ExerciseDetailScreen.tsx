@@ -1,19 +1,36 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { AuthContext, UserContext } from '../services/context';
+import { ExercisesParamList } from '../types';
+import { StackScreenProps } from '@react-navigation/stack';
+import {
+  exerciseDefinitionActions,
+  exerciseDefinitionReducer,
+  initialExerciseDefinitionState,
+} from '../reducers/exerciseDefinition';
 
-export default function ExerciseDetailScreen() {
-  const {
-    actions: { signOut },
-  } = useContext(AuthContext);
-  const {
-    state: { exercises },
-  } = useContext(UserContext);
+type Props = StackScreenProps<ExercisesParamList, 'ExerciseDetailScreen'>;
+
+export default function ExerciseDetailScreen({ route }: Props) {
+  const definitionId = route.params ? route.params.definitionId : null;
+
+  const [state, definitionDispatch] = useReducer(
+    exerciseDefinitionReducer,
+    initialExerciseDefinitionState
+  );
+
+  useEffect(() => {
+    definitionId &&
+      exerciseDefinitionActions(definitionDispatch).getDefinitionById(
+        definitionId
+      );
+  }, []);
+
+  const exercise = state.definitions?.find((def) => def.id === definitionId);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Exercises Detail</Text>
+      <Text style={styles.title}>{exercise?.title}</Text>
     </View>
   );
 }

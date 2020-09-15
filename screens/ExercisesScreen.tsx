@@ -11,7 +11,7 @@ import {
 } from '../reducers/exerciseDefinition';
 import { ExerciseDefinition } from '../constants/Interfaces';
 
-type Props = StackScreenProps<ExercisesParamList, 'ExerciseDetailScreen'>;
+type Props = StackScreenProps<ExercisesParamList, 'ExercisesScreen'>;
 
 export default function ExercisesScreen({ navigation }: Props) {
   const [state, definitionDispatch] = useReducer(
@@ -26,11 +26,13 @@ export default function ExercisesScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Exercises</Text>
-      {state.definitions?.map((defintion: ExerciseDefinition) => (
+      {state.definitions?.map(({ id, title }: ExerciseDefinition) => (
         <Button
-          key={defintion.id}
-          title={defintion.title}
-          onPress={() => navigation.navigate('ExerciseDetailScreen')}
+          key={id}
+          title={title}
+          onPress={() =>
+            navigation.navigate('ExerciseDetailScreen', { definitionId: id })
+          }
         ></Button>
       ))}
     </View>
