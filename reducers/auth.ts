@@ -1,27 +1,31 @@
 import axios, { AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import { User, BaseState } from '../constants/Interfaces';
+import { User } from '../constants/Interfaces';
 import { Axios, LOGIN_URL, REGISTER_URL } from '../constants/Api';
 import { UserAction, userTypes } from './user';
 import { StorageKeys } from '../constants/StorageKeys';
+import { BaseState, baseTypes, BaseActions } from './base';
 
 export enum authTypes {
   RESTORE_TOKEN = 'RESTORE_TOKEN',
   SIGN_IN = 'SIGN_IN',
   SIGN_UP = 'SIGN_UP',
   SIGN_OUT = 'SIGN_OUT',
-  ERROR = 'ERROR',
-  LOADING = 'LOADING',
 }
+
+type Token = string | null;
 
 export type AuthState = BaseState & {
   signedOut: boolean;
-  token: string | null;
+  token: Token;
 };
 
-export type AuthAction = Partial<AuthState> & {
-  type: authTypes;
-};
+export type AuthAction =
+  | BaseActions
+  | { type: authTypes.SIGN_UP }
+  | { type: authTypes.SIGN_OUT }
+  | { type: authTypes.SIGN_IN; token: Token }
+  | { type: authTypes.RESTORE_TOKEN; token: Token };
 
 export type AuthActions = {
   restoreToken: () => Promise<void>;
@@ -51,11 +55,11 @@ export const authActions = (
       axios.defaults.headers.common['Authorization'] = `bearer ${token}`;
       dispatch({ type: authTypes.RESTORE_TOKEN, token });
     } catch (e) {
-      dispatch({ type: authTypes.ERROR, error: e.message });
+      dispatch({ type: baseTypes.ERROR, error: e.message });
     }
   },
   signIn: async (email, password) => {
-    dispatch({ type: authTypes.LOADING });
+    dispatch({ type: baseTypes.LOADING });
     try {
       const {
         data,
@@ -77,7 +81,7 @@ export const authActions = (
       await AsyncStorage.setItem(StorageKeys.User, JSON.stringify(userDetails));
       userDispatch({ type: userTypes.LOGIN_USER, user: userDetails });
     } catch (error) {
-      dispatch({ type: authTypes.ERROR, error: error.message });
+      dispatch({ type: baseTypes.ERROR, error: error.message });
     }
   },
   signOut: () => {
@@ -94,7 +98,7 @@ export const authActions = (
       });
       dispatch({ type: authTypes.SIGN_UP });
     } catch (error) {
-      dispatch({ type: authTypes.ERROR, error: error.message });
+      dispatch({ type: baseTypes.ERROR, error: error.message });
     }
   },
 });
@@ -132,7 +136,7 @@ export const authReducer = (state: Partial<AuthState>, action: AuthAction) => {
         error: null,
         token: null,
       };
-    case authTypes.ERROR:
+    case baseTypes.ERROR:
       return {
         ...state,
         signedOut: true,
@@ -140,7 +144,7 @@ export const authReducer = (state: Partial<AuthState>, action: AuthAction) => {
         error: action.error,
         token: null,
       };
-    case authTypes.LOADING:
+    case baseTypes.LOADING:
       return {
         ...state,
         signedOut: true,

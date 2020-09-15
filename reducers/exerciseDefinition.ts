@@ -1,10 +1,9 @@
-import { ExerciseDefinition, BaseState } from '../constants/Interfaces';
+import { ExerciseDefinition } from '../constants/Interfaces';
 import Axios, { AxiosResponse } from 'axios';
 import { EXERCISE_DEFINITION_URL } from '../constants/Api';
+import { BaseState, BaseActions, baseTypes } from './base';
 
 export enum exerciseDefinitionTypes {
-  ERROR = 'ERROR',
-  LOADING = 'LOADING',
   GET_DEFINITIONS = 'GET_DEFINITIONS',
   GET_DEFINITION_BY_ID = 'GET_DEFINITION_BY_ID',
 }
@@ -14,6 +13,7 @@ export type ExerciseDefinitionState = BaseState & {
 };
 
 export type ExerciseDefinitionAction =
+  | BaseActions
   | {
       type: exerciseDefinitionTypes.GET_DEFINITIONS;
       definitions: ExerciseDefinition[];
@@ -21,13 +21,6 @@ export type ExerciseDefinitionAction =
   | {
       type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID;
       definition: ExerciseDefinition;
-    }
-  | {
-      type: exerciseDefinitionTypes.ERROR;
-      error: string;
-    }
-  | {
-      type: exerciseDefinitionTypes.LOADING;
     };
 
 export type ExerciseDefinitionActions = {
@@ -46,7 +39,7 @@ export const exerciseDefinitionActions = (
 ): ExerciseDefinitionActions => ({
   getDefinitions: async () => {
     dispatch({
-      type: exerciseDefinitionTypes.LOADING,
+      type: baseTypes.LOADING,
     });
     try {
       const { data }: AxiosResponse<ExerciseDefinition[]> = await Axios.get(
@@ -62,7 +55,7 @@ export const exerciseDefinitionActions = (
   },
   getDefinitionById: async (id: string) => {
     dispatch({
-      type: exerciseDefinitionTypes.LOADING,
+      type: baseTypes.LOADING,
     });
     try {
       const { data }: AxiosResponse<ExerciseDefinition> = await Axios.get(
@@ -74,7 +67,7 @@ export const exerciseDefinitionActions = (
         definition: data,
       });
     } catch (e) {
-      dispatch({ type: exerciseDefinitionTypes.ERROR, error: e.message });
+      dispatch({ type: baseTypes.ERROR, error: e.message });
     }
   },
 });
@@ -84,12 +77,12 @@ export const exerciseDefinitionReducer = (
   action: ExerciseDefinitionAction
 ): ExerciseDefinitionState => {
   switch (action.type) {
-    case exerciseDefinitionTypes.LOADING:
+    case baseTypes.LOADING:
       return {
         ...state,
         loading: true,
       };
-    case exerciseDefinitionTypes.ERROR:
+    case baseTypes.ERROR:
       return {
         ...state,
         loading: false,
