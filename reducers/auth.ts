@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import { User } from '../constants/Interfaces';
+import { User, BaseState } from '../constants/Interfaces';
 import { Axios, LOGIN_URL, REGISTER_URL } from '../constants/Api';
 import { UserAction, userTypes } from './user';
 import { StorageKeys } from '../constants/StorageKeys';
@@ -14,11 +14,9 @@ export enum authTypes {
   LOADING = 'LOADING',
 }
 
-export type AuthState = {
-  loading: boolean;
+export type AuthState = BaseState & {
   signedOut: boolean;
   token: string | null;
-  error: string | null;
 };
 
 export type AuthAction = Partial<AuthState> & {

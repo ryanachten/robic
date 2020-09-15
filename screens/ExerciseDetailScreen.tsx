@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { ExercisesParamList } from '../types';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -26,11 +26,13 @@ export default function ExerciseDetailScreen({ route }: Props) {
       );
   }, []);
 
-  const exercise = state.definitions?.find((def) => def.id === definitionId);
+  const { definitions, error, loading } = state;
+  const exercise = definitions.find((def) => def.id === definitionId);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{exercise?.title}</Text>
+      {loading && <ActivityIndicator size="large" />}
     </View>
   );
 }

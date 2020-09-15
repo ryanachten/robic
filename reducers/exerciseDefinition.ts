@@ -1,84 +1,123 @@
-import { ExerciseDefinition } from '../constants/Interfaces';
+import { ExerciseDefinition, BaseState } from '../constants/Interfaces';
 import Axios, { AxiosResponse } from 'axios';
 import { EXERCISE_DEFINITION_URL } from '../constants/Api';
 
 export enum exerciseDefinitionTypes {
+  ERROR = 'ERROR',
+  LOADING = 'LOADING',
   GET_DEFINITIONS = 'GET_DEFINITIONS',
   GET_DEFINITION_BY_ID = 'GET_DEFINITION_BY_ID',
 }
 
-export type ExerciseDefinitionState = {
+export type ExerciseDefinitionState = BaseState & {
   definitions: ExerciseDefinition[];
 };
 
-export type ExerciseDefinitionAction = {
-  type: exerciseDefinitionTypes;
-  payload: ExerciseDefinition[];
-};
+export type ExerciseDefinitionAction =
+  | {
+      type: exerciseDefinitionTypes.GET_DEFINITIONS;
+      definitions: ExerciseDefinition[];
+    }
+  | {
+      type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID;
+      definition: ExerciseDefinition;
+    }
+  | {
+      type: exerciseDefinitionTypes.ERROR;
+      error: string;
+    }
+  | {
+      type: exerciseDefinitionTypes.LOADING;
+    };
 
 export type ExerciseDefinitionActions = {
   getDefinitions: () => Promise<void>;
   getDefinitionById: (id: string) => Promise<void>;
 };
 
-export const initialExerciseDefinitionState = {
+export const initialExerciseDefinitionState: ExerciseDefinitionState = {
   definitions: [],
+  loading: true,
+  error: null,
 };
 
 export const exerciseDefinitionActions = (
   dispatch: React.Dispatch<ExerciseDefinitionAction>
 ): ExerciseDefinitionActions => ({
   getDefinitions: async () => {
+    dispatch({
+      type: exerciseDefinitionTypes.LOADING,
+    });
     try {
-      const { data } = await Axios.get(EXERCISE_DEFINITION_URL);
+      const { data }: AxiosResponse<ExerciseDefinition[]> = await Axios.get(
+        EXERCISE_DEFINITION_URL
+      );
       dispatch({
         type: exerciseDefinitionTypes.GET_DEFINITIONS,
-        payload: data,
+        definitions: data,
       });
     } catch (e) {
       console.log('error getting definitions', e);
     }
   },
   getDefinitionById: async (id: string) => {
+    dispatch({
+      type: exerciseDefinitionTypes.LOADING,
+    });
     try {
       const { data }: AxiosResponse<ExerciseDefinition> = await Axios.get(
         `${EXERCISE_DEFINITION_URL}/${id}`
       );
+
       dispatch({
         type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID,
-        payload: [data],
+        definition: data,
       });
     } catch (e) {
-      console.log('error getting definitions', e);
+      dispatch({ type: exerciseDefinitionTypes.ERROR, error: e.message });
     }
   },
 });
 
 export const exerciseDefinitionReducer = (
-  state: Partial<ExerciseDefinitionState>,
+  state: ExerciseDefinitionState,
   action: ExerciseDefinitionAction
-) => {
+): ExerciseDefinitionState => {
   switch (action.type) {
+    case exerciseDefinitionTypes.LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
+    case exerciseDefinitionTypes.ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
     case exerciseDefinitionTypes.GET_DEFINITIONS:
       return {
         ...state,
-        definitions: [...action.payload],
+        loading: false,
+        definitions: action.definitions ? [...action.definitions] : [],
       };
     case exerciseDefinitionTypes.GET_DEFINITION_BY_ID:
-      const fullDefinition = action.payload[0];
+      const fullDefinition = action.definition;
       const definitionIndex = state.definitions?.findIndex(
         (def) => def.id === fullDefinition.id
       );
-      if (!state.definitions || !definitionIndex || definitionIndex < 0) {
+      if (!state.definitions || definitionIndex < 0) {
         return {
           ...state,
+          loading: false,
           definitions: [fullDefinition],
         };
       }
       const definitions = [...state.definitions];
-      definitions[definitionIndex] = fullDefinition;
+      definitions[definitionIndex] = fullDefinition as ExerciseDefinition;
       return {
         ...state,
+        loading: false,
         definitions,
       };
     default:

@@ -1,3 +1,8 @@
+export type BaseState = {
+  loading: boolean;
+  error: string | null;
+};
+
 export interface User {
   id: string;
   firstName: string;

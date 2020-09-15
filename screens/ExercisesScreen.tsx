@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useReducer } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useReducer } from 'react';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { Button } from 'react-native-elements';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -23,10 +23,13 @@ export default function ExercisesScreen({ navigation }: Props) {
     exerciseDefinitionActions(definitionDispatch).getDefinitions();
   }, []);
 
+  const { definitions, error, loading } = state;
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Exercises</Text>
-      {state.definitions?.map(({ id, title }: ExerciseDefinition) => (
+      {loading && <ActivityIndicator size="large" />}
+      {definitions?.map(({ id, title }: ExerciseDefinition) => (
         <Button
           key={id}
           title={title}
