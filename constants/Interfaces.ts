@@ -45,11 +45,15 @@ export interface SetExercise {
   unit: Unit;
 }
 
-export interface Set {
-  exercises?: SetExercise[];
-  reps: number; //TODO: should be optional
-  value: number; //TODO: should be optional
-}
+// TODO: this data structure doesn't look 100%
+export type Set =
+  | {
+      exercises: SetExercise[];
+    }
+  | {
+      reps: number;
+      value: number;
+    };
 
 export interface Exercise {
   id: string;

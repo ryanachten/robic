@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { Button } from 'react-native-elements';
+import { Button, Input } from 'react-native-elements';
 import { AuthContext, UserContext } from '../services/context';
 
 export default function HomeScreen() {

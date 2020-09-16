@@ -50,7 +50,7 @@ export const exerciseDefinitionActions = (
         definitions: data,
       });
     } catch (e) {
-      console.log('error getting definitions', e);
+      dispatch({ type: baseTypes.ERROR, error: e.message });
     }
   },
   getDefinitionById: async (id: string) => {
@@ -92,7 +92,7 @@ export const exerciseDefinitionReducer = (
       return {
         ...state,
         loading: false,
-        definitions: action.definitions ? [...action.definitions] : [],
+        definitions: [...action.definitions],
       };
     case exerciseDefinitionTypes.GET_DEFINITION_BY_ID:
       const fullDefinition = action.definition;
