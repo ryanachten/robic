@@ -1,8 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useReducer, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { Button } from 'react-native-elements';
+import { Picker } from 'native-base';
 import { Text, View } from '../components/Themed';
-import { Button, Input } from 'react-native-elements';
 import { AuthContext, UserContext } from '../services/context';
+import {
+  exerciseDefinitionReducer,
+  initialExerciseDefinitionState,
+  exerciseDefinitionActions,
+} from '../reducers/exerciseDefinition';
 
 export default function HomeScreen() {
   const {
@@ -12,12 +18,31 @@ export default function HomeScreen() {
     state: { firstName },
   } = useContext(UserContext);
 
+  const [definitionState, definitionDispatch] = useReducer(
+    exerciseDefinitionReducer,
+    initialExerciseDefinitionState
+  );
+
+  useEffect(() => {
+    exerciseDefinitionActions(definitionDispatch).getDefinitions();
+  }, []);
+
+  const [selectedDefintion, setSelectedDefinition] = useState();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{firstName}</Text>
-      <Button title="Log out" onPress={signOut}>
-        Log out
-      </Button>
+    <View>
+      <Picker
+        mode="dropdown"
+        placeholder="Select exercise"
+        selectedValue={selectedDefintion}
+        onValueChange={setSelectedDefinition}
+      >
+        {definitionState.definitions.map((defintion) => {
+          const { title, id } = defintion;
+          return <Picker.Item key={id} label={title} value={defintion} />;
+        })}
+      </Picker>
+      <Button title="Log out" onPress={signOut} />
     </View>
   );
 }

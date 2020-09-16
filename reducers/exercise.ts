@@ -49,7 +49,7 @@ export const exerciseDefinitionActions = (
   },
 });
 
-export const exerciseDefinitionReducer = (
+export const exerciseReducer = (
   state: ExerciseState,
   action: ExerciseAction
 ): ExerciseState => {
