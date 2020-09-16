@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { StyleSheet, Picker, ScrollView } from 'react-native';
 import { Text } from '../components/Themed';
-import { AuthContext, UserContext } from '../services/context';
+import { UserContext } from '../services/context';
 import {
   exerciseDefinitionReducer,
   initialExerciseDefinitionState,
@@ -17,9 +17,6 @@ import { ExerciseDefinition } from '../constants/Interfaces';
 import { ExerciseForm } from '../components/ExerciseForm';
 
 export default function HomeScreen() {
-  const {
-    actions: { signOut },
-  } = useContext(AuthContext);
   const {
     state: { firstName },
   } = useContext(UserContext);
@@ -55,7 +52,6 @@ export default function HomeScreen() {
         })}
       </Picker>
       {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
-      {/* <Button title="Log out" onPress={signOut} /> */}
     </ScrollView>
   );
 }

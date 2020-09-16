@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -13,8 +13,13 @@ import {
 import HomeScreen from '../screens/HomeScreen';
 import ExercisesScreen from '../screens/ExercisesScreen';
 import ExerciseDetailScreen from '../screens/ExerciseDetailScreen';
+import { LogoutButton } from '../components/LogoutButton';
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
+
+const sharedScreenOptions = {
+  headerRight: () => <LogoutButton />,
+};
 
 export default function AuthenticatedNavigator() {
   const colorScheme = useColorScheme();
@@ -63,7 +68,10 @@ function HomeNavigator() {
       <HomeStack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{ headerTitle: 'Home' }}
+        options={{
+          ...sharedScreenOptions,
+          headerTitle: 'Home',
+        }}
       />
     </HomeStack.Navigator>
   );
@@ -75,12 +83,18 @@ function ExerciseNavigator() {
       <ExercisesStack.Screen
         name="ExercisesScreen"
         component={ExercisesScreen}
-        options={{ headerTitle: 'Exercises' }}
+        options={{
+          ...sharedScreenOptions,
+          headerTitle: 'Exercises',
+        }}
       />
       <ExercisesStack.Screen
         name="ExerciseDetailScreen"
         component={ExerciseDetailScreen}
-        options={{ headerTitle: 'Exercise Detail' }}
+        options={{
+          ...sharedScreenOptions,
+          headerTitle: 'Exercise Detail',
+        }}
       />
     </ExercisesStack.Navigator>
   );
