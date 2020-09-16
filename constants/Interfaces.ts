@@ -1,3 +1,36 @@
+export enum MuscleGroup {
+  CHEST = 'Chest',
+  FOREARMS = 'Forearms',
+  LATS = 'Lats',
+  // MIDDLE_BACK = "Middle Back",
+  LOWER_BACK = 'Lower Back',
+  NECK = 'Neck',
+  HAMS = 'Hamstrings',
+  QUADS = 'Quadriceps',
+  CALVES = 'Calves',
+  TRICEPS = 'Triceps',
+  TRAPS = 'Traps',
+  SHOULDERS = 'Shoulders',
+  ABS = 'Abdominals',
+  OBLIQUES = 'Obliques',
+  GLUTES = 'Glutes',
+  BICEPS = 'Biceps',
+  // ADDUCTORS = "Adductors",
+  // ABDUCTORS = "Abductors"
+}
+
+export enum ExerciseType {
+  CIRCUIT = 'Circuit',
+  STANDARD = 'Standard',
+  SUPERSET = 'Superset',
+}
+
+export enum Unit {
+  kg = 'kg',
+  min = 'min',
+  bodyweight = 'body weight',
+}
+
 export interface User {
   id: string;
   firstName: string;
@@ -5,13 +38,34 @@ export interface User {
   exercises: any[];
 }
 
+export interface SetExercise {
+  id: string;
+  reps: number;
+  value: number;
+  unit: Unit;
+}
+
+export interface Set {
+  exercises?: SetExercise[];
+  reps: number; //TODO: should be optional
+  value: number; //TODO: should be optional
+}
+
+export interface Exercise {
+  id: string;
+  date: string;
+  definiton: ExerciseDefinition;
+  sets: Set[];
+  timeTaken: string;
+}
+
 export interface ExerciseDefinition {
   id: string;
   title: string;
-  unit: string; //TODO: add enum
-  type: string; //TODO: add enum
+  unit: Unit;
+  type?: ExerciseType;
   user: string;
-  history: []; //TODO: add history type
+  history: Exercise[];
   childExercises: ExerciseDefinition[];
-  primaryMuscleGroup: string; //TODO: add enum
+  primaryMuscleGroup?: MuscleGroup[];
 }

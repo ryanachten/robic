@@ -103,7 +103,10 @@ export const authActions = (
   },
 });
 
-export const authReducer = (state: Partial<AuthState>, action: AuthAction) => {
+export const authReducer = (
+  state: AuthState,
+  action: AuthAction
+): AuthState => {
   switch (action.type) {
     case authTypes.RESTORE_TOKEN:
       return {
