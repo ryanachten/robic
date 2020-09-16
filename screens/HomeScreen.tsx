@@ -1,6 +1,11 @@
-import React, { useContext, useReducer, useEffect, useState } from 'react';
-import { StyleSheet, View, Picker } from 'react-native';
-import { Button } from 'react-native-elements';
+import React, {
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+  Dispatch,
+} from 'react';
+import { StyleSheet, Picker, ScrollView } from 'react-native';
 import { Text } from '../components/Themed';
 import { AuthContext, UserContext } from '../services/context';
 import {
@@ -8,8 +13,8 @@ import {
   initialExerciseDefinitionState,
   exerciseDefinitionActions,
 } from '../reducers/exerciseDefinition';
-import { ScrollView } from 'react-native-gesture-handler';
 import { ExerciseDefinition } from '../constants/Interfaces';
+import { ExerciseForm } from '../components/ExerciseForm';
 
 export default function HomeScreen() {
   const {
@@ -19,33 +24,38 @@ export default function HomeScreen() {
     state: { firstName },
   } = useContext(UserContext);
 
-  const [definitionState, definitionDispatch] = useReducer(
+  const [{ definitions }, definitionDispatch] = useReducer(
     exerciseDefinitionReducer,
     initialExerciseDefinitionState
   );
 
+  const [selectedDefintion, setSelectedDefinition]: [
+    ExerciseDefinition | undefined,
+    Dispatch<ExerciseDefinition>
+  ] = useState();
+
   useEffect(() => {
     exerciseDefinitionActions(definitionDispatch).getDefinitions();
   }, []);
-
-  const [selectedDefintion, setSelectedDefinition] = useState(
-    definitionState.definitions[0]
-  );
 
   return (
     <ScrollView>
       <Text style={styles.title}>{firstName}</Text>
       {/* TODO: decide whether to use this R/N Picker or NativeBase picker */}
       <Picker
-        selectedValue={selectedDefintion}
-        onValueChange={setSelectedDefinition}
+        selectedValue={selectedDefintion?.id}
+        onValueChange={(id) => {
+          const definition = definitions.find((def) => def.id === id);
+          definition && setSelectedDefinition(definition);
+        }}
       >
-        {definitionState.definitions.map((defintion) => {
+        {definitions.map((defintion) => {
           const { title, id } = defintion;
           return <Picker.Item key={id} label={title} value={id} />;
         })}
       </Picker>
-      <Button title="Log out" onPress={signOut} />
+      {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
+      {/* <Button title="Log out" onPress={signOut} /> */}
     </ScrollView>
   );
 }

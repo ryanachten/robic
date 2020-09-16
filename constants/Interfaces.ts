@@ -45,15 +45,11 @@ export interface SetExercise {
   unit: Unit;
 }
 
-// TODO: this data structure doesn't look 100%
-export type Set =
-  | {
-      exercises: SetExercise[];
-    }
-  | {
-      reps: number;
-      value: number;
-    };
+// TODO: doesn't handle nested Set type
+export type Set = {
+  reps: number;
+  value: number;
+};
 
 export interface Exercise {
   id: string;
