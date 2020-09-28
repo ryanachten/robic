@@ -4,7 +4,7 @@ import axios from 'axios';
 // URL is temporary and will not be used in production
 // TODO: handle this better using a process.env flag
 
-const API_DOMAIN = 'https://ce42a82b9a4f.ngrok.io';
+const API_DOMAIN = 'https://f8d956799d94.ngrok.io';
 const API_URL = `${API_DOMAIN}/api`;
 
 export const Axios = axios.create({ baseURL: API_URL });

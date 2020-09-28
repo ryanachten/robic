@@ -5,7 +5,12 @@ import React, {
   useState,
   Dispatch,
 } from 'react';
-import { StyleSheet, Picker, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  Picker,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import { Text } from '../components/Themed';
 import { UserContext } from '../services/context';
 import {
@@ -21,7 +26,7 @@ export default function HomeScreen() {
     state: { firstName },
   } = useContext(UserContext);
 
-  const [{ definitions }, definitionDispatch] = useReducer(
+  const [{ definitions, loading }, definitionDispatch] = useReducer(
     exerciseDefinitionReducer,
     initialExerciseDefinitionState
   );
@@ -31,13 +36,20 @@ export default function HomeScreen() {
     Dispatch<ExerciseDefinition>
   ] = useState();
 
+  // Get definitions on mount
   useEffect(() => {
     exerciseDefinitionActions(definitionDispatch).getDefinitions();
   }, []);
 
+  // Set default definition to first item
+  useEffect(() => {
+    !selectedDefintion && setSelectedDefinition(definitions[0]);
+  }, [definitions]);
+
   return (
     <ScrollView>
       <Text style={styles.title}>{firstName}</Text>
+      {loading && <ActivityIndicator />}
       {/* TODO: decide whether to use this R/N Picker or NativeBase picker */}
       <Picker
         selectedValue={selectedDefintion?.id}
