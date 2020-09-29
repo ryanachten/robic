@@ -1,6 +1,6 @@
 import React, { useState, Dispatch, useEffect } from 'react';
 import { ExerciseDefinition, Set } from '../constants/Interfaces';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View, Text } from 'react-native';
 import { Icon, Input, Button } from 'react-native-elements';
 
 export const ExerciseForm = ({
@@ -23,7 +23,7 @@ export const ExerciseForm = ({
   };
 
   const addSet = () => {
-    const updatedSets = [...sets, { ...sets[sets.length - 1] }];
+    const updatedSets = [{ ...sets[0] }, ...sets];
     setSets(updatedSets);
   };
 
@@ -35,39 +35,42 @@ export const ExerciseForm = ({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Icon name="add" raised onPress={() => addSet()} />
       {sets.map(({ reps, value }: Set, index: number) => (
-        <View key={index} style={styles.setWrapper}>
-          <Input
-            containerStyle={styles.input}
-            label="Reps"
-            keyboardType="numeric"
-            value={reps ? reps.toString() : ''}
-            onChange={({ nativeEvent }) =>
-              updateSet(index, 'reps', nativeEvent.text)
-            }
-          />
-          <Input
-            containerStyle={styles.input}
-            label="Weight"
-            keyboardType="numeric"
-            value={value ? value.toString() : ''}
-            onChange={({ nativeEvent }) =>
-              updateSet(index, 'value', nativeEvent.text)
-            }
-          />
-          {index > 0 ? (
-            <Icon
-              containerStyle={styles.icon}
-              name="remove"
-              raised
-              onPress={() => removeSet(index)}
+        <View key={index}>
+          <Text>Set: {sets.length - index}</Text>
+          <View style={styles.setWrapper}>
+            <Input
+              containerStyle={styles.input}
+              label="Reps"
+              keyboardType="numeric"
+              value={reps ? reps.toString() : ''}
+              onChange={({ nativeEvent }) =>
+                updateSet(index, 'reps', nativeEvent.text)
+              }
             />
-          ) : (
-            <View style={styles.icon} />
-          )}
+            <Input
+              containerStyle={styles.input}
+              label="Weight"
+              keyboardType="numeric"
+              value={value ? value.toString() : ''}
+              onChange={({ nativeEvent }) =>
+                updateSet(index, 'value', nativeEvent.text)
+              }
+            />
+            {index > 0 ? (
+              <Icon
+                containerStyle={styles.icon}
+                name="remove"
+                raised
+                onPress={() => removeSet(index)}
+              />
+            ) : (
+              <View style={styles.icon} />
+            )}
+          </View>
         </View>
       ))}
-      <Icon name="add" raised onPress={() => addSet()} />
     </ScrollView>
   );
 };
