@@ -55,12 +55,19 @@ export const ExerciseForm = ({
               updateSet(index, 'value', nativeEvent.text)
             }
           />
-          {index > 0 && (
-            <Icon name="remove" raised onPress={() => removeSet(index)} />
+          {index > 0 ? (
+            <Icon
+              containerStyle={styles.icon}
+              name="remove"
+              raised
+              onPress={() => removeSet(index)}
+            />
+          ) : (
+            <View style={styles.icon} />
           )}
         </View>
       ))}
-      <Button title="Add set" onPress={() => addSet()} />
+      <Icon name="add" raised onPress={() => addSet()} />
     </ScrollView>
   );
 };
@@ -68,15 +75,18 @@ export const ExerciseForm = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
   },
   setWrapper: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
+  icon: {
+    width: 60,
+    margin: 0,
+  },
   input: {
+    flexGrow: 1,
     width: '30%',
   },
 });
