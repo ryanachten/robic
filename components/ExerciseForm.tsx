@@ -2,6 +2,7 @@ import React, { useState, Dispatch, useEffect } from 'react';
 import { ExerciseDefinition, Set } from '../constants/Interfaces';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
 import { Icon, Input, Button } from 'react-native-elements';
+import { Stopwatch } from './Stopwatch';
 
 export const ExerciseForm = ({
   definition: { id },
@@ -35,6 +36,7 @@ export const ExerciseForm = ({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Stopwatch />
       <Icon name="add" raised onPress={() => addSet()} />
       {sets.map(({ reps, value }: Set, index: number) => (
         <View key={index}>
