@@ -36,7 +36,7 @@ export type ExerciseActions = {
 
 export const initialExerciseState: ExerciseState = {
   exercises: [],
-  loading: true,
+  loading: false,
   error: null,
 };
 

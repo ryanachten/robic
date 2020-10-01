@@ -23,7 +23,7 @@ export const ExerciseForm = ({
     min: number;
   } | null>(null);
 
-  const [, exerciseDispatch] = useReducer(
+  const [{ loading }, exerciseDispatch] = useReducer(
     exerciseReducer,
     initialExerciseState
   );
@@ -50,20 +50,20 @@ export const ExerciseForm = ({
     setSets(updatedSets);
   };
 
-  const submitExercise = () => {
+  const submitExercise = async () => {
     const exercise: ExerciseForPost = {
       definiton: id,
       sets: [],
     };
     if (time) {
       const { msec, sec, min } = time;
-      let timeTaken = new Date(0);
+      const timeTaken = new Date(0);
       timeTaken.setMilliseconds(msec);
       timeTaken.setSeconds(sec);
       timeTaken.setMinutes(min);
       exercise.timeTaken = timeTaken.toString();
     }
-    exerciseActions(exerciseDispatch).postExercise(exercise);
+    await exerciseActions(exerciseDispatch).postExercise(exercise);
   };
 
   return (
@@ -105,7 +105,7 @@ export const ExerciseForm = ({
           </View>
         </View>
       ))}
-      <Button title="Done" onPress={submitExercise} />
+      <Button title="Done" onPress={submitExercise} loading={loading} />
     </ScrollView>
   );
 };
