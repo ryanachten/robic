@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Exercise, ExerciseDefinition, Set } from "../constants/Interfaces";
+import { ExerciseDefinition, Set } from "../constants/Interfaces";
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 import { Icon, Input, Button } from "react-native-elements";
 import { Stopwatch } from "./Stopwatch";
 import {
   exerciseActions,
+  ExerciseForPost,
   exerciseReducer,
   initialExerciseState,
 } from "../reducers/exercise";
@@ -50,11 +51,18 @@ export const ExerciseForm = ({
   };
 
   const submitExercise = () => {
-    console.log("time", time);
-    const exercise: Exercise = {
+    const exercise: ExerciseForPost = {
       definiton: id,
       sets: [],
     };
+    if (time) {
+      const { msec, sec, min } = time;
+      let timeTaken = new Date(0);
+      timeTaken.setMilliseconds(msec);
+      timeTaken.setSeconds(sec);
+      timeTaken.setMinutes(min);
+      exercise.timeTaken = timeTaken.toString();
+    }
     exerciseActions(exerciseDispatch).postExercise(exercise);
   };
 
