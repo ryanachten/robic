@@ -8,15 +8,17 @@ type Lap = { min: number; sec: number; msec: number };
 
 let padToTwo = (number: number) => (number <= 9 ? `0${number}` : number);
 
-export const Stopwatch = () => {
+interface Props {
+  getTime: Dispatch<{ msec: number; sec: number; min: number }>;
+}
+
+export const Stopwatch = ({ getTime }: Props) => {
   // Stopwatch state
   const [start, setStart] = useState(false);
   const [msec, setMilliSec] = useState(0);
   const [sec, setSec] = useState(0);
   const [min, setMin] = useState(0);
-  const [laps, setLaps]: [Array<Lap>, Dispatch<Array<Lap>>] = useState(
-    []
-  ) as any;
+  const [laps, setLaps] = useState<Array<Lap>>([]);
 
   const handleToggle = () => {
     setStart(!start);
@@ -38,6 +40,7 @@ export const Stopwatch = () => {
         setSec(0);
         setMin(min + 1);
       }
+      getTime({ msec, sec, min });
     }
   }, 1);
 

@@ -1,8 +1,13 @@
-import React, { useState, Dispatch, useEffect } from 'react';
-import { ExerciseDefinition, Set } from '../constants/Interfaces';
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
-import { Icon, Input, Button } from 'react-native-elements';
-import { Stopwatch } from './Stopwatch';
+import React, { useState, useEffect, useReducer } from "react";
+import { Exercise, ExerciseDefinition, Set } from "../constants/Interfaces";
+import { ScrollView, StyleSheet, View, Text } from "react-native";
+import { Icon, Input, Button } from "react-native-elements";
+import { Stopwatch } from "./Stopwatch";
+import {
+  exerciseActions,
+  exerciseReducer,
+  initialExerciseState,
+} from "../reducers/exercise";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -10,14 +15,24 @@ export const ExerciseForm = ({
   definition: ExerciseDefinition;
 }) => {
   const initialSet: Set[] = [{ reps: 1, value: 5 }];
-  const [sets, setSets]: [Set[], Dispatch<Set[]>] = useState(initialSet);
+  const [sets, setSets] = useState<Set[]>(initialSet);
+  const [time, setTime] = useState<{
+    msec: number;
+    sec: number;
+    min: number;
+  } | null>(null);
+
+  const [, exerciseDispatch] = useReducer(
+    exerciseReducer,
+    initialExerciseState
+  );
 
   // Reset form if definition ID changes
   useEffect(() => {
     setSets(initialSet);
   }, [id]);
 
-  const updateSet = (index: number, field: 'reps' | 'value', value: string) => {
+  const updateSet = (index: number, field: "reps" | "value", value: string) => {
     const updatedSets = [...sets];
     updatedSets[index][field] = parseInt(value);
     setSets(updatedSets);
@@ -34,9 +49,18 @@ export const ExerciseForm = ({
     setSets(updatedSets);
   };
 
+  const submitExercise = () => {
+    console.log("time", time);
+    const exercise: Exercise = {
+      definiton: id,
+      sets: [],
+    };
+    exerciseActions(exerciseDispatch).postExercise(exercise);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Stopwatch />
+      <Stopwatch getTime={setTime} />
       <Icon name="add" raised onPress={() => addSet()} />
       {sets.map(({ reps, value }: Set, index: number) => (
         <View key={index}>
@@ -46,18 +70,18 @@ export const ExerciseForm = ({
               containerStyle={styles.input}
               label="Reps"
               keyboardType="numeric"
-              value={reps ? reps.toString() : ''}
+              value={reps ? reps.toString() : ""}
               onChange={({ nativeEvent }) =>
-                updateSet(index, 'reps', nativeEvent.text)
+                updateSet(index, "reps", nativeEvent.text)
               }
             />
             <Input
               containerStyle={styles.input}
               label="Weight"
               keyboardType="numeric"
-              value={value ? value.toString() : ''}
+              value={value ? value.toString() : ""}
               onChange={({ nativeEvent }) =>
-                updateSet(index, 'value', nativeEvent.text)
+                updateSet(index, "value", nativeEvent.text)
               }
             />
             {index > 0 ? (
@@ -73,6 +97,7 @@ export const ExerciseForm = ({
           </View>
         </View>
       ))}
+      <Button title="Done" onPress={submitExercise} />
     </ScrollView>
   );
 };
@@ -83,8 +108,8 @@ const styles = StyleSheet.create({
   },
   setWrapper: {
     flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   icon: {
     width: 60,
@@ -92,6 +117,6 @@ const styles = StyleSheet.create({
   },
   input: {
     flexGrow: 1,
-    width: '30%',
+    width: "30%",
   },
 });

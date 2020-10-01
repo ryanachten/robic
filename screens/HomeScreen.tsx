@@ -5,7 +5,7 @@ import React, {
   useState,
   Dispatch,
 } from "react";
-import { StyleSheet, ScrollView, ActivityIndicator, Modal } from "react-native";
+import { StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { Text } from "../components/Themed";
 import { UserContext } from "../services/context";
 import {

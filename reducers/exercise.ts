@@ -1,10 +1,11 @@
-import { Exercise } from '../constants/Interfaces';
-import Axios, { AxiosResponse } from 'axios';
-import { EXERCISE_DEFINITION_URL } from '../constants/Api';
-import { BaseState, BaseActions, baseTypes } from './base';
+import { Exercise } from "../constants/Interfaces";
+import Axios, { AxiosResponse } from "axios";
+import { EXERCISE_DEFINITION_URL } from "../constants/Api";
+import { BaseState, BaseActions, baseTypes } from "./base";
 
 export enum exerciseTypes {
-  GET_EXERCISES = 'GET_EXERCISES',
+  GET_EXERCISES = "GET_EXERCISES",
+  POST_EXERCISE = "POST_EXERCISE",
 }
 
 export type ExerciseState = BaseState & {
@@ -16,10 +17,15 @@ export type ExerciseAction =
   | {
       type: exerciseTypes.GET_EXERCISES;
       exercises: Exercise[];
+    }
+  | {
+      type: exerciseTypes.POST_EXERCISE;
+      exercise: Exercise;
     };
 
 export type ExerciseActions = {
   getExercises: () => Promise<void>;
+  postExercise: (exercise: Exercise) => Promise<void>;
 };
 
 export const initialExerciseState: ExerciseState = {
@@ -28,7 +34,7 @@ export const initialExerciseState: ExerciseState = {
   error: null,
 };
 
-export const exerciseDefinitionActions = (
+export const exerciseActions = (
   dispatch: React.Dispatch<ExerciseAction>
 ): ExerciseActions => ({
   getExercises: async () => {
@@ -42,6 +48,23 @@ export const exerciseDefinitionActions = (
       dispatch({
         type: exerciseTypes.GET_EXERCISES,
         exercises: data,
+      });
+    } catch (e) {
+      dispatch({ type: baseTypes.ERROR, error: e.message });
+    }
+  },
+  postExercise: async (exercise: Exercise) => {
+    dispatch({
+      type: baseTypes.LOADING,
+    });
+    try {
+      const { data }: AxiosResponse<Exercise> = await Axios.post(
+        EXERCISE_DEFINITION_URL,
+        exercise
+      );
+      dispatch({
+        type: exerciseTypes.POST_EXERCISE,
+        exercise: data,
       });
     } catch (e) {
       dispatch({ type: baseTypes.ERROR, error: e.message });
@@ -70,6 +93,16 @@ export const exerciseReducer = (
         ...state,
         loading: false,
         exercises: [...action.exercises],
+      };
+    case exerciseTypes.POST_EXERCISE:
+      const { exercises } = state;
+      const index = exercises.findIndex(({ id }) => action.exercise.id === id);
+      console.log("index", index);
+      exercises[index] = action.exercise;
+      return {
+        ...state,
+        loading: false,
+        exercises: [...exercises],
       };
     default:
       return state;

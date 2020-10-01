@@ -1,34 +1,34 @@
 export enum MuscleGroup {
-  CHEST = 'Chest',
-  FOREARMS = 'Forearms',
-  LATS = 'Lats',
+  CHEST = "Chest",
+  FOREARMS = "Forearms",
+  LATS = "Lats",
   // MIDDLE_BACK = "Middle Back",
-  LOWER_BACK = 'Lower Back',
-  NECK = 'Neck',
-  HAMS = 'Hamstrings',
-  QUADS = 'Quadriceps',
-  CALVES = 'Calves',
-  TRICEPS = 'Triceps',
-  TRAPS = 'Traps',
-  SHOULDERS = 'Shoulders',
-  ABS = 'Abdominals',
-  OBLIQUES = 'Obliques',
-  GLUTES = 'Glutes',
-  BICEPS = 'Biceps',
+  LOWER_BACK = "Lower Back",
+  NECK = "Neck",
+  HAMS = "Hamstrings",
+  QUADS = "Quadriceps",
+  CALVES = "Calves",
+  TRICEPS = "Triceps",
+  TRAPS = "Traps",
+  SHOULDERS = "Shoulders",
+  ABS = "Abdominals",
+  OBLIQUES = "Obliques",
+  GLUTES = "Glutes",
+  BICEPS = "Biceps",
   // ADDUCTORS = "Adductors",
   // ABDUCTORS = "Abductors"
 }
 
 export enum ExerciseType {
-  CIRCUIT = 'Circuit',
-  STANDARD = 'Standard',
-  SUPERSET = 'Superset',
+  CIRCUIT = "Circuit",
+  STANDARD = "Standard",
+  SUPERSET = "Superset",
 }
 
 export enum Unit {
-  kg = 'kg',
-  min = 'min',
-  bodyweight = 'body weight',
+  kg = "kg",
+  min = "min",
+  bodyweight = "body weight",
 }
 
 export interface User {
@@ -54,7 +54,7 @@ export type Set = {
 export interface Exercise {
   id: string;
   date: string;
-  definiton: ExerciseDefinition;
+  definiton: string;
   sets: Set[];
   timeTaken: string;
 }
