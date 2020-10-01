@@ -2,6 +2,7 @@
 
 import React, { Dispatch, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useInterval } from "../hooks/useInterval";
 
 type Lap = { min: number; sec: number; msec: number };
 
@@ -13,42 +14,32 @@ export const Stopwatch = () => {
   const [msec, setMilliSec] = useState(0);
   const [sec, setSec] = useState(0);
   const [min, setMin] = useState(0);
-  const [interval, setIntervalTimestamp]: [
-    NodeJS.Timeout,
-    Dispatch<NodeJS.Timeout>
-  ] = useState({} as NodeJS.Timeout);
   const [laps, setLaps]: [Array<Lap>, Dispatch<Array<Lap>>] = useState(
     []
   ) as any;
 
   const handleToggle = () => {
     setStart(!start);
-    handleStart();
   };
 
   const handleLap = (min: number, sec: number, msec: number) => {
     setLaps([...laps, { min, sec, msec }]);
   };
 
-  const handleStart = () => {
+  useInterval(() => {
     if (start) {
-      const interval = setInterval(() => {
-        if (msec !== 99) {
-          setMilliSec(msec);
-        } else if (sec !== 59) {
-          setMilliSec(0);
-          setSec(sec + 1);
-        } else {
-          setMilliSec(0);
-          setSec(0);
-          setMin(min + 1);
-        }
-      }, 1);
-      setIntervalTimestamp(interval);
-    } else {
-      interval && clearInterval(interval);
+      if (msec !== 99) {
+        setMilliSec(msec + 1);
+      } else if (sec !== 59) {
+        setMilliSec(0);
+        setSec(sec + 1);
+      } else {
+        setMilliSec(0);
+        setSec(0);
+        setMin(min + 1);
+      }
     }
-  };
+  }, 1);
 
   const handleReset = () => {
     setMilliSec(0);
@@ -56,7 +47,6 @@ export const Stopwatch = () => {
     setMin(0);
     setStart(false);
     setLaps([]);
-    interval && clearInterval(interval);
   };
 
   return (
