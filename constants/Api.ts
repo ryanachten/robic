@@ -1,10 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-// This URL is forwarded using ngrok for development purposes
-// URL is temporary and will not be used in production
-// TODO: handle this better using a process.env flag
-
-const API_DOMAIN = 'https://f8d956799d94.ngrok.io';
+const API_DOMAIN = "https://robic-api.herokuapp.com";
 const API_URL = `${API_DOMAIN}/api`;
 
 export const Axios = axios.create({ baseURL: API_URL });
