@@ -9,6 +9,7 @@ import {
   exerciseReducer,
   initialExerciseState,
 } from "../reducers/exercise";
+import { ErrorCard } from "./ErrorCard";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -23,7 +24,7 @@ export const ExerciseForm = ({
     min: number;
   } | null>(null);
 
-  const [{ loading }, exerciseDispatch] = useReducer(
+  const [{ loading, error }, exerciseDispatch] = useReducer(
     exerciseReducer,
     initialExerciseState
   );
@@ -106,6 +107,7 @@ export const ExerciseForm = ({
         </View>
       ))}
       <Button title="Done" onPress={submitExercise} loading={loading} />
+      {error && <ErrorCard error={error} />}
     </ScrollView>
   );
 };

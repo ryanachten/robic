@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const ErrorCard = ({
-  error,
-}: {
-  error: Error | string | undefined | null;
-}) => {
+export const ErrorCard = ({ error }: { error: Error | string | null }) => {
   // Reset error state if error message changes
   const [showError, setShowError] = useState(true);
   useEffect(() => {

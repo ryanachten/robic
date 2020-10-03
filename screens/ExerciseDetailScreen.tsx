@@ -1,21 +1,22 @@
-import React, { useEffect, useReducer } from 'react';
-import { StyleSheet, ActivityIndicator } from 'react-native';
-import { Text, View } from '../components/Themed';
-import { ExercisesParamList } from '../types';
-import { ExerciseDefinition } from '../constants/Interfaces';
-import { StackScreenProps } from '@react-navigation/stack';
+import React, { useEffect, useReducer } from "react";
+import { StyleSheet, ActivityIndicator } from "react-native";
+import { Text, View } from "../components/Themed";
+import { ExercisesParamList } from "../types";
+import { ExerciseDefinition } from "../constants/Interfaces";
+import { StackScreenProps } from "@react-navigation/stack";
 import {
   exerciseDefinitionActions,
   exerciseDefinitionReducer,
   initialExerciseDefinitionState,
-} from '../reducers/exerciseDefinition';
+} from "../reducers/exerciseDefinition";
+import { ErrorCard } from "../components/ErrorCard";
 
-type Props = StackScreenProps<ExercisesParamList, 'ExerciseDetailScreen'>;
+type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
 export default function ExerciseDetailScreen({ route }: Props) {
   const definitionId = route.params ? route.params.definitionId : null;
 
-  const [state, definitionDispatch] = useReducer(
+  const [{ definitions, error, loading }, definitionDispatch] = useReducer(
     exerciseDefinitionReducer,
     initialExerciseDefinitionState
   );
@@ -27,7 +28,6 @@ export default function ExerciseDetailScreen({ route }: Props) {
       );
   }, []);
 
-  const { definitions, error, loading } = state;
   const exercise = definitions.find((def) => def.id === definitionId);
 
   return (
@@ -35,6 +35,7 @@ export default function ExerciseDetailScreen({ route }: Props) {
       <Text style={styles.title}>{exercise?.title}</Text>
       {loading && <ActivityIndicator size="large" />}
       {exercise && <DefinitionDetail definition={exercise} />}
+      {error && <ErrorCard error={error} />}
     </View>
   );
 }
@@ -56,16 +57,16 @@ const DefinitionDetail = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   separator: {
     marginVertical: 30,
     height: 1,
-    width: '80%',
+    width: "80%",
   },
 });
