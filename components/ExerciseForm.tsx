@@ -107,7 +107,7 @@ export const ExerciseForm = ({
         </View>
       ))}
       <Button title="Done" onPress={submitExercise} loading={loading} />
-      {/* <ErrorToast error={error} /> */}
+      <ErrorToast error={error} />
     </ScrollView>
   );
 };

@@ -11,6 +11,8 @@ import {
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { ErrorToast } from "../components/ErrorToast";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { format } from "date-fns";
 
 type Props = StackScreenProps<ExercisesParamList, "ExercisesScreen">;
 
@@ -28,15 +30,22 @@ export default function ExercisesScreen({ navigation }: Props) {
     <View style={styles.container}>
       <Text style={styles.title}>Exercises</Text>
       {loading && <ActivityIndicator size="large" />}
-      {definitions?.map(({ id, title }: ExerciseDefinition) => (
-        <Button
-          key={id}
-          title={title}
-          onPress={() =>
-            navigation.navigate("ExerciseDetailScreen", { definitionId: id })
-          }
-        ></Button>
-      ))}
+      {definitions
+        ?.sort((a, b) =>
+          // Sort descending by last modified
+          new Date(a.lastModified) < new Date(b.lastModified) ? 1 : -1
+        )
+        .map(({ id, title, lastModified }: ExerciseDefinition) => (
+          <TouchableOpacity
+            key={id}
+            onPress={() =>
+              navigation.navigate("ExerciseDetailScreen", { definitionId: id })
+            }
+          >
+            <Text>{title}</Text>
+            <Text>{format(new Date(lastModified), "dd MM yyyy")}</Text>
+          </TouchableOpacity>
+        ))}
       <ErrorToast error={error} />
     </View>
   );
