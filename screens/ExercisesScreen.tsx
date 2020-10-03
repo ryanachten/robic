@@ -10,7 +10,7 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
-import { ErrorCard } from "../components/ErrorCard";
+import { ErrorToast } from "../components/ErrorToast";
 
 type Props = StackScreenProps<ExercisesParamList, "ExercisesScreen">;
 
@@ -37,7 +37,7 @@ export default function ExercisesScreen({ navigation }: Props) {
           }
         ></Button>
       ))}
-      <ErrorCard error={error} />
+      <ErrorToast error={error} />
     </View>
   );
 }

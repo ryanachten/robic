@@ -9,7 +9,7 @@ import {
   exerciseReducer,
   initialExerciseState,
 } from "../reducers/exercise";
-import { ErrorCard } from "./ErrorCard";
+import { ErrorToast } from "./ErrorToast";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -107,7 +107,7 @@ export const ExerciseForm = ({
         </View>
       ))}
       <Button title="Done" onPress={submitExercise} loading={loading} />
-      {error && <ErrorCard error={error} />}
+      <ErrorToast error={error} />
     </ScrollView>
   );
 };

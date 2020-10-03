@@ -9,7 +9,7 @@ import {
   exerciseDefinitionReducer,
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
-import { ErrorCard } from "../components/ErrorCard";
+import { ErrorToast } from "../components/ErrorToast";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
@@ -35,7 +35,7 @@ export default function ExerciseDetailScreen({ route }: Props) {
       <Text style={styles.title}>{exercise?.title}</Text>
       {loading && <ActivityIndicator size="large" />}
       {exercise && <DefinitionDetail definition={exercise} />}
-      {error && <ErrorCard error={error} />}
+      <ErrorToast error={error} />
     </View>
   );
 }

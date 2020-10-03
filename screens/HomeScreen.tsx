@@ -15,7 +15,7 @@ import {
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { ExerciseForm } from "../components/ExerciseForm";
-import { ErrorCard } from "../components/ErrorCard";
+import { ErrorToast } from "../components/ErrorToast";
 import { Picker } from "native-base";
 
 export default function HomeScreen() {
@@ -62,7 +62,7 @@ export default function HomeScreen() {
         })}
       </Picker>
       {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
-      <ErrorCard error={error} />
+      <ErrorToast error={error} />
     </ScrollView>
   );
 }
