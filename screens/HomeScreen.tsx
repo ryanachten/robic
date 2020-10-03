@@ -15,6 +15,7 @@ import {
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { ExerciseForm } from "../components/ExerciseForm";
+import { ErrorCard } from "../components/ErrorCard";
 import { Picker } from "native-base";
 
 export default function HomeScreen() {
@@ -22,7 +23,7 @@ export default function HomeScreen() {
     state: { firstName },
   } = useContext(UserContext);
 
-  const [{ definitions, loading }, definitionDispatch] = useReducer(
+  const [{ definitions, error, loading }, definitionDispatch] = useReducer(
     exerciseDefinitionReducer,
     initialExerciseDefinitionState
   );
@@ -61,6 +62,7 @@ export default function HomeScreen() {
         })}
       </Picker>
       {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
+      <ErrorCard error={error} />
     </ScrollView>
   );
 }
