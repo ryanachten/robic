@@ -1,10 +1,10 @@
 import { Exercise, Set } from "../constants/Interfaces";
-import Axios, { AxiosResponse } from "axios";
-import { EXERCISE_DEFINITION_URL } from "../constants/Api";
+import axios, { AxiosResponse } from "axios";
+import { EXERCISE_URL } from "../constants/Api";
 import { BaseState, BaseActions, baseTypes } from "./base";
 
 export type ExerciseForPost = {
-  definiton: string;
+  definition: string;
   sets: Set[];
   timeTaken?: string;
 };
@@ -48,9 +48,7 @@ export const exerciseActions = (
       type: baseTypes.LOADING,
     });
     try {
-      const { data }: AxiosResponse<Exercise[]> = await Axios.get(
-        EXERCISE_DEFINITION_URL
-      );
+      const { data }: AxiosResponse<Exercise[]> = await axios.get(EXERCISE_URL);
       dispatch({
         type: exerciseTypes.GET_EXERCISES,
         exercises: data,
@@ -64,8 +62,8 @@ export const exerciseActions = (
       type: baseTypes.LOADING,
     });
     try {
-      const { data }: AxiosResponse<Exercise> = await Axios.post(
-        EXERCISE_DEFINITION_URL,
+      const { data }: AxiosResponse<Exercise> = await axios.post(
+        EXERCISE_URL,
         exercise
       );
       dispatch({

@@ -53,8 +53,8 @@ export const ExerciseForm = ({
 
   const submitExercise = async () => {
     const exercise: ExerciseForPost = {
-      definiton: id,
-      sets: [],
+      sets,
+      definition: id,
     };
     if (time) {
       const { msec, sec, min } = time;
@@ -62,7 +62,7 @@ export const ExerciseForm = ({
       timeTaken.setMilliseconds(msec);
       timeTaken.setSeconds(sec);
       timeTaken.setMinutes(min);
-      exercise.timeTaken = timeTaken.toString();
+      exercise.timeTaken = timeTaken.toISOString();
     }
     await exerciseActions(exerciseDispatch).postExercise(exercise);
   };
@@ -107,7 +107,7 @@ export const ExerciseForm = ({
         </View>
       ))}
       <Button title="Done" onPress={submitExercise} loading={loading} />
-      <ErrorToast error={error} />
+      {/* <ErrorToast error={error} /> */}
     </ScrollView>
   );
 };

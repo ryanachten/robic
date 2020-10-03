@@ -54,7 +54,7 @@ export type Set = {
 export interface Exercise {
   id: string;
   date: string;
-  definiton: string;
+  definition: string;
   sets: Set[];
   timeTaken: string;
 }
