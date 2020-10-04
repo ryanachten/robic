@@ -28,13 +28,18 @@ export default function ExercisesScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Exercises</Text>
       {loading && <ActivityIndicator size="large" />}
       {definitions
-        ?.sort((a, b) =>
+        ?.sort((a, b) => {
+          const dateA = new Date(a.lastModified);
+          const dateB = new Date(b.lastModified);
+          // If dates are equal, sort using title alphabetically
+          if (dateA.getMilliseconds() === dateB.getMilliseconds()) {
+            return a.title > b.title ? 1 : -1;
+          }
           // Sort descending by last modified
-          new Date(a.lastModified) < new Date(b.lastModified) ? 1 : -1
-        )
+          return dateA < dateB ? 1 : -1;
+        })
         .map(({ id, title, lastModified }: ExerciseDefinition) => (
           <TouchableOpacity
             key={id}
@@ -56,10 +61,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
   },
   separator: {
     marginVertical: 30,
