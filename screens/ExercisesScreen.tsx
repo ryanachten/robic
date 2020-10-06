@@ -31,8 +31,8 @@ export default function ExercisesScreen({ navigation }: Props) {
       {loading && <ActivityIndicator size="large" />}
       {definitions
         ?.sort((a, b) => {
-          const dateA = new Date(a.lastModified);
-          const dateB = new Date(b.lastModified);
+          const dateA = new Date(a.lastActive);
+          const dateB = new Date(b.lastActive);
           // If dates are equal, sort using title alphabetically
           if (dateA.getMilliseconds() === dateB.getMilliseconds()) {
             return a.title > b.title ? 1 : -1;
@@ -40,7 +40,7 @@ export default function ExercisesScreen({ navigation }: Props) {
           // Sort descending by last modified
           return dateA < dateB ? 1 : -1;
         })
-        .map(({ id, title, lastModified }: ExerciseDefinition) => (
+        .map(({ id, title, lastActive }: ExerciseDefinition) => (
           <TouchableOpacity
             key={id}
             onPress={() =>
@@ -48,7 +48,7 @@ export default function ExercisesScreen({ navigation }: Props) {
             }
           >
             <Text>{title}</Text>
-            <Text>{format(new Date(lastModified), "dd MM yyyy")}</Text>
+            <Text>{format(new Date(lastActive), "dd MM yyyy")}</Text>
           </TouchableOpacity>
         ))}
       <ErrorToast error={error} />
