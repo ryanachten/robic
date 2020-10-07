@@ -45,8 +45,6 @@ export const exerciseDefinitionActions = (
       const { data }: AxiosResponse<ExerciseDefinition[]> = await Axios.get(
         EXERCISE_DEFINITION_URL
       );
-      console.log("data", data);
-
       dispatch({
         type: exerciseDefinitionTypes.GET_DEFINITIONS,
         definitions: data,

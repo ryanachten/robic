@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Button } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ExercisesParamList } from "../types";
 import {
@@ -31,19 +30,24 @@ export default function ExercisesScreen({ navigation }: Props) {
       {loading && <ActivityIndicator size="large" />}
       {definitions
         ?.sort(sortExercises)
-        .map(({ id, title, lastActive }: ExerciseDefinition) => (
-          <TouchableOpacity
-            key={id}
-            onPress={() =>
-              navigation.navigate("ExerciseDetailScreen", { definitionId: id })
-            }
-          >
-            <Text>{title}</Text>
-            {lastActive && (
-              <Text>{format(new Date(lastActive), "dd MM yyyy")}</Text>
-            )}
-          </TouchableOpacity>
-        ))}
+        .map(
+          ({ id, title, lastActive, lastImprovement }: ExerciseDefinition) => (
+            <TouchableOpacity
+              key={id}
+              onPress={() =>
+                navigation.navigate("ExerciseDetailScreen", {
+                  definitionId: id,
+                })
+              }
+            >
+              <Text>{title}</Text>
+              {lastActive && (
+                <Text>{format(new Date(lastActive), "dd MM yyyy")}</Text>
+              )}
+              {lastImprovement && <Text>{lastImprovement}</Text>}
+            </TouchableOpacity>
+          )
+        )}
       <ErrorToast error={error} />
     </View>
   );
