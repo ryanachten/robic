@@ -30,16 +30,7 @@ export default function ExercisesScreen({ navigation }: Props) {
     <View style={styles.container}>
       {loading && <ActivityIndicator size="large" />}
       {definitions
-        ?.sort((a, b) => {
-          const dateA = new Date(a.lastActive);
-          const dateB = new Date(b.lastActive);
-          // If dates are equal, sort using title alphabetically
-          if (dateA.getMilliseconds() === dateB.getMilliseconds()) {
-            return a.title > b.title ? 1 : -1;
-          }
-          // Sort descending by last modified
-          return dateA < dateB ? 1 : -1;
-        })
+        ?.sort(sortExercises)
         .map(({ id, title, lastActive }: ExerciseDefinition) => (
           <TouchableOpacity
             key={id}
@@ -48,7 +39,9 @@ export default function ExercisesScreen({ navigation }: Props) {
             }
           >
             <Text>{title}</Text>
-            <Text>{format(new Date(lastActive), "dd MM yyyy")}</Text>
+            {lastActive && (
+              <Text>{format(new Date(lastActive), "dd MM yyyy")}</Text>
+            )}
           </TouchableOpacity>
         ))}
       <ErrorToast error={error} />
@@ -68,3 +61,29 @@ const styles = StyleSheet.create({
     width: "80%",
   },
 });
+
+const sortExercises = (
+  a: ExerciseDefinition,
+  b: ExerciseDefinition
+): 1 | -1 => {
+  // Alphbetical sort fallback
+  const sortAlpha = () => (a.title > b.title ? 1 : -1);
+
+  // Handle date sorting
+  const dateA = a.lastActive && new Date(a.lastActive);
+  const dateB = b.lastActive && new Date(b.lastActive);
+  if (dateA instanceof Date && dateB instanceof Date) {
+    if (dateA.getMilliseconds() === dateB.getMilliseconds()) {
+      return sortAlpha();
+    }
+    return dateA < dateB ? 1 : -1;
+  }
+
+  // Handle cases where dates don't exist
+  if (dateA && !dateB) {
+    return -1;
+  } else if (!dateA && dateB) {
+    return 1;
+  }
+  return sortAlpha();
+};

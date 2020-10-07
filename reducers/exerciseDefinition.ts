@@ -1,11 +1,11 @@
-import { ExerciseDefinition } from '../constants/Interfaces';
-import Axios, { AxiosResponse } from 'axios';
-import { EXERCISE_DEFINITION_URL } from '../constants/Api';
-import { BaseState, BaseActions, baseTypes } from './base';
+import { ExerciseDefinition } from "../constants/Interfaces";
+import Axios, { AxiosResponse } from "axios";
+import { EXERCISE_DEFINITION_URL } from "../constants/Api";
+import { BaseState, BaseActions, baseTypes } from "./base";
 
 export enum exerciseDefinitionTypes {
-  GET_DEFINITIONS = 'GET_DEFINITIONS',
-  GET_DEFINITION_BY_ID = 'GET_DEFINITION_BY_ID',
+  GET_DEFINITIONS = "GET_DEFINITIONS",
+  GET_DEFINITION_BY_ID = "GET_DEFINITION_BY_ID",
 }
 
 export type ExerciseDefinitionState = BaseState & {
@@ -45,6 +45,8 @@ export const exerciseDefinitionActions = (
       const { data }: AxiosResponse<ExerciseDefinition[]> = await Axios.get(
         EXERCISE_DEFINITION_URL
       );
+      console.log("data", data);
+
       dispatch({
         type: exerciseDefinitionTypes.GET_DEFINITIONS,
         definitions: data,

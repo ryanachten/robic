@@ -62,7 +62,8 @@ export interface Exercise {
 export interface ExerciseDefinition {
   id: string;
   title: string;
-  lastActive: string;
+  lastActive: string | null;
+  lastExercise: number | null;
   unit: Unit;
   type?: ExerciseType;
   user: string;
