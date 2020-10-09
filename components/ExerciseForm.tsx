@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useRef,
+  ElementRef,
+} from "react";
 import { ExerciseDefinition, Set } from "../constants/Interfaces";
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 import { Icon, Input, Button } from "react-native-elements";
@@ -18,16 +24,12 @@ export const ExerciseForm = ({
 }) => {
   const initialSet: Set[] = [{ reps: 1, value: 5 }];
   const [sets, setSets] = useState<Set[]>(initialSet);
-  const [time, setTime] = useState<{
-    msec: number;
-    sec: number;
-    min: number;
-  } | null>(null);
-
   const [{ loading, error }, exerciseDispatch] = useReducer(
     exerciseReducer,
     initialExerciseState
   );
+
+  const stopwatchRef = useRef<ElementRef<typeof Stopwatch>>(null);
 
   // Reset form if definition ID changes
   useEffect(() => {
@@ -56,20 +58,27 @@ export const ExerciseForm = ({
       sets,
       definition: id,
     };
-    if (time) {
-      const { msec, sec, min } = time;
+    if (!stopwatchRef.current) {
+      return;
+    }
+    const { getTime, handleReset } = stopwatchRef.current;
+    const { msec, sec, min } = getTime();
+    if (msec !== 0 || sec !== 0 || min !== 0) {
       const timeTaken = new Date(0);
       timeTaken.setMilliseconds(msec);
       timeTaken.setSeconds(sec);
       timeTaken.setMinutes(min);
       exercise.timeTaken = timeTaken.toISOString();
     }
+
     await exerciseActions(exerciseDispatch).postExercise(exercise);
+    setSets(initialSet);
+    handleReset();
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Stopwatch getTime={setTime} />
+      <Stopwatch ref={stopwatchRef} />
       <Icon name="add" raised onPress={() => addSet()} />
       {sets.map(({ reps, value }: Set, index: number) => (
         <View key={index}>

@@ -1,6 +1,6 @@
 // Based on https://codersera.com/blog/first-react-native-app-stopwatch/ implementation
 
-import React, { Dispatch, useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useInterval } from "../hooks/useInterval";
 
@@ -8,11 +8,12 @@ type Lap = { min: number; sec: number; msec: number };
 
 let padToTwo = (number: number) => (number <= 9 ? `0${number}` : number);
 
-interface Props {
-  getTime: Dispatch<{ msec: number; sec: number; min: number }>;
-}
+type StopwatchHandle = {
+  handleReset: () => void;
+  getTime: () => { min: number; sec: number; msec: number };
+};
 
-export const Stopwatch = ({ getTime }: Props) => {
+export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
   // Stopwatch state
   const [start, setStart] = useState(false);
   const [msec, setMilliSec] = useState(0);
@@ -40,7 +41,6 @@ export const Stopwatch = ({ getTime }: Props) => {
         setSec(0);
         setMin(min + 1);
       }
-      getTime({ msec, sec, min });
     }
   }, 1);
 
@@ -51,6 +51,14 @@ export const Stopwatch = ({ getTime }: Props) => {
     setStart(false);
     setLaps([]);
   };
+
+  const getTime = () => ({ msec, sec, min });
+
+  // Expose following functions to parent via ref
+  useImperativeHandle(ref, () => ({
+    handleReset,
+    getTime,
+  }));
 
   return (
     <View>
@@ -75,7 +83,7 @@ export const Stopwatch = ({ getTime }: Props) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   parent: {
