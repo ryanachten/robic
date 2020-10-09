@@ -11,7 +11,7 @@ import {
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { ErrorToast } from "../components/ErrorToast";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { format } from "date-fns";
+import { formatDistance } from "date-fns";
 import { Picker } from "native-base";
 
 enum SortBy {
@@ -46,6 +46,7 @@ export default function ExercisesScreen({ navigation }: Props) {
           ({ id, title, lastActive, lastImprovement }: ExerciseDefinition) => (
             <TouchableOpacity
               key={id}
+              style={styles.exerciseItem}
               onPress={() =>
                 navigation.navigate("ExerciseDetailScreen", {
                   definitionId: id,
@@ -54,9 +55,15 @@ export default function ExercisesScreen({ navigation }: Props) {
             >
               <Text>{title}</Text>
               {lastActive && (
-                <Text>{format(new Date(lastActive), "dd MM yyyy")}</Text>
+                <Text style={styles.exerciseDate}>
+                  {`${formatDistance(new Date(lastActive), Date.now())} ago`}
+                </Text>
               )}
-              {lastImprovement && <Text>{lastImprovement}</Text>}
+              {lastImprovement && (
+                <Text style={styles.exerciseImprovement}>
+                  {lastImprovement}
+                </Text>
+              )}
             </TouchableOpacity>
           )
         )}
@@ -70,6 +77,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  exerciseItem: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  exerciseDate: {
+    marginLeft: 10,
+  },
+  exerciseImprovement: {
+    marginLeft: 10,
   },
   separator: {
     marginVertical: 30,
