@@ -12,6 +12,7 @@ import { ExerciseDefinition } from "../constants/Interfaces";
 import { ErrorToast } from "../components/ErrorToast";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { format } from "date-fns";
+import { Picker } from "native-base";
 
 enum SortBy {
   lastActive = "lastActive",
@@ -34,6 +35,10 @@ export default function ExercisesScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
+      <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
+        <Picker.Item label="Last active" value={SortBy.lastActive} />
+        <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
+      </Picker>
       {loading && <ActivityIndicator size="large" />}
       {definitions
         ?.sort(sortBy === SortBy.lastActive ? sortByDate : sortByImprovment)
