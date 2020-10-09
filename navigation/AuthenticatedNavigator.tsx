@@ -1,19 +1,20 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
+import Colors from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
 import {
   AuthenticatedParamList,
   HomeParamList,
   ExercisesParamList,
-} from '../types';
-import HomeScreen from '../screens/HomeScreen';
-import ExercisesScreen from '../screens/ExercisesScreen';
-import ExerciseDetailScreen from '../screens/ExerciseDetailScreen';
-import { LogoutButton } from '../components/LogoutButton';
+} from "../types";
+import HomeScreen from "../screens/HomeScreen";
+import ExercisesScreen from "../screens/ExercisesScreen";
+import ExerciseDetailScreen from "../screens/ExerciseDetailScreen";
+import { LogoutButton } from "../components/LogoutButton";
+import ExerciseEditScreen from "../screens/ExerciseEditScreen";
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -70,7 +71,7 @@ function HomeNavigator() {
         component={HomeScreen}
         options={{
           ...sharedScreenOptions,
-          headerTitle: 'Home',
+          headerTitle: "Home",
         }}
       />
     </HomeStack.Navigator>
@@ -85,7 +86,7 @@ function ExerciseNavigator() {
         component={ExercisesScreen}
         options={{
           ...sharedScreenOptions,
-          headerTitle: 'Exercises',
+          headerTitle: "Exercises",
         }}
       />
       <ExercisesStack.Screen
@@ -93,7 +94,15 @@ function ExerciseNavigator() {
         component={ExerciseDetailScreen}
         options={{
           ...sharedScreenOptions,
-          headerTitle: 'Exercise Detail',
+          headerTitle: "Exercise Detail",
+        }}
+      />
+      <ExercisesStack.Screen
+        name="ExerciseEditScreen"
+        component={ExerciseEditScreen}
+        options={{
+          ...sharedScreenOptions,
+          headerTitle: "Edit Exercise",
         }}
       />
     </ExercisesStack.Navigator>

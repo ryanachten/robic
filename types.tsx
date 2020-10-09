@@ -27,6 +27,7 @@ export type HomeParamList = {
 
 export type ExercisesParamList = {
   ExercisesScreen: undefined;
+  ExerciseEditScreen: undefined;
   ExerciseDetailScreen: {
     definitionId: string;
   };

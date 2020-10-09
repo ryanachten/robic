@@ -13,6 +13,7 @@ import { ErrorToast } from "../components/ErrorToast";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { Picker } from "native-base";
+import { Button } from "react-native-elements";
 
 enum SortBy {
   lastActive = "lastActive",
@@ -35,6 +36,10 @@ export default function ExercisesScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
+      <Button
+        title="Create exercise"
+        onPress={() => navigation.navigate("ExerciseEditScreen")}
+      />
       <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
         <Picker.Item label="Last active" value={SortBy.lastActive} />
         <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
