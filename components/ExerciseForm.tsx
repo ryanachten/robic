@@ -16,6 +16,7 @@ import {
   initialExerciseState,
 } from "../reducers/exercise";
 import { ErrorToast } from "./ErrorToast";
+import { useNavigation } from "@react-navigation/native";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -30,6 +31,8 @@ export const ExerciseForm = ({
   );
 
   const stopwatchRef = useRef<ElementRef<typeof Stopwatch>>(null);
+
+  const navigation = useNavigation();
 
   // Reset form if definition ID changes
   useEffect(() => {
@@ -72,8 +75,16 @@ export const ExerciseForm = ({
     }
 
     await exerciseActions(exerciseDispatch).postExercise(exercise);
-    setSets(initialSet);
-    handleReset();
+
+    // If there's an error, we don't clear state
+    // to give user another attempt at submission
+    if (!error) {
+      setSets(initialSet);
+      handleReset();
+      navigation.navigate("ExerciseDetailScreen", {
+        definitionId: id,
+      });
+    }
   };
 
   return (
