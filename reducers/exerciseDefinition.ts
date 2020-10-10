@@ -1,11 +1,18 @@
-import { ExerciseDefinition } from "../constants/Interfaces";
+import { ExerciseDefinition, MuscleGroup, Unit } from "../constants/Interfaces";
 import Axios, { AxiosResponse } from "axios";
 import { EXERCISE_DEFINITION_URL } from "../constants/Api";
 import { BaseState, BaseActions, baseTypes } from "./base";
 
+export type ExerciseDefinitionForPost = {
+  title: string;
+  unit: Unit;
+  primaryMuscleGroup: MuscleGroup[];
+};
+
 export enum exerciseDefinitionTypes {
   GET_DEFINITIONS = "GET_DEFINITIONS",
   GET_DEFINITION_BY_ID = "GET_DEFINITION_BY_ID",
+  POST_DEFINITION = "POST_DEFINITION",
 }
 
 export type ExerciseDefinitionState = BaseState & {
@@ -21,16 +28,21 @@ export type ExerciseDefinitionAction =
   | {
       type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID;
       definition: ExerciseDefinition;
+    }
+  | {
+      type: exerciseDefinitionTypes.POST_DEFINITION;
+      definition: ExerciseDefinition;
     };
 
 export type ExerciseDefinitionActions = {
   getDefinitions: () => Promise<void>;
   getDefinitionById: (id: string) => Promise<void>;
+  postDefinition: (definition: ExerciseDefinitionForPost) => Promise<void>;
 };
 
 export const initialExerciseDefinitionState: ExerciseDefinitionState = {
   definitions: [],
-  loading: true,
+  loading: false,
   error: null,
 };
 
@@ -64,6 +76,23 @@ export const exerciseDefinitionActions = (
 
       dispatch({
         type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID,
+        definition: data,
+      });
+    } catch (e) {
+      dispatch({ type: baseTypes.ERROR, error: e.message });
+    }
+  },
+  postDefinition: async (definition: ExerciseDefinitionForPost) => {
+    dispatch({
+      type: baseTypes.LOADING,
+    });
+    try {
+      const { data }: AxiosResponse<ExerciseDefinition> = await Axios.post(
+        EXERCISE_DEFINITION_URL,
+        definition
+      );
+      dispatch({
+        type: exerciseDefinitionTypes.POST_DEFINITION,
         definition: data,
       });
     } catch (e) {
@@ -112,6 +141,12 @@ export const exerciseDefinitionReducer = (
         ...state,
         loading: false,
         definitions,
+      };
+    case exerciseDefinitionTypes.POST_DEFINITION:
+      return {
+        ...state,
+        loading: false,
+        definitions: [...state.definitions, action.definition],
       };
     default:
       return state;

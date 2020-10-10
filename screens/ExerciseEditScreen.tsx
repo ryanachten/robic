@@ -1,21 +1,53 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import React, { useReducer, useState } from "react";
+import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { ExercisesParamList } from "../types";
 import { MuscleGroup, Unit } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
-import { Badge, CheckBox, Input, Overlay } from "react-native-elements";
+import { Badge, Button, CheckBox, Input, Overlay } from "react-native-elements";
 import { Picker } from "native-base";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  exerciseDefinitionActions,
+  ExerciseDefinitionForPost,
+  exerciseDefinitionReducer,
+  initialExerciseDefinitionState,
+} from "../reducers/exerciseDefinition";
 
-type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
+type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
-export default function ExerciseEditScreen({ route }: Props) {
+export default function ExerciseEditScreen({ navigation }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [unit, setUnit] = useState(Unit.bodyweight);
   const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>([]);
+
+  const [{ definitions, error, loading }, definitionDispatch] = useReducer(
+    exerciseDefinitionReducer,
+    initialExerciseDefinitionState
+  );
+
+  error && console.log("error", error);
+
+  const createExercise = async () => {
+    const exercise: ExerciseDefinitionForPost = {
+      title,
+      unit,
+      primaryMuscleGroup: muscleGroups,
+    };
+    await exerciseDefinitionActions(definitionDispatch).postDefinition(
+      exercise
+    );
+    if (!error) {
+      const definition = definitions.find((def) => def.title === title);
+      if (definition) {
+        navigation.navigate("ExerciseDetailScreen", {
+          definitionId: definition.id,
+        });
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -77,6 +109,11 @@ export default function ExerciseEditScreen({ route }: Props) {
           ))}
         </ScrollView>
       </Overlay>
+      <Button
+        title="Create exercise"
+        loading={loading}
+        onPress={() => createExercise()}
+      />
 
       {/* <ErrorToast error={error} /> */}
     </View>
