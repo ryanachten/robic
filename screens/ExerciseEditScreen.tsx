@@ -2,22 +2,20 @@ import React, { useEffect, useReducer, useState } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { Text, View } from "../components/Themed";
 import { ExercisesParamList } from "../types";
-import { ExerciseDefinition, Unit } from "../constants/Interfaces";
+import { MuscleGroup, Unit } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
-import {
-  exerciseDefinitionActions,
-  exerciseDefinitionReducer,
-  initialExerciseDefinitionState,
-} from "../reducers/exerciseDefinition";
 import { ErrorToast } from "../components/ErrorToast";
-import { Input } from "react-native-elements";
+import { Badge, CheckBox, Input, Overlay } from "react-native-elements";
 import { Picker } from "native-base";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
 export default function ExerciseEditScreen({ route }: Props) {
+  const [modalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState("");
-  const [unit, setUnit] = useState(Unit.kg);
+  const [unit, setUnit] = useState(Unit.bodyweight);
+  const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>([]);
 
   return (
     <View style={styles.container}>
@@ -27,37 +25,73 @@ export default function ExerciseEditScreen({ route }: Props) {
         value={title}
         onChange={(e) => setTitle(e.nativeEvent.text)}
       />
-      <Picker note selectedValue={unit} onValueChange={setUnit}>
-        {Object.keys(Unit).map((key, index) => (
-          // @ts-ignore - Stupid TS doesn't let us easily get enum value in typesafe manner
-          <Picker.Item key={index} label={Unit[key]} value={key} />
-        ))}
-      </Picker>
+      <Input
+        label="Unit"
+        InputComponent={() => (
+          <Picker note selectedValue={unit} onValueChange={setUnit}>
+            {Object.keys(Unit).map((key, index) => (
+              <Picker.Item key={index} label={key} value={key} />
+            ))}
+          </Picker>
+        )}
+      />
+      <Input
+        label="Muscle Groups"
+        InputComponent={() => (
+          <View style={styles.badgeWrapper}>
+            {muscleGroups.length === 0 ? (
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <Text>Select exercise muscle group</Text>
+              </TouchableOpacity>
+            ) : (
+              muscleGroups.map((group, index) => (
+                <Badge
+                  key={index}
+                  value={group}
+                  onPress={() => setModalVisible(true)}
+                />
+              ))
+            )}
+          </View>
+        )}
+      />
+      <Overlay
+        isVisible={modalVisible}
+        onBackdropPress={() => setModalVisible(false)}
+      >
+        <ScrollView>
+          {Object.keys(MuscleGroup).map((key, index) => (
+            <CheckBox
+              key={index}
+              title={key}
+              checked={muscleGroups.includes(key as MuscleGroup)}
+              onPress={() => {
+                const groups = [...muscleGroups];
+                const index = groups.findIndex((group) => group === key);
+                index === -1
+                  ? groups.push(key as MuscleGroup)
+                  : groups.splice(index, 1);
+                setMuscleGroups(groups);
+              }}
+            />
+          ))}
+        </ScrollView>
+      </Overlay>
 
       {/* <ErrorToast error={error} /> */}
     </View>
   );
 }
 
-const DefinitionDetail = ({
-  definition,
-}: {
-  definition: ExerciseDefinition;
-}) => {
-  const { unit, type, primaryMuscleGroup } = definition;
-  return (
-    <View>
-      <Text>Unit: {unit}</Text>
-      {type && <Text>Type: {type}</Text>}
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  badgeWrapper: {
+    flex: 1,
+    flexDirection: "row",
   },
   title: {
     fontSize: 20,

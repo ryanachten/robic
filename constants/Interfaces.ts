@@ -1,34 +1,34 @@
 export enum MuscleGroup {
-  CHEST = "Chest",
-  FOREARMS = "Forearms",
-  LATS = "Lats",
+  Chest = "Chest",
+  Forearms = "Forearms",
+  Lats = "Lats",
   // MIDDLE_BACK = "Middle Back",
-  LOWER_BACK = "Lower Back",
-  NECK = "Neck",
-  HAMS = "Hamstrings",
-  QUADS = "Quadriceps",
-  CALVES = "Calves",
-  TRICEPS = "Triceps",
-  TRAPS = "Traps",
-  SHOULDERS = "Shoulders",
-  ABS = "Abdominals",
-  OBLIQUES = "Obliques",
-  GLUTES = "Glutes",
-  BICEPS = "Biceps",
+  Back = "Lower Back",
+  Neck = "Neck",
+  Hamstrings = "Hamstrings",
+  Quadriceps = "Quadriceps",
+  Calves = "Calves",
+  Triceps = "Triceps",
+  Traps = "Traps",
+  Shoulders = "Shoulders",
+  Abdominals = "Abdominals",
+  Obliques = "Obliques",
+  Glutes = "Glutes",
+  Biceps = "Biceps",
   // ADDUCTORS = "Adductors",
   // ABDUCTORS = "Abductors"
 }
 
 export enum ExerciseType {
-  CIRCUIT = "Circuit",
-  STANDARD = "Standard",
-  SUPERSET = "Superset",
+  Circuit = "Circuit",
+  Standard = "Standard",
+  Superset = "Superset",
 }
 
 export enum Unit {
   kg = "kg",
   min = "min",
-  bodyweight = "body weight",
+  bodyweight = "bodyweight",
 }
 
 export interface User {
