@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
-import { Text, View } from "../components/Themed";
+import { Text } from "../components/Themed";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ExercisesParamList } from "../types";
 import {
@@ -10,7 +10,7 @@ import {
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { ErrorToast } from "../components/ErrorToast";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { Picker } from "native-base";
 import { Button } from "react-native-elements";
@@ -35,7 +35,7 @@ export default function ExercisesScreen({ navigation }: Props) {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.lastActive);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Button
         title="Create exercise"
         onPress={() => navigation.navigate("ExerciseEditScreen")}
@@ -73,7 +73,7 @@ export default function ExercisesScreen({ navigation }: Props) {
           )
         )}
       <ErrorToast error={error} />
-    </View>
+    </ScrollView>
   );
 }
 

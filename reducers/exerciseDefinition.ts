@@ -6,6 +6,7 @@ import { BaseState, BaseActions, baseTypes } from "./base";
 export type ExerciseDefinitionForPost = {
   title: string;
   unit: Unit;
+  user: string;
   primaryMuscleGroup: MuscleGroup[];
 };
 
@@ -37,7 +38,9 @@ export type ExerciseDefinitionAction =
 export type ExerciseDefinitionActions = {
   getDefinitions: () => Promise<void>;
   getDefinitionById: (id: string) => Promise<void>;
-  postDefinition: (definition: ExerciseDefinitionForPost) => Promise<void>;
+  postDefinition: (
+    definition: ExerciseDefinitionForPost
+  ) => Promise<ExerciseDefinition | null>;
 };
 
 export const initialExerciseDefinitionState: ExerciseDefinitionState = {
@@ -95,8 +98,10 @@ export const exerciseDefinitionActions = (
         type: exerciseDefinitionTypes.POST_DEFINITION,
         definition: data,
       });
+      return data;
     } catch (e) {
       dispatch({ type: baseTypes.ERROR, error: e.message });
+      return null;
     }
   },
 });

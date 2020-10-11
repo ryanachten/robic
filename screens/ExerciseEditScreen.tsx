@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { forwardRef, useContext, useReducer, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { ExercisesParamList } from "../types";
@@ -14,6 +14,7 @@ import {
   exerciseDefinitionReducer,
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
+import { UserContext } from "../services/context";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
@@ -23,24 +24,28 @@ export default function ExerciseEditScreen({ navigation }: Props) {
   const [unit, setUnit] = useState(Unit.bodyweight);
   const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>([]);
 
-  const [{ definitions, error, loading }, definitionDispatch] = useReducer(
+  const {
+    state: { id = "" },
+  } = useContext(UserContext);
+
+  const [{ error, loading }, definitionDispatch] = useReducer(
     exerciseDefinitionReducer,
     initialExerciseDefinitionState
   );
-
-  error && console.log("error", error);
 
   const createExercise = async () => {
     const exercise: ExerciseDefinitionForPost = {
       title,
       unit,
+      user: id,
       primaryMuscleGroup: muscleGroups,
     };
-    await exerciseDefinitionActions(definitionDispatch).postDefinition(
-      exercise
-    );
+
+    const definition = await exerciseDefinitionActions(
+      definitionDispatch
+    ).postDefinition(exercise);
+
     if (!error) {
-      const definition = definitions.find((def) => def.title === title);
       if (definition) {
         navigation.navigate("ExerciseDetailScreen", {
           definitionId: definition.id,
@@ -59,17 +64,17 @@ export default function ExerciseEditScreen({ navigation }: Props) {
       />
       <Input
         label="Unit"
-        InputComponent={() => (
+        InputComponent={forwardRef(() => (
           <Picker note selectedValue={unit} onValueChange={setUnit}>
             {Object.keys(Unit).map((key, index) => (
               <Picker.Item key={index} label={key} value={key} />
             ))}
           </Picker>
-        )}
+        ))}
       />
       <Input
         label="Muscle Groups"
-        InputComponent={() => (
+        InputComponent={forwardRef(() => (
           <View style={styles.badgeWrapper}>
             {muscleGroups.length === 0 ? (
               <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -85,7 +90,7 @@ export default function ExerciseEditScreen({ navigation }: Props) {
               ))
             )}
           </View>
-        )}
+        ))}
       />
       <Overlay
         isVisible={modalVisible}
@@ -115,7 +120,7 @@ export default function ExerciseEditScreen({ navigation }: Props) {
         onPress={() => createExercise()}
       />
 
-      {/* <ErrorToast error={error} /> */}
+      <ErrorToast error={error} />
     </View>
   );
 }
