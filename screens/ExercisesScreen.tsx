@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, View } from "react-native";
 import { Text } from "../components/Themed";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ExercisesParamList } from "../types";
@@ -35,7 +35,7 @@ export default function ExercisesScreen({ navigation }: Props) {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.lastActive);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Button
         title="Create exercise"
         onPress={() => navigation.navigate("ExerciseEditScreen")}
@@ -45,35 +45,42 @@ export default function ExercisesScreen({ navigation }: Props) {
         <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
       </Picker>
       {loading && <ActivityIndicator size="large" />}
-      {definitions
-        ?.sort(sortBy === SortBy.lastActive ? sortByDate : sortByImprovment)
-        .map(
-          ({ id, title, lastActive, lastImprovement }: ExerciseDefinition) => (
-            <TouchableOpacity
-              key={id}
-              style={styles.exerciseItem}
-              onPress={() =>
-                navigation.navigate("ExerciseDetailScreen", {
-                  definitionId: id,
-                })
-              }
-            >
-              <Text>{title}</Text>
-              {lastActive && (
-                <Text style={styles.exerciseDate}>
-                  {`${formatDistance(new Date(lastActive), Date.now())} ago`}
-                </Text>
-              )}
-              {lastImprovement && (
-                <Text style={styles.exerciseImprovement}>
-                  {lastImprovement}
-                </Text>
-              )}
-            </TouchableOpacity>
-          )
-        )}
-      <ErrorToast error={error} />
-    </ScrollView>
+      <ScrollView contentContainerStyle={styles.container}>
+        {definitions
+          ?.sort(sortBy === SortBy.lastActive ? sortByDate : sortByImprovment)
+          .map(
+            ({
+              id,
+              title,
+              lastActive,
+              lastImprovement,
+            }: ExerciseDefinition) => (
+              <TouchableOpacity
+                key={id}
+                style={styles.exerciseItem}
+                onPress={() =>
+                  navigation.navigate("ExerciseDetailScreen", {
+                    definitionId: id,
+                  })
+                }
+              >
+                <Text>{title}</Text>
+                {lastActive && (
+                  <Text style={styles.exerciseDate}>
+                    {`${formatDistance(new Date(lastActive), Date.now())} ago`}
+                  </Text>
+                )}
+                {lastImprovement && (
+                  <Text style={styles.exerciseImprovement}>
+                    {lastImprovement}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            )
+          )}
+        <ErrorToast error={error} />
+      </ScrollView>
+    </View>
   );
 }
 
