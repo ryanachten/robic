@@ -18,6 +18,7 @@ import { Button } from "react-native-elements";
 enum SortBy {
   lastActive = "lastActive",
   lastImprovement = "lastImprovement",
+  numberOfSessions = "numberOfSessions",
 }
 
 type Props = StackScreenProps<ExercisesParamList, "ExercisesScreen">;
@@ -43,17 +44,31 @@ export default function ExercisesScreen({ navigation }: Props) {
       <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
         <Picker.Item label="Last active" value={SortBy.lastActive} />
         <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
+        <Picker.Item
+          label="Number of sessions"
+          value={SortBy.numberOfSessions}
+        />
       </Picker>
       {loading && <ActivityIndicator size="large" />}
       <ScrollView contentContainerStyle={styles.container}>
         {definitions
-          ?.sort(sortBy === SortBy.lastActive ? sortByDate : sortByImprovment)
+          ?.sort((a, b) => {
+            switch (sortBy) {
+              case SortBy.lastImprovement:
+                return sortByImprovment(a, b);
+              case SortBy.numberOfSessions:
+                return sortByNumberOfSessions(a, b);
+              default:
+                return sortByDate(a, b);
+            }
+          })
           .map(
             ({
               id,
               title,
               lastActive,
               lastImprovement,
+              history,
             }: ExerciseDefinition) => (
               <TouchableOpacity
                 key={id}
@@ -75,6 +90,9 @@ export default function ExercisesScreen({ navigation }: Props) {
                     {lastImprovement}
                   </Text>
                 )}
+                <Text style={styles.exerciseImprovement}>
+                  Sessions: {history.length}
+                </Text>
               </TouchableOpacity>
             )
           )}
@@ -115,7 +133,6 @@ const sortByImprovment = (
   a: ExerciseDefinition,
   b: ExerciseDefinition
 ): 1 | -1 => {
-  // Handle date sorting
   const improvementA = a.lastImprovement;
   const improvementB = b.lastImprovement;
 
@@ -153,4 +170,17 @@ const sortByDate = (a: ExerciseDefinition, b: ExerciseDefinition): 1 | -1 => {
     return 1;
   }
   return sortAlpha(a, b);
+};
+
+const sortByNumberOfSessions = (
+  a: ExerciseDefinition,
+  b: ExerciseDefinition
+): 1 | -1 => {
+  const sessionsA = a.history.length;
+  const sessionsB = b.history.length;
+
+  if (sessionsA === sessionsB) {
+    return sortAlpha(a, b);
+  }
+  return sessionsA < sessionsB ? 1 : -1;
 };
