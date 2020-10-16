@@ -1,7 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { StyleSheet, ActivityIndicator, View } from "react-native";
-import { Text } from "../components/Themed";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { formatDistance } from "date-fns";
+import { Picker } from "native-base";
+import { Button, SearchBar } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
+import { Text } from "../components/Themed";
 import { ExercisesParamList } from "../types";
 import {
   exerciseDefinitionReducer,
@@ -10,10 +14,13 @@ import {
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { ErrorToast } from "../components/ErrorToast";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { formatDistance } from "date-fns";
-import { Picker } from "native-base";
-import { Button } from "react-native-elements";
+import useColorScheme from "../hooks/useColorScheme";
+import {
+  filterBySearchTerm,
+  sortByDate,
+  sortByImprovment,
+  sortByNumberOfSessions,
+} from "../utilities/searchHelpers";
 
 enum SortBy {
   lastActive = "lastActive",
@@ -33,6 +40,7 @@ export default function ExercisesScreen({ navigation }: Props) {
     exerciseDefinitionActions(definitionDispatch).getDefinitions();
   }, []);
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.lastActive);
 
   return (
@@ -40,6 +48,13 @@ export default function ExercisesScreen({ navigation }: Props) {
       <Button
         title="Create exercise"
         onPress={() => navigation.navigate("ExerciseEditScreen")}
+      />
+      <SearchBar
+        lightTheme={useColorScheme() === "light"}
+        containerStyle={styles.searchBar}
+        placeholder="Type Here..."
+        onChangeText={setSearchTerm}
+        value={searchTerm}
       />
       <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
         <Picker.Item label="Last active" value={SortBy.lastActive} />
@@ -62,6 +77,7 @@ export default function ExercisesScreen({ navigation }: Props) {
                 return sortByDate(a, b);
             }
           })
+          .filter((e) => filterBySearchTerm(e, searchTerm))
           .map(
             ({
               id,
@@ -87,7 +103,7 @@ export default function ExercisesScreen({ navigation }: Props) {
                 )}
                 {lastImprovement && (
                   <Text style={styles.exerciseImprovement}>
-                    {lastImprovement}
+                    {lastImprovement}%
                   </Text>
                 )}
                 <Text style={styles.exerciseImprovement}>
@@ -118,69 +134,12 @@ const styles = StyleSheet.create({
   exerciseImprovement: {
     marginLeft: 10,
   },
+  searchBar: {
+    width: "100%",
+  },
   separator: {
     marginVertical: 30,
     height: 1,
     width: "80%",
   },
 });
-
-// Alphbetical sort fallback
-const sortAlpha = (a: ExerciseDefinition, b: ExerciseDefinition) =>
-  a.title > b.title ? 1 : -1;
-
-const sortByImprovment = (
-  a: ExerciseDefinition,
-  b: ExerciseDefinition
-): 1 | -1 => {
-  const improvementA = a.lastImprovement;
-  const improvementB = b.lastImprovement;
-
-  if (improvementA !== null && improvementB !== null) {
-    if (improvementA === improvementB) {
-      return sortAlpha(a, b);
-    }
-    return improvementA < improvementB ? 1 : -1;
-  }
-
-  // Handle cases where dates don't exist
-  if (improvementA && !improvementB) {
-    return -1;
-  } else if (!improvementA && improvementB) {
-    return 1;
-  }
-  return sortAlpha(a, b);
-};
-
-const sortByDate = (a: ExerciseDefinition, b: ExerciseDefinition): 1 | -1 => {
-  // Handle date sorting
-  const dateA = a.lastActive && new Date(a.lastActive);
-  const dateB = b.lastActive && new Date(b.lastActive);
-  if (dateA instanceof Date && dateB instanceof Date) {
-    if (dateA.getMilliseconds() === dateB.getMilliseconds()) {
-      return sortAlpha(a, b);
-    }
-    return dateA < dateB ? 1 : -1;
-  }
-
-  // Handle cases where dates don't exist
-  if (dateA && !dateB) {
-    return -1;
-  } else if (!dateA && dateB) {
-    return 1;
-  }
-  return sortAlpha(a, b);
-};
-
-const sortByNumberOfSessions = (
-  a: ExerciseDefinition,
-  b: ExerciseDefinition
-): 1 | -1 => {
-  const sessionsA = a.history.length;
-  const sessionsB = b.history.length;
-
-  if (sessionsA === sessionsB) {
-    return sortAlpha(a, b);
-  }
-  return sessionsA < sessionsB ? 1 : -1;
-};
