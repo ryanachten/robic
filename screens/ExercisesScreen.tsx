@@ -120,9 +120,8 @@ export default function ExercisesScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    flex: 1,
   },
   exerciseItem: {
     flexDirection: "row",

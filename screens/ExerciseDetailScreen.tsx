@@ -10,6 +10,7 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { ErrorToast } from "../components/ErrorToast";
+import { formatDistance } from "date-fns";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
@@ -45,11 +46,27 @@ const DefinitionDetail = ({
 }: {
   definition: ExerciseDefinition;
 }) => {
-  const { unit, type, primaryMuscleGroup } = definition;
+  const {
+    unit,
+    type,
+    primaryMuscleGroup,
+    lastActive,
+    lastImprovement,
+  } = definition;
   return (
     <View>
       <Text>Unit: {unit}</Text>
       {type && <Text>Type: {type}</Text>}
+      {lastActive && (
+        <Text>
+          Last active:{" "}
+          {`${formatDistance(new Date(lastActive), Date.now())} ago`}
+        </Text>
+      )}
+      {lastImprovement && <Text>Last improvement: {lastImprovement}%</Text>}
+      {primaryMuscleGroup && (
+        <Text>Muscles groups: {primaryMuscleGroup.join(", ")}</Text>
+      )}
     </View>
   );
 };
