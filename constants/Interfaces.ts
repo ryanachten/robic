@@ -51,12 +51,20 @@ export type Set = {
   value: number;
 };
 
+export type PersonalBest = {
+  topNetExercise: Exercise;
+  topAvgValue: number;
+  topReps: Number;
+  topSets: Number;
+};
+
 export interface Exercise {
   id: string;
   date: string;
   definition: string;
   sets: Set[];
   timeTaken: string;
+  netValue: number;
 }
 
 export interface ExerciseDefinition {
@@ -70,4 +78,5 @@ export interface ExerciseDefinition {
   history: Exercise[];
   childExercises: ExerciseDefinition[];
   primaryMuscleGroup?: MuscleGroup[];
+  personalBest: PersonalBest;
 }

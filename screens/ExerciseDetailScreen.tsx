@@ -52,6 +52,7 @@ const DefinitionDetail = ({
     primaryMuscleGroup,
     lastActive,
     lastImprovement,
+    personalBest: pb,
   } = definition;
   return (
     <View>
@@ -66,6 +67,14 @@ const DefinitionDetail = ({
       {lastImprovement && <Text>Last improvement: {lastImprovement}%</Text>}
       {primaryMuscleGroup && (
         <Text>Muscles groups: {primaryMuscleGroup.join(", ")}</Text>
+      )}
+      {pb && (
+        <View>
+          {/* TODO: add top net exercise */}
+          <Text>Top average value: {pb.topAvgValue}</Text>
+          <Text>Top reps: {pb.topReps}</Text>
+          <Text>Top sets: {pb.topSets}</Text>
+        </View>
       )}
     </View>
   );
