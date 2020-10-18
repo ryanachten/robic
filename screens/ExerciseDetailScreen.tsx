@@ -50,7 +50,7 @@ const DefinitionDetail = ({
     unit,
     type,
     primaryMuscleGroup,
-    lastActive,
+    lastSession,
     lastImprovement,
     personalBest: pb,
   } = definition;
@@ -58,10 +58,10 @@ const DefinitionDetail = ({
     <View>
       <Text>Unit: {unit}</Text>
       {type && <Text>Type: {type}</Text>}
-      {lastActive && (
+      {lastSession && (
         <Text>
           Last active:{" "}
-          {`${formatDistance(new Date(lastActive), Date.now())} ago`}
+          {`${formatDistance(new Date(lastSession.date), Date.now())} ago`}
         </Text>
       )}
       {lastImprovement && <Text>Last improvement: {lastImprovement}%</Text>}
@@ -70,7 +70,15 @@ const DefinitionDetail = ({
       )}
       {pb && (
         <View>
-          {/* TODO: add top net exercise */}
+          <Text>
+            {`Personal Best ${formatDistance(
+              new Date(pb.topNetExercise.date),
+              Date.now()
+            )} ago`}
+          </Text>
+          {pb.topNetExercise.sets.map((s, i) => (
+            <Text key={i}>{`${s.reps} reps x ${s.value} kg`}</Text>
+          ))}
           <Text>Top average value: {pb.topAvgValue}</Text>
           <Text>Top reps: {pb.topReps}</Text>
           <Text>Top sets: {pb.topSets}</Text>

@@ -82,7 +82,7 @@ export default function ExercisesScreen({ navigation }: Props) {
             ({
               id,
               title,
-              lastActive,
+              lastSession,
               lastImprovement,
               history,
             }: ExerciseDefinition) => (
@@ -96,9 +96,12 @@ export default function ExercisesScreen({ navigation }: Props) {
                 }
               >
                 <Text>{title}</Text>
-                {lastActive && (
+                {lastSession && (
                   <Text style={styles.exerciseDate}>
-                    {`${formatDistance(new Date(lastActive), Date.now())} ago`}
+                    {`${formatDistance(
+                      new Date(lastSession.date),
+                      Date.now()
+                    )} ago`}
                   </Text>
                 )}
                 {lastImprovement && (

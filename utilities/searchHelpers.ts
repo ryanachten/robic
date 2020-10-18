@@ -32,8 +32,8 @@ export const sortByDate = (
   b: ExerciseDefinition
 ): 1 | -1 => {
   // Handle date sorting
-  const dateA = a.lastActive && new Date(a.lastActive);
-  const dateB = b.lastActive && new Date(b.lastActive);
+  const dateA = a.lastSession && new Date(a.lastSession.date);
+  const dateB = b.lastSession && new Date(b.lastSession.date);
   if (dateA instanceof Date && dateB instanceof Date) {
     if (dateA.getMilliseconds() === dateB.getMilliseconds()) {
       return sortAlpha(a, b);

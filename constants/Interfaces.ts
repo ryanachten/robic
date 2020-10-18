@@ -70,7 +70,7 @@ export interface Exercise {
 export interface ExerciseDefinition {
   id: string;
   title: string;
-  lastActive: string | null;
+  lastSession: Exercise | null;
   lastImprovement: number | null;
   unit: Unit;
   type?: ExerciseType;
@@ -78,5 +78,5 @@ export interface ExerciseDefinition {
   history: Exercise[];
   childExercises: ExerciseDefinition[];
   primaryMuscleGroup?: MuscleGroup[];
-  personalBest: PersonalBest;
+  personalBest: PersonalBest | null;
 }
