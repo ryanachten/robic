@@ -11,6 +11,7 @@ import {
 } from "../reducers/exerciseDefinition";
 import { ErrorToast } from "../components/ErrorToast";
 import { formatDistance } from "date-fns";
+import { ExerciseCard } from "../components/ExerciseCard";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
@@ -58,27 +59,16 @@ const DefinitionDetail = ({
     <View>
       <Text>Unit: {unit}</Text>
       {type && <Text>Type: {type}</Text>}
-      {lastSession && (
-        <Text>
-          Last active:{" "}
-          {`${formatDistance(new Date(lastSession.date), Date.now())} ago`}
-        </Text>
-      )}
-      {lastImprovement && <Text>Last improvement: {lastImprovement}%</Text>}
       {primaryMuscleGroup && (
         <Text>Muscles groups: {primaryMuscleGroup.join(", ")}</Text>
       )}
+      {lastImprovement && <Text>Last improvement: {lastImprovement}%</Text>}
+      {lastSession && (
+        <ExerciseCard title="Latest Exercise" exercise={lastSession} />
+      )}
       {pb && (
         <View>
-          <Text>
-            {`Personal Best ${formatDistance(
-              new Date(pb.topNetExercise.date),
-              Date.now()
-            )} ago`}
-          </Text>
-          {pb.topNetExercise.sets.map((s, i) => (
-            <Text key={i}>{`${s.reps} reps x ${s.value} kg`}</Text>
-          ))}
+          <ExerciseCard title="Personal Best" exercise={pb.topNetExercise} />
           <Text>Top average value: {pb.topAvgValue}</Text>
           <Text>Top reps: {pb.topReps}</Text>
           <Text>Top sets: {pb.topSets}</Text>
