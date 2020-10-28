@@ -6,7 +6,8 @@ import React, {
   Dispatch,
 } from "react";
 import { StyleSheet, ScrollView, ActivityIndicator } from "react-native";
-import { Text } from "../components/Themed";
+import { Picker } from "native-base";
+import { Text, ErrorToast, ExerciseForm } from "../components";
 import { UserContext } from "../services/context";
 import {
   exerciseDefinitionReducer,
@@ -14,9 +15,6 @@ import {
   exerciseDefinitionActions,
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
-import { ExerciseForm } from "../components/ExerciseForm";
-import { ErrorToast } from "../components/ErrorToast";
-import { Picker } from "native-base";
 
 export default function HomeScreen() {
   const {

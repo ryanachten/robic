@@ -1,8 +1,9 @@
 // Based on https://codersera.com/blog/first-react-native-app-stopwatch/ implementation
 
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useInterval } from "../hooks/useInterval";
+import { Text } from "./index";
 
 type Lap = { min: number; sec: number; msec: number };
 
