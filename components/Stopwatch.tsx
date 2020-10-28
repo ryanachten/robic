@@ -3,7 +3,7 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useInterval } from "../hooks/useInterval";
-import { Text } from "./index";
+import { Text } from "./Themed";
 
 type Lap = { min: number; sec: number; msec: number };
 

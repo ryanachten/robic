@@ -5,7 +5,7 @@ import React, {
   useState,
   Dispatch,
 } from "react";
-import { StyleSheet, ScrollView, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { Picker } from "native-base";
 import { Text, ErrorToast, ExerciseForm } from "../components";
 import { UserContext } from "../services/context";
@@ -42,7 +42,7 @@ export default function HomeScreen() {
   }, [definitions]);
 
   return (
-    <ScrollView>
+    <View style={styles.container}>
       <Text style={styles.title}>{firstName}</Text>
       {loading && <ActivityIndicator />}
       <Picker
@@ -61,7 +61,7 @@ export default function HomeScreen() {
       </Picker>
       {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
       <ErrorToast error={error} />
-    </ScrollView>
+    </View>
   );
 }
 
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   title: {
     fontSize: 20,
