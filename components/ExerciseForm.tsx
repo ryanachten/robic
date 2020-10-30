@@ -98,46 +98,60 @@ export const ExerciseForm = ({
         loading={loading}
       />
       <ScrollView>
-        {sets.map(({ reps, value }: Set, index: number) => (
-          <View key={index} style={styles.setWrapper}>
-            <Text>Set: {sets.length - index}</Text>
-            <View style={styles.inputWrapper}>
-              <Input
-                containerStyle={styles.input}
-                label="Reps"
-                keyboardType="numeric"
-                value={reps ? reps.toString() : ""}
-                onChange={({ nativeEvent }) =>
-                  updateSet(index, "reps", nativeEvent.text)
-                }
-              />
-              <Input
-                containerStyle={styles.input}
-                label="Weight"
-                keyboardType="numeric"
-                value={value ? value.toString() : ""}
-                onChange={({ nativeEvent }) =>
-                  updateSet(index, "value", nativeEvent.text)
-                }
-              />
-              {index > 0 ? (
-                <Icon
-                  containerStyle={styles.icon}
-                  name="remove"
-                  raised
-                  onPress={() => removeSet(index)}
+        {sets.map(({ reps, value }: Set, index: number) => {
+          const activeSet = index === 0;
+          const setDisplayNumber = sets.length - index;
+          return (
+            <View
+              key={index}
+              style={[
+                styles.setWrapper,
+                !activeSet && styles.inputWrapperInactive,
+              ]}
+            >
+              <Text>{`${
+                activeSet
+                  ? `Current Set (${setDisplayNumber})`
+                  : `Set ${setDisplayNumber}`
+              } `}</Text>
+              <View style={styles.inputWrapper}>
+                <Input
+                  containerStyle={styles.input}
+                  label="Reps"
+                  keyboardType="numeric"
+                  value={reps ? reps.toString() : ""}
+                  onChange={({ nativeEvent }) =>
+                    updateSet(index, "reps", nativeEvent.text)
+                  }
                 />
-              ) : (
-                <Icon
-                  containerStyle={styles.icon}
-                  name="add"
-                  raised
-                  onPress={() => addSet()}
+                <Input
+                  containerStyle={styles.input}
+                  label="Weight"
+                  keyboardType="numeric"
+                  value={value ? value.toString() : ""}
+                  onChange={({ nativeEvent }) =>
+                    updateSet(index, "value", nativeEvent.text)
+                  }
                 />
-              )}
+                {!activeSet ? (
+                  <Icon
+                    containerStyle={styles.icon}
+                    name="remove"
+                    raised
+                    onPress={() => removeSet(index)}
+                  />
+                ) : (
+                  <Icon
+                    containerStyle={styles.icon}
+                    name="add"
+                    raised
+                    onPress={() => addSet()}
+                  />
+                )}
+              </View>
             </View>
-          </View>
-        ))}
+          );
+        })}
       </ScrollView>
       <ErrorToast error={error} />
     </View>
@@ -156,6 +170,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
+  },
+  inputWrapperInactive: {
+    opacity: 0.4,
   },
   input: {
     flexGrow: 1,
