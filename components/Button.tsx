@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Button as RnButton, ButtonProps } from "react-native-elements";
-import Colors from "../constants/Colors";
+import { Colors } from "../constants/Colors";
 
 export const Button = (props: ButtonProps) => (
   <RnButton
@@ -14,9 +14,9 @@ export const Button = (props: ButtonProps) => (
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Colors.light.background,
+    backgroundColor: Colors.white,
   },
   title: {
-    color: Colors.light.text,
+    color: Colors.orange,
   },
 });

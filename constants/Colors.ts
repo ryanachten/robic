@@ -1,6 +1,12 @@
 const tintColorLight = "#2f95dc";
 const tintColorDark = "#fff";
 
+export enum Colors {
+  white = "#fff",
+  black = "#4A4A4A",
+  orange = "#ff9100",
+}
+
 export default {
   light: {
     text: "#4A4A4A",

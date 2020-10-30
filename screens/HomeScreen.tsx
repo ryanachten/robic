@@ -15,6 +15,7 @@ import {
   exerciseDefinitionActions,
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
+import { Margin } from "../constants/Sizes";
 
 export default function HomeScreen() {
   const {
@@ -35,11 +36,6 @@ export default function HomeScreen() {
   useEffect(() => {
     exerciseDefinitionActions(definitionDispatch).getDefinitions();
   }, []);
-
-  // Set default definition to first item
-  // useEffect(() => {
-  //   !selectedDefintion && setSelectedDefinition(definitions[0]);
-  // }, [definitions]);
 
   return (
     <View style={styles.container}>
@@ -79,6 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
+    padding: Margin.md,
   },
   title: {
     fontSize: 20,

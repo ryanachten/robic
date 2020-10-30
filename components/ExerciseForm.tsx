@@ -21,6 +21,7 @@ import { Input } from "./Input";
 import { Stopwatch } from "./Stopwatch";
 import { Text } from "./Themed";
 import { Margin } from "../constants/Sizes";
+import { Colors } from "../constants/Colors";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -100,6 +101,16 @@ export const ExerciseForm = ({
         onPress={submitExercise}
         loading={loading}
       />
+      <View style={styles.addSetButton}>
+        <Text>Add Set</Text>
+        <Icon
+          color={Colors.orange}
+          containerStyle={styles.addSetButtonIcon}
+          name="add"
+          raised
+          onPress={() => addSet()}
+        />
+      </View>
       <ScrollView>
         {sets.map(({ reps, value }: Set, index: number) => {
           const activeSet = index === 0;
@@ -107,10 +118,7 @@ export const ExerciseForm = ({
           return (
             <View
               key={index}
-              style={[
-                styles.setNumber,
-                !activeSet && styles.inputWrapperInactive,
-              ]}
+              style={[!activeSet && styles.inputWrapperInactive]}
             >
               <Text style={styles.setNumber}>{`${
                 activeSet
@@ -136,19 +144,11 @@ export const ExerciseForm = ({
                     updateSet(index, "value", nativeEvent.text)
                   }
                 />
-                {!activeSet ? (
+                {!activeSet && (
                   <Icon
-                    containerStyle={styles.icon}
+                    color={Colors.orange}
                     name="remove"
-                    raised
                     onPress={() => removeSet(index)}
-                  />
-                ) : (
-                  <Icon
-                    containerStyle={styles.icon}
-                    name="add"
-                    raised
-                    onPress={() => addSet()}
                   />
                 )}
               </View>
@@ -162,17 +162,41 @@ export const ExerciseForm = ({
 };
 
 const styles = StyleSheet.create({
-  button: {
+  addSetButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: Margin.md,
+  },
+  addSetButtonIcon: {
+    width: 60,
+    margin: 0,
+    marginLeft: Margin.sm,
+  },
+  button: {
+    marginBottom: Margin.sm,
   },
   container: {
     flex: 1,
     flexGrow: 1,
+    minWidth: "100%",
   },
   inputWrapper: {
+    backgroundColor: Colors.white,
+    borderRadius: 3,
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
+    overflow: "visible",
+    padding: Margin.md,
+    marginBottom: Margin.sm,
+    shadowColor: "rgba(0, 0, 0, 0.4)",
+    shadowOffset: {
+      height: 1,
+      width: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 1,
   },
   inputWrapperInactive: {
     opacity: 0.4,
@@ -180,10 +204,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexGrow: 1,
     width: "30%",
-  },
-  icon: {
-    width: 60,
-    margin: 0,
   },
   setNumber: {
     marginBottom: Margin.sm,
