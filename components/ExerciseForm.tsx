@@ -5,18 +5,20 @@ import React, {
   useRef,
   ElementRef,
 } from "react";
-import { ExerciseDefinition, Set } from "../constants/Interfaces";
-import { ScrollView, StyleSheet, View, Text } from "react-native";
-import { Icon, Input, Button } from "react-native-elements";
-import { Stopwatch } from "./Stopwatch";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Icon, Button } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
 import {
   exerciseActions,
   ExerciseForPost,
   exerciseReducer,
   initialExerciseState,
 } from "../reducers/exercise";
+import { ExerciseDefinition, Set } from "../constants/Interfaces";
 import { ErrorToast } from "./ErrorToast";
-import { useNavigation } from "@react-navigation/native";
+import { Input } from "./Input";
+import { Stopwatch } from "./Stopwatch";
+import { Text } from "./Themed";
 import { Margin } from "../constants/Sizes";
 
 export const ExerciseForm = ({
@@ -105,18 +107,18 @@ export const ExerciseForm = ({
             <View
               key={index}
               style={[
-                styles.setWrapper,
+                styles.setNumber,
                 !activeSet && styles.inputWrapperInactive,
               ]}
             >
-              <Text>{`${
+              <Text style={styles.setNumber}>{`${
                 activeSet
                   ? `Current Set (${setDisplayNumber})`
                   : `Set ${setDisplayNumber}`
               } `}</Text>
               <View style={styles.inputWrapper}>
                 <Input
-                  containerStyle={styles.input}
+                  containerStyle={styles.inputContainer}
                   label="Reps"
                   keyboardType="numeric"
                   value={reps ? reps.toString() : ""}
@@ -125,7 +127,7 @@ export const ExerciseForm = ({
                   }
                 />
                 <Input
-                  containerStyle={styles.input}
+                  containerStyle={styles.inputContainer}
                   label="Weight"
                   keyboardType="numeric"
                   value={value ? value.toString() : ""}
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
   inputWrapperInactive: {
     opacity: 0.4,
   },
-  input: {
+  inputContainer: {
     flexGrow: 1,
     width: "30%",
   },
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
     width: 60,
     margin: 0,
   },
-  setWrapper: {
-    // minHeight: 50,
+  setNumber: {
+    marginBottom: Margin.sm,
   },
 });

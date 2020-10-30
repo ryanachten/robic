@@ -43,24 +43,31 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{firstName}</Text>
-      {loading && <ActivityIndicator />}
-      <Picker
-        note
-        placeholder="Select Exercise"
-        style={{ width: 120 }}
-        selectedValue={selectedDefintion?.id}
-        onValueChange={(id) => {
-          const definition = definitions.find((def) => def.id === id);
-          definition && setSelectedDefinition(definition);
-        }}
-      >
-        {definitions.map((defintion) => {
-          const { title, id } = defintion;
-          return <Picker.Item key={id} label={title} value={id} />;
-        })}
-      </Picker>
-
+      {!selectedDefintion && (
+        <Text style={styles.title}>Hello {firstName}!</Text>
+      )}
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <Text>Select an exercise:</Text>
+          <Picker
+            note
+            placeholder="No excercise selected"
+            style={{ width: 120 }}
+            selectedValue={selectedDefintion?.id}
+            onValueChange={(id) => {
+              const definition = definitions.find((def) => def.id === id);
+              definition && setSelectedDefinition(definition);
+            }}
+          >
+            {definitions.map((defintion) => {
+              const { title, id } = defintion;
+              return <Picker.Item key={id} label={title} value={id} />;
+            })}
+          </Picker>
+        </>
+      )}
       {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
       <ErrorToast error={error} />
     </View>
