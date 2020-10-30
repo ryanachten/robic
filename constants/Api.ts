@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_DOMAIN = "http://d615f4a23c74.ngrok.io"; //"https://robic-api.herokuapp.com"
+const API_DOMAIN = "http://5006d57b4eb9.ngrok.io"; //"https://robic-api.herokuapp.com"
 const API_URL = `${API_DOMAIN}/api`;
 
 // TODO: not sure this instance really works

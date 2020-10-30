@@ -17,6 +17,7 @@ import {
 } from "../reducers/exercise";
 import { ErrorToast } from "./ErrorToast";
 import { useNavigation } from "@react-navigation/native";
+import { Margin } from "../constants/Sizes";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -64,9 +65,9 @@ export const ExerciseForm = ({
     if (!stopwatchRef.current) {
       return;
     }
-    const { getTime, handleReset } = stopwatchRef.current;
+    const { getTime, handleReset, hasStarted } = stopwatchRef.current;
     const { msec, sec, min } = getTime();
-    if (msec !== 0 || sec !== 0 || min !== 0) {
+    if (hasStarted()) {
       const timeTaken = new Date(0);
       timeTaken.setMilliseconds(msec);
       timeTaken.setSeconds(sec);
@@ -90,8 +91,12 @@ export const ExerciseForm = ({
   return (
     <View style={styles.container}>
       <Stopwatch ref={stopwatchRef} />
-      <Icon name="add" raised onPress={() => addSet()} />
-      <Button title="Done" onPress={submitExercise} loading={loading} />
+      <Button
+        style={styles.button}
+        title="Done"
+        onPress={submitExercise}
+        loading={loading}
+      />
       <ScrollView>
         {sets.map(({ reps, value }: Set, index: number) => (
           <View key={index} style={styles.setWrapper}>
@@ -123,7 +128,12 @@ export const ExerciseForm = ({
                   onPress={() => removeSet(index)}
                 />
               ) : (
-                <View style={styles.icon} />
+                <Icon
+                  containerStyle={styles.icon}
+                  name="add"
+                  raised
+                  onPress={() => addSet()}
+                />
               )}
             </View>
           </View>
@@ -135,6 +145,9 @@ export const ExerciseForm = ({
 };
 
 const styles = StyleSheet.create({
+  button: {
+    marginBottom: Margin.md,
+  },
   container: {
     flex: 1,
     flexGrow: 1,
@@ -153,6 +166,6 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   setWrapper: {
-    minHeight: 100,
+    // minHeight: 50,
   },
 });

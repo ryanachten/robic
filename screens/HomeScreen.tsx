@@ -37,9 +37,9 @@ export default function HomeScreen() {
   }, []);
 
   // Set default definition to first item
-  useEffect(() => {
-    !selectedDefintion && setSelectedDefinition(definitions[0]);
-  }, [definitions]);
+  // useEffect(() => {
+  //   !selectedDefintion && setSelectedDefinition(definitions[0]);
+  // }, [definitions]);
 
   return (
     <View style={styles.container}>
@@ -47,6 +47,7 @@ export default function HomeScreen() {
       {loading && <ActivityIndicator />}
       <Picker
         note
+        placeholder="Select Exercise"
         style={{ width: 120 }}
         selectedValue={selectedDefintion?.id}
         onValueChange={(id) => {
@@ -59,6 +60,7 @@ export default function HomeScreen() {
           return <Picker.Item key={id} label={title} value={id} />;
         })}
       </Picker>
+
       {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
       <ErrorToast error={error} />
     </View>

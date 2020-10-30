@@ -2,6 +2,7 @@
 
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Margin } from "../constants/Sizes";
 import { useInterval } from "../hooks/useInterval";
 import { Text } from "./Themed";
 
@@ -12,6 +13,7 @@ let padToTwo = (number: number) => (number <= 9 ? `0${number}` : number);
 type StopwatchHandle = {
   handleReset: () => void;
   getTime: () => { min: number; sec: number; msec: number };
+  hasStarted: () => boolean;
 };
 
 export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
@@ -45,6 +47,8 @@ export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
     }
   }, 1);
 
+  const hasStarted = () => msec !== 0 || sec !== 0 || min !== 0;
+
   const handleReset = () => {
     setMilliSec(0);
     setSec(0);
@@ -59,10 +63,11 @@ export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
   useImperativeHandle(ref, () => ({
     handleReset,
     getTime,
+    hasStarted,
   }));
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.parent}>
         <Text style={styles.child}>{padToTwo(min) + " : "}</Text>
         <Text style={styles.child}>{padToTwo(sec) + " : "}</Text>
@@ -75,21 +80,20 @@ export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
         <TouchableOpacity onPress={handleToggle}>
           <Text style={styles.buttonText}>{!start ? "Start" : "Stop"}</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleLap(min, sec, msec)}
-          disabled={!start}
-        >
-          <Text style={styles.buttonText}>Lap</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
 });
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: Margin.md,
+  },
   parent: {
+    alignSelf: "center",
     display: "flex",
     flexDirection: "row",
+    width: 200,
   },
 
   child: {
