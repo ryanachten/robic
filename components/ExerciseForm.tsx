@@ -6,7 +6,7 @@ import React, {
   ElementRef,
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Icon, Button } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import {
   exerciseActions,
@@ -16,6 +16,7 @@ import {
 } from "../reducers/exercise";
 import { ExerciseDefinition, Set } from "../constants/Interfaces";
 import { ErrorToast } from "./ErrorToast";
+import { Button } from "./Button";
 import { Input } from "./Input";
 import { Stopwatch } from "./Stopwatch";
 import { Text } from "./Themed";
@@ -94,7 +95,7 @@ export const ExerciseForm = ({
     <View style={styles.container}>
       <Stopwatch ref={stopwatchRef} />
       <Button
-        style={styles.button}
+        containerStyle={styles.button}
         title="Done"
         onPress={submitExercise}
         loading={loading}
