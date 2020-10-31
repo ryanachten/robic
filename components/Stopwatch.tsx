@@ -2,6 +2,7 @@
 
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import { useInterval } from "../hooks/useInterval";
 import { Text } from "./Themed";
@@ -95,18 +96,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: 200,
   },
-
   child: {
     fontSize: 40,
   },
-
   buttonParent: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
   },
-
   buttonText: {
+    color: Colors.orange,
     fontSize: 20,
     alignSelf: "center",
   },

@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Icon } from "react-native-elements";
 
-import Colors from "../constants/Colors";
+import { Colors } from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import {
   AuthenticatedParamList,
@@ -27,11 +27,11 @@ export default function AuthenticatedNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Home"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+      initialRouteName="Start"
+      tabBarOptions={{ activeTintColor: Colors.orange }}
     >
       <BottomTab.Screen
-        name="Home"
+        name="Start"
         component={HomeNavigator}
         options={{
           tabBarIcon: ({ color }) => (
@@ -44,7 +44,16 @@ export default function AuthenticatedNavigator() {
         component={ExerciseNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="remove-red-eye" color={color} />
+            <TabBarIcon name="fitness-center" color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Activity"
+        component={ExerciseNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="equalizer" color={color} />
           ),
         }}
       />
