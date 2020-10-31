@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: Margin.md,
+    maxHeight: 60,
     minHeight: 60,
   },
   addSetButtonIcon: {

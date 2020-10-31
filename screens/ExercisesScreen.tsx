@@ -1,11 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { StyleSheet, ActivityIndicator, View } from "react-native";
+import { StyleSheet, ActivityIndicator } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { Picker } from "native-base";
-import { Button, SearchBar } from "react-native-elements";
+import { SearchBar } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Text } from "../components/Themed";
+import { Background, Button, ErrorToast, Text } from "../components";
 import { ExercisesParamList } from "../types";
 import {
   exerciseDefinitionReducer,
@@ -13,7 +13,6 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
-import { ErrorToast } from "../components/ErrorToast";
 import useColorScheme from "../hooks/useColorScheme";
 import {
   filterBySearchTerm,
@@ -21,6 +20,8 @@ import {
   sortByImprovment,
   sortByNumberOfSessions,
 } from "../utilities/searchHelpers";
+import { Margin } from "../constants/Sizes";
+import { Colors } from "../constants/Colors";
 
 enum SortBy {
   lastActive = "lastActive",
@@ -44,17 +45,20 @@ export default function ExercisesScreen({ navigation }: Props) {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.lastActive);
 
   return (
-    <View style={styles.container}>
-      <Button
-        title="Create exercise"
-        onPress={() => navigation.navigate("ExerciseEditScreen")}
-      />
+    <Background style={styles.container}>
       <SearchBar
         lightTheme={useColorScheme() === "light"}
         containerStyle={styles.searchBar}
+        inputContainerStyle={{
+          backgroundColor: Colors.white,
+        }}
         placeholder="Type Here..."
         onChangeText={setSearchTerm}
         value={searchTerm}
+      />
+      <Button
+        title="Create exercise"
+        onPress={() => navigation.navigate("ExerciseEditScreen")}
       />
       <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
         <Picker.Item label="Last active" value={SortBy.lastActive} />
@@ -117,7 +121,7 @@ export default function ExercisesScreen({ navigation }: Props) {
           )}
         <ErrorToast error={error} />
       </ScrollView>
-    </View>
+    </Background>
   );
 }
 
@@ -137,6 +141,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   searchBar: {
+    backgroundColor: "transparent",
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    borderTopColor: "transparent",
+    borderBottomColor: "transparent",
+    marginBottom: Margin.md,
+    padding: 0,
     width: "100%",
   },
   separator: {
