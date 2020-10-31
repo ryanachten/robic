@@ -1,3 +1,4 @@
+export * from "./Background";
 export * from "./ErrorToast";
 export * from "./ExerciseForm";
 export * from "./Stopwatch";

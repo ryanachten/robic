@@ -5,9 +5,9 @@ import React, {
   useState,
   Dispatch,
 } from "react";
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator } from "react-native";
 import { Picker } from "native-base";
-import { Text, ErrorToast, ExerciseForm } from "../components";
+import { Text, ErrorToast, ExerciseForm, Background } from "../components";
 import { UserContext } from "../services/context";
 import {
   exerciseDefinitionReducer,
@@ -38,7 +38,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Background>
       {!selectedDefintion && (
         <Text style={styles.title}>Hello {firstName}!</Text>
       )}
@@ -66,17 +66,11 @@ export default function HomeScreen() {
       )}
       {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
       <ErrorToast error={error} />
-    </View>
+    </Background>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    padding: Margin.md,
-  },
   title: {
     fontSize: 20,
     fontWeight: "bold",

@@ -5,6 +5,7 @@ export enum Colors {
   white = "#fff",
   black = "#4A4A4A",
   orange = "#ff9100",
+  lilac = "#F4F3FF",
 }
 
 export default {
