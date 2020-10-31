@@ -5,7 +5,7 @@ import { formatDistance } from "date-fns";
 import { Picker } from "native-base";
 import { SearchBar } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Background, Button, ErrorToast, Text } from "../components";
+import { Background, Button, Card, ErrorToast, Text } from "../components";
 import { ExercisesParamList } from "../types";
 import {
   exerciseDefinitionReducer,
@@ -99,23 +99,25 @@ export default function ExercisesScreen({ navigation }: Props) {
                   })
                 }
               >
-                <Text>{title}</Text>
-                {lastSession && (
-                  <Text style={styles.exerciseDate}>
-                    {`${formatDistance(
-                      new Date(lastSession.date),
-                      Date.now()
-                    )} ago`}
-                  </Text>
-                )}
-                {lastImprovement && (
+                <Card>
+                  <Text>{title}</Text>
+                  {lastSession && (
+                    <Text style={styles.exerciseDate}>
+                      {`${formatDistance(
+                        new Date(lastSession.date),
+                        Date.now()
+                      )} ago`}
+                    </Text>
+                  )}
+                  {lastImprovement && (
+                    <Text style={styles.exerciseImprovement}>
+                      {lastImprovement}%
+                    </Text>
+                  )}
                   <Text style={styles.exerciseImprovement}>
-                    {lastImprovement}%
+                    Sessions: {history.length}
                   </Text>
-                )}
-                <Text style={styles.exerciseImprovement}>
-                  Sessions: {history.length}
-                </Text>
+                </Card>
               </TouchableOpacity>
             )
           )}
@@ -127,12 +129,11 @@ export default function ExercisesScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    flex: 1,
+    // alignItems: "center",
+    // flex: 1,
   },
   exerciseItem: {
-    flexDirection: "row",
-    marginBottom: 10,
+    marginBottom: Margin.sm,
   },
   exerciseDate: {
     marginLeft: 10,

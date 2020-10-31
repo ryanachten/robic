@@ -22,6 +22,7 @@ import { Stopwatch } from "./Stopwatch";
 import { Text } from "./Themed";
 import { Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
+import { Card } from "./Card";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -125,7 +126,7 @@ export const ExerciseForm = ({
                   ? `Current Set (${setDisplayNumber})`
                   : `Set ${setDisplayNumber}`
               } `}</Text>
-              <View style={styles.inputWrapper}>
+              <Card style={styles.inputWrapper}>
                 <Input
                   containerStyle={styles.inputContainer}
                   label="Reps"
@@ -151,7 +152,7 @@ export const ExerciseForm = ({
                     onPress={() => removeSet(index)}
                   />
                 )}
-              </View>
+              </Card>
             </View>
           );
         })}
@@ -184,21 +185,7 @@ const styles = StyleSheet.create({
     minWidth: "100%",
   },
   inputWrapper: {
-    backgroundColor: Colors.white,
-    borderRadius: 3,
-    flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    overflow: "visible",
-    padding: Margin.md,
     marginBottom: Margin.sm,
-    shadowColor: "rgba(0, 0, 0, 0.4)",
-    shadowOffset: {
-      height: 1,
-      width: 1,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 1,
   },
   inputWrapperInactive: {
     opacity: 0.4,
