@@ -20,7 +20,7 @@ import {
   sortByImprovment,
   sortByNumberOfSessions,
 } from "../utilities/searchHelpers";
-import { Margin } from "../constants/Sizes";
+import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 
 enum SortBy {
@@ -45,7 +45,7 @@ export default function ExercisesScreen({ navigation }: Props) {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.lastActive);
 
   return (
-    <Background style={styles.container}>
+    <Background>
       <SearchBar
         lightTheme={useColorScheme() === "light"}
         containerStyle={styles.searchBar}
@@ -69,7 +69,7 @@ export default function ExercisesScreen({ navigation }: Props) {
         />
       </Picker>
       {loading && <ActivityIndicator size="large" />}
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView>
         {definitions
           ?.sort((a, b) => {
             switch (sortBy) {
@@ -100,7 +100,7 @@ export default function ExercisesScreen({ navigation }: Props) {
                 }
               >
                 <Card>
-                  <Text>{title}</Text>
+                  <Text style={styles.exerciseTitle}>{title}</Text>
                   {lastSession && (
                     <Text style={styles.exerciseDate}>
                       {`${formatDistance(
@@ -128,10 +128,6 @@ export default function ExercisesScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // alignItems: "center",
-    // flex: 1,
-  },
   exerciseItem: {
     marginBottom: Margin.sm,
   },
@@ -141,13 +137,18 @@ const styles = StyleSheet.create({
   exerciseImprovement: {
     marginLeft: 10,
   },
+  exerciseTitle: {
+    fontSize: FontSize.heading,
+    marginBottom: Margin.sm,
+    width: "100%",
+  },
   searchBar: {
     backgroundColor: "transparent",
     borderTopWidth: 0,
     borderBottomWidth: 0,
     borderTopColor: "transparent",
     borderBottomColor: "transparent",
-    marginBottom: Margin.md,
+    marginBottom: Margin.sm,
     padding: 0,
     width: "100%",
   },
