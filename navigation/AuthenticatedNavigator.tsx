@@ -1,6 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  StackHeaderLeftButtonProps,
+} from "@react-navigation/stack";
 import { Icon } from "react-native-elements";
 
 import { Colors } from "../constants/Colors";
@@ -13,13 +16,14 @@ import {
 import HomeScreen from "../screens/HomeScreen";
 import ExercisesScreen from "../screens/ExercisesScreen";
 import ExerciseDetailScreen from "../screens/ExerciseDetailScreen";
-import { LogoutButton } from "../components/LogoutButton";
+import { BackButton, LogoutButton } from "../components/NavigationButtons";
 import ExerciseEditScreen from "../screens/ExerciseEditScreen";
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
 const sharedScreenOptions = {
   headerRight: () => <LogoutButton />,
+  headerLeft: (props: StackHeaderLeftButtonProps) => <BackButton {...props} />,
 };
 
 export default function AuthenticatedNavigator() {

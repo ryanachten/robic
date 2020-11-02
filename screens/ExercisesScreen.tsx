@@ -5,7 +5,7 @@ import { formatDistance } from "date-fns";
 import { Picker } from "native-base";
 import { SearchBar } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Background, Button, Card, ErrorToast, Fab, Text } from "../components";
+import { Background, Card, ErrorToast, Fab, Text } from "../components";
 import { ExercisesParamList } from "../types";
 import {
   exerciseDefinitionReducer,
@@ -169,11 +169,6 @@ const styles = StyleSheet.create({
     marginBottom: Margin.sm,
     padding: 0,
     width: "100%",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
   pickerWrapper: {
     alignItems: "center",
