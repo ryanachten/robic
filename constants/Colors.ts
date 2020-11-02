@@ -4,7 +4,9 @@ const tintColorDark = "#fff";
 export enum Colors {
   white = "#fff",
   black = "#4A4A4A",
+  red = "#ff5353",
   orange = "#ff9100",
+  green = "#28a745",
   lilac = "#F4F3FF",
 }
 

@@ -52,7 +52,7 @@ export default function ExercisesScreen({ navigation }: Props) {
         inputContainerStyle={{
           backgroundColor: Colors.white,
         }}
-        placeholder="Type Here..."
+        placeholder="Search exercises..."
         onChangeText={setSearchTerm}
         value={searchTerm}
       />
@@ -110,12 +110,22 @@ export default function ExercisesScreen({ navigation }: Props) {
                     </Text>
                   )}
                   {lastImprovement && (
-                    <Text style={styles.exerciseImprovement}>
-                      {lastImprovement}%
+                    <Text
+                      style={[
+                        styles.exerciseImprovement,
+                        {
+                          color:
+                            lastImprovement > 0 ? Colors.green : Colors.red,
+                        },
+                      ]}
+                    >
+                      {`${lastImprovement > 0 ? "+" : ""}${lastImprovement}%`}
                     </Text>
                   )}
                   <Text style={styles.exerciseImprovement}>
-                    Sessions: {history.length}
+                    {history.length === 0
+                      ? "Unattempted!"
+                      : `Sessions: ${history.length}`}
                   </Text>
                 </Card>
               </TouchableOpacity>
@@ -132,10 +142,10 @@ const styles = StyleSheet.create({
     marginBottom: Margin.sm,
   },
   exerciseDate: {
-    marginLeft: 10,
+    marginRight: Margin.sm,
   },
   exerciseImprovement: {
-    marginLeft: 10,
+    marginRight: Margin.sm,
   },
   exerciseTitle: {
     fontSize: FontSize.heading,
