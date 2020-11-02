@@ -20,10 +20,11 @@ export const LogoutButton = () => {
 };
 
 export const BackButton = (props: StackHeaderLeftButtonProps) => {
-  return props.canGoBack ? (
+  const { canGoBack, label } = props;
+  return canGoBack ? (
     <TouchableOpacity style={styles.backWrapper} {...props}>
       <Icon color={Colors.orange} name="keyboard-arrow-left" />
-      <Text style={styles.text}>{props.label}</Text>
+      <Text style={styles.text}>{label}</Text>
     </TouchableOpacity>
   ) : null;
 };

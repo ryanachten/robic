@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
-import { Text, View } from "../components/Themed";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { Text } from "../components/Themed";
 import { ExercisesParamList } from "../types";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -10,8 +10,10 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { ErrorToast } from "../components/ErrorToast";
-import { formatDistance } from "date-fns";
 import { ExerciseCard } from "../components/ExerciseCard";
+import { Background } from "../components";
+import { Margin } from "../constants/Sizes";
+import { Colors } from "../constants/Colors";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
@@ -33,12 +35,12 @@ export default function ExerciseDetailScreen({ route }: Props) {
   const exercise = definitions.find((def) => def.id === definitionId);
 
   return (
-    <View style={styles.container}>
+    <Background>
       <Text style={styles.title}>{exercise?.title}</Text>
       {loading && <ActivityIndicator size="large" />}
       {exercise && <DefinitionDetail definition={exercise} />}
       <ErrorToast error={error} />
-    </View>
+    </Background>
   );
 }
 
@@ -56,7 +58,7 @@ const DefinitionDetail = ({
     personalBest: pb,
   } = definition;
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Unit: {unit}</Text>
       {type && <Text>Type: {type}</Text>}
       {primaryMuscleGroup && (
@@ -64,33 +66,54 @@ const DefinitionDetail = ({
       )}
       {lastImprovement && <Text>Last improvement: {lastImprovement}%</Text>}
       {lastSession && (
-        <ExerciseCard title="Latest Exercise" exercise={lastSession} />
+        <ExerciseCard
+          icon="schedule"
+          containerStyle={styles.exerciseCard}
+          title="Latest Exercise"
+          exercise={lastSession}
+        />
       )}
       {pb && (
         <View>
-          <ExerciseCard title="Personal Best" exercise={pb.topNetExercise} />
-          <Text>Top average value: {pb.topAvgValue}</Text>
-          <Text>Top reps: {pb.topReps}</Text>
-          <Text>Top sets: {pb.topSets}</Text>
+          <ExerciseCard
+            icon="star"
+            title="Personal Best"
+            exercise={pb.topNetExercise}
+            containerStyle={styles.exerciseCard}
+          />
+          <View style={styles.pbWrapper}>
+            <Item label="Top Weight (Avg)" value={pb.topAvgValue.toString()} />
+            <Item label="Top Reps" value={pb.topReps.toString()} />
+            <Item label="Top Sets" value={pb.topSets.toString()} />
+          </View>
         </View>
       )}
     </View>
   );
 };
 
+const Item = ({ label, value }: { label: string; value: string }) => (
+  <View>
+    <Text style={styles.label}>{label}</Text>
+    <Text>{value}</Text>
+  </View>
+);
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    width: "100%",
+  },
+  exerciseCard: {
+    marginBottom: Margin.md,
+  },
+  pbWrapper: {
+    flexDirection: "row",
+  },
+  label: {
+    color: Colors.grey,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
 });

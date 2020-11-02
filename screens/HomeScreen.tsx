@@ -15,7 +15,6 @@ import {
   exerciseDefinitionActions,
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
-import { Margin } from "../constants/Sizes";
 
 export default function HomeScreen() {
   const {
