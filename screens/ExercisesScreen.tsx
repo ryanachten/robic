@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { Picker } from "native-base";
@@ -46,6 +46,12 @@ export default function ExercisesScreen({ navigation }: Props) {
 
   return (
     <Background>
+      <Fab
+        containerStyles={styles.addExerciseButton}
+        label="Create exercise"
+        icon="add"
+        onPress={() => navigation.navigate("ExerciseEditScreen")}
+      />
       <SearchBar
         lightTheme={useColorScheme() === "light"}
         containerStyle={styles.searchBar}
@@ -56,21 +62,17 @@ export default function ExercisesScreen({ navigation }: Props) {
         onChangeText={setSearchTerm}
         value={searchTerm}
       />
-      <Fab
-        containerStyles={styles.addExerciseButton}
-        label="Create exercise"
-        icon="add"
-        onPress={() => navigation.navigate("ExerciseEditScreen")}
-      />
-      <Text>Sort by:</Text>
-      <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
-        <Picker.Item label="Last active" value={SortBy.lastActive} />
-        <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
-        <Picker.Item
-          label="Number of sessions"
-          value={SortBy.numberOfSessions}
-        />
-      </Picker>
+      <View style={styles.pickerWrapper}>
+        <Text>Sort by:</Text>
+        <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
+          <Picker.Item label="Last active" value={SortBy.lastActive} />
+          <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
+          <Picker.Item
+            label="Number of sessions"
+            value={SortBy.numberOfSessions}
+          />
+        </Picker>
+      </View>
       {loading && <ActivityIndicator size="large" />}
       <ScrollView>
         {definitions
@@ -172,5 +174,9 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  pickerWrapper: {
+    alignItems: "center",
+    flexDirection: "row",
   },
 });

@@ -5,7 +5,7 @@ import React, {
   useState,
   Dispatch,
 } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, View } from "react-native";
 import { Picker } from "native-base";
 import { Text, ErrorToast, ExerciseForm, Background } from "../components";
 import { UserContext } from "../services/context";
@@ -45,7 +45,7 @@ export default function HomeScreen() {
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <>
+        <View style={styles.pickerWrapper}>
           <Text>Select an exercise:</Text>
           <Picker
             note
@@ -61,7 +61,7 @@ export default function HomeScreen() {
               return <Picker.Item key={id} label={title} value={id} />;
             })}
           </Picker>
-        </>
+        </View>
       )}
       {selectedDefintion && <ExerciseForm definition={selectedDefintion} />}
       <ErrorToast error={error} />
@@ -70,6 +70,10 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  pickerWrapper: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
