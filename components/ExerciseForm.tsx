@@ -16,7 +16,7 @@ import {
 } from "../reducers/exercise";
 import { ExerciseDefinition, Set } from "../constants/Interfaces";
 import { ErrorToast } from "./ErrorToast";
-import { Button } from "./Button";
+import { Button, Fab } from "./Button";
 import { Input } from "./Input";
 import { Stopwatch } from "./Stopwatch";
 import { Text } from "./Themed";
@@ -102,16 +102,12 @@ export const ExerciseForm = ({
         onPress={submitExercise}
         loading={loading}
       />
-      <View style={styles.addSetButton}>
-        <Text>Add Set</Text>
-        <Icon
-          color={Colors.orange}
-          containerStyle={styles.addSetButtonIcon}
-          name="add"
-          raised
-          onPress={() => addSet()}
-        />
-      </View>
+      <Fab
+        containerStyles={styles.addSetButton}
+        label="Add Set"
+        icon="add"
+        onPress={() => addSet()}
+      />
       <ScrollView>
         {sets.map(({ reps, value }: Set, index: number) => {
           const activeSet = index === 0;
@@ -164,17 +160,7 @@ export const ExerciseForm = ({
 
 const styles = StyleSheet.create({
   addSetButton: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
     marginBottom: Margin.md,
-    maxHeight: 60,
-    minHeight: 60,
-  },
-  addSetButtonIcon: {
-    width: 60,
-    margin: 0,
-    marginLeft: Margin.sm,
   },
   button: {
     marginBottom: Margin.sm,

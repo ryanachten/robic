@@ -50,7 +50,6 @@ export default function HomeScreen() {
           <Picker
             note
             placeholder="No excercise selected"
-            style={{ width: 120 }}
             selectedValue={selectedDefintion?.id}
             onValueChange={(id) => {
               const definition = definitions.find((def) => def.id === id);

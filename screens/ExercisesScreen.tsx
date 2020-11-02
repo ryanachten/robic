@@ -5,7 +5,7 @@ import { formatDistance } from "date-fns";
 import { Picker } from "native-base";
 import { SearchBar } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Background, Button, Card, ErrorToast, Text } from "../components";
+import { Background, Button, Card, ErrorToast, Fab, Text } from "../components";
 import { ExercisesParamList } from "../types";
 import {
   exerciseDefinitionReducer,
@@ -56,10 +56,13 @@ export default function ExercisesScreen({ navigation }: Props) {
         onChangeText={setSearchTerm}
         value={searchTerm}
       />
-      <Button
-        title="Create exercise"
+      <Fab
+        containerStyles={styles.addExerciseButton}
+        label="Create exercise"
+        icon="add"
         onPress={() => navigation.navigate("ExerciseEditScreen")}
       />
+      <Text>Sort by:</Text>
       <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
         <Picker.Item label="Last active" value={SortBy.lastActive} />
         <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
@@ -138,6 +141,9 @@ export default function ExercisesScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+  addExerciseButton: {
+    marginBottom: Margin.md,
+  },
   exerciseItem: {
     marginBottom: Margin.sm,
   },
