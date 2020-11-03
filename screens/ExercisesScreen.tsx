@@ -64,7 +64,12 @@ export default function ExercisesScreen({ navigation }: Props) {
       />
       <View style={styles.pickerWrapper}>
         <Text>Sort by:</Text>
-        <Picker note selectedValue={sortBy} onValueChange={setSortBy}>
+        <Picker
+          note
+          selectedValue={sortBy}
+          onValueChange={setSortBy}
+          headerBackButtonTextStyle={{ color: Colors.orange }}
+        >
           <Picker.Item label="Last active" value={SortBy.lastActive} />
           <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
           <Picker.Item

@@ -72,6 +72,7 @@ export default function ExerciseEditScreen({ navigation }: Props) {
         InputComponent={forwardRef(() => (
           <Picker
             note
+            headerBackButtonTextStyle={{ color: Colors.orange }}
             selectedValue={unit}
             placeholder="Select unit"
             onValueChange={setUnit}

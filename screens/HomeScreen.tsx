@@ -15,6 +15,7 @@ import {
   exerciseDefinitionActions,
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
+import { Colors } from "../constants/Colors";
 
 export default function HomeScreen() {
   const {
@@ -48,6 +49,7 @@ export default function HomeScreen() {
           <Text>Select an exercise:</Text>
           <Picker
             note
+            headerBackButtonTextStyle={{ color: Colors.orange }}
             placeholder="No excercise selected"
             selectedValue={selectedDefintion?.id}
             onValueChange={(id) => {
