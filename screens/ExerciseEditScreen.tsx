@@ -5,7 +5,7 @@ import { ExercisesParamList } from "../types";
 import { MuscleGroup, Unit } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
-import { Badge, Button, CheckBox, Overlay } from "react-native-elements";
+import { CheckBox, Overlay } from "react-native-elements";
 import { Picker } from "native-base";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {
@@ -15,7 +15,7 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { UserContext } from "../services/context";
-import { Background, Input } from "../components";
+import { Background, Badge, Button, Input } from "../components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 
@@ -108,10 +108,21 @@ export default function ExerciseEditScreen({ navigation }: Props) {
       <Overlay
         isVisible={modalVisible}
         onBackdropPress={() => setModalVisible(false)}
+        overlayStyle={styles.overlay}
       >
         <ScrollView>
+          <View style={styles.badgeWrapper}>
+            {muscleGroups.map((group, index) => (
+              <Badge key={index} value={group} />
+            ))}
+          </View>
           {Object.keys(MuscleGroup).map((key, index) => (
             <CheckBox
+              iconType="material"
+              checkedIcon="check"
+              uncheckedIcon="check-box-outline-blank"
+              checkedColor={Colors.orange}
+              containerStyle={[styles.checkbox]}
               key={index}
               title={key}
               checked={muscleGroups.includes(key as MuscleGroup)}
@@ -142,11 +153,26 @@ const styles = StyleSheet.create({
   badgeWrapper: {
     flex: 1,
     flexDirection: "row",
+    flexWrap: "wrap",
     marginBottom: Margin.sm,
     marginTop: Margin.sm,
   },
+  checkbox: {
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    margin: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: Margin.sm,
+    padding: 0,
+  },
   input: {
     marginBottom: Margin.md,
+  },
+  overlay: {
+    height: "80%",
+    width: "80%",
+    padding: Margin.md,
   },
   placeholder: {
     color: Colors.grey,

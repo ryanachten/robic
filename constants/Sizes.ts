@@ -7,4 +7,5 @@ export enum Margin {
 export enum FontSize {
   heading = 20,
   paragraph = 16,
+  caption = 12,
 }
