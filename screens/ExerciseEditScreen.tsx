@@ -1,11 +1,11 @@
 import React, { forwardRef, useContext, useReducer, useState } from "react";
-import { StyleSheet } from "react-native";
-import { Text, View } from "../components/Themed";
+import { StyleSheet, View } from "react-native";
+import { Text } from "../components/Themed";
 import { ExercisesParamList } from "../types";
 import { MuscleGroup, Unit } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
-import { Badge, Button, CheckBox, Input, Overlay } from "react-native-elements";
+import { Badge, Button, CheckBox, Overlay } from "react-native-elements";
 import { Picker } from "native-base";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {
@@ -15,13 +15,16 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { UserContext } from "../services/context";
+import { Background, Input } from "../components";
+import { Colors } from "../constants/Colors";
+import { Margin } from "../constants/Sizes";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
 export default function ExerciseEditScreen({ navigation }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState("");
-  const [unit, setUnit] = useState(Unit.bodyweight);
+  const [unit, setUnit] = useState("");
   const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>([]);
 
   const {
@@ -55,17 +58,24 @@ export default function ExerciseEditScreen({ navigation }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <Background>
       <Input
+        containerStyle={styles.input}
         label="Title"
         placeholder="i.e. Squat"
         value={title}
         onChange={(e) => setTitle(e.nativeEvent.text)}
       />
       <Input
+        containerStyle={styles.input}
         label="Unit"
         InputComponent={forwardRef(() => (
-          <Picker note selectedValue={unit} onValueChange={setUnit}>
+          <Picker
+            note
+            selectedValue={unit}
+            placeholder="Select unit"
+            onValueChange={setUnit}
+          >
             {Object.keys(Unit).map((key, index) => (
               <Picker.Item key={index} label={key} value={key} />
             ))}
@@ -73,12 +83,15 @@ export default function ExerciseEditScreen({ navigation }: Props) {
         ))}
       />
       <Input
+        containerStyle={styles.input}
         label="Muscle Groups"
         InputComponent={forwardRef(() => (
           <View style={styles.badgeWrapper}>
             {muscleGroups.length === 0 ? (
               <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <Text>Select exercise muscle group</Text>
+                <Text style={styles.placeholder}>
+                  Select exercise muscle group
+                </Text>
               </TouchableOpacity>
             ) : (
               muscleGroups.map((group, index) => (
@@ -121,19 +134,22 @@ export default function ExerciseEditScreen({ navigation }: Props) {
       />
 
       <ErrorToast error={error} />
-    </View>
+    </Background>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   badgeWrapper: {
     flex: 1,
     flexDirection: "row",
+    marginBottom: Margin.sm,
+    marginTop: Margin.sm,
+  },
+  input: {
+    marginBottom: Margin.md,
+  },
+  placeholder: {
+    color: Colors.grey,
   },
   title: {
     fontSize: 20,
