@@ -11,6 +11,16 @@ export enum Colors {
   lilac = "#F4F3FF",
 }
 
+export const boxShadowStyles = {
+  shadowColor: "rgba(0, 0, 0, 0.4)",
+  shadowOffset: {
+    height: 1,
+    width: 1,
+  },
+  shadowOpacity: 1,
+  shadowRadius: 1,
+};
+
 export default {
   light: {
     text: "#4A4A4A",

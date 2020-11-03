@@ -4,7 +4,7 @@ import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { Text } from "./Themed";
 import { Exercise } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
-import { Colors } from "../constants/Colors";
+import { boxShadowStyles, Colors } from "../constants/Colors";
 import { Icon } from "react-native-elements";
 
 type ExerciseCardProps = {
@@ -39,7 +39,8 @@ export const ExerciseCard = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-    padding: Margin.sm,
+    padding: Margin.md,
+    ...boxShadowStyles,
   },
   setWrapper: {
     flexDirection: "row",

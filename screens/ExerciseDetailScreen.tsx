@@ -12,7 +12,7 @@ import {
 import { ErrorToast } from "../components/ErrorToast";
 import { ExerciseCard } from "../components/ExerciseCard";
 import { Background } from "../components";
-import { Margin } from "../constants/Sizes";
+import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
@@ -59,12 +59,6 @@ const DefinitionDetail = ({
   } = definition;
   return (
     <View style={styles.container}>
-      <Text>Unit: {unit}</Text>
-      {type && <Text>Type: {type}</Text>}
-      {primaryMuscleGroup && (
-        <Text>Muscles groups: {primaryMuscleGroup.join(", ")}</Text>
-      )}
-      {lastImprovement && <Text>Last improvement: {lastImprovement}%</Text>}
       {lastSession && (
         <ExerciseCard
           icon="schedule"
@@ -81,19 +75,28 @@ const DefinitionDetail = ({
             exercise={pb.topNetExercise}
             containerStyle={styles.exerciseCard}
           />
-          <View style={styles.pbWrapper}>
+          <View style={styles.itemWrapper}>
             <Item label="Top Weight (Avg)" value={pb.topAvgValue.toString()} />
             <Item label="Top Reps" value={pb.topReps.toString()} />
             <Item label="Top Sets" value={pb.topSets.toString()} />
           </View>
         </View>
       )}
+      <View style={styles.itemWrapper}>
+        {type && <Item label="Type" value={type} />}
+        {primaryMuscleGroup && (
+          <Item label="Muscles groups" value={primaryMuscleGroup.join(", ")} />
+        )}
+        {lastImprovement && (
+          <Item label="Last improvement" value={`${lastImprovement}%`} />
+        )}
+      </View>
     </View>
   );
 };
 
 const Item = ({ label, value }: { label: string; value: string }) => (
-  <View>
+  <View style={styles.item}>
     <Text style={styles.label}>{label}</Text>
     <Text>{value}</Text>
   </View>
@@ -106,14 +109,19 @@ const styles = StyleSheet.create({
   exerciseCard: {
     marginBottom: Margin.md,
   },
-  pbWrapper: {
+  item: {
+    alignItems: "center",
+  },
+  itemWrapper: {
     flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: Margin.md,
   },
   label: {
     color: Colors.grey,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: FontSize.heading,
+    marginBottom: Margin.md,
   },
 });
