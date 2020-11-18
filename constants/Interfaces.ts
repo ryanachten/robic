@@ -56,6 +56,16 @@ export type PersonalBest = {
   topAvgValue: number;
   topReps: Number;
   topSets: Number;
+  history: PersonalBestHistory[];
+};
+
+export type PersonalBestHistory = {
+  date: string;
+  netValue: number;
+  avgValue: number;
+  avgReps: number;
+  sets: number;
+  timeTaken: number;
 };
 
 export interface Exercise {

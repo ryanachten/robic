@@ -2,6 +2,8 @@ export * from "./Background";
 export * from "./Badge";
 export * from "./Button";
 export * from "./Card";
+export * from "./ExerciseCard";
+export * from "./ExerciseDetailAnalytics";
 export * from "./ExerciseForm";
 export * from "./ErrorToast";
 export * from "./Input";

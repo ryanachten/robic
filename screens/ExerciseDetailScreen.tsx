@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { ScrollView, StyleSheet, View, ActivityIndicator } from "react-native";
 import { Text } from "../components/Themed";
 import { ExercisesParamList } from "../types";
 import { ExerciseDefinition } from "../constants/Interfaces";
@@ -9,9 +9,12 @@ import {
   exerciseDefinitionReducer,
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
-import { ErrorToast } from "../components/ErrorToast";
-import { ExerciseCard } from "../components/ExerciseCard";
-import { Background } from "../components";
+import {
+  Background,
+  ExerciseCard,
+  ExerciseDetailAnalytics,
+  ErrorToast,
+} from "../components";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 
@@ -57,8 +60,9 @@ const DefinitionDetail = ({
     lastImprovement,
     personalBest: pb,
   } = definition;
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {lastSession && (
         <ExerciseCard
           icon="schedule"
@@ -91,7 +95,8 @@ const DefinitionDetail = ({
           <Item label="Last improvement" value={`${lastImprovement}%`} />
         )}
       </View>
-    </View>
+      {pb && <ExerciseDetailAnalytics history={pb.history} />}
+    </ScrollView>
   );
 };
 
