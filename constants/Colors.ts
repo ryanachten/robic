@@ -9,6 +9,7 @@ export enum Colors {
   orange = "#ff9100",
   green = "#28a745",
   lilac = "#F4F3FF",
+  purple = "#8050D0"
 }
 
 export const boxShadowStyles = {
