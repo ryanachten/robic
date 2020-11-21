@@ -32,6 +32,7 @@ export default function HomeScreen() {
 
   return (
     <Background>
+      <ErrorToast error={error} />
       {!selectedDefintion && (
         <Text style={styles.title}>Hello {firstName}!</Text>
       )}
@@ -54,7 +55,6 @@ export default function HomeScreen() {
           <ExerciseForm definition={selectedDefintion} />
         </>
       )}
-      {/* <ErrorToast error={error} /> */}
     </Background>
   );
 }
