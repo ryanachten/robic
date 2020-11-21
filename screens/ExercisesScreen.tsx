@@ -55,6 +55,7 @@ export default function ExercisesScreen({ navigation }: Props) {
 
   return (
     <Background>
+      <ErrorToast error={error} />
       <Fab
         containerStyles={styles.addExerciseButton}
         label="Create exercise"
@@ -147,7 +148,6 @@ export default function ExercisesScreen({ navigation }: Props) {
               </TouchableOpacity>
             )
           )}
-        <ErrorToast error={error} />
       </ScrollView>
     </Background>
   );
