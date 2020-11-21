@@ -1,5 +1,6 @@
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider } from "@ui-kitten/components";
 import { StatusBar } from "expo-status-bar";
-import { Root } from "native-base";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -16,9 +17,9 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <Root>
+        <ApplicationProvider {...eva} theme={eva.light}>
           <Navigation colorScheme={colorScheme} />
-        </Root>
+        </ApplicationProvider>
         <StatusBar />
       </SafeAreaProvider>
     );
