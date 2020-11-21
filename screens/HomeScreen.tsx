@@ -39,10 +39,10 @@ export default function HomeScreen() {
       {selectedDefintion && (
         <>
           <View style={styles.pickerWrapper}>
-            <Text>Select an exercise:</Text>
+            <Text style={styles.pickerLabel}>Select an exercise:</Text>
             <Select
               value={selectedDefintion.title}
-              style={{ width: "100%" }}
+              style={styles.picker}
               selectedIndex={selectedIndex}
               onSelect={(index) => setSelectedIndex(index as IndexPath)}
             >
@@ -62,6 +62,12 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   pickerWrapper: {
     marginBottom: Margin.md,
+    width: "100%",
+  },
+  pickerLabel: {
+    marginBottom: Margin.sm,
+  },
+  picker: {
     width: "100%",
   },
   title: {

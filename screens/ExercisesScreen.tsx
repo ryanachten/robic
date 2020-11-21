@@ -2,7 +2,6 @@ import React, { useEffect, useReducer, useState } from "react";
 import { StyleSheet, ActivityIndicator, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
-import { Picker } from "native-base";
 import { SearchBar } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Background, Card, ErrorToast, Fab, Text } from "../components";
@@ -22,12 +21,19 @@ import {
 } from "../utilities/searchHelpers";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
+import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 
 enum SortBy {
   lastActive = "lastActive",
   lastImprovement = "lastImprovement",
   numberOfSessions = "numberOfSessions",
 }
+
+const sortOptions = [
+  { value: SortBy.lastActive, label: "Last Active" },
+  { value: SortBy.lastImprovement, label: "Last Improvement" },
+  { value: SortBy.numberOfSessions, label: "Number of Sessions" },
+];
 
 type Props = StackScreenProps<ExercisesParamList, "ExercisesScreen">;
 
@@ -42,7 +48,10 @@ export default function ExercisesScreen({ navigation }: Props) {
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState<SortBy>(SortBy.lastActive);
+  const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
+    new IndexPath(0)
+  );
+  const sortBy = sortOptions[selectedIndex.row];
 
   return (
     <Background>
@@ -63,26 +72,23 @@ export default function ExercisesScreen({ navigation }: Props) {
         value={searchTerm}
       />
       <View style={styles.pickerWrapper}>
-        <Text>Sort by:</Text>
-        <Picker
-          note
-          selectedValue={sortBy}
-          onValueChange={setSortBy}
-          headerBackButtonTextStyle={{ color: Colors.orange }}
+        <Text style={styles.pickerLabel}>Select an exercise:</Text>
+        <Select
+          value={sortBy.label}
+          style={styles.picker}
+          selectedIndex={selectedIndex}
+          onSelect={(index) => setSelectedIndex(index as IndexPath)}
         >
-          <Picker.Item label="Last active" value={SortBy.lastActive} />
-          <Picker.Item label="Most improved" value={SortBy.lastImprovement} />
-          <Picker.Item
-            label="Number of sessions"
-            value={SortBy.numberOfSessions}
-          />
-        </Picker>
+          {sortOptions.map(({ value, label }) => (
+            <SelectItem key={value} title={label} />
+          ))}
+        </Select>
       </View>
       {loading && <ActivityIndicator size="large" />}
       <ScrollView>
         {definitions
           ?.sort((a, b) => {
-            switch (sortBy) {
+            switch (sortBy.value) {
               case SortBy.lastImprovement:
                 return sortByImprovment(a, b);
               case SortBy.numberOfSessions:
@@ -176,7 +182,13 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   pickerWrapper: {
-    alignItems: "center",
-    flexDirection: "row",
+    marginBottom: Margin.md,
+    width: "100%",
+  },
+  pickerLabel: {
+    marginBottom: Margin.sm,
+  },
+  picker: {
+    width: "100%",
   },
 });
