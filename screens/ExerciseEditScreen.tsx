@@ -1,13 +1,10 @@
-import React, { forwardRef, useContext, useReducer, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "../components/Themed";
 import { ExercisesParamList } from "../types";
 import { MuscleGroup, Unit } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
-import { CheckBox, Overlay } from "react-native-elements";
-import { Picker } from "native-base";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {
   exerciseDefinitionActions,
   ExerciseDefinitionForPost,
@@ -15,17 +12,15 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { UserContext } from "../services/context";
-import { Background, Badge, Button, Input } from "../components";
+import { Background, Button, Input } from "../components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
+import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
 export default function ExerciseEditScreen({ navigation }: Props) {
-  const [modalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState("");
-  const [unit, setUnit] = useState("");
-  const [muscleGroups, setMuscleGroups] = useState<MuscleGroup[]>([]);
 
   const {
     state: { id = "" },
@@ -35,6 +30,18 @@ export default function ExerciseEditScreen({ navigation }: Props) {
     exerciseDefinitionReducer,
     initialExerciseDefinitionState
   );
+
+  const [selectedUnitIndex, setSelectedUnitIndex] = useState<IndexPath>(
+    new IndexPath(0)
+  );
+  const unit = Object.keys(Unit)[selectedUnitIndex.row] as Unit;
+
+  const [selectedMuscleIndex, setSelectedMuscleIndex] = useState<IndexPath[]>(
+    []
+  );
+  const muscleGroups = selectedMuscleIndex.map(
+    (index) => Object.keys(MuscleGroup)[index.row]
+  ) as MuscleGroup[];
 
   const createExercise = async () => {
     const exercise: ExerciseDefinitionForPost = {
@@ -66,85 +73,39 @@ export default function ExerciseEditScreen({ navigation }: Props) {
         value={title}
         onChange={(e) => setTitle(e.nativeEvent.text)}
       />
-      <Input
-        containerStyle={styles.input}
-        label="Unit"
-        InputComponent={forwardRef(() => (
-          <Picker
-            note
-            headerBackButtonTextStyle={{ color: Colors.orange }}
-            selectedValue={unit}
-            placeholder="Select unit"
-            onValueChange={setUnit}
-          >
-            {Object.keys(Unit).map((key, index) => (
-              <Picker.Item key={index} label={key} value={key} />
-            ))}
-          </Picker>
-        ))}
-      />
-      <Input
-        containerStyle={styles.input}
-        label="Muscle Groups"
-        InputComponent={forwardRef(() => (
-          <View style={styles.badgeWrapper}>
-            {muscleGroups.length === 0 ? (
-              <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <Text style={styles.placeholder}>
-                  Select exercise muscle group
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              muscleGroups.map((group, index) => (
-                <Badge
-                  key={index}
-                  value={group}
-                  onPress={() => setModalVisible(true)}
-                />
-              ))
-            )}
-          </View>
-        ))}
-      />
-      <Overlay
-        isVisible={modalVisible}
-        onBackdropPress={() => setModalVisible(false)}
-        overlayStyle={styles.overlay}
-      >
-        <ScrollView>
-          <View style={styles.badgeWrapper}>
-            {muscleGroups.map((group, index) => (
-              <Badge key={index} value={group} />
-            ))}
-          </View>
-          {Object.keys(MuscleGroup).map((key, index) => (
-            <CheckBox
-              iconType="material"
-              checkedIcon="check"
-              uncheckedIcon="check-box-outline-blank"
-              checkedColor={Colors.orange}
-              containerStyle={[styles.checkbox]}
-              key={index}
-              title={key}
-              checked={muscleGroups.includes(key as MuscleGroup)}
-              onPress={() => {
-                const groups = [...muscleGroups];
-                const index = groups.findIndex((group) => group === key);
-                index === -1
-                  ? groups.push(key as MuscleGroup)
-                  : groups.splice(index, 1);
-                setMuscleGroups(groups);
-              }}
-            />
+      <View style={styles.pickerWrapper}>
+        <Text style={styles.pickerLabel}>Select unit:</Text>
+        <Select
+          value={unit}
+          style={styles.picker}
+          selectedIndex={selectedUnitIndex}
+          onSelect={(index) => setSelectedUnitIndex(index as IndexPath)}
+        >
+          {Object.keys(Unit).map((unit) => (
+            <SelectItem key={unit} title={unit} />
           ))}
-        </ScrollView>
-      </Overlay>
+        </Select>
+      </View>
+      <View style={styles.pickerWrapper}>
+        <Text style={styles.pickerLabel}>Select muscle groups:</Text>
+        <Select
+          multiSelect={true}
+          value={muscleGroups.join(", ")}
+          style={styles.picker}
+          selectedIndex={selectedMuscleIndex}
+          onSelect={(index) => setSelectedMuscleIndex(index as IndexPath[])}
+          placeholder="i.e. Glutes"
+        >
+          {Object.keys(MuscleGroup).map((muscle) => (
+            <SelectItem key={muscle} title={muscle} />
+          ))}
+        </Select>
+      </View>
       <Button
         title="Create exercise"
         loading={loading}
         onPress={() => createExercise()}
       />
-
       <ErrorToast error={error} />
     </Background>
   );
@@ -169,6 +130,16 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: Margin.md,
+  },
+  pickerWrapper: {
+    marginBottom: Margin.md,
+    width: "100%",
+  },
+  pickerLabel: {
+    marginBottom: Margin.sm,
+  },
+  picker: {
+    width: "100%",
   },
   overlay: {
     height: "80%",
