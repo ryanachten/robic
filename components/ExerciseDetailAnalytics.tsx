@@ -1,10 +1,4 @@
-import {
-  IndexPath,
-  Select,
-  SelectItem,
-  Tab,
-  TabBar,
-} from "@ui-kitten/components";
+import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { VictoryChart, VictoryTheme, VictoryLine } from "victory-native";

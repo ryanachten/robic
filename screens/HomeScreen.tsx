@@ -1,5 +1,5 @@
 import React, { useContext, useReducer, useEffect, useState } from "react";
-import { StyleSheet, ActivityIndicator, View } from "react-native";
+import { StyleSheet, ActivityIndicator } from "react-native";
 import { Text, ErrorToast, ExerciseForm, Background } from "../components";
 import { UserContext } from "../services/context";
 import {
@@ -39,19 +39,17 @@ export default function HomeScreen() {
       {loading && <ActivityIndicator />}
       {selectedDefintion && (
         <>
-          <View style={styles.pickerWrapper}>
-            <Text style={styles.pickerLabel}>Select an exercise:</Text>
-            <Select
-              value={selectedDefintion.title}
-              style={styles.picker}
-              selectedIndex={selectedIndex}
-              onSelect={(index) => setSelectedIndex(index as IndexPath)}
-            >
-              {definitions.map(({ id, title }) => (
-                <SelectItem key={id} title={title} />
-              ))}
-            </Select>
-          </View>
+          <Select
+            label="Select exercise"
+            value={selectedDefintion.title}
+            style={styles.picker}
+            selectedIndex={selectedIndex}
+            onSelect={(index) => setSelectedIndex(index as IndexPath)}
+          >
+            {definitions.map(({ id, title }) => (
+              <SelectItem key={id} title={title} />
+            ))}
+          </Select>
           <ExerciseForm definition={selectedDefintion} />
         </>
       )}
@@ -60,14 +58,8 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  pickerWrapper: {
-    marginBottom: Margin.md,
-    width: "100%",
-  },
-  pickerLabel: {
-    marginBottom: Margin.sm,
-  },
   picker: {
+    marginBottom: Margin.md,
     width: "100%",
   },
   title: {

@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { StyleSheet, ActivityIndicator, View } from "react-native";
+import { StyleSheet, ActivityIndicator } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { SearchBar } from "react-native-elements";
@@ -72,19 +72,17 @@ export default function ExercisesScreen({ navigation }: Props) {
         onChangeText={setSearchTerm}
         value={searchTerm}
       />
-      <View style={styles.pickerWrapper}>
-        <Text style={styles.pickerLabel}>Select an exercise:</Text>
-        <Select
-          value={sortBy.label}
-          style={styles.picker}
-          selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index as IndexPath)}
-        >
-          {sortOptions.map(({ value, label }) => (
-            <SelectItem key={value} title={label} />
-          ))}
-        </Select>
-      </View>
+      <Select
+        label="Select an exercise"
+        value={sortBy.label}
+        style={styles.picker}
+        selectedIndex={selectedIndex}
+        onSelect={(index) => setSelectedIndex(index as IndexPath)}
+      >
+        {sortOptions.map(({ value, label }) => (
+          <SelectItem key={value} title={label} />
+        ))}
+      </Select>
       {loading && <ActivityIndicator size="large" />}
       <ScrollView>
         {definitions
@@ -181,14 +179,8 @@ const styles = StyleSheet.create({
     padding: 0,
     width: "100%",
   },
-  pickerWrapper: {
-    marginBottom: Margin.md,
-    width: "100%",
-  },
-  pickerLabel: {
-    marginBottom: Margin.sm,
-  },
   picker: {
+    marginBottom: Margin.md,
     width: "100%",
   },
 });

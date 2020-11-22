@@ -1,6 +1,5 @@
 import React, { useContext, useReducer, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Text } from "../components/Themed";
+import { StyleSheet } from "react-native";
 import { ExercisesParamList } from "../types";
 import { MuscleGroup, Unit } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -12,10 +11,10 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { UserContext } from "../services/context";
-import { Background, Button, Input } from "../components";
+import { Background, Button } from "../components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
-import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
+import { Input, IndexPath, Select, SelectItem } from "@ui-kitten/components";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
@@ -67,40 +66,36 @@ export default function ExerciseEditScreen({ navigation }: Props) {
   return (
     <Background>
       <Input
-        containerStyle={styles.input}
+        style={styles.input}
         label="Title"
         placeholder="i.e. Squat"
         value={title}
         onChange={(e) => setTitle(e.nativeEvent.text)}
       />
-      <View style={styles.pickerWrapper}>
-        <Text style={styles.pickerLabel}>Select unit:</Text>
-        <Select
-          value={unit}
-          style={styles.picker}
-          selectedIndex={selectedUnitIndex}
-          onSelect={(index) => setSelectedUnitIndex(index as IndexPath)}
-        >
-          {Object.keys(Unit).map((unit) => (
-            <SelectItem key={unit} title={unit} />
-          ))}
-        </Select>
-      </View>
-      <View style={styles.pickerWrapper}>
-        <Text style={styles.pickerLabel}>Select muscle groups:</Text>
-        <Select
-          multiSelect={true}
-          value={muscleGroups.join(", ")}
-          style={styles.picker}
-          selectedIndex={selectedMuscleIndex}
-          onSelect={(index) => setSelectedMuscleIndex(index as IndexPath[])}
-          placeholder="i.e. Glutes"
-        >
-          {Object.keys(MuscleGroup).map((muscle) => (
-            <SelectItem key={muscle} title={muscle} />
-          ))}
-        </Select>
-      </View>
+      <Select
+        label="Select unit"
+        value={unit}
+        style={styles.picker}
+        selectedIndex={selectedUnitIndex}
+        onSelect={(index) => setSelectedUnitIndex(index as IndexPath)}
+      >
+        {Object.keys(Unit).map((unit) => (
+          <SelectItem key={unit} title={unit} />
+        ))}
+      </Select>
+      <Select
+        label="Select muscle groups"
+        multiSelect={true}
+        value={muscleGroups.join(", ")}
+        style={styles.picker}
+        selectedIndex={selectedMuscleIndex}
+        onSelect={(index) => setSelectedMuscleIndex(index as IndexPath[])}
+        placeholder="i.e. Glutes"
+      >
+        {Object.keys(MuscleGroup).map((muscle) => (
+          <SelectItem key={muscle} title={muscle} />
+        ))}
+      </Select>
       <Button
         title="Create exercise"
         loading={loading}
@@ -131,14 +126,8 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: Margin.md,
   },
-  pickerWrapper: {
-    marginBottom: Margin.md,
-    width: "100%",
-  },
-  pickerLabel: {
-    marginBottom: Margin.sm,
-  },
   picker: {
+    marginBottom: Margin.md,
     width: "100%",
   },
   overlay: {
