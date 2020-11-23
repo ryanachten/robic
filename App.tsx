@@ -1,8 +1,9 @@
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider } from "@ui-kitten/components";
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
@@ -17,6 +18,7 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
+        <IconRegistry icons={EvaIconsPack} />
         <ApplicationProvider {...eva} theme={eva.light}>
           <Navigation colorScheme={colorScheme} />
         </ApplicationProvider>

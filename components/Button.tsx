@@ -6,17 +6,22 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { Button as RnButton, ButtonProps, Icon } from "react-native-elements";
+// import { Button as RnButton, ButtonProps, Icon } from "react-native-elements";
+import {
+  Icon,
+  Button as KittenButton,
+  ButtonProps,
+} from "@ui-kitten/components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import { Text } from "./Themed";
 
 export const Button = (props: ButtonProps) => (
-  <RnButton
+  <KittenButton
     {...props}
-    raised={true}
-    buttonStyle={[styles.button, props.buttonStyle]}
-    titleStyle={[styles.title, props.titleStyle]}
+    // raised={true}
+    // buttonStyle={[styles.button, props.buttonStyle]}
+    // titleStyle={[styles.title, props.titleStyle]}
   />
 );
 
@@ -31,10 +36,9 @@ export const Fab = ({ containerStyles, icon, label, onPress }: FabProps) => (
   <View style={[styles.fabContainer, containerStyles]}>
     <Text>{label}</Text>
     <Icon
-      color={Colors.orange}
-      containerStyle={styles.fabIcon}
+      fill={Colors.orange}
       name={icon}
-      raised
+      style={styles.fabIcon}
       onPress={onPress}
     />
   </View>
@@ -56,7 +60,8 @@ const styles = StyleSheet.create({
     minHeight: 60,
   },
   fabIcon: {
-    width: 60,
+    height: 32,
+    width: 32,
     margin: 0,
     marginLeft: Margin.sm,
   },

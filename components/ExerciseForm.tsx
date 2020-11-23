@@ -97,15 +97,16 @@ export const ExerciseForm = ({
     <View style={styles.container}>
       <Stopwatch ref={stopwatchRef} />
       <Button
-        containerStyle={styles.button}
-        title="Done"
+        // containerStyle={styles.button}
         onPress={submitExercise}
-        loading={loading}
-      />
+        // loading={loading}
+      >
+        Done
+      </Button>
       <Fab
         containerStyles={styles.addSetButton}
         label="Add Set"
-        icon="add"
+        icon="plus-circle-outline"
         onPress={() => addSet()}
       />
       <ScrollView>
@@ -124,7 +125,7 @@ export const ExerciseForm = ({
               } `}</Text>
               <Card style={styles.inputWrapper}>
                 <Input
-                  containerStyle={styles.inputContainer}
+                  style={styles.inputContainer}
                   label="Reps"
                   keyboardType="numeric"
                   value={reps ? reps.toString() : ""}
@@ -133,7 +134,7 @@ export const ExerciseForm = ({
                   }
                 />
                 <Input
-                  containerStyle={styles.inputContainer}
+                  style={styles.inputContainer}
                   label="Weight"
                   keyboardType="numeric"
                   value={value ? value.toString() : ""}
