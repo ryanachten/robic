@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon, Text } from "@ui-kitten/components";
+import { Icon, Spinner, Text } from "@ui-kitten/components";
 import {
   exerciseActions,
   ExerciseForPost,
@@ -95,11 +95,7 @@ export const ExerciseForm = ({
   return (
     <View style={styles.container}>
       <Stopwatch ref={stopwatchRef} />
-      <Button
-        // containerStyle={styles.button}
-        onPress={submitExercise}
-        // loading={loading}
-      >
+      <Button loading={loading} onPress={submitExercise}>
         Done
       </Button>
       <Fab

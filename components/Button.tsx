@@ -9,13 +9,29 @@ import {
 import {
   Icon,
   Button as KittenButton,
-  ButtonProps,
+  ButtonProps as KittenButtonProps,
+  Spinner,
 } from "@ui-kitten/components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import { Text } from "./Themed";
 
-export const Button = (props: ButtonProps) => <KittenButton {...props} />;
+type ButtonProps = KittenButtonProps & {
+  loading?: boolean;
+};
+
+const LoadingIndicator = () => (
+  <View style={styles.loadingIndicator}>
+    <Spinner size="small" status="control" />
+  </View>
+);
+
+export const Button = (props: ButtonProps) => (
+  <KittenButton
+    {...props}
+    accessoryLeft={props.loading ? LoadingIndicator : undefined}
+  />
+);
 
 type FabProps = {
   icon: string;
@@ -53,5 +69,9 @@ const styles = StyleSheet.create({
     width: 32,
     margin: 0,
     marginLeft: Margin.sm,
+  },
+  loadingIndicator: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
