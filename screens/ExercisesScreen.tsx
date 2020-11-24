@@ -4,7 +4,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { SearchBar } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Background, Card, ErrorToast, Fab, Text } from "../components";
+import { Background, Card, ErrorToast, Fab } from "../components";
 import { ExercisesParamList } from "../types";
 import {
   exerciseDefinitionReducer,
@@ -21,7 +21,7 @@ import {
 } from "../utilities/searchHelpers";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
-import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
+import { IndexPath, Select, SelectItem, Text } from "@ui-kitten/components";
 
 enum SortBy {
   lastActive = "lastActive",
@@ -59,7 +59,7 @@ export default function ExercisesScreen({ navigation }: Props) {
       <Fab
         containerStyles={styles.addExerciseButton}
         label="Create exercise"
-        icon="add"
+        icon="plus-circle-outline"
         onPress={() => navigation.navigate("ExerciseEditScreen")}
       />
       <SearchBar
