@@ -11,10 +11,10 @@ import {
   Button as KittenButton,
   ButtonProps as KittenButtonProps,
   Spinner,
+  Text,
 } from "@ui-kitten/components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
-import { Text } from "./Themed";
 
 type ButtonProps = KittenButtonProps & {
   loading?: boolean;
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     height: 32,
     width: 32,
     margin: 0,
-    marginLeft: Margin.sm,
+    marginLeft: Margin.xs,
   },
   loadingIndicator: {
     justifyContent: "center",

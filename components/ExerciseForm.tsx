@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon, Spinner, Text } from "@ui-kitten/components";
+import { Icon, Text } from "@ui-kitten/components";
 import {
   exerciseActions,
   ExerciseForPost,
@@ -140,10 +140,7 @@ export const ExerciseForm = ({
                 {!activeSet && (
                   <Icon
                     fill={Colors.orange}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
+                    style={styles.inputWrapperDeleteIcon}
                     name="slash-outline"
                     onPress={() => removeSet(index)}
                   />
@@ -171,14 +168,20 @@ const styles = StyleSheet.create({
     minWidth: "100%",
   },
   inputWrapper: {
+    alignItems: "center",
     marginBottom: Margin.sm,
   },
   inputWrapperInactive: {
-    opacity: 0.4,
+    opacity: 0.5,
   },
   inputContainer: {
     flexGrow: 1,
     width: "30%",
+  },
+  inputWrapperDeleteIcon: {
+    marginLeft: Margin.sm,
+    height: 24,
+    width: 24,
   },
   inputRepContainer: {
     marginRight: Margin.sm,

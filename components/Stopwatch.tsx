@@ -1,11 +1,12 @@
 // Based on https://codersera.com/blog/first-react-native-app-stopwatch/ implementation
 
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import { useInterval } from "../hooks/useInterval";
-import { Text } from "./Themed";
+import { Text } from "@ui-kitten/components";
+import { Button } from "./Button";
 
 type Lap = { min: number; sec: number; msec: number };
 
@@ -75,12 +76,12 @@ export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
         <Text style={styles.child}>{padToTwo(msec)}</Text>
       </View>
       <View style={styles.buttonParent}>
-        <TouchableOpacity onPress={handleReset}>
-          <Text style={styles.buttonText}>Reset</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleToggle}>
-          <Text style={styles.buttonText}>{!start ? "Start" : "Stop"}</Text>
-        </TouchableOpacity>
+        <Button appearance="ghost" onPress={handleReset}>
+          Reset
+        </Button>
+        <Button appearance="ghost" onPress={handleToggle}>
+          {!start ? "Start" : "Stop"}
+        </Button>
       </View>
     </View>
   );
