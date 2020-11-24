@@ -6,8 +6,8 @@ import React, {
   ElementRef,
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import { Icon, Text } from "@ui-kitten/components";
 import {
   exerciseActions,
   ExerciseForPost,
@@ -19,7 +19,6 @@ import { ErrorToast } from "./ErrorToast";
 import { Button, Fab } from "./Button";
 import { Input } from "./Input";
 import { Stopwatch } from "./Stopwatch";
-import { Text } from "./Themed";
 import { Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 import { Card } from "./Card";
@@ -118,14 +117,14 @@ export const ExerciseForm = ({
               key={index}
               style={[!activeSet && styles.inputWrapperInactive]}
             >
-              <Text style={styles.setNumber}>{`${
+              <Text style={styles.setNumber} appearance="hint">{`${
                 activeSet
                   ? `Current Set (${setDisplayNumber})`
                   : `Set ${setDisplayNumber}`
               } `}</Text>
               <Card style={styles.inputWrapper}>
                 <Input
-                  style={styles.inputContainer}
+                  style={[styles.inputContainer, styles.inputRepContainer]}
                   label="Reps"
                   keyboardType="numeric"
                   value={reps ? reps.toString() : ""}
@@ -144,8 +143,12 @@ export const ExerciseForm = ({
                 />
                 {!activeSet && (
                   <Icon
-                    color={Colors.orange}
-                    name="remove"
+                    fill={Colors.orange}
+                    style={{
+                      height: 24,
+                      width: 24,
+                    }}
+                    name="slash-outline"
                     onPress={() => removeSet(index)}
                   />
                 )}
@@ -180,6 +183,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexGrow: 1,
     width: "30%",
+  },
+  inputRepContainer: {
+    marginRight: Margin.sm,
   },
   setNumber: {
     marginBottom: Margin.sm,

@@ -6,7 +6,6 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-// import { Button as RnButton, ButtonProps, Icon } from "react-native-elements";
 import {
   Icon,
   Button as KittenButton,
@@ -16,14 +15,7 @@ import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import { Text } from "./Themed";
 
-export const Button = (props: ButtonProps) => (
-  <KittenButton
-    {...props}
-    // raised={true}
-    // buttonStyle={[styles.button, props.buttonStyle]}
-    // titleStyle={[styles.title, props.titleStyle]}
-  />
-);
+export const Button = (props: ButtonProps) => <KittenButton {...props} />;
 
 type FabProps = {
   icon: string;
@@ -32,25 +24,22 @@ type FabProps = {
   onPress: (event: GestureResponderEvent) => void;
 };
 
-export const Fab = ({ containerStyles, icon, label, onPress }: FabProps) => (
-  <View style={[styles.fabContainer, containerStyles]}>
-    <Text>{label}</Text>
-    <Icon
-      fill={Colors.orange}
-      name={icon}
-      style={styles.fabIcon}
-      onPress={onPress}
-    />
-  </View>
-);
+export const Fab = ({ containerStyles, icon, label, onPress }: FabProps) => {
+  return (
+    <View style={[styles.fabContainer, containerStyles]}>
+      <Text>{label}</Text>
+      <Icon
+        fill={Colors.orange}
+        styles={styles.fabIcon}
+        name={icon}
+        style={styles.fabIcon}
+        onPress={onPress}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: Colors.white,
-  },
-  title: {
-    color: Colors.orange,
-  },
   fabContainer: {
     flex: 1,
     flexDirection: "row",

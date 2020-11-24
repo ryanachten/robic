@@ -73,5 +73,7 @@
   "color-danger-transparent-300": "rgba(255, 83, 83, 0.24)",
   "color-danger-transparent-400": "rgba(255, 83, 83, 0.32)",
   "color-danger-transparent-500": "rgba(255, 83, 83, 0.4)",
-  "color-danger-transparent-600": "rgba(255, 83, 83, 0.48)"
+  "color-danger-transparent-600": "rgba(255, 83, 83, 0.48)",
+  "text-basic-color": "#4A4A4A",
+  "text-hint-color": "#9a9aa7"
 }
