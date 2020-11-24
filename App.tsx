@@ -9,6 +9,9 @@ import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 
+// Generated via Primary: #FF9100, Success: #35d229, Info: #20CAF9, Warning: #FFB626, Danger: #ff5353
+import { default as theme } from "./robic-theme.json";
+
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -19,7 +22,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <IconRegistry icons={EvaIconsPack} />
-        <ApplicationProvider {...eva} theme={eva.light}>
+        <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
           <Navigation colorScheme={colorScheme} />
         </ApplicationProvider>
         <StatusBar />
