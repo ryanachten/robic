@@ -1,26 +1,31 @@
-import React, { useState, useContext } from 'react';
-import { StyleSheet } from 'react-native';
-import { Button, Input, Card } from 'react-native-elements';
-import { Text, View } from '../components/Themed';
-import { AuthContext } from '../services/context';
+import React, { useState, useContext } from "react";
+import { StyleSheet, View } from "react-native";
+import { Input, Text } from "@ui-kitten/components";
+import { AuthContext } from "../services/context";
+import { Background, Button, ErrorToast } from "../components";
+import { Margin } from "../constants/Sizes";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const {
-    state: { error },
+    state: { error, loading },
     actions: { signIn },
   } = useContext(AuthContext);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <Background style={styles.container}>
+      <ErrorToast error={error} />
+      <Text category="h5" style={styles.title}>
+        Login
+      </Text>
       <Input
         autoCapitalize="none"
         label="Email"
         placeholder="robic@user.com"
         value={email}
         onChange={(e) => setEmail(e.nativeEvent.text)}
+        style={styles.input}
       />
       <Input
         label="Password"
@@ -28,28 +33,25 @@ export default function LoginScreen() {
         value={password}
         secureTextEntry={true}
         onChange={(e) => setPassword(e.nativeEvent.text)}
+        style={styles.input}
       />
-      {error ? (
-        <Card containerStyle={styles.error} title="Oops!">
-          <Text>{error}</Text>
-        </Card>
-      ) : null}
-      <Button title="Login" onPress={() => signIn(email, password)} />
-    </View>
+      <Button loading={loading} onPress={() => signIn(email, password)}>
+        Login
+      </Button>
+    </Background>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-  error: {
-    marginBottom: 30,
+  input: {
+    marginBottom: Margin.md,
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    marginBottom: Margin.md,
   },
 });

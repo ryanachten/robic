@@ -11,7 +11,7 @@ export const Background = (props: View["props"]) => (
       end={{ x: 0.5, y: 1.0 }}
       locations={[0, 0.15, 0.85, 1]}
       colors={[Colors.lilac, Colors.white, Colors.white, Colors.lilac]}
-      style={styles.gradient}
+      style={[styles.gradient, props.style]}
     >
       {props.children}
     </LinearGradient>

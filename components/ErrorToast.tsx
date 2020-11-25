@@ -3,7 +3,11 @@ import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 
-export const ErrorToast = ({ error }: { error: Error | string | null }) => {
+export const ErrorToast = ({
+  error,
+}: {
+  error: Error | string | null | undefined;
+}) => {
   // Handle both Error objects and string messages
   const message = error instanceof Error ? error.message : error;
   if (message) {
