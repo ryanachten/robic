@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Input, Text } from "@ui-kitten/components";
 import { AuthContext } from "../services/context";
 import { Background, Button, ErrorToast } from "../components";
