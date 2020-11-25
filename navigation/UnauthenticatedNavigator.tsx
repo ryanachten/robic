@@ -1,54 +1,55 @@
-import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
-
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import LoginScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
+import * as React from "react";
+import {
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import {
+  BottomNavigation,
+  BottomNavigationTab,
+} from "@ui-kitten/components/ui";
+import { Icon } from "../components";
+import Colors from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 import {
   UnauthenticatedParamList,
   LoginParamList,
   RegisterParamList,
-} from '../types';
+} from "../types";
 
 const BottomTab = createBottomTabNavigator<UnauthenticatedParamList>();
+
+const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={(index) => navigation.navigate(state.routeNames[index])}
+  >
+    <BottomNavigationTab
+      title="Login"
+      icon={(props) => <Icon {...props} name="person-outline" />}
+    />
+    <BottomNavigationTab
+      title="Register"
+      icon={(props) => <Icon {...props} name="edit-outline" />}
+    />
+  </BottomNavigation>
+);
 
 export default function UnauthenticatedNavigator() {
   const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
+      tabBar={(props) => <BottomTabBar {...props} />}
       initialRouteName="Login"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
     >
-      <BottomTab.Screen
-        name="Login"
-        component={LoginNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name="Register"
-        component={RegisterNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          ),
-        }}
-      />
+      <BottomTab.Screen name="Login" component={LoginNavigator} />
+      <BottomTab.Screen name="Register" component={RegisterNavigator} />
     </BottomTab.Navigator>
   );
-}
-
-// You can explore the built-in icon families and icons on the web at:
-// https://icons.expo.fyi/
-function TabBarIcon(props: { name: string; color: string }) {
-  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
@@ -61,7 +62,7 @@ function LoginNavigator() {
       <LoginStack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{ headerTitle: 'Login' }}
+        options={{ headerTitle: "Login" }}
       />
     </LoginStack.Navigator>
   );
@@ -75,7 +76,7 @@ function RegisterNavigator() {
       <RegisterStack.Screen
         name="Register"
         component={RegisterScreen}
-        options={{ headerTitle: 'Register' }}
+        options={{ headerTitle: "Register" }}
       />
     </RegisterStack.Navigator>
   );

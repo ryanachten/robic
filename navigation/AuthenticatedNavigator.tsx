@@ -8,7 +8,6 @@ import {
   StackHeaderLeftButtonProps,
 } from "@react-navigation/stack";
 
-import { Colors } from "../constants/Colors";
 import {
   AuthenticatedParamList,
   HomeParamList,
@@ -60,12 +59,6 @@ export default function AuthenticatedNavigator() {
       <BottomTab.Screen name="Activity" component={ExerciseNavigator} />
     </BottomTab.Navigator>
   );
-}
-
-// You can explore the built-in icon families and icons on the web at:
-// https://icons.expo.fyi/
-function TabBarIcon(props: { name: string; color: string }) {
-  return <Icon size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
