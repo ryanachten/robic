@@ -5,7 +5,7 @@ import { Text } from "./Themed";
 import { Exercise } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
 import { boxShadowStyles, Colors } from "../constants/Colors";
-import { Icon } from "@ui-kitten/components/ui";
+import { Icon } from "./Icon";
 
 type ExerciseCardProps = {
   containerStyle?: StyleProp<ViewStyle>;
@@ -22,7 +22,7 @@ export const ExerciseCard = ({
 }: ExerciseCardProps) => (
   <View style={[styles.container, containerStyle]}>
     <View style={styles.titleWrapper}>
-      <Icon style={styles.icon} fill={Colors.orange} name={icon} />
+      <Icon size="sm" fill={Colors.orange} name={icon} />
       <Text style={styles.title}>{`${title} ${formatDistance(
         new Date(date),
         Date.now()
@@ -37,10 +37,6 @@ export const ExerciseCard = ({
 );
 
 const styles = StyleSheet.create({
-  icon: {
-    height: 24,
-    width: 24,
-  },
   container: {
     backgroundColor: Colors.white,
     padding: Margin.md,

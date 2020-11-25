@@ -3,7 +3,7 @@ import { StyleSheet, ActivityIndicator } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Background, Card, ErrorToast, Fab } from "../components";
+import { Background, Card, ErrorToast, Fab, Icon } from "../components";
 import { ExercisesParamList } from "../types";
 import {
   exerciseDefinitionReducer,
@@ -25,7 +25,6 @@ import {
   Select,
   SelectItem,
   Text,
-  Icon,
 } from "@ui-kitten/components";
 
 enum SortBy {
@@ -72,7 +71,9 @@ export default function ExercisesScreen({ navigation }: Props) {
         placeholder="Search exercises..."
         onChangeText={setSearchTerm}
         value={searchTerm}
-        accessoryLeft={(props) => <Icon {...props} name="search-outline" />}
+        accessoryLeft={(props) => (
+          <Icon {...props} size="sm" name="search-outline" />
+        )}
       />
       <Select
         label="Select an exercise"

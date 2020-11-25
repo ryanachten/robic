@@ -7,7 +7,6 @@ import {
   ViewStyle,
 } from "react-native";
 import {
-  Icon,
   Button as KittenButton,
   ButtonProps as KittenButtonProps,
   Spinner,
@@ -15,6 +14,7 @@ import {
 } from "@ui-kitten/components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
+import { Icon } from "./Icon";
 
 type ButtonProps = KittenButtonProps & {
   loading?: boolean;
@@ -45,8 +45,8 @@ export const Fab = ({ containerStyles, icon, label, onPress }: FabProps) => {
     <View style={[styles.fabContainer, containerStyles]}>
       <Text>{label}</Text>
       <Icon
+        size="md"
         fill={Colors.orange}
-        styles={styles.fabIcon}
         name={icon}
         style={styles.fabIcon}
         onPress={onPress}
@@ -65,8 +65,6 @@ const styles = StyleSheet.create({
     minHeight: 60,
   },
   fabIcon: {
-    height: 32,
-    width: 32,
     margin: 0,
     marginLeft: Margin.xs,
   },

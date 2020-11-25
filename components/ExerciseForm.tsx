@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Icon, Text } from "@ui-kitten/components";
+import { Text } from "@ui-kitten/components";
 import {
   exerciseActions,
   ExerciseForPost,
@@ -22,6 +22,7 @@ import { Stopwatch } from "./Stopwatch";
 import { Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 import { Card } from "./Card";
+import { Icon } from "./Icon";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -139,6 +140,7 @@ export const ExerciseForm = ({
                 />
                 {!activeSet && (
                   <Icon
+                    size="sm"
                     fill={Colors.orange}
                     style={styles.inputWrapperDeleteIcon}
                     name="slash-outline"
@@ -180,8 +182,6 @@ const styles = StyleSheet.create({
   },
   inputWrapperDeleteIcon: {
     marginLeft: Margin.sm,
-    height: 24,
-    width: 24,
   },
   inputRepContainer: {
     marginRight: Margin.sm,

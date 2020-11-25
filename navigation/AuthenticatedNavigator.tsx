@@ -7,7 +7,6 @@ import {
 import { Icon } from "react-native-elements";
 
 import { Colors } from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
 import {
   AuthenticatedParamList,
   HomeParamList,
@@ -27,8 +26,6 @@ const sharedScreenOptions = {
 };
 
 export default function AuthenticatedNavigator() {
-  const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
       initialRouteName="Start"

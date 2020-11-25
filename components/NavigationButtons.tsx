@@ -6,7 +6,7 @@ import { Text } from "./Themed";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import { StackHeaderLeftButtonProps } from "@react-navigation/stack";
-import { Icon } from "react-native-elements";
+import { Icon } from "./Icon";
 
 export const LogoutButton = () => {
   const {
@@ -23,20 +23,20 @@ export const BackButton = (props: StackHeaderLeftButtonProps) => {
   const { canGoBack, label } = props;
   return canGoBack ? (
     <TouchableOpacity style={styles.backWrapper} {...props}>
-      <Icon color={Colors.orange} name="keyboard-arrow-left" />
+      <Icon size="sm" fill={Colors.orange} name="chevron-left-outline" />
       <Text style={styles.text}>{label}</Text>
     </TouchableOpacity>
   ) : null;
 };
 
 const styles = StyleSheet.create({
-  logoutWrapper: {
-    marginRight: Margin.md,
-  },
   backWrapper: {
     alignItems: "center",
     flexDirection: "row",
     marginLeft: Margin.sm,
+  },
+  logoutWrapper: {
+    marginRight: Margin.md,
   },
   text: {
     color: Colors.orange,
