@@ -1,10 +1,12 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 import {
   createStackNavigator,
   StackHeaderLeftButtonProps,
 } from "@react-navigation/stack";
-import { Icon } from "react-native-elements";
 
 import { Colors } from "../constants/Colors";
 import {
@@ -17,6 +19,8 @@ import ExercisesScreen from "../screens/ExercisesScreen";
 import ExerciseDetailScreen from "../screens/ExerciseDetailScreen";
 import { BackButton, LogoutButton } from "../components/NavigationButtons";
 import ExerciseEditScreen from "../screens/ExerciseEditScreen";
+import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
+import { Icon } from "../components";
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -25,39 +29,35 @@ const sharedScreenOptions = {
   headerLeft: (props: StackHeaderLeftButtonProps) => <BackButton {...props} />,
 };
 
+const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={(index) => navigation.navigate(state.routeNames[index])}
+  >
+    <BottomNavigationTab
+      title="Home"
+      icon={(props) => <Icon {...props} name="bell-outline" />}
+    />
+    <BottomNavigationTab
+      title="Exercises"
+      icon={(props) => <Icon {...props} name="bell-outline" />}
+    />
+    <BottomNavigationTab
+      title="Activity"
+      icon={(props) => <Icon {...props} name="bell-outline" />}
+    />
+  </BottomNavigation>
+);
+
 export default function AuthenticatedNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Start"
-      tabBarOptions={{ activeTintColor: Colors.orange }}
+      tabBar={(props) => <BottomTabBar {...props} />}
     >
-      <BottomTab.Screen
-        name="Start"
-        component={HomeNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="flash-on" color={color} />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name="Exercises"
-        component={ExerciseNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="fitness-center" color={color} />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name="Activity"
-        component={ExerciseNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="equalizer" color={color} />
-          ),
-        }}
-      />
+      <BottomTab.Screen name="Start" component={HomeNavigator} />
+      <BottomTab.Screen name="Exercises" component={ExerciseNavigator} />
+      <BottomTab.Screen name="Activity" component={ExerciseNavigator} />
     </BottomTab.Navigator>
   );
 }
