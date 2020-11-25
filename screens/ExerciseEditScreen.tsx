@@ -96,11 +96,9 @@ export default function ExerciseEditScreen({ navigation }: Props) {
           <SelectItem key={muscle} title={muscle} />
         ))}
       </Select>
-      <Button
-        title="Create exercise"
-        loading={loading}
-        onPress={() => createExercise()}
-      />
+      <Button loading={loading} onPress={() => createExercise()}>
+        Create exercise
+      </Button>
       <ErrorToast error={error} />
     </Background>
   );

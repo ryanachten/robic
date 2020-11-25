@@ -2,7 +2,6 @@ import React, { useEffect, useReducer, useState } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
-import { SearchBar } from "react-native-elements";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Background, Card, ErrorToast, Fab } from "../components";
 import { ExercisesParamList } from "../types";
@@ -12,7 +11,6 @@ import {
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
-import useColorScheme from "../hooks/useColorScheme";
 import {
   filterBySearchTerm,
   sortByDate,
@@ -21,7 +19,14 @@ import {
 } from "../utilities/searchHelpers";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
-import { IndexPath, Select, SelectItem, Text } from "@ui-kitten/components";
+import {
+  Input,
+  IndexPath,
+  Select,
+  SelectItem,
+  Text,
+  Icon,
+} from "@ui-kitten/components";
 
 enum SortBy {
   lastActive = "lastActive",
@@ -62,15 +67,12 @@ export default function ExercisesScreen({ navigation }: Props) {
         icon="plus-circle-outline"
         onPress={() => navigation.navigate("ExerciseEditScreen")}
       />
-      <SearchBar
-        lightTheme={useColorScheme() === "light"}
-        containerStyle={styles.searchBar}
-        inputContainerStyle={{
-          backgroundColor: Colors.white,
-        }}
+      <Input
+        style={styles.searchBar}
         placeholder="Search exercises..."
         onChangeText={setSearchTerm}
         value={searchTerm}
+        accessoryLeft={(props) => <Icon {...props} name="search-outline" />}
       />
       <Select
         label="Select an exercise"
@@ -170,14 +172,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   searchBar: {
-    backgroundColor: "transparent",
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-    borderTopColor: "transparent",
-    borderBottomColor: "transparent",
     marginBottom: Margin.sm,
-    padding: 0,
-    width: "100%",
   },
   picker: {
     marginBottom: Margin.md,
