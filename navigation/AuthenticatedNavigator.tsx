@@ -36,15 +36,15 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
   >
     <BottomNavigationTab
       title="Home"
-      icon={(props) => <Icon {...props} name="bell-outline" />}
+      icon={(props) => <Icon {...props} name="flash-outline" />}
     />
     <BottomNavigationTab
       title="Exercises"
-      icon={(props) => <Icon {...props} name="bell-outline" />}
+      icon={(props) => <Icon {...props} name="layers-outline" />}
     />
     <BottomNavigationTab
       title="Activity"
-      icon={(props) => <Icon {...props} name="bell-outline" />}
+      icon={(props) => <Icon {...props} name="activity-outline" />}
     />
   </BottomNavigation>
 );
