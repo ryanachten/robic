@@ -65,7 +65,7 @@ const DefinitionDetail = ({
     <ScrollView style={styles.container}>
       {lastSession && (
         <ExerciseCard
-          icon="schedule"
+          icon="clock-outline"
           containerStyle={styles.exerciseCard}
           title="Latest Exercise"
           exercise={lastSession}
@@ -74,7 +74,7 @@ const DefinitionDetail = ({
       {pb && (
         <View>
           <ExerciseCard
-            icon="star"
+            icon="star-outline"
             title="Personal Best"
             exercise={pb.topNetExercise}
             containerStyle={styles.exerciseCard}
