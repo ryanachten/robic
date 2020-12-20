@@ -3,17 +3,22 @@ import Axios, { AxiosResponse } from "axios";
 import { EXERCISE_DEFINITION_URL } from "../constants/Api";
 import { BaseState, BaseActions, baseTypes } from "./base";
 
-export type ExerciseDefinitionForPost = {
+export type ExerciseDefinitionForCreate = {
   title: string;
   unit: Unit;
   user: string;
   primaryMuscleGroup: MuscleGroup[];
 };
 
+export type ExerciseDefinitionForEdit = ExerciseDefinitionForCreate & {
+  id: string;
+};
+
 export enum exerciseDefinitionTypes {
   GET_DEFINITIONS = "GET_DEFINITIONS",
   GET_DEFINITION_BY_ID = "GET_DEFINITION_BY_ID",
-  POST_DEFINITION = "POST_DEFINITION",
+  CREATE_DEFINITION = "CREATE_DEFINITION",
+  UPDATE_DEFINITION = "UPDATE_DEFINITION",
 }
 
 export type ExerciseDefinitionState = BaseState & {
@@ -31,15 +36,22 @@ export type ExerciseDefinitionAction =
       definition: ExerciseDefinition;
     }
   | {
-      type: exerciseDefinitionTypes.POST_DEFINITION;
+      type: exerciseDefinitionTypes.CREATE_DEFINITION;
+      definition: ExerciseDefinition;
+    }
+  | {
+      type: exerciseDefinitionTypes.UPDATE_DEFINITION;
       definition: ExerciseDefinition;
     };
 
 export type ExerciseDefinitionActions = {
   getDefinitions: () => Promise<void>;
   getDefinitionById: (id: string) => Promise<void>;
-  postDefinition: (
-    definition: ExerciseDefinitionForPost
+  createDefinition: (
+    definition: ExerciseDefinitionForCreate
+  ) => Promise<ExerciseDefinition | null>;
+  editDefinition: (
+    definition: ExerciseDefinitionForEdit
   ) => Promise<ExerciseDefinition | null>;
 };
 
@@ -85,7 +97,7 @@ export const exerciseDefinitionActions = (
       dispatch({ type: baseTypes.ERROR, error: e.message });
     }
   },
-  postDefinition: async (definition: ExerciseDefinitionForPost) => {
+  createDefinition: async (definition: ExerciseDefinitionForCreate) => {
     dispatch({
       type: baseTypes.LOADING,
     });
@@ -95,7 +107,26 @@ export const exerciseDefinitionActions = (
         definition
       );
       dispatch({
-        type: exerciseDefinitionTypes.POST_DEFINITION,
+        type: exerciseDefinitionTypes.CREATE_DEFINITION,
+        definition: data,
+      });
+      return data;
+    } catch (e) {
+      dispatch({ type: baseTypes.ERROR, error: e.message });
+      return null;
+    }
+  },
+  editDefinition: async (definition: ExerciseDefinitionForEdit) => {
+    dispatch({
+      type: baseTypes.LOADING,
+    });
+    try {
+      const { data }: AxiosResponse<ExerciseDefinition> = await Axios.put(
+        `${EXERCISE_DEFINITION_URL}/${definition.id}`,
+        definition
+      );
+      dispatch({
+        type: exerciseDefinitionTypes.CREATE_DEFINITION,
         definition: data,
       });
       return data;
@@ -147,11 +178,20 @@ export const exerciseDefinitionReducer = (
         loading: false,
         definitions,
       };
-    case exerciseDefinitionTypes.POST_DEFINITION:
+    case exerciseDefinitionTypes.CREATE_DEFINITION:
       return {
         ...state,
         loading: false,
         definitions: [...state.definitions, action.definition],
+      };
+    case exerciseDefinitionTypes.UPDATE_DEFINITION:
+      const existingDefintions = state.definitions.filter(
+        (d) => d.id === action.definition.id
+      );
+      return {
+        ...state,
+        loading: false,
+        definitions: [...existingDefintions, action.definition],
       };
     default:
       return state;

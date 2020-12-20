@@ -6,7 +6,8 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
 import {
   exerciseDefinitionActions,
-  ExerciseDefinitionForPost,
+  ExerciseDefinitionForCreate,
+  ExerciseDefinitionForEdit,
   exerciseDefinitionReducer,
   initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
@@ -68,7 +69,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
   }, []);
 
   const createExercise = async () => {
-    const exercise: ExerciseDefinitionForPost = {
+    const exercise: ExerciseDefinitionForCreate = {
       title,
       unit,
       user: id,
@@ -77,7 +78,32 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
 
     const definition = await exerciseDefinitionActions(
       definitionDispatch
-    ).postDefinition(exercise);
+    ).createDefinition(exercise);
+
+    if (!error) {
+      if (definition) {
+        navigation.navigate("ExerciseDetailScreen", {
+          definitionId: definition.id,
+        });
+      }
+    }
+  };
+
+  const updateExercise = async () => {
+    if (!existingDefinition) {
+      return;
+    }
+    const exercise: ExerciseDefinitionForEdit = {
+      id: existingDefinition.id,
+      title,
+      unit,
+      user: id,
+      primaryMuscleGroup: muscleGroups,
+    };
+
+    const definition = await exerciseDefinitionActions(
+      definitionDispatch
+    ).editDefinition(exercise);
 
     if (!error) {
       if (definition) {
@@ -117,13 +143,12 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
         onSelect={(index) => setSelectedMuscleIndex(index as IndexPath[])}
         placeholder="i.e. Glutes"
       >
-        {Object.keys(MuscleGroup).map((muscle) => (
+        {allMuscleGroups.map((muscle) => (
           <SelectItem key={muscle} title={muscle} />
         ))}
       </Select>
       {existingDefinition ? (
-        // TODO: needs to update instead of create new exercise
-        <Button loading={loading} onPress={() => createExercise()}>
+        <Button loading={loading} onPress={() => updateExercise()}>
           Update exercise
         </Button>
       ) : (
