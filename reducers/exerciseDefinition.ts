@@ -10,8 +10,11 @@ export type ExerciseDefinitionForCreate = {
   primaryMuscleGroup: MuscleGroup[];
 };
 
-export type ExerciseDefinitionForEdit = ExerciseDefinitionForCreate & {
+export type ExerciseDefinitionForEdit = {
   id: string;
+  title: string;
+  unit: Unit;
+  primaryMuscleGroup: MuscleGroup[];
 };
 
 export enum exerciseDefinitionTypes {

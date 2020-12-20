@@ -97,7 +97,6 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
       id: existingDefinition.id,
       title,
       unit,
-      user: id,
       primaryMuscleGroup: muscleGroups,
     };
 
