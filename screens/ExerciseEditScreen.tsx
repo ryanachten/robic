@@ -1,6 +1,6 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { StyleSheet } from "react-native";
-import { ExercisesParamList } from "../types";
+import { ExercisesParamList } from "../navigation/types";
 import { MuscleGroup, Unit } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
@@ -18,7 +18,7 @@ import { Input, IndexPath, Select, SelectItem } from "@ui-kitten/components";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
-export default function ExerciseEditScreen({ navigation }: Props) {
+export default function ExerciseEditScreen({ navigation, route }: Props) {
   const [title, setTitle] = useState("");
 
   const {
@@ -33,14 +33,39 @@ export default function ExerciseEditScreen({ navigation }: Props) {
   const [selectedUnitIndex, setSelectedUnitIndex] = useState<IndexPath>(
     new IndexPath(0)
   );
-  const unit = Object.keys(Unit)[selectedUnitIndex.row] as Unit;
+
+  const allUnits = Object.keys(Unit);
+  const unit = allUnits[selectedUnitIndex.row] as Unit;
 
   const [selectedMuscleIndex, setSelectedMuscleIndex] = useState<IndexPath[]>(
     []
   );
+
+  const allMuscleGroups = Object.keys(MuscleGroup);
   const muscleGroups = selectedMuscleIndex.map(
-    (index) => Object.keys(MuscleGroup)[index.row]
+    (index) => allMuscleGroups[index.row]
   ) as MuscleGroup[];
+
+  // If a definition is passed, we use form as an edit screen
+  // Otherwise, we use it to create a new exercise definition
+  const existingDefinition = route.params.definition;
+  useEffect(() => {
+    if (existingDefinition) {
+      setTitle(existingDefinition.title);
+
+      const unitIndex = allUnits.findIndex(
+        (u) => u === existingDefinition.unit
+      );
+      setSelectedUnitIndex(new IndexPath(unitIndex));
+
+      const muscleIndices: number[] = existingDefinition.primaryMuscleGroup
+        ? existingDefinition.primaryMuscleGroup.map((m) =>
+            allMuscleGroups.findIndex((mu) => mu === m)
+          )
+        : [];
+      setSelectedMuscleIndex(muscleIndices.map((i) => new IndexPath(i)));
+    }
+  }, []);
 
   const createExercise = async () => {
     const exercise: ExerciseDefinitionForPost = {
@@ -79,7 +104,7 @@ export default function ExerciseEditScreen({ navigation }: Props) {
         selectedIndex={selectedUnitIndex}
         onSelect={(index) => setSelectedUnitIndex(index as IndexPath)}
       >
-        {Object.keys(Unit).map((unit) => (
+        {allUnits.map((unit) => (
           <SelectItem key={unit} title={unit} />
         ))}
       </Select>
@@ -96,9 +121,16 @@ export default function ExerciseEditScreen({ navigation }: Props) {
           <SelectItem key={muscle} title={muscle} />
         ))}
       </Select>
-      <Button loading={loading} onPress={() => createExercise()}>
-        Create exercise
-      </Button>
+      {existingDefinition ? (
+        // TODO: needs to update instead of create new exercise
+        <Button loading={loading} onPress={() => createExercise()}>
+          Update exercise
+        </Button>
+      ) : (
+        <Button loading={loading} onPress={() => createExercise()}>
+          Create exercise
+        </Button>
+      )}
       <ErrorToast error={error} />
     </Background>
   );

@@ -1,3 +1,5 @@
+import { ExerciseDefinition } from "../constants/Interfaces";
+
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;
@@ -28,7 +30,9 @@ export type HomeParamList = {
 
 export type ExercisesParamList = {
   ExercisesScreen: undefined;
-  ExerciseEditScreen: undefined;
+  ExerciseEditScreen: {
+    definition?: ExerciseDefinition;
+  };
   ExerciseDetailScreen: {
     definitionId: string;
   };

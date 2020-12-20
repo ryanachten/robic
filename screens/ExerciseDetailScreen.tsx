@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { ScrollView, StyleSheet, View, ActivityIndicator } from "react-native";
 import { Text } from "../components/Themed";
-import { ExercisesParamList } from "../types";
+import { ExercisesParamList } from "../navigation/types";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
 import {
@@ -14,13 +14,15 @@ import {
   ExerciseCard,
   ExerciseDetailAnalytics,
   ErrorToast,
+  Button,
+  Icon,
 } from "../components";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
-export default function ExerciseDetailScreen({ route }: Props) {
+export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const definitionId = route.params ? route.params.definitionId : null;
 
   const [{ definitions, error, loading }, definitionDispatch] = useReducer(
@@ -37,9 +39,27 @@ export default function ExerciseDetailScreen({ route }: Props) {
 
   const exercise = definitions.find((def) => def.id === definitionId);
 
+  const navigateToEditScreen = () =>
+    navigation.navigate("ExerciseEditScreen", {
+      definition: exercise,
+    });
+
   return (
     <Background>
       <Text style={styles.title}>{exercise?.title}</Text>
+      <Button
+        appearance="outline"
+        accessoryRight={() => (
+          <Icon
+            fill={Colors.orange}
+            name="edit-outline"
+            size="sm"
+            onPress={navigateToEditScreen}
+          />
+        )}
+      >
+        Edit
+      </Button>
       {loading && <ActivityIndicator size="large" />}
       {exercise && <DefinitionDetail definition={exercise} />}
       <ErrorToast error={error} />

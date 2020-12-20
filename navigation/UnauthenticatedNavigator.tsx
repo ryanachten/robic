@@ -17,7 +17,7 @@ import {
   UnauthenticatedParamList,
   LoginParamList,
   RegisterParamList,
-} from "../types";
+} from "./types";
 
 const BottomTab = createBottomTabNavigator<UnauthenticatedParamList>();
 

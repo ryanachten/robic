@@ -12,7 +12,7 @@ import {
   AuthenticatedParamList,
   HomeParamList,
   ExercisesParamList,
-} from "../types";
+} from "./types";
 import HomeScreen from "../screens/HomeScreen";
 import ExercisesScreen from "../screens/ExercisesScreen";
 import ExerciseDetailScreen from "../screens/ExerciseDetailScreen";
