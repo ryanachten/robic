@@ -188,13 +188,22 @@ export const exerciseDefinitionReducer = (
         definitions: [...state.definitions, action.definition],
       };
     case exerciseDefinitionTypes.UPDATE_DEFINITION:
-      const existingDefintions = state.definitions.filter(
-        (d) => d.id !== action.definition.id
-      );
+      const existingDefintions = [...state.definitions];
+      const { title, unit, primaryMuscleGroup } = action.definition;
+      existingDefintions.forEach((e, i) => {
+        if (e.id === action.definition.id) {
+          existingDefintions[i] = {
+            ...existingDefintions[i],
+            title,
+            unit,
+            primaryMuscleGroup,
+          };
+        }
+      });
       return {
         ...state,
         loading: false,
-        definitions: [...existingDefintions, action.definition],
+        definitions: existingDefintions,
       };
     default:
       return state;
