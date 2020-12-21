@@ -4,7 +4,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Background, Card, ErrorToast, Fab, Icon } from "../components";
-import { ExercisesParamList } from "../types";
+import { ExercisesParamList } from "../navigation/types";
 import {
   exerciseDefinitionReducer,
   exerciseDefinitionActions,
@@ -64,7 +64,7 @@ export default function ExercisesScreen({ navigation }: Props) {
         containerStyles={styles.addExerciseButton}
         label="Create exercise"
         icon="plus-circle-outline"
-        onPress={() => navigation.navigate("ExerciseEditScreen")}
+        onPress={() => navigation.navigate("ExerciseEditScreen", {})}
       />
       <Input
         style={styles.searchBar}
