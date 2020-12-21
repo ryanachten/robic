@@ -15,8 +15,17 @@ import AuthenticatedNavigator from "./AuthenticatedNavigator";
 import { useEffect, useReducer, useMemo } from "react";
 import LoadingScreen from "../screens/LoadingScreen";
 import { userReducer, userActions } from "../reducers/user";
-import { UserContext, AuthContext } from "../services/context";
+import {
+  UserContext,
+  AuthContext,
+  ExerciseDefintionContext,
+} from "../services/context";
 import { authReducer, authActions, initialAuthState } from "../reducers/auth";
+import {
+  exerciseDefinitionActions,
+  exerciseDefinitionReducer,
+  initialExerciseDefinitionState,
+} from "../reducers/exerciseDefinition";
 
 export default function Navigation({
   colorScheme,
@@ -38,10 +47,18 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const [user, userDispatch] = useReducer(userReducer, {});
   const [auth, authDispatch] = useReducer(authReducer, initialAuthState);
+  const [exerciseDefinition, exerciseDefinitionDispatch] = useReducer(
+    exerciseDefinitionReducer,
+    initialExerciseDefinitionState
+  );
 
   const userContext = useMemo(() => userActions(userDispatch), []);
   const authContext = useMemo(
     () => authActions(authDispatch, userDispatch),
+    []
+  );
+  const exerciseDefintionContext = useMemo(
+    () => exerciseDefinitionActions(exerciseDefinitionDispatch),
     []
   );
 
@@ -57,25 +74,32 @@ function RootNavigator() {
   return (
     <AuthContext.Provider value={{ state: auth, actions: authContext }}>
       <UserContext.Provider value={{ state: user, actions: userContext }}>
-        {auth.token ? (
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Root" component={AuthenticatedNavigator} />
-            <Stack.Screen
-              name="NotFound"
-              component={NotFoundScreen}
-              options={{ title: "Oops!" }}
-            />
-          </Stack.Navigator>
-        ) : (
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Root" component={UnauthenticatedNavigator} />
-            <Stack.Screen
-              name="NotFound"
-              component={NotFoundScreen}
-              options={{ title: "Oops!" }}
-            />
-          </Stack.Navigator>
-        )}
+        <ExerciseDefintionContext.Provider
+          value={{
+            state: exerciseDefinition,
+            actions: exerciseDefintionContext,
+          }}
+        >
+          {auth.token ? (
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Root" component={AuthenticatedNavigator} />
+              <Stack.Screen
+                name="NotFound"
+                component={NotFoundScreen}
+                options={{ title: "Oops!" }}
+              />
+            </Stack.Navigator>
+          ) : (
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Root" component={UnauthenticatedNavigator} />
+              <Stack.Screen
+                name="NotFound"
+                component={NotFoundScreen}
+                options={{ title: "Oops!" }}
+              />
+            </Stack.Navigator>
+          )}
+        </ExerciseDefintionContext.Provider>
       </UserContext.Provider>
     </AuthContext.Provider>
   );

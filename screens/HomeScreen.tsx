@@ -1,12 +1,7 @@
-import React, { useContext, useReducer, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { Text, ErrorToast, ExerciseForm, Background } from "../components";
-import { UserContext } from "../services/context";
-import {
-  exerciseDefinitionReducer,
-  initialExerciseDefinitionState,
-  exerciseDefinitionActions,
-} from "../reducers/exerciseDefinition";
+import { ExerciseDefintionContext, UserContext } from "../services/context";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { Margin } from "../constants/Sizes";
 
@@ -15,14 +10,14 @@ export default function HomeScreen() {
     state: { firstName },
   } = useContext(UserContext);
 
-  const [{ definitions, error, loading }, definitionDispatch] = useReducer(
-    exerciseDefinitionReducer,
-    initialExerciseDefinitionState
-  );
+  const {
+    state: { definitions, error, loading },
+    actions: { getDefinitions },
+  } = useContext(ExerciseDefintionContext);
 
   // Get definitions on mount
   useEffect(() => {
-    exerciseDefinitionActions(definitionDispatch).getDefinitions();
+    getDefinitions();
   }, []);
 
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(

@@ -1,17 +1,14 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { ExercisesParamList } from "../navigation/types";
 import { MuscleGroup, Unit } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
 import {
-  exerciseDefinitionActions,
   ExerciseDefinitionForCreate,
   ExerciseDefinitionForEdit,
-  exerciseDefinitionReducer,
-  initialExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
-import { UserContext } from "../services/context";
+import { ExerciseDefintionContext, UserContext } from "../services/context";
 import { Background, Button } from "../components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
@@ -26,10 +23,10 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
     state: { id = "" },
   } = useContext(UserContext);
 
-  const [{ error, loading }, definitionDispatch] = useReducer(
-    exerciseDefinitionReducer,
-    initialExerciseDefinitionState
-  );
+  const {
+    state: { error, loading },
+    actions: { createDefinition, editDefinition },
+  } = useContext(ExerciseDefintionContext);
 
   const [selectedUnitIndex, setSelectedUnitIndex] = useState<IndexPath>(
     new IndexPath(0)
@@ -76,9 +73,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
       primaryMuscleGroup: muscleGroups,
     };
 
-    const definition = await exerciseDefinitionActions(
-      definitionDispatch
-    ).createDefinition(exercise);
+    const definition = await createDefinition(exercise);
 
     if (!error) {
       if (definition) {
@@ -100,9 +95,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
       primaryMuscleGroup: muscleGroups,
     };
 
-    const definition = await exerciseDefinitionActions(
-      definitionDispatch
-    ).editDefinition(exercise);
+    const definition = await editDefinition(exercise);
 
     if (!error) {
       if (definition) {

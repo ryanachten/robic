@@ -1,14 +1,9 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useContext, useEffect } from "react";
 import { ScrollView, StyleSheet, View, ActivityIndicator } from "react-native";
 import { Text } from "../components/Themed";
 import { ExercisesParamList } from "../navigation/types";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
-import {
-  exerciseDefinitionActions,
-  exerciseDefinitionReducer,
-  initialExerciseDefinitionState,
-} from "../reducers/exerciseDefinition";
 import {
   Background,
   ExerciseCard,
@@ -19,22 +14,20 @@ import {
 } from "../components";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
+import { ExerciseDefintionContext } from "../services/context";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
 export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const definitionId = route.params ? route.params.definitionId : null;
 
-  const [{ definitions, error, loading }, definitionDispatch] = useReducer(
-    exerciseDefinitionReducer,
-    initialExerciseDefinitionState
-  );
+  const {
+    state: { definitions, error, loading },
+    actions: { getDefinitionById },
+  } = useContext(ExerciseDefintionContext);
 
   useEffect(() => {
-    definitionId &&
-      exerciseDefinitionActions(definitionDispatch).getDefinitionById(
-        definitionId
-      );
+    definitionId && getDefinitionById(definitionId);
   }, []);
 
   const exercise = definitions.find((def) => def.id === definitionId);

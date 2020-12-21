@@ -164,10 +164,10 @@ export const exerciseDefinitionReducer = (
       };
     case exerciseDefinitionTypes.GET_DEFINITION_BY_ID:
       const fullDefinition = action.definition;
-      const definitionIndex = state.definitions?.findIndex(
+      const definitionIndex = state.definitions.findIndex(
         (def) => def.id === fullDefinition.id
       );
-      if (!state.definitions.length || definitionIndex < 0) {
+      if (!state.definitions.length || definitionIndex > 0) {
         return {
           ...state,
           loading: false,

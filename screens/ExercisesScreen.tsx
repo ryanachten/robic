@@ -1,15 +1,10 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Background, Card, ErrorToast, Fab, Icon } from "../components";
 import { ExercisesParamList } from "../navigation/types";
-import {
-  exerciseDefinitionReducer,
-  exerciseDefinitionActions,
-  initialExerciseDefinitionState,
-} from "../reducers/exerciseDefinition";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import {
   filterBySearchTerm,
@@ -26,6 +21,7 @@ import {
   SelectItem,
   Text,
 } from "@ui-kitten/components";
+import { ExerciseDefintionContext } from "../services/context";
 
 enum SortBy {
   lastActive = "lastActive",
@@ -42,13 +38,13 @@ const sortOptions = [
 type Props = StackScreenProps<ExercisesParamList, "ExercisesScreen">;
 
 export default function ExercisesScreen({ navigation }: Props) {
-  const [{ definitions, error, loading }, definitionDispatch] = useReducer(
-    exerciseDefinitionReducer,
-    initialExerciseDefinitionState
-  );
+  const {
+    state: { definitions, error, loading },
+    actions: { getDefinitions },
+  } = useContext(ExerciseDefintionContext);
 
   useEffect(() => {
-    exerciseDefinitionActions(definitionDispatch).getDefinitions();
+    getDefinitions();
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -141,7 +137,7 @@ export default function ExercisesScreen({ navigation }: Props) {
                     </Text>
                   )}
                   <Text style={styles.exerciseImprovement}>
-                    {history.length === 0
+                    {!history || history.length === 0
                       ? "Unattempted!"
                       : `Sessions: ${history.length}`}
                   </Text>
