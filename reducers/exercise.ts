@@ -101,7 +101,6 @@ export const exerciseReducer = (
     case exerciseTypes.POST_EXERCISE:
       const { exercises } = state;
       const index = exercises.findIndex(({ id }) => action.exercise.id === id);
-      console.log("index", index);
       exercises[index] = action.exercise;
       return {
         ...state,

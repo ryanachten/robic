@@ -129,7 +129,7 @@ export const exerciseDefinitionActions = (
         definition
       );
       dispatch({
-        type: exerciseDefinitionTypes.CREATE_DEFINITION,
+        type: exerciseDefinitionTypes.UPDATE_DEFINITION,
         definition: data,
       });
       return data;
@@ -167,7 +167,7 @@ export const exerciseDefinitionReducer = (
       const definitionIndex = state.definitions?.findIndex(
         (def) => def.id === fullDefinition.id
       );
-      if (!state.definitions || definitionIndex < 0) {
+      if (!state.definitions.length || definitionIndex < 0) {
         return {
           ...state,
           loading: false,
@@ -189,7 +189,7 @@ export const exerciseDefinitionReducer = (
       };
     case exerciseDefinitionTypes.UPDATE_DEFINITION:
       const existingDefintions = state.definitions.filter(
-        (d) => d.id === action.definition.id
+        (d) => d.id !== action.definition.id
       );
       return {
         ...state,

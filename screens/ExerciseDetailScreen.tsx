@@ -49,13 +49,9 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       <Text style={styles.title}>{exercise?.title}</Text>
       <Button
         appearance="outline"
+        onPress={navigateToEditScreen}
         accessoryRight={() => (
-          <Icon
-            fill={Colors.orange}
-            name="edit-outline"
-            size="sm"
-            onPress={navigateToEditScreen}
-          />
+          <Icon fill={Colors.orange} name="edit-outline" size="sm" />
         )}
       >
         Edit
