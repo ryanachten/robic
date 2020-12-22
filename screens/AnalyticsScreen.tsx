@@ -58,14 +58,11 @@ type BarChartProps = {
 const AnalyticsChart = ({ data, title, variant }: BarChartProps) => {
   // TODO: this shouldn't be necessary - used to avoid horizontal overflow
   const windowWidth = useWindowDimensions().width;
-  const commonProps = {
-    title: title,
-  };
 
   if (variant === "pie") {
     return (
       <PieChart
-        {...commonProps}
+        title={title}
         pieProps={{
           data,
           x: "marker",
@@ -77,7 +74,7 @@ const AnalyticsChart = ({ data, title, variant }: BarChartProps) => {
   }
   return (
     <BarChart
-      {...commonProps}
+      title={title}
       barProps={{
         data,
         x: "marker",

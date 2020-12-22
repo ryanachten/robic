@@ -17,6 +17,7 @@ import { VictoryPieProps } from "victory-pie";
 import { VictoryGroupProps } from "victory-group";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
+import { lerpColor } from "../utilities/styleHelpers";
 
 export type ChartProps = {
   title?: string;
@@ -55,14 +56,30 @@ export const LineChart = ({ chartProps, lineProps }: LineChartProps) => {
   );
 };
 
+const getMaxValue = (props: VictoryBarProps): number | null => {
+  if (props && props.x && props.data) {
+    const data: number[] = props.data.map((d) => d[props.y as string]);
+    const max = Math.max(...data);
+    return max;
+  }
+  return null;
+};
+
 export const BarChart = ({ chartProps, barProps, title }: BarChartProps) => {
+  const max = barProps && getMaxValue(barProps);
   return (
     <>
       <VictoryChart theme={VictoryTheme.material} {...chartProps}>
         <VictoryBar
           style={{
             data: {
-              fill: Colors.purple,
+              fill: (d) => {
+                if (barProps && barProps.y && max) {
+                  const percent = d.datum[barProps.y as string] / max;
+                  return lerpColor(Colors.orange, Colors.red, percent);
+                }
+                return Colors.orange;
+              },
             },
           }}
           {...barProps}
@@ -96,7 +113,10 @@ export const PieChart = ({ chartProps, pieProps, title }: PieChartProps) => {
         <VictoryPie
           style={{
             data: {
-              fill: Colors.purple,
+              fill: (d) => {
+                const percent = (d.datum.endAngle - d.datum.startAngle) / 360;
+                return lerpColor(Colors.orange, Colors.red, percent);
+              },
             },
           }}
           {...pieProps}
