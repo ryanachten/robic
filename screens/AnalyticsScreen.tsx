@@ -1,14 +1,21 @@
 import React, { useEffect, useReducer } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
 import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import {
+  VictoryAxis,
   VictoryBar,
   VictoryChart,
   VictoryLabel,
-  VictoryLine,
   VictoryTheme,
 } from "victory-native";
-import { Background, ErrorToast } from "../components";
+import { Background, ErrorToast, Text } from "../components";
 import { AnalyticsItem } from "../constants/Interfaces";
+import { Margin } from "../constants/Sizes";
 import {
   analyticsActions,
   analyticsReducer,
@@ -24,7 +31,6 @@ export default function AnalyticsScreen() {
   useEffect(() => {
     analyticsActions(analyticsDispatch).getAnalytics();
   }, []);
-  console.log("analytics", analytics);
 
   return (
     <Background>
@@ -32,9 +38,18 @@ export default function AnalyticsScreen() {
       <ScrollView>
         {analytics && (
           <>
-            <BarChart data={analytics.exerciseFrequency} />
-            <BarChart data={analytics.muscleGroupFrequency} />
-            <BarChart data={analytics.exerciseProgress} />
+            <BarChart
+              title="Muscle group frequency"
+              data={analytics.muscleGroupFrequency}
+            />
+            <BarChart
+              title="Exercises frequency"
+              data={analytics.exerciseFrequency}
+            />
+            <BarChart
+              title="Exercise progress"
+              data={analytics.exerciseProgress}
+            />
           </>
         )}
       </ScrollView>
@@ -45,18 +60,29 @@ export default function AnalyticsScreen() {
 
 type BarChartProps = {
   data: AnalyticsItem[];
+  title: string;
 };
 
-const BarChart = ({ data }: BarChartProps) => (
-  <VictoryChart width={350} theme={VictoryTheme.material}>
-    <VictoryBar
-      data={data}
-      x="marker"
-      y="count"
-      labels={() => null}
-      style={{ labels: { display: "none" } }}
-    />
-  </VictoryChart>
-);
+const BarChart = ({ data, title }: BarChartProps) => {
+  // TODO: this shouldn't be necessary - used to avoid horizontal overflow
+  const chartWidth = useWindowDimensions().width - 40;
+  return (
+    <View>
+      <VictoryChart theme={VictoryTheme.material} width={chartWidth}>
+        <VictoryBar data={data} x="marker" y="count" />
+        <VictoryAxis
+          tickLabelComponent={<VictoryLabel textAnchor="end" />}
+          style={{ tickLabels: { angle: -90 } }}
+        />
+      </VictoryChart>
+      <Text style={styles.chartTitle}>{title}</Text>
+    </View>
+  );
+};
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  chartTitle: {
+    marginTop: Margin.md,
+    textAlign: "center",
+  },
+});
