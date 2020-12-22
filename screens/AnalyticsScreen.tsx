@@ -2,20 +2,10 @@ import React, { useEffect, useReducer } from "react";
 import {
   ActivityIndicator,
   ScrollView,
-  StyleSheet,
   useWindowDimensions,
-  View,
 } from "react-native";
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryLabel,
-  VictoryTheme,
-} from "victory-native";
-import { Background, ErrorToast, Text } from "../components";
+import { Background, BarChart, ErrorToast, PieChart } from "../components";
 import { AnalyticsItem } from "../constants/Interfaces";
-import { Margin } from "../constants/Sizes";
 import {
   analyticsActions,
   analyticsReducer,
@@ -38,15 +28,16 @@ export default function AnalyticsScreen() {
       <ScrollView>
         {analytics && (
           <>
-            <BarChart
+            <AnalyticsChart
               title="Muscle group frequency"
               data={analytics.muscleGroupFrequency}
+              variant="pie"
             />
-            <BarChart
+            <AnalyticsChart
               title="Exercises frequency"
               data={analytics.exerciseFrequency}
             />
-            <BarChart
+            <AnalyticsChart
               title="Exercise progress"
               data={analytics.exerciseProgress}
             />
@@ -60,29 +51,39 @@ export default function AnalyticsScreen() {
 
 type BarChartProps = {
   data: AnalyticsItem[];
+  variant?: "pie" | "bar";
   title: string;
 };
 
-const BarChart = ({ data, title }: BarChartProps) => {
+const AnalyticsChart = ({ data, title, variant }: BarChartProps) => {
   // TODO: this shouldn't be necessary - used to avoid horizontal overflow
-  const chartWidth = useWindowDimensions().width - 40;
+  const windowWidth = useWindowDimensions().width;
+  const commonProps = {
+    title: title,
+  };
+
+  if (variant === "pie") {
+    return (
+      <PieChart
+        {...commonProps}
+        pieProps={{
+          data,
+          x: "marker",
+          y: "count",
+        }}
+        chartProps={{ width: windowWidth - 100 }}
+      />
+    );
+  }
   return (
-    <View>
-      <VictoryChart theme={VictoryTheme.material} width={chartWidth}>
-        <VictoryBar data={data} x="marker" y="count" />
-        <VictoryAxis
-          tickLabelComponent={<VictoryLabel textAnchor="end" />}
-          style={{ tickLabels: { angle: -90 } }}
-        />
-      </VictoryChart>
-      <Text style={styles.chartTitle}>{title}</Text>
-    </View>
+    <BarChart
+      {...commonProps}
+      barProps={{
+        data,
+        x: "marker",
+        y: "count",
+      }}
+      chartProps={{ width: windowWidth - 40 }}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  chartTitle: {
-    marginTop: Margin.md,
-    textAlign: "center",
-  },
-});

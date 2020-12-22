@@ -1,10 +1,9 @@
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import { VictoryChart, VictoryTheme, VictoryLine } from "victory-native";
-import { Colors } from "../constants/Colors";
 import { PersonalBestHistory } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
+import { LineChart } from "./Chart";
 
 type Props = {
   history: PersonalBestHistory[];
@@ -37,18 +36,16 @@ export const ExerciseDetailAnalytics = ({ history }: Props) => {
           <SelectItem key={value} title={label} />
         ))}
       </Select>
-      <VictoryChart width={350} theme={VictoryTheme.material}>
-        <VictoryLine
-          data={data}
-          x="date"
-          y={analyticMode.value}
-          style={{
-            data: {
-              stroke: Colors.purple,
-            },
-          }}
-        />
-      </VictoryChart>
+      <LineChart
+        chartProps={{
+          width: 350,
+        }}
+        lineProps={{
+          data,
+          x: "date",
+          y: analyticMode.value,
+        }}
+      />
     </>
   );
 };
