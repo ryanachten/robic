@@ -92,7 +92,7 @@ export interface ExerciseDefinition {
 }
 
 export type AnalyticsItem = {
-  label: string;
+  marker: string;
   count: number;
 };
 export interface Analytics {
