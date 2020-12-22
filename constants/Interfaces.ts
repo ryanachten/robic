@@ -90,3 +90,15 @@ export interface ExerciseDefinition {
   primaryMuscleGroup?: MuscleGroup[];
   personalBest: PersonalBest | null;
 }
+
+export type AnalyticsItem = {
+  label: string;
+  count: number;
+};
+export interface Analytics {
+  mostFrequentMuscleGroup: AnalyticsItem | null;
+  mostFrequentExercise: AnalyticsItem | null;
+  muscleGroupFrequency: AnalyticsItem[];
+  exerciseFrequency: AnalyticsItem[];
+  exerciseProgress: AnalyticsItem[];
+}

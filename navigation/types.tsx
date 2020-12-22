@@ -37,3 +37,7 @@ export type ExercisesParamList = {
     definitionId: string;
   };
 };
+
+export type AnalyticsParamList = {
+  AnalyticsScreen: undefined;
+};

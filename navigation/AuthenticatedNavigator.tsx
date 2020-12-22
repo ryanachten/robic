@@ -12,6 +12,7 @@ import {
   AuthenticatedParamList,
   HomeParamList,
   ExercisesParamList,
+  AnalyticsParamList,
 } from "./types";
 import HomeScreen from "../screens/HomeScreen";
 import ExercisesScreen from "../screens/ExercisesScreen";
@@ -20,6 +21,7 @@ import { BackButton, LogoutButton } from "../components/NavigationButtons";
 import ExerciseEditScreen from "../screens/ExerciseEditScreen";
 import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
 import { Icon } from "../components";
+import AnalyticsScreen from "../screens/AnalyticsScreen";
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -56,15 +58,14 @@ export default function AuthenticatedNavigator() {
     >
       <BottomTab.Screen name="Start" component={HomeNavigator} />
       <BottomTab.Screen name="Exercises" component={ExerciseNavigator} />
-      <BottomTab.Screen name="Activity" component={ExerciseNavigator} />
+      <BottomTab.Screen name="Activity" component={ActivityNavigator} />
     </BottomTab.Navigator>
   );
 }
 
-// Each tab has its own navigation stack, you can read more about this pattern here:
-// https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const HomeStack = createStackNavigator<HomeParamList>();
 const ExercisesStack = createStackNavigator<ExercisesParamList>();
+const AnalyticsStack = createStackNavigator<AnalyticsParamList>();
 
 function HomeNavigator() {
   return (
@@ -109,5 +110,20 @@ function ExerciseNavigator() {
         }}
       />
     </ExercisesStack.Navigator>
+  );
+}
+
+function ActivityNavigator() {
+  return (
+    <AnalyticsStack.Navigator>
+      <AnalyticsStack.Screen
+        name="AnalyticsScreen"
+        component={AnalyticsScreen}
+        options={{
+          ...sharedScreenOptions,
+          headerTitle: "Activity",
+        }}
+      />
+    </AnalyticsStack.Navigator>
   );
 }
