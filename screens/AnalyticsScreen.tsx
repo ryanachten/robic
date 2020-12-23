@@ -1,11 +1,16 @@
+import { Text } from "@ui-kitten/components";
 import React, { useEffect, useReducer } from "react";
 import {
   ActivityIndicator,
   ScrollView,
+  StyleSheet,
   useWindowDimensions,
+  View,
+  ViewStyle,
 } from "react-native";
 import { Background, BarChart, ErrorToast, PieChart } from "../components";
 import { AnalyticsItem } from "../constants/Interfaces";
+import { Margin } from "../constants/Sizes";
 import {
   analyticsActions,
   analyticsReducer,
@@ -28,6 +33,21 @@ export default function AnalyticsScreen() {
       <ScrollView>
         {analytics && (
           <>
+            <View style={styles.overviewWrapper}>
+              {analytics.mostFrequentMuscleGroup && (
+                <AnalyticsOverview
+                  label="Top Muscle Group"
+                  item={analytics.mostFrequentMuscleGroup}
+                  style={styles.overviewLeftGutter}
+                />
+              )}
+              {analytics.mostFrequentExercise && (
+                <AnalyticsOverview
+                  label="Top Exercise"
+                  item={analytics.mostFrequentExercise}
+                />
+              )}
+            </View>
             <AnalyticsChart
               title="Muscle group frequency"
               data={analytics.muscleGroupFrequency}
@@ -49,13 +69,28 @@ export default function AnalyticsScreen() {
   );
 }
 
-type BarChartProps = {
+const AnalyticsOverview = ({
+  label,
+  item,
+  style,
+}: {
+  label: string;
+  item: AnalyticsItem;
+  style?: ViewStyle;
+}) => (
+  <View style={style}>
+    <Text category="label">{label}</Text>
+    <Text>{`${item.marker} (x${item.count})`}</Text>
+  </View>
+);
+
+type AnalyticsChartProps = {
   data: AnalyticsItem[];
   variant?: "pie" | "bar";
   title: string;
 };
 
-const AnalyticsChart = ({ data, title, variant }: BarChartProps) => {
+const AnalyticsChart = ({ data, title, variant }: AnalyticsChartProps) => {
   // TODO: this shouldn't be necessary - used to avoid horizontal overflow
   const windowWidth = useWindowDimensions().width;
 
@@ -84,3 +119,14 @@ const AnalyticsChart = ({ data, title, variant }: BarChartProps) => {
     />
   );
 };
+
+const styles = StyleSheet.create({
+  overviewWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  overviewLeftGutter: {
+    marginRight: Margin.md,
+  },
+});
