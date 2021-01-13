@@ -56,17 +56,54 @@ export const LineChart = ({ chartProps, lineProps }: LineChartProps) => {
   );
 };
 
-const getMaxValue = (props: VictoryBarProps): number | null => {
+const getMaxMin = (props?: VictoryBarProps): { max?: number; min?: number } => {
+  let max, min;
   if (props && props.x && props.data) {
     const data: number[] = props.data.map((d) => d[props.y as string]);
-    const max = Math.max(...data);
-    return max;
+    max = Math.max(...data);
+    min = Math.min(...data);
   }
-  return null;
+  return { max, min };
+};
+
+const getColour = ({
+  y,
+  defaultColor,
+  max,
+  min,
+}: {
+  y: number;
+  defaultColor: string;
+  max?: number;
+  min?: number;
+}): string => {
+  let colour;
+  // Handle positive colour range
+  if (y >= 0 && max) {
+    const percent = y / max;
+    colour = lerpColor(Colors.orange, Colors.red, percent);
+  }
+  // Handle negative colour range
+  else if (y < 0 && min) {
+    const percent = Math.abs(y) / Math.abs(min);
+    colour = lerpColor(Colors.orange, Colors.purple, percent);
+  }
+  // Handle edge cases where max or min
+  else {
+    return defaultColor;
+  }
+
+  // Handle error contexts
+  if (colour === "#") {
+    return defaultColor;
+  }
+
+  return colour;
 };
 
 export const BarChart = ({ chartProps, barProps, title }: BarChartProps) => {
-  const max = barProps && getMaxValue(barProps);
+  const { max, min } = getMaxMin(barProps);
+  const defaultColor = Colors.orange;
   return (
     <>
       <VictoryChart theme={VictoryTheme.material} {...chartProps}>
@@ -74,11 +111,11 @@ export const BarChart = ({ chartProps, barProps, title }: BarChartProps) => {
           style={{
             data: {
               fill: (d) => {
-                if (barProps && barProps.y && max) {
-                  const percent = d.datum[barProps.y as string] / max;
-                  return lerpColor(Colors.orange, Colors.red, percent);
+                if (barProps) {
+                  const y = d.datum[barProps.y as string];
+                  return getColour({ y, max, min, defaultColor });
                 }
-                return Colors.orange;
+                return defaultColor;
               },
             },
           }}

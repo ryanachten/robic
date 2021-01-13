@@ -1,16 +1,17 @@
-import axios, { AxiosResponse } from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
-import { User } from '../constants/Interfaces';
-import { Axios, LOGIN_URL, REGISTER_URL } from '../constants/Api';
-import { UserAction, userTypes } from './user';
-import { StorageKeys } from '../constants/StorageKeys';
-import { BaseState, baseTypes, BaseActions } from './base';
+import axios, { AxiosResponse } from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
+import { User } from "../constants/Interfaces";
+import { LOGIN_URL, REGISTER_URL } from "../constants/Api";
+import { UserAction, userTypes } from "./user";
+import { StorageKeys } from "../constants/StorageKeys";
+import { BaseState, baseTypes, BaseActions } from "./base";
+import Axios from "axios";
 
 export enum authTypes {
-  RESTORE_TOKEN = 'RESTORE_TOKEN',
-  SIGN_IN = 'SIGN_IN',
-  SIGN_UP = 'SIGN_UP',
-  SIGN_OUT = 'SIGN_OUT',
+  RESTORE_TOKEN = "RESTORE_TOKEN",
+  SIGN_IN = "SIGN_IN",
+  SIGN_UP = "SIGN_UP",
+  SIGN_OUT = "SIGN_OUT",
 }
 
 type Token = string | null;
@@ -52,7 +53,7 @@ export const authActions = (
     try {
       // TODO: After restoring token, we may need to validate it in production apps
       token = await AsyncStorage.getItem(StorageKeys.Token);
-      axios.defaults.headers.common['Authorization'] = `bearer ${token}`;
+      axios.defaults.headers.common["Authorization"] = `bearer ${token}`;
       dispatch({ type: authTypes.RESTORE_TOKEN, token });
     } catch (e) {
       dispatch({ type: baseTypes.ERROR, error: e.message });
@@ -74,7 +75,7 @@ export const authActions = (
 
       // Dispatch and serialise token
       await AsyncStorage.setItem(StorageKeys.Token, token);
-      axios.defaults.headers.common['Authorization'] = `bearer ${token}`;
+      axios.defaults.headers.common["Authorization"] = `bearer ${token}`;
       dispatch({ type: authTypes.SIGN_IN, token });
 
       // Dispatch and serialise user

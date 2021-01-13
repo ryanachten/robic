@@ -27,6 +27,8 @@ export default function AnalyticsScreen() {
     analyticsActions(analyticsDispatch).getAnalytics();
   }, []);
 
+  const resultsPerChart = 20;
+
   return (
     <Background>
       {loading && <ActivityIndicator size="large" />}
@@ -54,12 +56,26 @@ export default function AnalyticsScreen() {
               variant="pie"
             />
             <AnalyticsChart
-              title="Exercises frequency"
-              data={analytics.exerciseFrequency}
+              title="Most frequent exercises"
+              data={analytics.exerciseFrequency.splice(0, resultsPerChart)}
             />
             <AnalyticsChart
-              title="Exercise progress"
-              data={analytics.exerciseProgress}
+              title="Least frequent exercises"
+              data={analytics.exerciseFrequency.splice(
+                analytics.exerciseFrequency.length - resultsPerChart,
+                analytics.exerciseFrequency.length
+              )}
+            />
+            <AnalyticsChart
+              title="Most exercise progress"
+              data={analytics.exerciseProgress.splice(0, resultsPerChart)}
+            />
+            <AnalyticsChart
+              title="Least exercise progress"
+              data={analytics.exerciseProgress.splice(
+                analytics.exerciseProgress.length - resultsPerChart,
+                analytics.exerciseProgress.length
+              )}
             />
           </>
         )}
