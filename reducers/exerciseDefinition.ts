@@ -167,7 +167,7 @@ export const exerciseDefinitionReducer = (
       const definitionIndex = state.definitions.findIndex(
         (def) => def.id === fullDefinition.id
       );
-      if (!state.definitions.length || definitionIndex > 0) {
+      if (!state.definitions.length || definitionIndex === -1) {
         return {
           ...state,
           loading: false,
