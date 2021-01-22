@@ -100,9 +100,9 @@ const DefinitionDetail = ({
         {primaryMuscleGroup && (
           <Item label="Muscles groups" value={primaryMuscleGroup.join(", ")} />
         )}
-        {lastImprovement && (
+        {lastImprovement ? (
           <Item label="Last improvement" value={`${lastImprovement}%`} />
-        )}
+        ) : null}
       </View>
       {pb && <ExerciseDetailAnalytics history={pb.history} />}
     </ScrollView>

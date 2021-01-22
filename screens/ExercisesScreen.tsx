@@ -123,7 +123,7 @@ export default function ExercisesScreen({ navigation }: Props) {
                       )} ago`}
                     </Text>
                   )}
-                  {lastImprovement && (
+                  {lastImprovement ? (
                     <Text
                       style={[
                         styles.exerciseImprovement,
@@ -135,7 +135,7 @@ export default function ExercisesScreen({ navigation }: Props) {
                     >
                       {`${lastImprovement > 0 ? "+" : ""}${lastImprovement}%`}
                     </Text>
-                  )}
+                  ) : null}
                   <Text style={styles.exerciseImprovement}>
                     {!history || history.length === 0
                       ? "Unattempted!"
