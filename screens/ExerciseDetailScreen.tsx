@@ -1,5 +1,10 @@
 import React, { useContext, useEffect } from "react";
-import { ScrollView, StyleSheet, View, ActivityIndicator } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  RefreshControl,
+} from "react-native";
 import { Text } from "../components/Themed";
 import { ExercisesParamList } from "../navigation/types";
 import { ExerciseDefinition } from "../constants/Interfaces";
@@ -49,8 +54,13 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       >
         Edit
       </Button>
-      {loading && <ActivityIndicator size="large" />}
-      {exercise && <DefinitionDetail definition={exercise} />}
+      {exercise && (
+        <DefinitionDetail
+          loading={loading}
+          definition={exercise}
+          getDefinitionById={getDefinitionById}
+        />
+      )}
       <ErrorToast error={error} />
     </Background>
   );
@@ -58,11 +68,15 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
 
 const DefinitionDetail = ({
   definition,
+  loading,
+  getDefinitionById,
 }: {
   definition: ExerciseDefinition;
+  getDefinitionById: (id: string) => Promise<void>;
+  loading: boolean;
 }) => {
   const {
-    unit,
+    id,
     type,
     primaryMuscleGroup,
     lastSession,
@@ -70,8 +84,15 @@ const DefinitionDetail = ({
     personalBest: pb,
   } = definition;
 
+  const getDefinition = () => getDefinitionById(id);
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={getDefinition} />
+      }
+    >
       {lastSession && (
         <ExerciseCard
           icon="clock-outline"

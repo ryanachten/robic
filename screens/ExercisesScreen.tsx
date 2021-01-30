@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, RefreshControl } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -82,8 +82,11 @@ export default function ExercisesScreen({ navigation }: Props) {
           <SelectItem key={value} title={label} />
         ))}
       </Select>
-      {loading && <ActivityIndicator size="large" />}
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={getDefinitions} />
+        }
+      >
         {definitions
           ?.sort((a, b) => {
             switch (sortBy.value) {
