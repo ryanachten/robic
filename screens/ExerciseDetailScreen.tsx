@@ -103,12 +103,14 @@ const DefinitionDetail = ({
       )}
       {pb && (
         <View>
-          <ExerciseCard
+          {pb.topNetExercise && (
+            <ExerciseCard
             icon="star-outline"
             title="Personal Best"
             exercise={pb.topNetExercise}
             containerStyle={styles.exerciseCard}
           />
+          )}
           <View style={styles.itemWrapper}>
             <Item label="Top Weight (Avg)" value={pb.topAvgValue.toString()} />
             <Item label="Top Reps" value={pb.topReps.toString()} />

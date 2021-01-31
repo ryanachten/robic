@@ -52,7 +52,7 @@ export type Set = {
 };
 
 export type PersonalBest = {
-  topNetExercise: Exercise;
+  topNetExercise: Exercise | null;
   topAvgValue: number;
   topReps: Number;
   topSets: Number;
@@ -88,7 +88,7 @@ export interface ExerciseDefinition {
   history: Exercise[];
   childExercises: ExerciseDefinition[];
   primaryMuscleGroup?: MuscleGroup[];
-  personalBest: PersonalBest | null;
+  personalBest?: PersonalBest;
 }
 
 export type AnalyticsItem = {
