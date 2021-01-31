@@ -4,6 +4,7 @@ import React, {
   useReducer,
   useRef,
   ElementRef,
+  useContext,
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -23,6 +24,9 @@ import { Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 import { Card } from "./Card";
 import { Icon } from "./Icon";
+import { ExerciseDefintionContext } from "../services/context";
+import { ExerciseCard } from "./ExerciseCard";
+import { ExerciseDefinitionState } from "../reducers/exerciseDefinition";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -35,6 +39,10 @@ export const ExerciseForm = ({
     exerciseReducer,
     initialExerciseState
   );
+  const {
+    state: definitionState,
+    actions: { getDefinitionById },
+  } = useContext(ExerciseDefintionContext);
 
   const stopwatchRef = useRef<ElementRef<typeof Stopwatch>>(null);
 
@@ -43,6 +51,7 @@ export const ExerciseForm = ({
   // Reset form if definition ID changes
   useEffect(() => {
     setSets(initialSet);
+    getDefinitionById(id);
   }, [id]);
 
   const updateSet = (index: number, field: "reps" | "value", value: string) => {
@@ -106,6 +115,7 @@ export const ExerciseForm = ({
         onPress={() => addSet()}
       />
       <ScrollView>
+        <PreviousAttempts id={id} definitionState={definitionState} />
         {sets.map(({ reps, value }: Set, index: number) => {
           const activeSet = index === 0;
           const setDisplayNumber = sets.length - index;
@@ -157,6 +167,38 @@ export const ExerciseForm = ({
   );
 };
 
+const PreviousAttempts = ({
+  id, definitionState
+}: {
+  id: string, definitionState: ExerciseDefinitionState
+}) => {
+  const { definitions } = definitionState;
+  const definition = definitions.find( def => def.id === id);
+  if(definition) {
+    const {lastSession, personalBest: pb} = definition;
+    return (
+      <View>
+        {pb && pb.topNetExercise && (
+          <ExerciseCard
+          icon="star-outline"
+          title="Personal Best"
+          exercise={pb.topNetExercise}
+          containerStyle={styles.exerciseCard}
+        />)}
+        {lastSession && (
+          <ExerciseCard
+          icon="clock-outline"
+          containerStyle={styles.exerciseCard}
+          title="Latest Exercise"
+          exercise={lastSession}
+        />
+        )}
+      </View>
+    );
+  }
+  return null;
+}
+
 const styles = StyleSheet.create({
   addSetButton: {
     marginBottom: Margin.md,
@@ -168,6 +210,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     minWidth: "100%",
+  },
+  exerciseCard: {
+    marginBottom: Margin.md,
   },
   inputWrapper: {
     alignItems: "center",
