@@ -1,7 +1,7 @@
 import { Text } from "@ui-kitten/components";
 import React, { useEffect, useReducer } from "react";
 import {
-  ActivityIndicator,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   useWindowDimensions,
@@ -31,8 +31,14 @@ export default function AnalyticsScreen() {
 
   return (
     <Background>
-      {loading && <ActivityIndicator size="large" />}
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => analyticsActions(analyticsDispatch).getAnalytics()}
+          />
+        }
+      >
         {analytics && (
           <>
             <View style={styles.overviewWrapper}>
