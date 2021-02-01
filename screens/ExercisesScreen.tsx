@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, ActivityIndicator, RefreshControl } from "react-native";
+import { StyleSheet, RefreshControl } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Background, Card, ErrorToast, Fab, Icon } from "../components";
+import { Background, Button, Card, ErrorToast, Icon } from "../components";
 import { ExercisesParamList } from "../navigation/types";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import {
@@ -56,12 +56,16 @@ export default function ExercisesScreen({ navigation }: Props) {
   return (
     <Background>
       <ErrorToast error={error} />
-      <Fab
-        containerStyles={styles.addExerciseButton}
-        label="Create exercise"
-        icon="plus-circle-outline"
+      <Button
+        appearance="outline"
         onPress={() => navigation.navigate("ExerciseEditScreen", {})}
-      />
+        style={styles.addExerciseButton}
+        accessoryRight={() => (
+          <Icon fill={Colors.orange} name="plus-circle-outline" size="sm" />
+        )}
+      >
+        Add Set
+      </Button>
       <Input
         style={styles.searchBar}
         placeholder="Search exercises..."
