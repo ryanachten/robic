@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Text } from "@ui-kitten/components";
+import { Text, Toggle } from "@ui-kitten/components";
 import {
   exerciseActions,
   ExerciseForPost,
@@ -17,7 +17,7 @@ import {
 } from "../reducers/exercise";
 import { ExerciseDefinition, Set } from "../constants/Interfaces";
 import { ErrorToast } from "./ErrorToast";
-import { Button, Fab } from "./Button";
+import { Button } from "./Button";
 import { Input } from "./Input";
 import { Stopwatch } from "./Stopwatch";
 import { Margin } from "../constants/Sizes";
@@ -105,15 +105,25 @@ export const ExerciseForm = ({
   return (
     <View style={styles.container}>
       <Stopwatch ref={stopwatchRef} />
-      <Button loading={loading} onPress={submitExercise}>
-        Done
-      </Button>
-      <Fab
-        containerStyles={styles.addSetButton}
-        label="Add Set"
-        icon="plus-circle-outline"
-        onPress={() => addSet()}
-      />
+      <View style={styles.buttonWrapper}>
+        <Button
+          appearance="outline"
+          onPress={addSet}
+          style={styles.button}
+          accessoryRight={() => (
+            <Icon fill={Colors.orange} name="plus-circle-outline" size="sm" />
+          )}
+        >
+          Add Set
+        </Button>
+        <Button
+          style={styles.button}
+          loading={loading}
+          onPress={submitExercise}
+        >
+          Done
+        </Button>
+      </View>
       <ScrollView>
         <PreviousAttempts id={id} definitionState={definitionState} />
         {sets.map(({ reps, value }: Set, index: number) => {
@@ -168,48 +178,69 @@ export const ExerciseForm = ({
 };
 
 const PreviousAttempts = ({
-  id, definitionState
+  id,
+  definitionState,
 }: {
-  id: string, definitionState: ExerciseDefinitionState
+  id: string;
+  definitionState: ExerciseDefinitionState;
 }) => {
+  const [showLastActivity, setShowLastActivity] = useState<boolean>(true);
+  const [showPersonalBest, setShowPersonalBest] = useState<boolean>(true);
+
   const { definitions } = definitionState;
-  const definition = definitions.find( def => def.id === id);
-  if(definition) {
-    const {lastSession, personalBest: pb} = definition;
+  const definition = definitions.find((def) => def.id === id);
+  if (definition) {
+    const { lastSession, personalBest: pb } = definition;
     return (
       <View>
-        {pb && pb.topNetExercise && (
+        <View style={styles.controlWrapper}>
+          <Toggle checked={showPersonalBest} onChange={setShowPersonalBest}>
+            Personal best
+          </Toggle>
+          <Toggle checked={showLastActivity} onChange={setShowLastActivity}>
+            Last session
+          </Toggle>
+        </View>
+        {showPersonalBest && pb && pb.topNetExercise && (
           <ExerciseCard
-          icon="star-outline"
-          title="Personal Best"
-          exercise={pb.topNetExercise}
-          containerStyle={styles.exerciseCard}
-        />)}
-        {lastSession && (
+            icon="star-outline"
+            title="Personal Best"
+            exercise={pb.topNetExercise}
+            containerStyle={styles.exerciseCard}
+          />
+        )}
+        {showLastActivity && lastSession && (
           <ExerciseCard
-          icon="clock-outline"
-          containerStyle={styles.exerciseCard}
-          title="Latest Exercise"
-          exercise={lastSession}
-        />
+            icon="clock-outline"
+            containerStyle={styles.exerciseCard}
+            title="Latest Exercise"
+            exercise={lastSession}
+          />
         )}
       </View>
     );
   }
   return null;
-}
+};
 
 const styles = StyleSheet.create({
-  addSetButton: {
-    marginBottom: Margin.md,
-  },
   button: {
-    marginBottom: Margin.sm,
+    width: "50%",
+  },
+  buttonWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: Margin.md,
   },
   container: {
     flex: 1,
     flexGrow: 1,
     minWidth: "100%",
+  },
+  controlWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: Margin.md,
   },
   exerciseCard: {
     marginBottom: Margin.md,

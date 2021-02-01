@@ -69,7 +69,7 @@ export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
   }));
 
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.parent}>
         <Text style={styles.child}>{padToTwo(min) + " : "}</Text>
         <Text style={styles.child}>{padToTwo(sec) + " : "}</Text>
@@ -88,9 +88,6 @@ export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
 });
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: Margin.md,
-  },
   parent: {
     alignSelf: "center",
     display: "flex",
