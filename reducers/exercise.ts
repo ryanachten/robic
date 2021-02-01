@@ -84,6 +84,7 @@ export const exerciseReducer = (
     case baseTypes.LOADING:
       return {
         ...state,
+        error: null,
         loading: true,
       };
     case baseTypes.ERROR:
