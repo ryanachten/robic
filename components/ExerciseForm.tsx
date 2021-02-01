@@ -187,19 +187,33 @@ const PreviousAttempts = ({
   const [showLastActivity, setShowLastActivity] = useState<boolean>(true);
   const [showPersonalBest, setShowPersonalBest] = useState<boolean>(true);
 
-  const { definitions } = definitionState;
+  const { definitions, loading } = definitionState;
   const definition = definitions.find((def) => def.id === id);
   if (definition) {
     const { lastSession, personalBest: pb } = definition;
     return (
       <View>
         <View style={styles.controlWrapper}>
-          <Toggle checked={showPersonalBest} onChange={setShowPersonalBest}>
-            Personal best
-          </Toggle>
-          <Toggle checked={showLastActivity} onChange={setShowLastActivity}>
-            Last session
-          </Toggle>
+          {!loading && (
+            <>
+              {pb && pb.topNetExercise && (
+                <Toggle
+                  checked={showPersonalBest}
+                  onChange={setShowPersonalBest}
+                >
+                  Personal best
+                </Toggle>
+              )}
+              {lastSession && (
+                <Toggle
+                  checked={showLastActivity}
+                  onChange={setShowLastActivity}
+                >
+                  Last session
+                </Toggle>
+              )}
+            </>
+          )}
         </View>
         {showPersonalBest && pb && pb.topNetExercise && (
           <ExerciseCard
