@@ -64,7 +64,7 @@ export default function ExercisesScreen({ navigation }: Props) {
           <Icon fill={Colors.orange} name="plus-circle-outline" size="sm" />
         )}
       >
-        Add Set
+        Create Exercise
       </Button>
       <Input
         style={styles.searchBar}

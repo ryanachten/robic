@@ -1,19 +1,19 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 
-export const Background = (props: View["props"]) => (
+export const Background = ({ children, style }: View["props"]) => (
   <View style={styles.container}>
     <LinearGradient
       start={{ x: 0.5, y: 0 }}
       end={{ x: 0.5, y: 1.0 }}
       locations={[0, 0.15, 0.85, 1]}
       colors={[Colors.lilac, Colors.white, Colors.white, Colors.lilac]}
-      style={[styles.gradient, props.style]}
+      style={[styles.gradient, style]}
     >
-      {props.children}
+      {children}
     </LinearGradient>
   </View>
 );

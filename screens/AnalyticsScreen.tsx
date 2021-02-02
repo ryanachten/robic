@@ -31,7 +31,7 @@ export default function AnalyticsScreen() {
   const resultsPerChart = 20;
 
   return (
-    <Background>
+    <Background style={{ padding: 0 }}>
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -124,10 +124,10 @@ const AnalyticsChart = ({ data, title, variant }: AnalyticsChartProps) => {
         title={title}
         pieProps={{
           data,
+          radius: windowWidth / 4,
           x: "marker",
           y: "count",
         }}
-        chartProps={{ width: windowWidth - 100 }}
       />
     );
   }
@@ -139,7 +139,6 @@ const AnalyticsChart = ({ data, title, variant }: AnalyticsChartProps) => {
         x: "marker",
         y: "count",
       }}
-      chartProps={{ width: windowWidth - 40 }}
     />
   );
 };
@@ -149,6 +148,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
+    marginBottom: Margin.md,
   },
   overviewLeftGutter: {
     marginRight: Margin.md,

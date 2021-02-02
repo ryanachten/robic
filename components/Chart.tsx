@@ -102,8 +102,20 @@ const getColour = ({
 };
 
 export const BarChart = ({ chartProps, barProps, title }: BarChartProps) => {
+  const maxLabelLength = 8;
   const { max, min } = getMaxMin(barProps);
   const defaultColor = Colors.orange;
+  const labels: string[] = [];
+  if (barProps && barProps.data) {
+    barProps.data.map((d) => {
+      const marker = d.marker as string;
+      const label =
+        marker.length > maxLabelLength
+          ? `${marker.slice(0, maxLabelLength - 2)}..`
+          : marker;
+      labels.push(label);
+    });
+  }
   return (
     <>
       <VictoryChart theme={VictoryTheme.material} {...chartProps}>
@@ -122,7 +134,12 @@ export const BarChart = ({ chartProps, barProps, title }: BarChartProps) => {
           {...barProps}
         />
         <VictoryAxis
-          tickLabelComponent={<VictoryLabel textAnchor="end" />}
+          tickLabelComponent={
+            <VictoryLabel
+              textAnchor="end"
+              text={(d) => labels[d.index as number]}
+            />
+          }
           style={{
             tickLabels: { angle: -90 },
             grid: { stroke: "none" },
@@ -148,6 +165,8 @@ export const PieChart = ({ chartProps, pieProps, title }: PieChartProps) => {
         }}
       >
         <VictoryPie
+          labelPosition="centroid"
+          labelPlacement="parallel"
           style={{
             data: {
               fill: (d) => {
