@@ -1,6 +1,7 @@
 import { Text } from "@ui-kitten/components";
 import React, { useEffect, useReducer } from "react";
 import {
+  ActivityIndicator,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -39,6 +40,7 @@ export default function AnalyticsScreen() {
           />
         }
       >
+        {!analytics && loading && <ActivityIndicator size="large" />}
         {analytics && (
           <>
             <View style={styles.overviewWrapper}>
