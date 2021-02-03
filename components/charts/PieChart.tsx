@@ -5,7 +5,7 @@ import { VictoryPieProps } from "victory-pie";
 import { Colors } from "../../constants/Colors";
 import { Margin } from "../../constants/Sizes";
 import { lerpColor } from "../../utilities/styleHelpers";
-import { chartStyles, GroupProps } from "./chartCommon";
+import { GroupProps } from "./chartCommon";
 
 export type PieChartProps = GroupProps & {
   pieProps?: VictoryPieProps;
@@ -38,7 +38,17 @@ export const PieChart = ({ chartProps, pieProps, title }: PieChartProps) => {
           {...pieProps}
         />
       </VictoryGroup>
-      <Text style={chartStyles.groupTitle}>{title}</Text>
+      <Text style={styles.groupTitle}>{title}</Text>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  chartTitle: {
+    marginTop: Margin.sm,
+    textAlign: "center",
+  },
+  groupTitle: {
+    textAlign: "center",
+  },
+});

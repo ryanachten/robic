@@ -1,14 +1,15 @@
 import { Text } from "@ui-kitten/components";
 import React, { useEffect, useReducer } from "react";
 import {
-  ActivityIndicator,
   RefreshControl,
   ScrollView,
+  StyleProp,
   StyleSheet,
   useWindowDimensions,
   View,
   ViewStyle,
 } from "react-native";
+import { VictoryStyleInterface } from "victory-core";
 import { Background, BarChart, ErrorToast, PieChart } from "../components";
 import { AnalyticsItem } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
@@ -78,6 +79,9 @@ export default function AnalyticsScreen() {
               data={analytics.exerciseProgress.splice(0, resultsPerChart)}
             />
             <AnalyticsChart
+              containerStyle={{
+                marginTop: Margin.lg,
+              }}
               negative={true}
               title="Least exercise progress"
               data={analytics.exerciseProgress.splice(
@@ -113,11 +117,13 @@ type AnalyticsChartProps = {
   variant?: "pie" | "bar";
   title: string;
   negative?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
 };
 
 const AnalyticsChart = ({
   data,
   negative,
+  containerStyle,
   title,
   variant,
 }: AnalyticsChartProps) => {
@@ -139,6 +145,7 @@ const AnalyticsChart = ({
   }
   return (
     <BarChart
+      containerStyle={containerStyle}
       negative={negative}
       title={title}
       barProps={{

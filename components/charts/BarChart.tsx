@@ -1,20 +1,23 @@
 import React from "react";
-import { Text } from "react-native";
-import { ChartProps, chartStyles } from "./chartCommon";
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { ChartProps } from "./chartCommon";
 import { VictoryAxis, VictoryBar, VictoryLabel } from "victory-native";
 import { VictoryBarProps } from "victory-bar";
 import { VictoryChart, VictoryTheme } from "victory-native";
 import { getColour, getMaxMin } from "./chartUtils";
 import { Colors } from "../../constants/Colors";
+import { Margin } from "../../constants/Sizes";
 
 export type BarChartProps = ChartProps & {
   negative?: boolean;
   barProps?: VictoryBarProps;
+  containerStyle?: StyleProp<ViewStyle>;
 };
 
 export const BarChart = ({
   chartProps,
   barProps,
+  containerStyle,
   negative,
   title,
 }: BarChartProps) => {
@@ -33,9 +36,10 @@ export const BarChart = ({
     });
   }
   return (
-    <>
+    <View style={containerStyle}>
       <VictoryChart theme={VictoryTheme.material} {...chartProps}>
         <VictoryBar
+          animate={true}
           style={{
             data: {
               fill: (d) => {
@@ -68,7 +72,14 @@ export const BarChart = ({
           }}
         />
       </VictoryChart>
-      <Text style={chartStyles.chartTitle}>{title}</Text>
-    </>
+      <Text style={styles.chartTitle}>{title}</Text>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  chartTitle: {
+    marginTop: Margin.sm,
+    textAlign: "center",
+  },
+});
