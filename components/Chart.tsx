@@ -34,6 +34,7 @@ export type LineChartProps = ChartProps & {
 };
 
 export type BarChartProps = ChartProps & {
+  negative?: boolean;
   barProps?: VictoryBarProps;
 };
 
@@ -86,7 +87,7 @@ const getColour = ({
   // Handle negative colour range
   else if (y < 0 && min) {
     const percent = Math.abs(y) / Math.abs(min);
-    colour = lerpColor(Colors.orange, Colors.purple, percent);
+    colour = lerpColor(Colors.lilac, Colors.purple, percent);
   }
   // Handle edge cases where max or min
   else {
@@ -101,7 +102,12 @@ const getColour = ({
   return colour;
 };
 
-export const BarChart = ({ chartProps, barProps, title }: BarChartProps) => {
+export const BarChart = ({
+  chartProps,
+  barProps,
+  negative,
+  title,
+}: BarChartProps) => {
   const maxLabelLength = 8;
   const { max, min } = getMaxMin(barProps);
   const defaultColor = Colors.orange;
@@ -141,7 +147,7 @@ export const BarChart = ({ chartProps, barProps, title }: BarChartProps) => {
             />
           }
           style={{
-            tickLabels: { angle: -90 },
+            tickLabels: { angle: negative ? 90 : -90 },
             grid: { stroke: "none" },
           }}
         />

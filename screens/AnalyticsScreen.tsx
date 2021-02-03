@@ -79,6 +79,7 @@ export default function AnalyticsScreen() {
               data={analytics.exerciseProgress.splice(0, resultsPerChart)}
             />
             <AnalyticsChart
+              negative={true}
               title="Least exercise progress"
               data={analytics.exerciseProgress.splice(
                 analytics.exerciseProgress.length - resultsPerChart,
@@ -112,9 +113,15 @@ type AnalyticsChartProps = {
   data: AnalyticsItem[];
   variant?: "pie" | "bar";
   title: string;
+  negative?: boolean;
 };
 
-const AnalyticsChart = ({ data, title, variant }: AnalyticsChartProps) => {
+const AnalyticsChart = ({
+  data,
+  negative,
+  title,
+  variant,
+}: AnalyticsChartProps) => {
   // TODO: this shouldn't be necessary - used to avoid horizontal overflow
   const windowWidth = useWindowDimensions().width;
 
@@ -133,6 +140,7 @@ const AnalyticsChart = ({ data, title, variant }: AnalyticsChartProps) => {
   }
   return (
     <BarChart
+      negative={negative}
       title={title}
       barProps={{
         data,
