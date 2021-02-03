@@ -40,7 +40,6 @@ export default function AnalyticsScreen() {
           />
         }
       >
-        {!analytics && loading && <ActivityIndicator size="large" />}
         {analytics && (
           <>
             <View style={styles.overviewWrapper}>

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { PersonalBestHistory } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
-import { LineChart } from "./Chart";
+import { LineChart } from "./charts";
 
 type Props = {
   history: PersonalBestHistory[];
