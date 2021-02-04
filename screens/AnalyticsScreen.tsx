@@ -9,7 +9,6 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { VictoryStyleInterface } from "victory-core";
 import { Background, BarChart, ErrorToast, PieChart } from "../components";
 import { AnalyticsItem } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";

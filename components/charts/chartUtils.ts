@@ -41,8 +41,8 @@ export const getColour = ({
     return defaultColor;
   }
 
-  // Handle error contexts
-  if (colour === "#") {
+  // Check if hex is a valid colour
+  if (!/^#[0-9A-F]{6}$/i.test(colour)) {
     return defaultColor;
   }
 
