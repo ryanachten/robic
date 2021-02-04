@@ -1,6 +1,7 @@
 import { Text } from "@ui-kitten/components";
 import React, { useEffect, useReducer } from "react";
 import {
+  ActivityIndicator,
   RefreshControl,
   ScrollView,
   StyleProp,
@@ -35,12 +36,12 @@ export default function AnalyticsScreen() {
       <ScrollView
         refreshControl={
           <RefreshControl
-            refreshing={loading}
+            refreshing={loading && Boolean(analytics)}
             onRefresh={() => analyticsActions(analyticsDispatch).getAnalytics()}
           />
         }
       >
-        {analytics && (
+        {analytics ? (
           <>
             <View style={styles.overviewWrapper}>
               {analytics.mostFrequentMuscleGroup && (
@@ -89,6 +90,8 @@ export default function AnalyticsScreen() {
               )}
             />
           </>
+        ) : (
+          <ActivityIndicator size="large" />
         )}
       </ScrollView>
       <ErrorToast error={error} />
@@ -161,7 +164,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    marginBottom: Margin.md,
+    marginBottom: Margin.lg,
+    marginTop: Margin.lg,
   },
   overviewLeftGutter: {
     marginRight: Margin.md,
