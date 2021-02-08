@@ -1,5 +1,5 @@
 import { Text } from "@ui-kitten/components";
-import React, { useEffect, useReducer } from "react";
+import React, { useContext } from "react";
 import {
   ActivityIndicator,
   RefreshControl,
@@ -13,21 +13,13 @@ import {
 import { Background, BarChart, ErrorToast, PieChart } from "../components";
 import { AnalyticsItem } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
-import {
-  analyticsActions,
-  analyticsReducer,
-  initialAnalyticsState,
-} from "../reducers/analytics";
+import { AnalyticsContext } from "../services/context";
 
 export default function AnalyticsScreen() {
-  const [{ analytics, loading, error }, analyticsDispatch] = useReducer(
-    analyticsReducer,
-    initialAnalyticsState
-  );
-
-  useEffect(() => {
-    analyticsActions(analyticsDispatch).getAnalytics();
-  }, []);
+  const {
+    state: { analytics, error, loading },
+    actions: { getAnalytics },
+  } = useContext(AnalyticsContext);
 
   const resultsPerChart = 20;
 
@@ -37,7 +29,7 @@ export default function AnalyticsScreen() {
         refreshControl={
           <RefreshControl
             refreshing={loading && Boolean(analytics)}
-            onRefresh={() => analyticsActions(analyticsDispatch).getAnalytics()}
+            onRefresh={() => getAnalytics()}
           />
         }
       >
@@ -165,7 +157,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: Margin.lg,
-    marginTop: Margin.lg,
+    marginTop: Margin.md,
   },
   overviewLeftGutter: {
     marginRight: Margin.md,

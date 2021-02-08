@@ -5,6 +5,7 @@ import {
   ExerciseDefinitionActions,
   ExerciseDefinitionState,
 } from "../reducers/exerciseDefinition";
+import { AnalyticsActions, AnalyticsState } from "../reducers/analytics";
 
 export const AuthContext = createContext<{
   state: Partial<AuthState>;
@@ -19,4 +20,9 @@ export const UserContext = createContext<{
 export const ExerciseDefintionContext = createContext<{
   state: ExerciseDefinitionState;
   actions: ExerciseDefinitionActions;
+}>({});
+
+export const AnalyticsContext = createContext<{
+  state: AnalyticsState;
+  actions: AnalyticsActions;
 }>({});
