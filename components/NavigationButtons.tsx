@@ -1,8 +1,8 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { useContext } from "react";
+import { Text } from "@ui-kitten/components";
 import { AuthContext } from "../services/context";
-import { Text } from "./Themed";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import { StackHeaderLeftButtonProps } from "@react-navigation/stack";

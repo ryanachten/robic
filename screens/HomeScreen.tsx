@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
-import { Text, ErrorToast, ExerciseForm, Background } from "../components";
+import { IndexPath, Select, SelectItem, Text } from "@ui-kitten/components";
+import { ErrorToast, ExerciseForm, Background } from "../components";
 import { ExerciseDefintionContext, UserContext } from "../services/context";
-import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 
@@ -30,7 +30,7 @@ export default function HomeScreen() {
     <Background>
       <ErrorToast error={error} />
       {!selectedDefintion && (
-        <Text style={styles.title}>Hello {firstName}!</Text>
+        <Text style={styles.title}>Hello {firstName || ""}!</Text>
       )}
       {loading && <ActivityIndicator color={Colors.orange} />}
       {selectedDefintion && (

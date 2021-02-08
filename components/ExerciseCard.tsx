@@ -1,7 +1,7 @@
 import { formatDistance } from "date-fns";
 import React from "react";
 import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
-import { Text } from "./Themed";
+import { Text } from "@ui-kitten/components";
 import { Exercise } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
 import { boxShadowStyles, Colors } from "../constants/Colors";

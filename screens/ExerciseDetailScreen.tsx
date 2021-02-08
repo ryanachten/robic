@@ -1,11 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  RefreshControl,
-} from "react-native";
-import { Text } from "../components/Themed";
+import { ScrollView, StyleSheet, View, RefreshControl } from "react-native";
+import { Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -105,11 +100,11 @@ const DefinitionDetail = ({
         <View>
           {pb.topNetExercise && (
             <ExerciseCard
-            icon="star-outline"
-            title="Personal Best"
-            exercise={pb.topNetExercise}
-            containerStyle={styles.exerciseCard}
-          />
+              icon="star-outline"
+              title="Personal Best"
+              exercise={pb.topNetExercise}
+              containerStyle={styles.exerciseCard}
+            />
           )}
           <View style={styles.itemWrapper}>
             <Item label="Top Weight (Avg)" value={pb.topAvgValue.toString()} />

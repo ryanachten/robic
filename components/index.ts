@@ -9,4 +9,3 @@ export * from "./ErrorToast";
 export * from "./Icon";
 export * from "./Input";
 export * from "./Stopwatch";
-export * from "./Themed";
