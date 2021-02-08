@@ -4,6 +4,7 @@ import { Text, ErrorToast, ExerciseForm, Background } from "../components";
 import { ExerciseDefintionContext, UserContext } from "../services/context";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { Margin } from "../constants/Sizes";
+import { Colors } from "../constants/Colors";
 
 export default function HomeScreen() {
   const {
@@ -31,7 +32,7 @@ export default function HomeScreen() {
       {!selectedDefintion && (
         <Text style={styles.title}>Hello {firstName}!</Text>
       )}
-      {loading && <ActivityIndicator />}
+      {loading && <ActivityIndicator color={Colors.orange} />}
       {selectedDefintion && (
         <>
           <Select
