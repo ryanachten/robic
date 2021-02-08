@@ -9,8 +9,6 @@ import {
   BottomNavigationTab,
 } from "@ui-kitten/components/ui";
 import { Icon } from "../components";
-import Colors from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import {
@@ -38,13 +36,10 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
 );
 
 export default function UnauthenticatedNavigator() {
-  const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
       tabBar={(props) => <BottomTabBar {...props} />}
       initialRouteName="Login"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
     >
       <BottomTab.Screen name="Login" component={LoginNavigator} />
       <BottomTab.Screen name="Register" component={RegisterNavigator} />
