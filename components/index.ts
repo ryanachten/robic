@@ -8,4 +8,5 @@ export * from "./ExerciseForm";
 export * from "./ErrorToast";
 export * from "./Icon";
 export * from "./Input";
+export * from "./Logo";
 export * from "./Stopwatch";

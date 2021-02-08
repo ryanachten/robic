@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { StyleSheet } from "react-native";
 import { Input, Text } from "@ui-kitten/components";
 import { AuthContext } from "../services/context";
-import { Background, Button, ErrorToast } from "../components";
+import { Background, Button, ErrorToast, Logo } from "../components";
 import { Margin } from "../constants/Sizes";
 
 export default function LoginScreen() {
@@ -16,8 +16,9 @@ export default function LoginScreen() {
   return (
     <Background style={styles.container}>
       <ErrorToast error={error} />
+      <Logo style={styles.logo} />
       <Text category="h5" style={styles.title}>
-        Login
+        Login to get started!
       </Text>
       <Input
         autoCapitalize="none"
@@ -46,10 +47,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
   },
   input: {
     marginBottom: Margin.md,
+  },
+  logo: {
+    marginBottom: Margin.md,
+    marginTop: Margin.md,
   },
   title: {
     marginBottom: Margin.md,
