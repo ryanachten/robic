@@ -83,7 +83,9 @@ function RootNavigator() {
   const initApp = async () => {
     await authContext.restoreToken();
     await userContext.restoreUser();
-    analyticsContext.getAnalytics();
+    if (user.id) {
+      analyticsContext.getAnalytics();
+    }
   };
 
   if (auth.loading) {
