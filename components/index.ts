@@ -4,7 +4,7 @@ export * from "./Card";
 export * from "./charts";
 export * from "./ExerciseCard";
 export * from "./ExerciseDetailAnalytics";
-export * from "./ExerciseForm";
+export * from "./exercise-form";
 export * from "./ErrorToast";
 export * from "./Icon";
 export * from "./Input";

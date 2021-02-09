@@ -8,25 +8,25 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Text, Toggle } from "@ui-kitten/components";
+import { Text } from "@ui-kitten/components";
 import {
   exerciseActions,
   ExerciseForPost,
   exerciseReducer,
   initialExerciseState,
-} from "../reducers/exercise";
-import { ExerciseDefinition, Set } from "../constants/Interfaces";
-import { ErrorToast } from "./ErrorToast";
-import { Button } from "./Button";
-import { Input } from "./Input";
-import { Stopwatch } from "./Stopwatch";
-import { Margin } from "../constants/Sizes";
-import { Colors } from "../constants/Colors";
-import { Card } from "./Card";
-import { Icon } from "./Icon";
-import { ExerciseDefintionContext } from "../services/context";
-import { ExerciseCard } from "./ExerciseCard";
-import { ExerciseDefinitionState } from "../reducers/exerciseDefinition";
+} from "../../reducers/exercise";
+import { ExerciseDefinition, Set } from "../../constants/Interfaces";
+import { ErrorToast } from "../ErrorToast";
+import { Button } from "../Button";
+import { Input } from "../Input";
+import { Stopwatch } from "../Stopwatch";
+import { Margin } from "../../constants/Sizes";
+import { Colors } from "../../constants/Colors";
+import { Card } from "../Card";
+import { Icon } from "../Icon";
+import { ExerciseDefintionContext } from "../../services/context";
+import { PreviousAttempts } from "./PreviousAttempts";
+import { EffortTillPersonalBest } from "./EffortTillPersonalBest";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -126,6 +126,11 @@ export const ExerciseForm = ({
       </View>
       <ScrollView>
         <PreviousAttempts id={id} definitionState={definitionState} />
+        <EffortTillPersonalBest
+          id={id}
+          currentSets={sets}
+          definitionState={definitionState}
+        />
         {sets.map(({ reps, value }: Set, index: number) => {
           const activeSet = index === 0;
           const setDisplayNumber = sets.length - index;
@@ -177,66 +182,6 @@ export const ExerciseForm = ({
   );
 };
 
-const PreviousAttempts = ({
-  id,
-  definitionState,
-}: {
-  id: string;
-  definitionState: ExerciseDefinitionState;
-}) => {
-  const [showLastActivity, setShowLastActivity] = useState<boolean>(true);
-  const [showPersonalBest, setShowPersonalBest] = useState<boolean>(true);
-
-  const { definitions, loading } = definitionState;
-  const definition = definitions.find((def) => def.id === id);
-  if (definition) {
-    const { lastSession, personalBest: pb } = definition;
-    return (
-      <View>
-        <View style={styles.controlWrapper}>
-          {!loading && (
-            <>
-              {pb && pb.topNetExercise && (
-                <Toggle
-                  checked={showPersonalBest}
-                  onChange={setShowPersonalBest}
-                >
-                  Personal best
-                </Toggle>
-              )}
-              {lastSession && (
-                <Toggle
-                  checked={showLastActivity}
-                  onChange={setShowLastActivity}
-                >
-                  Last session
-                </Toggle>
-              )}
-            </>
-          )}
-        </View>
-        {showPersonalBest && pb && pb.topNetExercise && (
-          <ExerciseCard
-            icon="star-outline"
-            title="Personal Best"
-            exercise={pb.topNetExercise}
-            containerStyle={styles.exerciseCard}
-          />
-        )}
-        {showLastActivity && lastSession && (
-          <ExerciseCard
-            icon="clock-outline"
-            containerStyle={styles.exerciseCard}
-            title="Latest Exercise"
-            exercise={lastSession}
-          />
-        )}
-      </View>
-    );
-  }
-  return null;
-};
-
 const styles = StyleSheet.create({
   addButton: {
     marginRight: Margin.md,
@@ -254,14 +199,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     minWidth: "100%",
-  },
-  controlWrapper: {
-    display: "flex",
-    flexDirection: "row",
-    marginBottom: Margin.md,
-  },
-  exerciseCard: {
-    marginBottom: Margin.md,
   },
   inputWrapper: {
     alignItems: "center",
