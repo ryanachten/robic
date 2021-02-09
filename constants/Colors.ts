@@ -10,11 +10,21 @@ export enum Colors {
 }
 
 export const boxShadowStyles = {
-  shadowColor: "rgba(0, 0, 0, 0.4)",
+  // shadowColor: "rgba(0, 0, 0, 0.4)",
+  // shadowOffset: {
+  //   height: 1,
+  //   width: 1,
+  // },
+  // shadowOpacity: 1,
+  // shadowRadius: 1,
+
+  shadowColor: "#000",
   shadowOffset: {
-    height: 1,
-    width: 1,
+    width: 0,
+    height: 2,
   },
-  shadowOpacity: 1,
-  shadowRadius: 1,
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+
+  elevation: 5,
 };

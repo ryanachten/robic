@@ -109,7 +109,7 @@ export const ExerciseForm = ({
         <Button
           appearance="outline"
           onPress={addSet}
-          style={styles.button}
+          style={[styles.button, styles.addButton]}
           accessoryRight={() => (
             <Icon fill={Colors.orange} name="plus-circle-outline" size="sm" />
           )}
@@ -238,8 +238,12 @@ const PreviousAttempts = ({
 };
 
 const styles = StyleSheet.create({
+  addButton: {
+    marginRight: Margin.md,
+  },
   button: {
-    width: "50%",
+    width: "45%",
+    flexGrow: 1,
   },
   buttonWrapper: {
     display: "flex",

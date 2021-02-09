@@ -1,22 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, ActivityIndicator, View } from "react-native";
-import {
-  IndexPath,
-  Select,
-  SelectItem,
-  Spinner,
-  Text,
-} from "@ui-kitten/components";
+import { StyleSheet, View } from "react-native";
+import { IndexPath, Select, SelectItem, Spinner } from "@ui-kitten/components";
 import { ErrorToast, ExerciseForm, Background } from "../components";
-import { ExerciseDefintionContext, UserContext } from "../services/context";
+import { ExerciseDefintionContext } from "../services/context";
 import { Margin } from "../constants/Sizes";
-import { Colors } from "../constants/Colors";
 
 export default function HomeScreen() {
-  const {
-    state: { firstName },
-  } = useContext(UserContext);
-
   const {
     state: { definitions, error, loading },
     actions: { getDefinitions },
