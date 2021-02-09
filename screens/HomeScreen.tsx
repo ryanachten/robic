@@ -1,6 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
-import { IndexPath, Select, SelectItem, Text } from "@ui-kitten/components";
+import { StyleSheet, ActivityIndicator, View } from "react-native";
+import {
+  IndexPath,
+  Select,
+  SelectItem,
+  Spinner,
+  Text,
+} from "@ui-kitten/components";
 import { ErrorToast, ExerciseForm, Background } from "../components";
 import { ExerciseDefintionContext, UserContext } from "../services/context";
 import { Margin } from "../constants/Sizes";
@@ -29,10 +35,11 @@ export default function HomeScreen() {
   return (
     <Background>
       <ErrorToast error={error} />
-      {!selectedDefintion && (
-        <Text style={styles.title}>Hello {firstName || ""}!</Text>
+      {loading && (
+        <View style={styles.spinner}>
+          <Spinner size="giant" />
+        </View>
       )}
-      {loading && <ActivityIndicator color={Colors.orange} />}
       {selectedDefintion && (
         <>
           <Select
@@ -57,6 +64,9 @@ const styles = StyleSheet.create({
   picker: {
     marginBottom: Margin.md,
     width: "100%",
+  },
+  spinner: {
+    marginBottom: Margin.md,
   },
   title: {
     fontSize: 20,

@@ -1,7 +1,6 @@
-import { Text } from "@ui-kitten/components";
+import { Spinner, Text } from "@ui-kitten/components";
 import React, { useContext } from "react";
 import {
-  ActivityIndicator,
   RefreshControl,
   ScrollView,
   StyleProp,
@@ -11,16 +10,17 @@ import {
   ViewStyle,
 } from "react-native";
 import { Background, BarChart, ErrorToast, PieChart } from "../components";
-import { Colors } from "../constants/Colors";
 import { AnalyticsItem } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
 import { AnalyticsContext } from "../services/context";
 
 export default function AnalyticsScreen() {
   const {
-    state: { analytics, error, loading },
+    state: { analytics, error },
     actions: { getAnalytics },
   } = useContext(AnalyticsContext);
+
+  const loading = true;
 
   const resultsPerChart = 20;
 
@@ -84,7 +84,9 @@ export default function AnalyticsScreen() {
             />
           </>
         ) : (
-          <ActivityIndicator size="large" color={Colors.orange} />
+          <View style={styles.spinner}>
+            <Spinner size="giant" />
+          </View>
         )}
       </ScrollView>
       <ErrorToast error={error} />
@@ -162,5 +164,8 @@ const styles = StyleSheet.create({
   },
   overviewLeftGutter: {
     marginRight: Margin.md,
+  },
+  spinner: {
+    marginTop: Margin.md,
   },
 });
