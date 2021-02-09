@@ -1,12 +1,18 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Text } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import { Spinner, Text } from "@ui-kitten/components";
+import { Background, Logo } from "../components";
+import { Margin } from "../constants/Sizes";
 
 export default function LoadingScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Loading...</Text>
-    </View>
+    <Background style={styles.container}>
+      <Logo style={styles.logo} />
+      <Text category="h5" style={styles.title}>
+        Getting ready!
+      </Text>
+      <Spinner size="giant" />
+    </Background>
   );
 }
 
@@ -16,13 +22,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
+  logo: {
+    marginBottom: Margin.md,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  title: {
+    marginBottom: Margin.md,
   },
 });
