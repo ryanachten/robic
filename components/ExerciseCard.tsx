@@ -1,7 +1,7 @@
 import { formatDistance } from "date-fns";
 import React from "react";
 import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
-import { Card, Text } from "@ui-kitten/components";
+import { Text } from "@ui-kitten/components";
 import { Exercise } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
@@ -20,7 +20,7 @@ export const ExerciseCard = ({
   icon,
   exercise: { date, sets },
 }: ExerciseCardProps) => (
-  <Card style={containerStyle}>
+  <View style={containerStyle}>
     <View style={styles.titleWrapper}>
       <Icon size="sm" fill={Colors.orange} name={icon} />
       <Text style={styles.title}>{`${title} ${formatDistance(
@@ -33,7 +33,7 @@ export const ExerciseCard = ({
         <Text key={i}>{`${reps} reps x ${value} kg`}</Text>
       ))}
     </View>
-  </Card>
+  </View>
 );
 
 const styles = StyleSheet.create({

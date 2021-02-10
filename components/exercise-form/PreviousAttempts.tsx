@@ -1,4 +1,4 @@
-import { Toggle } from "@ui-kitten/components";
+import { Card, Toggle } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Margin } from "../../constants/Sizes";
@@ -20,7 +20,7 @@ export const PreviousAttempts = ({
   if (definition) {
     const { lastSession, personalBest: pb } = definition;
     return (
-      <View>
+      <View style={styles.root}>
         <View style={styles.controlWrapper}>
           {!loading && (
             <>
@@ -43,22 +43,25 @@ export const PreviousAttempts = ({
             </>
           )}
         </View>
-        {showPersonalBest && pb && pb.topNetExercise && (
-          <ExerciseCard
-            icon="star-outline"
-            title="Personal Best"
-            exercise={pb.topNetExercise}
-            containerStyle={styles.exerciseCard}
-          />
-        )}
-        {showLastActivity && lastSession && (
-          <ExerciseCard
-            icon="clock-outline"
-            containerStyle={styles.exerciseCard}
-            title="Latest Exercise"
-            exercise={lastSession}
-          />
-        )}
+        <Card>
+          {showPersonalBest && pb && pb.topNetExercise && (
+            <ExerciseCard
+              icon="star-outline"
+              title="Personal Best"
+              exercise={pb.topNetExercise}
+              containerStyle={[
+                showLastActivity && lastSession && styles.exerciseCard,
+              ]}
+            />
+          )}
+          {showLastActivity && lastSession && (
+            <ExerciseCard
+              icon="clock-outline"
+              title="Latest Exercise"
+              exercise={lastSession}
+            />
+          )}
+        </Card>
       </View>
     );
   }
@@ -72,6 +75,9 @@ const styles = StyleSheet.create({
     marginBottom: Margin.md,
   },
   exerciseCard: {
+    marginBottom: Margin.md,
+  },
+  root: {
     marginBottom: Margin.md,
   },
 });
