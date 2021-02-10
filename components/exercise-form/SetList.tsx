@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { Set } from "../../constants/Interfaces";
 import { Input } from "../Input";
-import { Card } from "../Card";
 import { Icon } from "../Icon";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
@@ -20,13 +19,16 @@ export const SetList = ({ sets, updateSet, removeSet }: SetListProps) => (
       const activeSet = index === 0;
       const setDisplayNumber = sets.length - index;
       return (
-        <View key={index} style={[!activeSet && styles.inputWrapperInactive]}>
+        <View
+          key={index}
+          style={[styles.root, !activeSet && styles.rootInactive]}
+        >
           <Text style={styles.setNumber} appearance="hint">{`${
             activeSet
               ? `Current Set (${setDisplayNumber})`
               : `Set ${setDisplayNumber}`
           } `}</Text>
-          <Card style={styles.inputWrapper}>
+          <View style={styles.inputWrapper}>
             <Input
               style={[styles.inputContainer, styles.inputRepContainer]}
               label="Reps"
@@ -54,7 +56,7 @@ export const SetList = ({ sets, updateSet, removeSet }: SetListProps) => (
                 onPress={() => removeSet(index)}
               />
             )}
-          </Card>
+          </View>
         </View>
       );
     })}
@@ -64,9 +66,16 @@ export const SetList = ({ sets, updateSet, removeSet }: SetListProps) => (
 const styles = StyleSheet.create({
   inputWrapper: {
     alignItems: "center",
-    marginBottom: Margin.sm,
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: Margin.md,
   },
-  inputWrapperInactive: {
+  root: {
+    borderBottomColor: Colors.lilac,
+    borderBottomWidth: 1,
+    marginBottom: Margin.md,
+  },
+  rootInactive: {
     opacity: 0.5,
   },
   inputContainer: {
