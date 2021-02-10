@@ -1,6 +1,5 @@
 export * from "./Background";
 export * from "./Button";
-export * from "./Card";
 export * from "./charts";
 export * from "./ExerciseCard";
 export * from "./ExerciseDetailAnalytics";
