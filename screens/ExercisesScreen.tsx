@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, RefreshControl } from "react-native";
+import { StyleSheet, RefreshControl, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { formatDistance } from "date-fns";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Background, Button, Card, ErrorToast, Icon } from "../components";
+import { Background, Button, ErrorToast, Icon } from "../components";
 import { ExercisesParamList } from "../navigation/types";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import {
@@ -20,6 +20,7 @@ import {
   Select,
   SelectItem,
   Text,
+  Card,
 } from "@ui-kitten/components";
 import { ExerciseDefintionContext } from "../services/context";
 
@@ -111,17 +112,17 @@ export default function ExercisesScreen({ navigation }: Props) {
               lastImprovement,
               history,
             }: ExerciseDefinition) => (
-              <TouchableOpacity
-                key={id}
+              <Card
                 style={styles.exerciseItem}
+                key={id}
                 onPress={() =>
                   navigation.navigate("ExerciseDetailScreen", {
                     definitionId: id,
                   })
                 }
               >
-                <Card>
-                  <Text style={styles.exerciseTitle}>{title}</Text>
+                <Text style={styles.exerciseTitle}>{title}</Text>
+                <View style={styles.exerciseMeta}>
                   {lastSession && (
                     <Text style={styles.exerciseDate}>
                       {`${formatDistance(
@@ -148,8 +149,8 @@ export default function ExercisesScreen({ navigation }: Props) {
                       ? "Unattempted!"
                       : `Sessions: ${history.length}`}
                   </Text>
-                </Card>
-              </TouchableOpacity>
+                </View>
+              </Card>
             )
           )}
       </ScrollView>
@@ -162,6 +163,10 @@ const styles = StyleSheet.create({
     marginBottom: Margin.md,
   },
   exerciseItem: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    minWidth: "100%",
     marginBottom: Margin.sm,
   },
   exerciseDate: {
@@ -169,6 +174,11 @@ const styles = StyleSheet.create({
   },
   exerciseImprovement: {
     marginRight: Margin.sm,
+  },
+  exerciseMeta: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   exerciseTitle: {
     fontSize: FontSize.heading,
