@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Text } from "@ui-kitten/components";
+import { Button, Card, Text } from "@ui-kitten/components";
 import { Set } from "../../constants/Interfaces";
 import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
 import { Margin } from "../../constants/Sizes";
@@ -36,28 +36,42 @@ export const EffortTillPersonalBest = ({
     );
     const totalGoal = currentTotal + 10;
     const remainingTotal = pbTotal - totalGoal;
-    const remainingSetCount = pbSetCount - currentSets.length;
-    const remainingSetValue = remainingTotal / pbAvgReps / remainingSetCount;
+    const remainingSetCount = pbSetCount - currentSets.length || 1;
+    console.log(
+      "pbSetCount",
+      pbSetCount,
+      "currentSets.length",
+      currentSets.length
+    );
+
+    const remainingSetValue = Math.abs(
+      remainingTotal / pbAvgReps / remainingSetCount
+    );
     const message = `${remainingSetValue}kg x ${pbAvgReps} reps x ${remainingSetCount} sets remaining until new personal best! (${totalGoal}kg)`;
     return (
-      <View>
+      <Card style={styles.card} status="basic">
         <Text style={styles.text}>{message}</Text>
-      </View>
+      </Card>
     );
   } else {
-    const message = `New personal best! Total of ${currentTotal}kg`;
+    const message = `Congratulations! New personal best of ${currentTotal}kg`;
     return (
-      <View>
-        <Text style={styles.text}>{message}</Text>
-      </View>
+      <Card style={styles.card} status="primary">
+        <Text style={[styles.text, styles.textSuccess]}>{message}</Text>
+      </Card>
     );
   }
 };
 
 const styles = StyleSheet.create({
-  text: {
-    color: Colors.orange,
+  card: {
     marginBottom: Margin.md,
+  },
+  text: {
+    color: Colors.grey,
     textAlign: "center",
+  },
+  textSuccess: {
+    color: Colors.orange,
   },
 });
