@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Text } from "@ui-kitten/components";
 import {
   exerciseActions,
   ExerciseForPost,
@@ -18,15 +17,14 @@ import {
 import { ExerciseDefinition, Set } from "../../constants/Interfaces";
 import { ErrorToast } from "../ErrorToast";
 import { Button } from "../Button";
-import { Input } from "../Input";
 import { Stopwatch } from "../Stopwatch";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
-import { Card } from "../Card";
 import { Icon } from "../Icon";
 import { ExerciseDefintionContext } from "../../services/context";
 import { PreviousAttempts } from "./PreviousAttempts";
 import { EffortTillPersonalBest } from "./EffortTillPersonalBest";
+import { SetList } from "./SetList";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -131,51 +129,7 @@ export const ExerciseForm = ({
           currentSets={sets}
           definitionState={definitionState}
         />
-        {sets.map(({ reps, value }: Set, index: number) => {
-          const activeSet = index === 0;
-          const setDisplayNumber = sets.length - index;
-          return (
-            <View
-              key={index}
-              style={[!activeSet && styles.inputWrapperInactive]}
-            >
-              <Text style={styles.setNumber} appearance="hint">{`${
-                activeSet
-                  ? `Current Set (${setDisplayNumber})`
-                  : `Set ${setDisplayNumber}`
-              } `}</Text>
-              <Card style={styles.inputWrapper}>
-                <Input
-                  style={[styles.inputContainer, styles.inputRepContainer]}
-                  label="Reps"
-                  keyboardType="numeric"
-                  value={reps ? reps.toString() : ""}
-                  onChange={({ nativeEvent }) =>
-                    updateSet(index, "reps", nativeEvent.text)
-                  }
-                />
-                <Input
-                  style={styles.inputContainer}
-                  label="Weight"
-                  keyboardType="numeric"
-                  value={value ? value.toString() : ""}
-                  onChange={({ nativeEvent }) =>
-                    updateSet(index, "value", nativeEvent.text)
-                  }
-                />
-                {!activeSet && (
-                  <Icon
-                    size="sm"
-                    fill={Colors.orange}
-                    style={styles.inputWrapperDeleteIcon}
-                    name="slash-outline"
-                    onPress={() => removeSet(index)}
-                  />
-                )}
-              </Card>
-            </View>
-          );
-        })}
+        <SetList sets={sets} updateSet={updateSet} removeSet={removeSet} />
       </ScrollView>
       <ErrorToast error={error} />
     </View>
@@ -199,25 +153,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     minWidth: "100%",
-  },
-  inputWrapper: {
-    alignItems: "center",
-    marginBottom: Margin.sm,
-  },
-  inputWrapperInactive: {
-    opacity: 0.5,
-  },
-  inputContainer: {
-    flexGrow: 1,
-    width: "30%",
-  },
-  inputWrapperDeleteIcon: {
-    marginLeft: Margin.sm,
-  },
-  inputRepContainer: {
-    marginRight: Margin.sm,
-  },
-  setNumber: {
-    marginBottom: Margin.sm,
   },
 });
