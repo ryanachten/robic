@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Card, Text } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import { Card, Text } from "@ui-kitten/components";
 import { Set } from "../../constants/Interfaces";
 import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
 import { Margin } from "../../constants/Sizes";
@@ -34,19 +34,14 @@ export const EffortTillPersonalBest = ({
     const pbAvgReps = Math.floor(
       pb.sets.reduce(totalRepReducer, 0) / pbSetCount
     );
-    const totalGoal = currentTotal + 10;
-    const remainingTotal = pbTotal - totalGoal;
-    const remainingSetCount = pbSetCount - currentSets.length || 1;
-    console.log(
-      "pbSetCount",
-      pbSetCount,
-      "currentSets.length",
-      currentSets.length
-    );
+    const totalGoal = pbTotal + 10;
+    const remainingTotal = totalGoal - currentTotal;
+    const remainingSetCount =
+      pbSetCount > currentSets.length ? pbSetCount - currentSets.length : 1;
 
     const remainingSetValue = Math.abs(
       remainingTotal / pbAvgReps / remainingSetCount
-    );
+    ).toFixed(2);
     const message = `${remainingSetValue}kg x ${pbAvgReps} reps x ${remainingSetCount} sets remaining until new personal best! (${totalGoal}kg)`;
     return (
       <Card style={styles.card} status="basic">
@@ -54,7 +49,9 @@ export const EffortTillPersonalBest = ({
       </Card>
     );
   } else {
-    const message = `Congratulations! New personal best of ${currentTotal}kg`;
+    const message = `Congratulations! New personal best of ${currentTotal}kg (+${
+      currentTotal - pbTotal
+    }kg)`;
     return (
       <Card style={styles.card} status="primary">
         <Text style={[styles.text, styles.textSuccess]}>{message}</Text>
