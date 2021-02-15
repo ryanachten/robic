@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
+    "primaryColor": "#4A4A4A",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -18,7 +19,13 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.app.robic",
+      "versionCode": 1
+    },
     "ios": {
+      "bundleIdentifier": "com.app.robic",
+      "buildNumber": "1",
       "supportsTablet": true
     },
     "web": {
