@@ -16,11 +16,9 @@ import { AnalyticsContext } from "../services/context";
 
 export default function AnalyticsScreen() {
   const {
-    state: { analytics, error },
+    state: { analytics, loading, error },
     actions: { getAnalytics },
   } = useContext(AnalyticsContext);
-
-  const loading = true;
 
   const resultsPerChart = 20;
 

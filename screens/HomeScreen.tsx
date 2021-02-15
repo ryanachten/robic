@@ -2,7 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { IndexPath, Select, SelectItem, Spinner } from "@ui-kitten/components";
 import { ErrorToast, ExerciseForm, Background } from "../components";
-import { ExerciseDefintionContext } from "../services/context";
+import {
+  AnalyticsContext,
+  ExerciseDefintionContext,
+} from "../services/context";
 import { Margin } from "../constants/Sizes";
 
 export default function HomeScreen() {
@@ -11,9 +14,14 @@ export default function HomeScreen() {
     actions: { getDefinitions },
   } = useContext(ExerciseDefintionContext);
 
-  // Get definitions on mount
+  const {
+    actions: { getAnalytics },
+  } = useContext(AnalyticsContext);
+
+  // Get definitions and analytics on mount
   useEffect(() => {
     getDefinitions();
+    getAnalytics();
   }, []);
 
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
@@ -56,9 +64,5 @@ const styles = StyleSheet.create({
   },
   spinner: {
     marginBottom: Margin.md,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
   },
 });
