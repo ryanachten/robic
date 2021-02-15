@@ -3,7 +3,10 @@ import {
   BottomTabBarProps,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 import {
   BottomNavigation,
   BottomNavigationTab,
@@ -47,13 +50,15 @@ export default function UnauthenticatedNavigator() {
   );
 }
 
-// Each tab has its own navigation stack, you can read more about this pattern here:
-// https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
+const sharedScreenOptions: StackNavigationOptions = {
+  headerTitleAlign: "center",
+};
+
 const LoginStack = createStackNavigator<LoginParamList>();
 
 function LoginNavigator() {
   return (
-    <LoginStack.Navigator>
+    <LoginStack.Navigator screenOptions={sharedScreenOptions}>
       <LoginStack.Screen
         name="LoginScreen"
         component={LoginScreen}
@@ -67,7 +72,7 @@ const RegisterStack = createStackNavigator<RegisterParamList>();
 
 function RegisterNavigator() {
   return (
-    <RegisterStack.Navigator>
+    <RegisterStack.Navigator screenOptions={sharedScreenOptions}>
       <RegisterStack.Screen
         name="Register"
         component={RegisterScreen}

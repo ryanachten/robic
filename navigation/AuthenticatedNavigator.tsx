@@ -6,6 +6,7 @@ import {
 import {
   createStackNavigator,
   StackHeaderLeftButtonProps,
+  StackNavigationOptions,
 } from "@react-navigation/stack";
 
 import {
@@ -24,11 +25,6 @@ import { Icon } from "../components";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
-
-const sharedScreenOptions = {
-  headerRight: () => <LogoutButton />,
-  headerLeft: (props: StackHeaderLeftButtonProps) => <BackButton {...props} />,
-};
 
 const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
   <BottomNavigation
@@ -63,18 +59,23 @@ export default function AuthenticatedNavigator() {
   );
 }
 
+const sharedScreenOptions: StackNavigationOptions = {
+  headerRight: () => <LogoutButton />,
+  headerLeft: (props: StackHeaderLeftButtonProps) => <BackButton {...props} />,
+  headerTitleAlign: "center",
+};
+
 const HomeStack = createStackNavigator<HomeParamList>();
 const ExercisesStack = createStackNavigator<ExercisesParamList>();
 const AnalyticsStack = createStackNavigator<AnalyticsParamList>();
 
 function HomeNavigator() {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator screenOptions={sharedScreenOptions}>
       <HomeStack.Screen
         name="HomeScreen"
         component={HomeScreen}
         options={{
-          ...sharedScreenOptions,
           headerTitle: "Home",
         }}
       />
@@ -84,12 +85,11 @@ function HomeNavigator() {
 
 function ExerciseNavigator() {
   return (
-    <ExercisesStack.Navigator>
+    <ExercisesStack.Navigator screenOptions={sharedScreenOptions}>
       <ExercisesStack.Screen
         name="ExercisesScreen"
         component={ExercisesScreen}
         options={{
-          ...sharedScreenOptions,
           headerTitle: "Exercises",
         }}
       />
@@ -97,15 +97,13 @@ function ExerciseNavigator() {
         name="ExerciseDetailScreen"
         component={ExerciseDetailScreen}
         options={{
-          ...sharedScreenOptions,
-          headerTitle: "Exercise Detail",
+          headerTitle: "Exercise",
         }}
       />
       <ExercisesStack.Screen
         name="ExerciseEditScreen"
         component={ExerciseEditScreen}
         options={{
-          ...sharedScreenOptions,
           headerTitle: "Edit Exercise",
         }}
       />
@@ -115,12 +113,11 @@ function ExerciseNavigator() {
 
 function ActivityNavigator() {
   return (
-    <AnalyticsStack.Navigator>
+    <AnalyticsStack.Navigator screenOptions={sharedScreenOptions}>
       <AnalyticsStack.Screen
         name="AnalyticsScreen"
         component={AnalyticsScreen}
         options={{
-          ...sharedScreenOptions,
           headerTitle: "Activity",
         }}
       />
