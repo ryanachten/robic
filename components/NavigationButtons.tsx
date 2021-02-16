@@ -7,7 +7,9 @@ import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import { StackHeaderLeftButtonProps } from "@react-navigation/stack";
 import { Icon } from "./Icon";
+import { useNavigation } from "@react-navigation/native";
 
+// TODO: delete after refactor of log out button into SettingsScreen
 export const LogoutButton = () => {
   const {
     actions: { signOut },
@@ -16,6 +18,19 @@ export const LogoutButton = () => {
     <TouchableOpacity style={styles.logoutWrapper} onPress={signOut}>
       <Text style={styles.text}>Log out</Text>
     </TouchableOpacity>
+  );
+};
+
+export const SettingsButton = () => {
+  const nav = useNavigation();
+  return (
+    <Icon
+    fill={Colors.orange}
+    size="sm"
+    name="more-horizontal-outline"
+    onPress={() => nav.navigate("Settings")}
+    style={styles.settingsWrapper}
+  />
   );
 };
 
@@ -36,6 +51,9 @@ const styles = StyleSheet.create({
     marginLeft: Margin.sm,
   },
   logoutWrapper: {
+    marginRight: Margin.md,
+  },
+  settingsWrapper: {
     marginRight: Margin.md,
   },
   text: {

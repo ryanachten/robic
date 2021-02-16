@@ -11,7 +11,7 @@ import NotFoundScreen from "../screens/NotFoundScreen";
 import { RootStackParamList } from "./types";
 import UnauthenticatedNavigator from "./UnauthenticatedNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
-import AuthenticatedNavigator from "./AuthenticatedNavigator";
+import AuthenticatedNavigator, { SettingsNavigator } from "./AuthenticatedNavigator";
 import { useEffect, useReducer, useMemo } from "react";
 import LoadingScreen from "../screens/LoadingScreen";
 import { userReducer, userActions } from "../reducers/user";
@@ -107,6 +107,7 @@ function RootNavigator() {
             >
               <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Root" component={AuthenticatedNavigator} />
+                <Stack.Screen name="Settings" component={SettingsNavigator} />
                 <Stack.Screen
                   name="NotFound"
                   component={NotFoundScreen}

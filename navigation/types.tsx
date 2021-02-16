@@ -2,6 +2,7 @@ import { ExerciseDefinition } from "../constants/Interfaces";
 
 export type RootStackParamList = {
   Root: undefined;
+  Settings: undefined;
   NotFound: undefined;
 };
 
@@ -40,4 +41,8 @@ export type ExercisesParamList = {
 
 export type AnalyticsParamList = {
   AnalyticsScreen: undefined;
+};
+
+export type SettingsParamList = {
+  SettingsScreen: undefined;
 };

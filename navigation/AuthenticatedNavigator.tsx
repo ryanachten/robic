@@ -14,15 +14,17 @@ import {
   HomeParamList,
   ExercisesParamList,
   AnalyticsParamList,
+  SettingsParamList,
 } from "./types";
 import HomeScreen from "../screens/HomeScreen";
 import ExercisesScreen from "../screens/ExercisesScreen";
 import ExerciseDetailScreen from "../screens/ExerciseDetailScreen";
-import { BackButton, LogoutButton } from "../components/NavigationButtons";
+import { BackButton, SettingsButton } from "../components/NavigationButtons";
 import ExerciseEditScreen from "../screens/ExerciseEditScreen";
 import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
 import { Icon } from "../components";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
+import SettingsScreen from "../screens/SettingsScreen";
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -60,7 +62,7 @@ export default function AuthenticatedNavigator() {
 }
 
 const sharedScreenOptions: StackNavigationOptions = {
-  headerRight: () => <LogoutButton />,
+  headerRight: () => <SettingsButton />,
   headerLeft: (props: StackHeaderLeftButtonProps) => <BackButton {...props} />,
   headerTitleAlign: "center",
 };
@@ -68,6 +70,7 @@ const sharedScreenOptions: StackNavigationOptions = {
 const HomeStack = createStackNavigator<HomeParamList>();
 const ExercisesStack = createStackNavigator<ExercisesParamList>();
 const AnalyticsStack = createStackNavigator<AnalyticsParamList>();
+const SettingsStack = createStackNavigator<SettingsParamList>();
 
 function HomeNavigator() {
   return (
@@ -119,6 +122,20 @@ function ActivityNavigator() {
         component={AnalyticsScreen}
         options={{
           headerTitle: "Activity",
+        }}
+      />
+    </AnalyticsStack.Navigator>
+  );
+}
+
+export function SettingsNavigator() {
+  return (
+    <AnalyticsStack.Navigator screenOptions={sharedScreenOptions}>
+      <SettingsStack.Screen
+        name="SettingsScreen"
+        component={SettingsScreen}
+        options={{
+          headerTitle: "Settings",
         }}
       />
     </AnalyticsStack.Navigator>
