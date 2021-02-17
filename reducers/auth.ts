@@ -42,7 +42,7 @@ export const initialAuthState: AuthState = {
   error: null,
 };
 
-type UserForRegister = Partial<User> & { email: string; password: string };
+type UserForRegister = User & { email: string; password: string };
 
 export const authActions = (
   dispatch: React.Dispatch<AuthAction>,

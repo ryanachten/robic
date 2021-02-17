@@ -13,7 +13,7 @@ export const AuthContext = createContext<{
 }>({});
 
 export const UserContext = createContext<{
-  state: Partial<UserState>;
+  state: UserState;
   actions: UserActions;
 }>({});
 
