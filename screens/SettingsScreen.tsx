@@ -1,30 +1,31 @@
 import React, { useContext } from "react";
 import { StyleSheet } from "react-native";
-import { Spinner, Text } from "@ui-kitten/components";
+import { Button, Spinner, Text } from "@ui-kitten/components";
 import { Background, Logo } from "../components";
 import { Margin } from "../constants/Sizes";
-import { UserContext } from "../services/context";
+import { AuthContext, UserContext } from "../services/context";
 
-export default function LoadingScreen() {
+export default function SettingsScreen() {
   const {
     state: { user },
   } = useContext(UserContext);
+  const {
+    actions: { signOut },
+  } = useContext(AuthContext);
   return (
-    <Background style={styles.container}>
+    <Background>
       <Logo style={styles.logo} />
       <Text category="h5" style={styles.title}>
-        Getting ready!
+        {user.firstName} {user.lastName}
       </Text>
+      <Button appearance="outline" status="primary" onPress={signOut}>
+        Log out
+      </Button>
     </Background>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   logo: {
     marginBottom: Margin.md,
   },
