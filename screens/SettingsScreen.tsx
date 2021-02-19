@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
-import { StyleSheet } from "react-native";
-import { Button, Spinner, Text } from "@ui-kitten/components";
+import React, { useContext, useState } from "react";
+import { Platform, StyleSheet } from "react-native";
+import { Button, Card, Modal, Text } from "@ui-kitten/components";
 import { Background, Logo } from "../components";
 import { Margin } from "../constants/Sizes";
 import { AuthContext, UserContext } from "../services/context";
+import Constants from "expo-constants";
 
 export default function SettingsScreen() {
   const {
@@ -12,16 +13,48 @@ export default function SettingsScreen() {
   const {
     actions: { signOut },
   } = useContext(AuthContext);
+
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+
+  const appVersionNumber = Constants.manifest.version;
+
   return (
     <Background>
+      <Modal
+        visible={showPrivacyPolicy}
+        backdropStyle={styles.backdrop}
+        onBackdropPress={() => setShowPrivacyPolicy(false)}
+      >
+        <Card disabled={true}>
+          <Text>Privacy policy goes here</Text>
+        </Card>
+      </Modal>
       <Logo style={styles.logo} />
-      <Text category="h5" style={styles.title}>
+      <Text category="h5" style={styles.name}>
         {user.firstName} {user.lastName}
       </Text>
-      <Text style={styles.title}>{user.email}</Text>
-      <Button appearance="outline" status="primary" onPress={signOut}>
+      <Text category="s1" style={styles.spacing}>
+        {user.email}
+      </Text>
+      <Button appearance="outline" onPress={signOut} style={styles.spacing}>
         Log out
       </Button>
+      <Button
+        appearance="outline"
+        status="basic"
+        onPress={() => setShowPrivacyPolicy(true)}
+        style={styles.spacing}
+      >
+        Privacy policy
+      </Button>
+      {appVersionNumber && (
+        <Card>
+          <Text category="label">Robic version</Text>
+          <Text style={styles.spacing}>{appVersionNumber}</Text>
+          <Text category="label">Credits</Text>
+          <Text>Designed and developed by Ryan Achten</Text>
+        </Card>
+      )}
     </Background>
   );
 }
@@ -30,7 +63,13 @@ const styles = StyleSheet.create({
   logo: {
     marginBottom: Margin.md,
   },
-  title: {
+  name: {
+    marginBottom: Margin.sm,
+  },
+  spacing: {
     marginBottom: Margin.md,
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
