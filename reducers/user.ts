@@ -32,6 +32,7 @@ export const initialUserState: UserState = {
     id: "",
     firstName: "",
     lastName: "",
+    email: "",
     exercises: [],
   },
   loading: false,

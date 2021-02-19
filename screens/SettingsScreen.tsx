@@ -18,6 +18,7 @@ export default function SettingsScreen() {
       <Text category="h5" style={styles.title}>
         {user.firstName} {user.lastName}
       </Text>
+      <Text style={styles.title}>{user.email}</Text>
       <Button appearance="outline" status="primary" onPress={signOut}>
         Log out
       </Button>
