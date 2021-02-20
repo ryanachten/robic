@@ -15,7 +15,6 @@ import AuthenticatedNavigator, {
   SettingsNavigator,
 } from "./AuthenticatedNavigator";
 import { useEffect, useReducer, useMemo } from "react";
-import LoadingScreen from "../screens/LoadingScreen";
 import { userReducer, userActions, initialUserState } from "../reducers/user";
 import {
   UserContext,

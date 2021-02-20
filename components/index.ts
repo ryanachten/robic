@@ -5,6 +5,7 @@ export * from "./ExerciseCard";
 export * from "./ExerciseDetailAnalytics";
 export * from "./exercise-form";
 export * from "./ErrorToast";
+export * from "./HintCard";
 export * from "./Icon";
 export * from "./Input";
 export * from "./Link";

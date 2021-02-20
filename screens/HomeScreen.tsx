@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { IndexPath, Select, SelectItem, Spinner } from "@ui-kitten/components";
-import { ErrorToast, ExerciseForm, Background } from "../components";
+import { ErrorToast, ExerciseForm, Background, HintCard } from "../components";
 import {
   AnalyticsContext,
   ExerciseDefintionContext,
 } from "../services/context";
 import { Margin } from "../constants/Sizes";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen() {
   const {
@@ -29,6 +30,9 @@ export default function HomeScreen() {
   );
   const selectedDefintion = definitions[selectedIndex.row];
 
+  const nav = useNavigation();
+  const goToExerciseScreen = () => nav.navigate("Exercises");
+
   return (
     <Background>
       <ErrorToast error={error} />
@@ -36,6 +40,14 @@ export default function HomeScreen() {
         <View style={styles.spinner}>
           <Spinner size="giant" />
         </View>
+      )}
+      {!loading && !definitions.length && (
+        <HintCard
+          title="You've got no exercises!"
+          body="Create an exercise to get started"
+          link="Create an exercise"
+          onPress={goToExerciseScreen}
+        />
       )}
       {selectedDefintion && (
         <>

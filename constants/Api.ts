@@ -1,4 +1,4 @@
-const API_DOMAIN = "https://robic-api.herokuapp.com";
+const API_DOMAIN = "https://69c53512a3d2.ngrok.io"; //"https://robic-api.herokuapp.com";
 const API_URL = `${API_DOMAIN}/api`;
 
 // Unauthorized endpoints

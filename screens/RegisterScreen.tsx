@@ -1,11 +1,10 @@
 import React, { useState, useContext } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-import { Card, Input, Text } from "@ui-kitten/components";
+import { Input, Text } from "@ui-kitten/components";
 import { AuthContext } from "../services/context";
-import { Background, Button, ErrorToast, Logo } from "../components";
+import { Background, Button, ErrorToast, HintCard, Logo } from "../components";
 import { Margin } from "../constants/Sizes";
 import { useNavigation } from "@react-navigation/native";
-import { Colors } from "../constants/Colors";
 
 export default function RegisterScreen() {
   const [firstName, setFirstName] = useState("");
@@ -71,13 +70,13 @@ export default function RegisterScreen() {
           onChange={(e) => setPassword(e.nativeEvent.text)}
         />
         {signedUp && (
-          <Card status="primary" style={styles.card} onPress={goToLoginScreen}>
-            <Text style={styles.cardText}>You're all signed up!</Text>
-            <Text style={styles.cardText}>
-              Head to the login screen to get started
-            </Text>
-            <Text style={styles.link}>Go to Login screen</Text>
-          </Card>
+          <HintCard
+            style={styles.card}
+            title="You're all signed up!"
+            body="Head to the login screen to get started"
+            link="Go to login screen"
+            onPress={goToLoginScreen}
+          />
         )}
         <Button style={styles.button} loading={loading} onPress={attemptSignUp}>
           Register
@@ -98,17 +97,8 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: Margin.md,
   },
-  cardText: {
-    textAlign: "center",
-  },
   input: {
     marginBottom: Margin.md,
-  },
-  link: {
-    color: Colors.orange,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginTop: Margin.sm,
   },
   logo: {
     marginBottom: Margin.md,
