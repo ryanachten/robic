@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Input, Text } from "@ui-kitten/components";
 import { AuthContext } from "../services/context";
 import { Background, Button, ErrorToast, Logo } from "../components";
@@ -12,13 +12,14 @@ export default function RegisterScreen() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [signedUp, setSignedUp] = useState(true);
+  const [signedUp, setSignedUp] = useState(false);
   const {
     state: { error, loading },
     actions: { signUp },
   } = useContext(AuthContext);
 
   const attemptSignUp = async () => {
+    setSignedUp(false);
     await signUp({
       firstName,
       lastName,
@@ -39,15 +40,6 @@ export default function RegisterScreen() {
         <Text category="h5" style={styles.title}>
           Sign up to get started!
         </Text>
-        {signedUp ? (
-          <Card status="primary" style={styles.card} onPress={goToLoginScreen}>
-            <Text style={styles.cardText}>You're all signed up!</Text>
-            <Text style={styles.cardText}>
-              Head to the login screen to get started
-            </Text>
-            <Text style={styles.link}>Go to Login screen</Text>
-          </Card>
-        ) : null}
         <Input
           label="First name"
           placeholder="John"
@@ -78,22 +70,33 @@ export default function RegisterScreen() {
           style={styles.input}
           onChange={(e) => setPassword(e.nativeEvent.text)}
         />
-        <Button loading={loading} onPress={attemptSignUp}>
+        <Button style={styles.button} loading={loading} onPress={attemptSignUp}>
           Register
         </Button>
+        {signedUp ? (
+          <Card status="primary" style={styles.card} onPress={goToLoginScreen}>
+            <Text style={styles.cardText}>You're all signed up!</Text>
+            <Text style={styles.cardText}>
+              Head to the login screen to get started
+            </Text>
+            <Text style={styles.link}>Go to Login screen</Text>
+          </Card>
+        ) : null}
       </ScrollView>
     </Background>
   );
 }
 
 const styles = StyleSheet.create({
+  button: {
+    marginBottom: Margin.md,
+  },
   container: {
-    flex: 1,
     alignItems: "center",
     width: "100%",
   },
   card: {
-    marginBottom: 30,
+    marginBottom: Margin.md,
   },
   cardText: {
     textAlign: "center",
