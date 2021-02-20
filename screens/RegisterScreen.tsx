@@ -4,13 +4,15 @@ import { Card, Input, Text } from "@ui-kitten/components";
 import { AuthContext } from "../services/context";
 import { Background, Button, ErrorToast, Logo } from "../components";
 import { Margin } from "../constants/Sizes";
+import { useNavigation } from "@react-navigation/native";
+import { Colors } from "../constants/Colors";
 
 export default function RegisterScreen() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [signedUp, setSignedUp] = useState(false);
+  const [signedUp, setSignedUp] = useState(true);
   const {
     state: { error, loading },
     actions: { signUp },
@@ -26,6 +28,9 @@ export default function RegisterScreen() {
     setSignedUp(true);
   };
 
+  const nav = useNavigation();
+  const goToLoginScreen = () => nav.navigate("LoginScreen");
+
   return (
     <Background>
       <ScrollView contentContainerStyle={styles.container}>
@@ -34,6 +39,15 @@ export default function RegisterScreen() {
         <Text category="h5" style={styles.title}>
           Sign up to get started!
         </Text>
+        {signedUp ? (
+          <Card status="primary" style={styles.card} onPress={goToLoginScreen}>
+            <Text style={styles.cardText}>You're all signed up!</Text>
+            <Text style={styles.cardText}>
+              Head to the login screen to get started
+            </Text>
+            <Text style={styles.link}>Go to Login screen</Text>
+          </Card>
+        ) : null}
         <Input
           label="First name"
           placeholder="John"
@@ -64,13 +78,6 @@ export default function RegisterScreen() {
           style={styles.input}
           onChange={(e) => setPassword(e.nativeEvent.text)}
         />
-        {signedUp ? (
-          <Card style={styles.card}>
-            <Text>You're all signed up!</Text>
-            <Text>Head to the login screen to get started</Text>
-            {/* TODO: should be modal with link to login screen */}
-          </Card>
-        ) : null}
         <Button loading={loading} onPress={attemptSignUp}>
           Register
         </Button>
@@ -88,8 +95,17 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 30,
   },
+  cardText: {
+    textAlign: "center",
+  },
   input: {
     marginBottom: Margin.md,
+  },
+  link: {
+    color: Colors.orange,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: Margin.sm,
   },
   logo: {
     marginBottom: Margin.md,

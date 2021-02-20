@@ -14,8 +14,8 @@ export default function LoginScreen() {
   } = useContext(AuthContext);
 
   return (
-    <Background style={styles.container}>
-      <ScrollView>
+    <Background>
+      <ScrollView contentContainerStyle={styles.container}>
         <ErrorToast error={error} />
         <Logo style={styles.logo} />
         <Text category="h5" style={styles.title}>
@@ -47,8 +47,9 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
+    flex: 1,
+    width: "100%",
   },
   input: {
     marginBottom: Margin.md,
