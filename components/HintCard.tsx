@@ -25,7 +25,7 @@ export const HintCard = ({
   title,
 }: HintCardProps) => (
   <Card status="primary" style={style} onPress={onPress}>
-    <Text category="s1" style={styles.text}>
+    <Text category="s1" style={styles.title}>
       {title}
     </Text>
     <Text style={styles.text}>{body}</Text>
@@ -36,6 +36,10 @@ export const HintCard = ({
 const styles = StyleSheet.create({
   text: {
     textAlign: "center",
+  },
+  title: {
+    textAlign: "center",
+    marginBottom: Margin.xs,
   },
   link: {
     color: Colors.orange,
