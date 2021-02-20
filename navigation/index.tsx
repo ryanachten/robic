@@ -87,10 +87,6 @@ function RootNavigator() {
     await userContext.restoreUser();
   };
 
-  if (auth.loading) {
-    return <LoadingScreen />;
-  }
-
   return (
     <AuthContext.Provider value={{ state: auth, actions: authContext }}>
       <UserContext.Provider value={{ state: user, actions: userContext }}>

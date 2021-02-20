@@ -95,6 +95,7 @@ export const authActions = (
     dispatch({ type: authTypes.SIGN_OUT });
   },
   signUp: async ({ firstName, lastName, email, password }: UserForRegister) => {
+    dispatch({ type: baseTypes.LOADING });
     try {
       await Axios.post(REGISTER_URL, {
         firstName,

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { Card, Input, Text } from "@ui-kitten/components";
 import { AuthContext } from "../services/context";
 import { Background, Button, ErrorToast, Logo } from "../components";
@@ -70,10 +70,7 @@ export default function RegisterScreen() {
           style={styles.input}
           onChange={(e) => setPassword(e.nativeEvent.text)}
         />
-        <Button style={styles.button} loading={loading} onPress={attemptSignUp}>
-          Register
-        </Button>
-        {signedUp ? (
+        {signedUp && (
           <Card status="primary" style={styles.card} onPress={goToLoginScreen}>
             <Text style={styles.cardText}>You're all signed up!</Text>
             <Text style={styles.cardText}>
@@ -81,7 +78,10 @@ export default function RegisterScreen() {
             </Text>
             <Text style={styles.link}>Go to Login screen</Text>
           </Card>
-        ) : null}
+        )}
+        <Button style={styles.button} loading={loading} onPress={attemptSignUp}>
+          Register
+        </Button>
       </ScrollView>
     </Background>
   );
