@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { Input, Text } from "@ui-kitten/components";
 import { AuthContext } from "../services/context";
 import { Background, Button, ErrorToast, Logo } from "../components";
@@ -15,30 +15,32 @@ export default function LoginScreen() {
 
   return (
     <Background style={styles.container}>
-      <ErrorToast error={error} />
-      <Logo style={styles.logo} />
-      <Text category="h5" style={styles.title}>
-        Login to get started!
-      </Text>
-      <Input
-        autoCapitalize="none"
-        label="Email"
-        placeholder="robic@user.com"
-        value={email}
-        onChange={(e) => setEmail(e.nativeEvent.text)}
-        style={styles.input}
-      />
-      <Input
-        label="Password"
-        placeholder="••••••••••••"
-        value={password}
-        secureTextEntry={true}
-        onChange={(e) => setPassword(e.nativeEvent.text)}
-        style={styles.input}
-      />
-      <Button loading={loading} onPress={() => signIn(email, password)}>
-        Login
-      </Button>
+      <ScrollView>
+        <ErrorToast error={error} />
+        <Logo style={styles.logo} />
+        <Text category="h5" style={styles.title}>
+          Login to get started!
+        </Text>
+        <Input
+          autoCapitalize="none"
+          label="Email"
+          placeholder="robic@user.com"
+          value={email}
+          onChange={(e) => setEmail(e.nativeEvent.text)}
+          style={styles.input}
+        />
+        <Input
+          label="Password"
+          placeholder="••••••••••••"
+          value={password}
+          secureTextEntry={true}
+          onChange={(e) => setPassword(e.nativeEvent.text)}
+          style={styles.input}
+        />
+        <Button loading={loading} onPress={() => signIn(email, password)}>
+          Login
+        </Button>
+      </ScrollView>
     </Background>
   );
 }

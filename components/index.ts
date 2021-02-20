@@ -7,5 +7,7 @@ export * from "./exercise-form";
 export * from "./ErrorToast";
 export * from "./Icon";
 export * from "./Input";
+export * from "./Link";
 export * from "./Logo";
+export * from "./PrivacyPolicy";
 export * from "./Stopwatch";

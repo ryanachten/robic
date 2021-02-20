@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 import { Button, Card, Modal, Text } from "@ui-kitten/components";
-import { Background, Logo } from "../components";
+import { Background, Link, Logo, PrivacyPolicy } from "../components";
 import { Margin } from "../constants/Sizes";
 import { AuthContext, UserContext } from "../services/context";
 import Constants from "expo-constants";
@@ -25,9 +25,7 @@ export default function SettingsScreen() {
         backdropStyle={styles.backdrop}
         onBackdropPress={() => setShowPrivacyPolicy(false)}
       >
-        <Card disabled={true}>
-          <Text>Privacy policy goes here</Text>
-        </Card>
+        <PrivacyPolicy />
       </Modal>
       <Logo style={styles.logo} />
       <Text category="h5" style={styles.name}>
@@ -52,7 +50,8 @@ export default function SettingsScreen() {
           <Text category="label">Robic version</Text>
           <Text style={styles.spacing}>{appVersionNumber}</Text>
           <Text category="label">Credits</Text>
-          <Text>Designed and developed by Ryan Achten</Text>
+          <Text>Designed and developed by</Text>
+          <Link url="http://ryanachten.io/">Ryan Achten</Link>
         </Card>
       )}
     </Background>
