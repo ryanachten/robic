@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Button, Card, Modal, Text } from "@ui-kitten/components";
 import { Background, Link, Logo, PrivacyPolicy } from "../components";
 import { Margin } from "../constants/Sizes";
@@ -37,6 +37,13 @@ export default function SettingsScreen() {
       <Button appearance="outline" onPress={signOut} style={styles.spacing}>
         Log out
       </Button>
+      <Card style={styles.spacing}>
+        <Text category="label">Robic version</Text>
+        <Text style={styles.spacing}>{appVersionNumber}</Text>
+        <Text category="label">Credits</Text>
+        <Text>Designed and developed by</Text>
+        <Link url="http://ryanachten.io/">Ryan Achten</Link>
+      </Card>
       <Button
         appearance="outline"
         status="basic"
@@ -45,15 +52,6 @@ export default function SettingsScreen() {
       >
         Privacy policy
       </Button>
-      {appVersionNumber && (
-        <Card>
-          <Text category="label">Robic version</Text>
-          <Text style={styles.spacing}>{appVersionNumber}</Text>
-          <Text category="label">Credits</Text>
-          <Text>Designed and developed by</Text>
-          <Link url="http://ryanachten.io/">Ryan Achten</Link>
-        </Card>
-      )}
     </Background>
   );
 }

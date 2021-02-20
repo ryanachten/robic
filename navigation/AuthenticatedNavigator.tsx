@@ -130,7 +130,15 @@ function ActivityNavigator() {
 
 export function SettingsNavigator() {
   return (
-    <AnalyticsStack.Navigator screenOptions={sharedScreenOptions}>
+    <AnalyticsStack.Navigator
+      screenOptions={{
+        ...sharedScreenOptions,
+        headerRight: undefined,
+        headerLeft: (props: StackHeaderLeftButtonProps) => (
+          <BackButton {...props} label="Back" />
+        ),
+      }}
+    >
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
