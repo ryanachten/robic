@@ -94,7 +94,8 @@ export const ExerciseForm = ({
     if (!error) {
       setSets(initialSet);
       handleReset();
-      navigation.navigate("ExerciseDetailScreen", {
+      navigation.navigate("Exercises", {
+        screen: "ExerciseDetailScreen",
         definitionId: id,
       });
     }

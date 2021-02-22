@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     marginBottom: Margin.sm,
     marginTop: Margin.sm,
     justifyContent: "center",
+    minWidth: "100%",
     padding: Margin.sm,
     width: "100%",
     zIndex: 99,

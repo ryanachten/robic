@@ -37,7 +37,10 @@ export default function HomeScreen() {
   const selectedDefintion = definitions[selectedIndex.row];
 
   const nav = useNavigation();
-  const goToExerciseScreen = () => nav.navigate("Exercises");
+  const goToExerciseScreen = () =>
+    nav.navigate("Exercises", {
+      screen: "ExerciseEditScreen",
+    });
 
   return (
     <Background>

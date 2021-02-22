@@ -48,7 +48,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
 
   // If a definition is passed, we use form as an edit screen
   // Otherwise, we use it to create a new exercise definition
-  const existingDefinition = route.params.definition;
+  const existingDefinition = route?.params?.definition;
   useEffect(() => {
     if (existingDefinition) {
       setTitle(existingDefinition.title);
