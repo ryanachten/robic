@@ -96,7 +96,9 @@ export const ExerciseForm = ({
       handleReset();
       navigation.navigate("Exercises", {
         screen: "ExerciseDetailScreen",
-        definitionId: id,
+        params: {
+          definitionId: id,
+        },
       });
     }
   };
