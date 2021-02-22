@@ -19,6 +19,9 @@ export const PreviousAttempts = ({
   const definition = definitions.find((def) => def.id === id);
   if (definition) {
     const { lastSession, personalBest: pb } = definition;
+    if (!lastSession && !pb) {
+      return null;
+    }
     return (
       <View style={styles.root}>
         <View style={styles.controlWrapper}>

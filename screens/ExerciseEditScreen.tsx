@@ -16,11 +16,13 @@ import { Input, IndexPath, Select, SelectItem } from "@ui-kitten/components";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
+const sortMuscleGroups = (a: string, b: string): number => (a > b ? 1 : -1);
+
 export default function ExerciseEditScreen({ navigation, route }: Props) {
   const [title, setTitle] = useState("");
 
   const {
-    state: { id = "" },
+    state: { user },
   } = useContext(UserContext);
 
   const {
@@ -39,7 +41,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
     []
   );
 
-  const allMuscleGroups = Object.keys(MuscleGroup);
+  const allMuscleGroups = Object.keys(MuscleGroup).sort(sortMuscleGroups);
   const muscleGroups = selectedMuscleIndex.map(
     (index) => allMuscleGroups[index.row]
   ) as MuscleGroup[];
@@ -69,7 +71,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
     const exercise: ExerciseDefinitionForCreate = {
       title,
       unit,
-      user: id,
+      user: user.id,
       primaryMuscleGroup: muscleGroups,
     };
 
