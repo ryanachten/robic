@@ -8,6 +8,12 @@ import {
 } from "../services/context";
 import { Margin } from "../constants/Sizes";
 import { useNavigation } from "@react-navigation/native";
+import { ExerciseDefinition } from "../constants/Interfaces";
+
+const sortExercisesAlphabetically = (
+  a: ExerciseDefinition,
+  b: ExerciseDefinition
+): number => (a.title > b.title ? 1 : -1);
 
 export default function HomeScreen() {
   const {
@@ -58,9 +64,11 @@ export default function HomeScreen() {
             selectedIndex={selectedIndex}
             onSelect={(index) => setSelectedIndex(index as IndexPath)}
           >
-            {definitions.map(({ id, title }) => (
-              <SelectItem key={id} title={title} />
-            ))}
+            {definitions
+              .sort(sortExercisesAlphabetically)
+              .map(({ id, title }) => (
+                <SelectItem key={id} title={title} />
+              ))}
           </Select>
           <ExerciseForm definition={selectedDefintion} />
         </>
