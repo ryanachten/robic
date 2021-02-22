@@ -20,14 +20,30 @@ export const SettingsButton = () => {
   );
 };
 
-export const BackButton = (props: StackHeaderLeftButtonProps) => {
-  const { canGoBack, label } = props;
-  return canGoBack ? (
-    <TouchableOpacity style={styles.backWrapper} {...props}>
+export const BackButton = (
+  props: StackHeaderLeftButtonProps & {
+    backScreenName?: string;
+  }
+) => {
+  const { canGoBack, label, backScreenName } = props;
+  const Button = ({ onPress }: { onPress?: () => void }) => (
+    <TouchableOpacity
+      style={styles.backWrapper}
+      {...props}
+      onPress={onPress || props.onPress}
+    >
       <Icon size="sm" fill={Colors.orange} name="chevron-left-outline" />
       <Text style={styles.text}>{label}</Text>
     </TouchableOpacity>
-  ) : null;
+  );
+
+  if (backScreenName) {
+    const nav = useNavigation();
+    const goBackToScreen = () => nav.navigate(backScreenName);
+    return <Button onPress={goBackToScreen} />;
+  }
+
+  return canGoBack ? <Button /> : null;
 };
 
 const styles = StyleSheet.create({

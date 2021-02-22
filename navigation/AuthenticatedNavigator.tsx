@@ -25,6 +25,7 @@ import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
 import { Icon } from "../components";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import { View } from "react-native";
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -94,6 +95,7 @@ function ExerciseNavigator() {
         component={ExercisesScreen}
         options={{
           headerTitle: "Exercises",
+          headerLeft: () => <></>,
         }}
       />
       <ExercisesStack.Screen
@@ -101,6 +103,13 @@ function ExerciseNavigator() {
         component={ExerciseDetailScreen}
         options={{
           headerTitle: "Exercise",
+          headerLeft: (props: StackHeaderLeftButtonProps) => (
+            <BackButton
+              {...props}
+              label="Exercises"
+              backScreenName="ExercisesScreen"
+            />
+          ),
         }}
       />
       <ExercisesStack.Screen
@@ -108,6 +117,13 @@ function ExerciseNavigator() {
         component={ExerciseEditScreen}
         options={{
           headerTitle: "Edit Exercise",
+          headerLeft: (props: StackHeaderLeftButtonProps) => (
+            <BackButton
+              {...props}
+              label="Exercises"
+              backScreenName="ExercisesScreen"
+            />
+          ),
         }}
       />
     </ExercisesStack.Navigator>
