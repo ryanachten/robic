@@ -10,7 +10,7 @@ export type ExerciseForPost = {
 };
 
 export enum exerciseTypes {
-  GET_EXERCISES = "GET_EXERCISES",
+  GET_EXERCISES_BY_DEFINITION = "GET_EXERCISES_BY_DEFINITION",
   POST_EXERCISE = "POST_EXERCISE",
 }
 
@@ -21,7 +21,7 @@ export type ExerciseState = BaseState & {
 export type ExerciseAction =
   | BaseActions
   | {
-      type: exerciseTypes.GET_EXERCISES;
+      type: exerciseTypes.GET_EXERCISES_BY_DEFINITION;
       exercises: Exercise[];
     }
   | {
@@ -30,7 +30,7 @@ export type ExerciseAction =
     };
 
 export type ExerciseActions = {
-  getExercises: () => Promise<void>;
+  getExercisesByDefintion: (definitionId: string) => Promise<void>;
   postExercise: (exercise: ExerciseForPost) => Promise<void>;
 };
 
@@ -43,14 +43,21 @@ export const initialExerciseState: ExerciseState = {
 export const exerciseActions = (
   dispatch: React.Dispatch<ExerciseAction>
 ): ExerciseActions => ({
-  getExercises: async () => {
+  getExercisesByDefintion: async (definitionId: string) => {
     dispatch({
       type: baseTypes.LOADING,
     });
     try {
-      const { data }: AxiosResponse<Exercise[]> = await axios.get(EXERCISE_URL);
+      const { data }: AxiosResponse<Exercise[]> = await axios.get(
+        EXERCISE_URL,
+        {
+          params: {
+            definition: definitionId,
+          },
+        }
+      );
       dispatch({
-        type: exerciseTypes.GET_EXERCISES,
+        type: exerciseTypes.GET_EXERCISES_BY_DEFINITION,
         exercises: data,
       });
     } catch (e) {
@@ -93,11 +100,16 @@ export const exerciseReducer = (
         loading: false,
         error: action.error,
       };
-    case exerciseTypes.GET_EXERCISES:
+    case exerciseTypes.GET_EXERCISES_BY_DEFINITION:
+      const newExercises = [...action.exercises];
+      const newExerciseIds = newExercises.map((e) => e.id);
+      const existingExercises = [...state.exercises].filter(
+        (e) => !newExerciseIds.includes(e.id)
+      );
       return {
         ...state,
         loading: false,
-        exercises: [...action.exercises],
+        exercises: [...existingExercises, ...newExercises],
       };
     case exerciseTypes.POST_EXERCISE:
       const { exercises } = state;
