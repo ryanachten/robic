@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { ScrollView, StyleSheet, View, RefreshControl } from "react-native";
-import { Card, Text } from "@ui-kitten/components";
+import { Card, List, ListItem, Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -14,7 +14,9 @@ import {
 } from "../components";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
-import { ExerciseDefintionContext } from "../services/context";
+import { ExerciseContext, ExerciseDefintionContext } from "../services/context";
+import { ExerciseState } from "../reducers/exercise";
+import { formatRelativeDate } from "../utilities/dateHelpers";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
@@ -26,8 +28,16 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
     actions: { getDefinitionById },
   } = useContext(ExerciseDefintionContext);
 
+  const {
+    state: exerciseState,
+    actions: { getExercisesByDefintion },
+  } = useContext(ExerciseContext);
+
   useEffect(() => {
-    definitionId && getDefinitionById(definitionId);
+    if (definitionId) {
+      getDefinitionById(definitionId);
+      getExercisesByDefintion(definitionId);
+    }
   }, []);
 
   const exercise = definitions.find((def) => def.id === definitionId);
@@ -51,11 +61,14 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
         Edit
       </Button>
       {exercise && (
-        <DefinitionDetail
-          loading={loading}
-          definition={exercise}
-          getDefinitionById={getDefinitionById}
-        />
+        <>
+          <DefinitionDetail
+            loading={loading}
+            definition={exercise}
+            getDefinitionById={getDefinitionById}
+          />
+          <ExerciseList {...exerciseState} />
+        </>
       )}
       <ErrorToast error={error} />
     </Background>
@@ -126,6 +139,27 @@ const DefinitionDetail = ({
       </View>
       {pb && <ExerciseDetailAnalytics history={pb.history} />}
     </ScrollView>
+  );
+};
+
+const ExerciseList = ({ exercises, loading, error }: ExerciseState) => {
+  return (
+    <List
+      style={styles.container}
+      data={exercises.map((e) => {
+        return {
+          title: formatRelativeDate(e.date),
+          description: "Meow",
+        };
+      })}
+      renderItem={({ item, index }) => (
+        <ListItem
+          title={item.title}
+          description={`${item.description} ${index + 1}`}
+          accessoryRight={() => <Button size="tiny">FOLLOW</Button>}
+        />
+      )}
+    />
   );
 };
 

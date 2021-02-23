@@ -86,7 +86,7 @@ export interface ExerciseDefinition {
   unit: Unit;
   type?: ExerciseType;
   user: string;
-  history: Exercise[];
+  history: string[];
   childExercises: ExerciseDefinition[];
   primaryMuscleGroup?: MuscleGroup[];
   personalBest?: PersonalBest;

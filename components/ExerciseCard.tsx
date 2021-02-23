@@ -1,4 +1,3 @@
-import { formatDistance } from "date-fns";
 import React from "react";
 import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { Text } from "@ui-kitten/components";
@@ -6,6 +5,7 @@ import { Exercise } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 import { Icon } from "./Icon";
+import { formatRelativeDate } from "../utilities/dateHelpers";
 
 type ExerciseCardProps = {
   containerStyle?: StyleProp<ViewStyle>;
@@ -23,10 +23,7 @@ export const ExerciseCard = ({
   <View style={containerStyle}>
     <View style={styles.titleWrapper}>
       <Icon size="sm" fill={Colors.orange} name={icon} />
-      <Text style={styles.title}>{`${title} ${formatDistance(
-        new Date(date),
-        Date.now()
-      )} ago`}</Text>
+      <Text style={styles.title}>{`${title} ${formatRelativeDate(date)}`}</Text>
     </View>
     <View style={styles.setWrapper}>
       {sets.map(({ reps, value }, i) => (

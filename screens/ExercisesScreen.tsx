@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, RefreshControl, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { formatDistance } from "date-fns";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Background, Button, ErrorToast, Icon } from "../components";
 import { ExercisesParamList } from "../navigation/types";
@@ -23,6 +22,7 @@ import {
   Card,
 } from "@ui-kitten/components";
 import { ExerciseDefintionContext } from "../services/context";
+import { formatRelativeDate } from "../utilities/dateHelpers";
 
 enum SortBy {
   lastActive = "lastActive",
@@ -125,10 +125,7 @@ export default function ExercisesScreen({ navigation }: Props) {
                 <View style={styles.exerciseMeta}>
                   {lastSession && (
                     <Text style={styles.exerciseDate}>
-                      {`${formatDistance(
-                        new Date(lastSession.date),
-                        Date.now()
-                      )} ago`}
+                      {formatRelativeDate(lastSession.date)}
                     </Text>
                   )}
                   {lastImprovement ? (
