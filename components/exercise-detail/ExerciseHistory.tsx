@@ -1,5 +1,5 @@
 import {
-  Button,
+  Button as KittenButton,
   Card,
   Icon,
   IndexPath,
@@ -15,10 +15,11 @@ import { ModalBackground } from "../../constants/Colors";
 import { Margin } from "../../constants/Sizes";
 import { ExerciseContext } from "../../services/context";
 import { formatRelativeDate } from "../../utilities/dateHelpers";
+import { Button } from "../Button";
 
 export const ExerciseHistory = () => {
   const {
-    state: { exercises },
+    state: { exercises, loading },
     actions: { deleteExercise },
   } = useContext(ExerciseContext);
 
@@ -26,12 +27,29 @@ export const ExerciseHistory = () => {
     new IndexPath(0)
   );
   const [visible, setVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
+
+  const toggleModal = (active: Boolean, id?: string) => {
+    if (active && id) {
+      setVisible(true);
+      setDeleteId(id);
+    } else {
+      setVisible(false);
+      setDeleteId("");
+    }
+  };
+
+  const deleteExerciseById = async (id: string) => {
+    await deleteExercise(id);
+    toggleModal(false);
+  };
+
   return (
     <>
       <Modal
         visible={visible}
         backdropStyle={styles.backdrop}
-        onBackdropPress={() => setVisible(false)}
+        onBackdropPress={() => toggleModal(false)}
       >
         <Card disabled={true}>
           <Text category="h5" style={styles.modalTitle}>
@@ -41,12 +59,16 @@ export const ExerciseHistory = () => {
             Are you sure you want to delete this exercise?
           </Text>
           <View style={styles.modalButtonWrapper}>
-            <Button status="danger" onPress={() => setVisible(false)}>
+            <Button
+              loading={loading}
+              status="danger"
+              onPress={() => deleteExerciseById(deleteId)}
+            >
               Delete
             </Button>
-            <Button status="basic" onPress={() => setVisible(false)}>
+            <KittenButton status="basic" onPress={() => toggleModal(false)}>
               Cancel
-            </Button>
+            </KittenButton>
           </View>
         </Card>
       </Modal>
@@ -58,7 +80,7 @@ export const ExerciseHistory = () => {
           title="History"
           accessoryLeft={(props) => <Icon {...props} name="clock-outline" />}
         >
-          {exercises.map(({ date, sets }, index) => (
+          {exercises.map(({ id, date, sets }, index) => (
             <MenuItem
               key={index}
               title={(props) => (
@@ -87,7 +109,7 @@ export const ExerciseHistory = () => {
                 <Icon
                   {...props}
                   name="slash-outline"
-                  onPress={() => setVisible(true)}
+                  onPress={() => toggleModal(true, id)}
                 />
               )}
             />
