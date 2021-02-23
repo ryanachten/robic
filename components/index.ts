@@ -2,7 +2,7 @@ export * from "./Background";
 export * from "./Button";
 export * from "./charts";
 export * from "./ExerciseCard";
-export * from "./ExerciseDetailAnalytics";
+export * from "./exercise-detail";
 export * from "./exercise-form";
 export * from "./ErrorToast";
 export * from "./HintCard";
