@@ -5,6 +5,7 @@ import { Background, Link, Logo, PrivacyPolicy } from "../components";
 import { Margin } from "../constants/Sizes";
 import { AuthContext, UserContext } from "../services/context";
 import Constants from "expo-constants";
+import { ModalBackground } from "../constants/Colors";
 
 export default function SettingsScreen() {
   const {
@@ -67,6 +68,6 @@ const styles = StyleSheet.create({
     marginBottom: Margin.md,
   },
   backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: ModalBackground,
   },
 });

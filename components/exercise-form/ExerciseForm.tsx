@@ -33,7 +33,7 @@ export const ExerciseForm = ({
 
   const {
     state: { loading, error },
-    actions: { postExercise },
+    actions: { createExercise },
   } = useContext(ExerciseContext);
   const {
     state: definitionState,
@@ -85,7 +85,7 @@ export const ExerciseForm = ({
       exercise.timeTaken = timeTaken.toISOString();
     }
 
-    await postExercise(exercise);
+    await createExercise(exercise);
 
     // If there's an error, we don't clear state
     // to give user another attempt at submission

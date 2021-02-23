@@ -69,7 +69,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
         {exercise && (
           <>
             <DefinitionDetail definition={exercise} />
-            <ExerciseHistory {...exerciseState} />
+            <ExerciseHistory />
           </>
         )}
       </ScrollView>

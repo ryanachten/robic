@@ -11,7 +11,8 @@ export type ExerciseForPost = {
 
 export enum exerciseTypes {
   GET_EXERCISES_BY_DEFINITION = "GET_EXERCISES_BY_DEFINITION",
-  POST_EXERCISE = "POST_EXERCISE",
+  CREATE_EXERCISE = "CREATE_EXERCISE",
+  DELETE_EXERCISE = "DELETE_EXERCISE",
 }
 
 export type ExerciseState = BaseState & {
@@ -25,13 +26,18 @@ export type ExerciseAction =
       exercises: Exercise[];
     }
   | {
-      type: exerciseTypes.POST_EXERCISE;
+      type: exerciseTypes.CREATE_EXERCISE;
       exercise: Exercise;
+    }
+  | {
+      type: exerciseTypes.DELETE_EXERCISE;
+      id: string;
     };
 
 export type ExerciseActions = {
   getExercisesByDefintion: (definitionId: string) => Promise<void>;
-  postExercise: (exercise: ExerciseForPost) => Promise<void>;
+  createExercise: (exercise: ExerciseForPost) => Promise<void>;
+  deleteExercise: (id: string) => Promise<void>;
 };
 
 export const initialExerciseState: ExerciseState = {
@@ -64,7 +70,7 @@ export const exerciseActions = (
       dispatch({ type: baseTypes.ERROR, error: e.message });
     }
   },
-  postExercise: async (exercise: ExerciseForPost) => {
+  createExercise: async (exercise: ExerciseForPost) => {
     dispatch({
       type: baseTypes.LOADING,
     });
@@ -74,8 +80,22 @@ export const exerciseActions = (
         exercise
       );
       dispatch({
-        type: exerciseTypes.POST_EXERCISE,
+        type: exerciseTypes.CREATE_EXERCISE,
         exercise: data,
+      });
+    } catch (e) {
+      dispatch({ type: baseTypes.ERROR, error: e.message });
+    }
+  },
+  deleteExercise: async (id: string) => {
+    dispatch({
+      type: baseTypes.LOADING,
+    });
+    try {
+      await axios.delete(`${EXERCISE_URL}/${id}`);
+      dispatch({
+        type: exerciseTypes.DELETE_EXERCISE,
+        id,
       });
     } catch (e) {
       dispatch({ type: baseTypes.ERROR, error: e.message });
@@ -111,7 +131,7 @@ export const exerciseReducer = (
         loading: false,
         exercises: [...existingExercises, ...newExercises],
       };
-    case exerciseTypes.POST_EXERCISE:
+    case exerciseTypes.CREATE_EXERCISE: {
       const { exercises } = state;
       const index = exercises.findIndex(({ id }) => action.exercise.id === id);
       exercises[index] = action.exercise;
@@ -120,6 +140,16 @@ export const exerciseReducer = (
         loading: false,
         exercises: [...exercises],
       };
+    }
+    case exerciseTypes.DELETE_EXERCISE: {
+      const { exercises } = state;
+      const updatedExercises = [...exercises].filter((e) => e.id !== action.id);
+      return {
+        ...state,
+        loading: false,
+        exercises: [...updatedExercises],
+      };
+    }
     default:
       return state;
   }
