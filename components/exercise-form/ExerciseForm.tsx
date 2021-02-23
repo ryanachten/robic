@@ -1,19 +1,13 @@
 import React, {
   useState,
   useEffect,
-  useReducer,
   useRef,
   ElementRef,
   useContext,
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {
-  exerciseActions,
-  ExerciseForPost,
-  exerciseReducer,
-  initialExerciseState,
-} from "../../reducers/exercise";
+import { ExerciseForPost } from "../../reducers/exercise";
 import { ExerciseDefinition, Set } from "../../constants/Interfaces";
 import { ErrorToast } from "../ErrorToast";
 import { Button } from "../Button";
@@ -21,7 +15,10 @@ import { Stopwatch } from "../Stopwatch";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
 import { Icon } from "../Icon";
-import { ExerciseDefintionContext } from "../../services/context";
+import {
+  ExerciseContext,
+  ExerciseDefintionContext,
+} from "../../services/context";
 import { PreviousAttempts } from "./PreviousAttempts";
 import { EffortTillPersonalBest } from "./EffortTillPersonalBest";
 import { SetList } from "./SetList";
@@ -33,10 +30,11 @@ export const ExerciseForm = ({
 }) => {
   const initialSet: Set[] = [{ reps: 1, value: 5 }];
   const [sets, setSets] = useState<Set[]>(initialSet);
-  const [{ loading, error }, exerciseDispatch] = useReducer(
-    exerciseReducer,
-    initialExerciseState
-  );
+
+  const {
+    state: { loading, error },
+    actions: { postExercise },
+  } = useContext(ExerciseContext);
   const {
     state: definitionState,
     actions: { getDefinitionById },
@@ -87,7 +85,7 @@ export const ExerciseForm = ({
       exercise.timeTaken = timeTaken.toISOString();
     }
 
-    await exerciseActions(exerciseDispatch).postExercise(exercise);
+    await postExercise(exercise);
 
     // If there's an error, we don't clear state
     // to give user another attempt at submission
