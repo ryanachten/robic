@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { ScrollView, StyleSheet, View, RefreshControl } from "react-native";
 import { Card, List, ListItem, Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
-import { ExerciseDefinition } from "../constants/Interfaces";
+import { Set, ExerciseDefinition } from "../constants/Interfaces";
 import { StackScreenProps } from "@react-navigation/stack";
 import {
   Background,
@@ -60,16 +60,22 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       >
         Edit
       </Button>
-      {exercise && (
-        <>
-          <DefinitionDetail
-            loading={loading}
-            definition={exercise}
-            getDefinitionById={getDefinitionById}
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => getDefinitionById(exercise ? exercise.id : "")}
           />
-          <ExerciseList {...exerciseState} />
-        </>
-      )}
+        }
+      >
+        {exercise && (
+          <>
+            <DefinitionDetail definition={exercise} />
+            <ExerciseList {...exerciseState} />
+          </>
+        )}
+      </ScrollView>
       <ErrorToast error={error} />
     </Background>
   );
@@ -77,15 +83,10 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
 
 const DefinitionDetail = ({
   definition,
-  loading,
-  getDefinitionById,
 }: {
   definition: ExerciseDefinition;
-  getDefinitionById: (id: string) => Promise<void>;
-  loading: boolean;
 }) => {
   const {
-    id,
     type,
     primaryMuscleGroup,
     lastSession,
@@ -93,15 +94,8 @@ const DefinitionDetail = ({
     personalBest: pb,
   } = definition;
 
-  const getDefinition = () => getDefinitionById(id);
-
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={loading} onRefresh={getDefinition} />
-      }
-    >
+    <>
       {(lastSession || pb) && (
         <Card style={styles.exerciseCards}>
           {lastSession && (
@@ -138,25 +132,37 @@ const DefinitionDetail = ({
         ) : null}
       </View>
       {pb && <ExerciseDetailAnalytics history={pb.history} />}
-    </ScrollView>
+    </>
   );
 };
 
-const ExerciseList = ({ exercises, loading, error }: ExerciseState) => {
+const ExerciseList = ({ exercises }: ExerciseState) => {
   return (
     <List
       style={styles.container}
       data={exercises.map((e) => {
         return {
           title: formatRelativeDate(e.date),
-          description: "Meow",
+          sets: e.sets,
         };
       })}
       renderItem={({ item, index }) => (
         <ListItem
+          key={index}
           title={item.title}
-          description={`${item.description} ${index + 1}`}
-          accessoryRight={() => <Button size="tiny">FOLLOW</Button>}
+          description={(props) => {
+            const sets: Array<Set> = item.sets;
+            return (
+              <>
+                {sets.map(({ reps, value }, i) => (
+                  <Text {...props} key={i}>{`${reps} reps x ${value} kg`}</Text>
+                ))}
+              </>
+            );
+          }}
+          accessoryRight={() => (
+            <Icon size="sm" fill={Colors.orange} name="slash-outline" />
+          )}
         />
       )}
     />
