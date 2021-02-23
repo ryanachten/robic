@@ -21,6 +21,7 @@ import {
   AuthContext,
   ExerciseDefintionContext,
   AnalyticsContext,
+  ExerciseContext,
 } from "../services/context";
 import { authReducer, authActions, initialAuthState } from "../reducers/auth";
 import {
@@ -33,6 +34,11 @@ import {
   analyticsReducer,
   initialAnalyticsState,
 } from "../reducers/analytics";
+import {
+  exerciseActions,
+  exerciseReducer,
+  initialExerciseState,
+} from "../reducers/exercise";
 
 export default function Navigation({
   colorScheme,
@@ -58,6 +64,10 @@ function RootNavigator() {
     exerciseDefinitionReducer,
     initialExerciseDefinitionState
   );
+  const [exercises, exerciseDispatch] = useReducer(
+    exerciseReducer,
+    initialExerciseState
+  );
   const [analytics, analyticsDispatch] = useReducer(
     analyticsReducer,
     initialAnalyticsState
@@ -68,6 +78,7 @@ function RootNavigator() {
     () => authActions(authDispatch, userDispatch),
     []
   );
+  const exerciseContext = useMemo(() => exerciseActions(exerciseDispatch), []);
   const exerciseDefintionContext = useMemo(
     () => exerciseDefinitionActions(exerciseDefinitionDispatch),
     []
@@ -96,22 +107,32 @@ function RootNavigator() {
               actions: exerciseDefintionContext,
             }}
           >
-            <AnalyticsContext.Provider
+            <ExerciseContext.Provider
               value={{
-                state: analytics,
-                actions: analyticsContext,
+                state: exercises,
+                actions: exerciseContext,
               }}
             >
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Root" component={AuthenticatedNavigator} />
-                <Stack.Screen name="Settings" component={SettingsNavigator} />
-                <Stack.Screen
-                  name="NotFound"
-                  component={NotFoundScreen}
-                  options={{ title: "Oops!" }}
-                />
-              </Stack.Navigator>
-            </AnalyticsContext.Provider>
+              <AnalyticsContext.Provider
+                value={{
+                  state: analytics,
+                  actions: analyticsContext,
+                }}
+              >
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  <Stack.Screen
+                    name="Root"
+                    component={AuthenticatedNavigator}
+                  />
+                  <Stack.Screen name="Settings" component={SettingsNavigator} />
+                  <Stack.Screen
+                    name="NotFound"
+                    component={NotFoundScreen}
+                    options={{ title: "Oops!" }}
+                  />
+                </Stack.Navigator>
+              </AnalyticsContext.Provider>
+            </ExerciseContext.Provider>
           </ExerciseDefintionContext.Provider>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
