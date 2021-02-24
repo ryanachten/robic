@@ -16,10 +16,11 @@ import { Margin } from "../../constants/Sizes";
 import { ExerciseContext } from "../../services/context";
 import { formatRelativeDate } from "../../utilities/dateHelpers";
 import { Button } from "../Button";
+import { ErrorToast } from "../ErrorToast";
 
 export const ExerciseHistory = () => {
   const {
-    state: { exercises, loading },
+    state: { exercises, error, loading },
     actions: { deleteExercise },
   } = useContext(ExerciseContext);
 
@@ -43,6 +44,10 @@ export const ExerciseHistory = () => {
     await deleteExercise(id);
     toggleModal(false);
   };
+
+  if (!exercises || exercises.length === 0) {
+    return null;
+  }
 
   return (
     <>
@@ -80,42 +85,46 @@ export const ExerciseHistory = () => {
           title="History"
           accessoryLeft={(props) => <Icon {...props} name="clock-outline" />}
         >
-          {exercises.map(({ id, date, sets }, index) => (
-            <MenuItem
-              key={index}
-              title={(props) => (
-                <View style={styles.itemContent}>
-                  <Text
-                    {...props}
-                    category="s1"
-                    style={[props?.style, styles.itemTitle]}
-                  >
-                    {formatRelativeDate(date)}
-                  </Text>
-                  <View style={styles.setWrapper}>
-                    {sets.map(({ reps, value }, i) => (
-                      <Text
-                        {...props}
-                        style={[props?.style, styles.setText]}
-                        category="p2"
-                      >
-                        {`${reps} reps x ${value} kg`}
-                      </Text>
-                    ))}
+          {exercises
+            .sort((a, b) => (new Date(a.date) > new Date(b.date) ? -1 : 1))
+            .map(({ id, date, sets }, i) => (
+              <MenuItem
+                key={i}
+                title={(props) => (
+                  <View style={styles.itemContent}>
+                    <Text
+                      {...props}
+                      category="s1"
+                      style={[props?.style, styles.itemTitle]}
+                    >
+                      {formatRelativeDate(date)}
+                    </Text>
+                    <View style={styles.setWrapper}>
+                      {sets.map(({ reps, value }, j) => (
+                        <Text
+                          {...props}
+                          key={j}
+                          style={[props?.style, styles.setText]}
+                          category="p2"
+                        >
+                          {`${reps} reps x ${value} kg`}
+                        </Text>
+                      ))}
+                    </View>
                   </View>
-                </View>
-              )}
-              accessoryRight={(props) => (
-                <Icon
-                  {...props}
-                  name="slash-outline"
-                  onPress={() => toggleModal(true, id)}
-                />
-              )}
-            />
-          ))}
+                )}
+                accessoryRight={(props) => (
+                  <Icon
+                    {...props}
+                    name="slash-outline"
+                    onPress={() => toggleModal(true, id)}
+                  />
+                )}
+              />
+            ))}
         </MenuGroup>
       </Menu>
+      <ErrorToast error={error} />
     </>
   );
 };
