@@ -26,7 +26,6 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   } = useContext(ExerciseDefintionContext);
 
   const {
-    state: exerciseState,
     actions: { getExercisesByDefintion },
   } = useContext(ExerciseContext);
 
@@ -69,7 +68,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
         {exercise && (
           <>
             <DefinitionDetail definition={exercise} />
-            <ExerciseHistory />
+            <ExerciseHistory definitionId={exercise.id} />
           </>
         )}
       </ScrollView>
