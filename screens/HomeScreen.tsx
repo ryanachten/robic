@@ -17,9 +17,13 @@ const sortExercisesAlphabetically = (
 
 export default function HomeScreen() {
   const {
-    state: { definitions, error, loading },
+    state: { definitions: unsortedDefintions, error, loading },
     actions: { getDefinitions },
   } = useContext(ExerciseDefintionContext);
+
+  const sortedDefinitions = unsortedDefintions.sort(
+    sortExercisesAlphabetically
+  );
 
   const {
     actions: { getAnalytics },
@@ -34,7 +38,7 @@ export default function HomeScreen() {
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
     new IndexPath(0)
   );
-  const selectedDefintion = definitions[selectedIndex.row];
+  const selectedDefintion = sortedDefinitions[selectedIndex.row];
 
   const nav = useNavigation();
   const goToExerciseScreen = () =>
@@ -50,7 +54,7 @@ export default function HomeScreen() {
           <Spinner size="giant" />
         </View>
       )}
-      {!loading && !definitions.length && (
+      {!loading && !sortedDefinitions.length && (
         <HintCard
           title="You've got no exercises!"
           body="Create an exercise to get started"
@@ -65,13 +69,15 @@ export default function HomeScreen() {
             value={selectedDefintion.title}
             style={styles.picker}
             selectedIndex={selectedIndex}
-            onSelect={(index) => setSelectedIndex(index as IndexPath)}
+            onSelect={(i) => {
+              const index = i as IndexPath;
+
+              setSelectedIndex(index);
+            }}
           >
-            {definitions
-              .sort(sortExercisesAlphabetically)
-              .map(({ id, title }) => (
-                <SelectItem key={id} title={title} />
-              ))}
+            {sortedDefinitions.map(({ id, title }) => (
+              <SelectItem key={id} title={title} />
+            ))}
           </Select>
           <ExerciseForm definition={selectedDefintion} />
         </>
