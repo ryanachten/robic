@@ -3,10 +3,13 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Colors } from "../constants/Colors";
-import { Margin } from "../constants/Sizes";
 import { useInterval } from "../hooks/useInterval";
 import { Text } from "@ui-kitten/components";
 import { Button } from "./Button";
+import useBackgroundMode from "../hooks/useBackgroundMode";
+import AsyncStorage from "@react-native-community/async-storage";
+import { StorageKeys } from "../constants/StorageKeys";
+import { differenceInMilliseconds } from "date-fns";
 
 type Lap = { min: number; sec: number; msec: number };
 
@@ -25,6 +28,10 @@ export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
   const [sec, setSec] = useState(0);
   const [min, setMin] = useState(0);
   const [laps, setLaps] = useState<Array<Lap>>([]);
+  useBackgroundMode({
+    onBackground: () => handleBackgroundMode(),
+    onForeground: () => handleForegroundMode(),
+  });
 
   const handleToggle = () => {
     setStart(!start);
@@ -57,6 +64,39 @@ export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
     setMin(0);
     setStart(false);
     setLaps([]);
+  };
+
+  const handleBackgroundMode = () => {
+    console.log("handleBackgroundMode", start);
+    console.log("min", min, "sec", sec);
+    setStart(false);
+    AsyncStorage.setItem(StorageKeys.StopwatchInactive, Date.now().toString());
+  };
+
+  const handleForegroundMode = async () => {
+    console.log("handleForegroundMode", start);
+
+    const cachedTimeStamp = await AsyncStorage.getItem(
+      StorageKeys.StopwatchInactive
+    );
+
+    console.log("cachedTimeStamp", cachedTimeStamp);
+
+    if (!cachedTimeStamp) return;
+
+    const relativeMillis = differenceInMilliseconds(
+      Date.now(),
+      parseInt(cachedTimeStamp)
+    );
+    const elapsedMins = Math.floor(relativeMillis / 60000);
+    const elapsedSeconds = parseFloat(
+      ((relativeMillis % 60000) / 1000).toFixed(0)
+    );
+    console.log("min", min, "sec", sec);
+    console.log("elapsedMins", elapsedMins, "elapsedSeconds", elapsedSeconds);
+    setMin(min + elapsedMins);
+    setMin(sec + elapsedSeconds);
+    // setStart(true);
   };
 
   const getTime = () => ({ msec, sec, min });
