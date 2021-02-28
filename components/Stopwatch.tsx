@@ -40,6 +40,12 @@ export class Stopwatch extends Component<Props, State> {
     );
   }
 
+  componentWillUnmount() {
+    AppState.removeEventListener("change", (nextAppState) =>
+      this.handleAppStateChange(nextAppState)
+    );
+  }
+
   start() {
     this.interval = setInterval(() => this.step(), 1);
     this.setState({
