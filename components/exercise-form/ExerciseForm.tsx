@@ -75,9 +75,9 @@ export const ExerciseForm = ({
     if (!stopwatchRef.current) {
       return;
     }
-    const { getTime, handleReset, hasStarted } = stopwatchRef.current;
-    const { msec, sec, min } = getTime();
-    if (hasStarted()) {
+    const { getTime, handleReset } = stopwatchRef.current;
+    const { started, msec, sec, min } = getTime();
+    if (started) {
       const timeTaken = new Date(0);
       timeTaken.setMilliseconds(msec);
       timeTaken.setSeconds(sec);
