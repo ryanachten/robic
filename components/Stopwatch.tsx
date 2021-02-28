@@ -21,7 +21,11 @@ type State = {
 };
 
 export class Stopwatch extends Component<Props, State> {
-  interval: NodeJS.Timeout | null;
+  animationRequest: number | null;
+  framesPerMillisecond: number;
+  fpsInterval: number;
+  then: number;
+  startTime: number;
   initState: State = {
     started: false,
     msec: 0,
@@ -30,7 +34,11 @@ export class Stopwatch extends Component<Props, State> {
   };
   constructor(props: Props) {
     super(props);
-    this.interval = null;
+    this.animationRequest = null;
+    this.framesPerMillisecond = 1000;
+    this.fpsInterval = this.framesPerMillisecond;
+    this.then = Date.now();
+    this.startTime = this.then;
     this.state = {
       ...this.initState,
     };
@@ -41,16 +49,29 @@ export class Stopwatch extends Component<Props, State> {
   }
 
   componentWillUnmount() {
+    this.stop();
     AppState.removeEventListener("change", (nextAppState) =>
       this.handleAppStateChange(nextAppState)
     );
   }
 
   start() {
-    this.interval = setInterval(() => this.step(), 1);
+    this.animate();
     this.setState({
       started: true,
     });
+  }
+
+  animate() {
+    this.animationRequest = requestAnimationFrame(() => this.animate());
+
+    const now = Date.now();
+    const elapsed = now - this.then;
+
+    if (elapsed > this.fpsInterval) {
+      this.then = now - (elapsed % this.fpsInterval);
+      this.step();
+    }
   }
 
   getTime() {
@@ -58,8 +79,8 @@ export class Stopwatch extends Component<Props, State> {
   }
 
   stop() {
-    if (this.interval) {
-      clearInterval(this.interval);
+    if (this.animationRequest) {
+      cancelAnimationFrame(this.animationRequest);
     }
     this.setState({
       started: false,
@@ -68,8 +89,8 @@ export class Stopwatch extends Component<Props, State> {
 
   step() {
     let { msec, sec, min } = this.state;
-    if (msec !== 99) {
-      msec += 1;
+    if (msec < 100 - this.framesPerMillisecond) {
+      msec += this.framesPerMillisecond;
     } else if (sec !== 59) {
       msec = 0;
       sec += 1;
@@ -91,26 +112,23 @@ export class Stopwatch extends Component<Props, State> {
   }
 
   handleAppStateChange(nextAppState: AppStateStatus) {
-    const currentState = AppState.currentState;
-
     if (nextAppState === "active") {
       this.handleForeground();
     }
 
-    if (
-      currentState.match("active") &&
-      (nextAppState === "inactive" || nextAppState === "background")
-    ) {
+    if (nextAppState === "inactive" || nextAppState === "background") {
       this.handleBackground();
     }
   }
 
   handleBackground() {
     this.stop();
+
     AsyncStorage.setItem(StorageKeys.StopwatchInactive, Date.now().toString());
   }
 
   async handleForeground() {
+    this.stop();
     const cachedTimeStamp = await AsyncStorage.getItem(
       StorageKeys.StopwatchInactive
     );
