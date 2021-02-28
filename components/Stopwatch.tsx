@@ -1,30 +1,15 @@
 // Based on https://codersera.com/blog/first-react-native-app-stopwatch/ implementation
 
-import React, {
-  Component,
-  forwardRef,
-  useImperativeHandle,
-  useState,
-} from "react";
-import { View, StyleSheet } from "react-native";
+import React, { Component } from "react";
+import { View, StyleSheet, AppState, AppStateStatus } from "react-native";
 import { Colors } from "../constants/Colors";
-import { useInterval } from "../hooks/useInterval";
 import { Text } from "@ui-kitten/components";
 import { Button } from "./Button";
-import useBackgroundMode from "../hooks/useBackgroundMode";
 import AsyncStorage from "@react-native-community/async-storage";
 import { StorageKeys } from "../constants/StorageKeys";
 import { differenceInMilliseconds } from "date-fns";
 
-type Lap = { min: number; sec: number; msec: number };
-
 let padToTwo = (number: number) => (number <= 9 ? `0${number}` : number);
-
-type StopwatchHandle = {
-  handleReset: () => void;
-  getTime: () => { min: number; sec: number; msec: number };
-  hasStarted: () => boolean;
-};
 
 type Props = {};
 
@@ -49,6 +34,10 @@ export class Stopwatch extends Component<Props, State> {
     this.state = {
       ...this.initState,
     };
+
+    AppState.addEventListener("change", (nextAppState) =>
+      this.handleAppStateChange(nextAppState)
+    );
   }
 
   start() {
@@ -95,6 +84,48 @@ export class Stopwatch extends Component<Props, State> {
     this.setState({ ...this.initState });
   }
 
+  handleAppStateChange(nextAppState: AppStateStatus) {
+    const currentState = AppState.currentState;
+
+    if (nextAppState === "active") {
+      this.handleForeground();
+    }
+
+    if (
+      currentState.match("active") &&
+      (nextAppState === "inactive" || nextAppState === "background")
+    ) {
+      this.handleBackground();
+    }
+  }
+
+  handleBackground() {
+    this.stop();
+    AsyncStorage.setItem(StorageKeys.StopwatchInactive, Date.now().toString());
+  }
+
+  async handleForeground() {
+    const cachedTimeStamp = await AsyncStorage.getItem(
+      StorageKeys.StopwatchInactive
+    );
+
+    if (!cachedTimeStamp) return;
+
+    const relativeMillis = differenceInMilliseconds(
+      Date.now(),
+      parseInt(cachedTimeStamp)
+    );
+    const elapsedMins = Math.floor(relativeMillis / 60000);
+    const elapsedSeconds = parseFloat(
+      ((relativeMillis % 60000) / 1000).toFixed(0)
+    );
+    this.setState((prevState) => ({
+      min: prevState.min + elapsedMins,
+      sec: prevState.sec + elapsedSeconds,
+    }));
+    this.start();
+  }
+
   render() {
     const { started, msec, sec, min } = this.state;
     return (
@@ -119,63 +150,6 @@ export class Stopwatch extends Component<Props, State> {
     );
   }
 }
-
-// export const Stopwatch = forwardRef<StopwatchHandle, {}>((props, ref) => {
-//   // Stopwatch state
-//   const [start, setStart] = useState(false);
-//   const [msec, setMilliSec] = useState(0);
-//   const [sec, setSec] = useState(0);
-//   const [min, setMin] = useState(0);
-//   const [laps, setLaps] = useState<Array<Lap>>([]);
-//   useBackgroundMode({
-//     onBackground: () => handleBackgroundMode(),
-//     onForeground: () => handleForegroundMode(),
-//   });
-
-//   const hasStarted = () => msec !== 0 || sec !== 0 || min !== 0;
-
-//   const handleBackgroundMode = () => {
-//     console.log("handleBackgroundMode", start);
-//     console.log("min", min, "sec", sec);
-//     setStart(false);
-//     AsyncStorage.setItem(StorageKeys.StopwatchInactive, Date.now().toString());
-//   };
-
-//   const handleForegroundMode = async () => {
-//     console.log("handleForegroundMode", start);
-
-//     const cachedTimeStamp = await AsyncStorage.getItem(
-//       StorageKeys.StopwatchInactive
-//     );
-
-//     console.log("cachedTimeStamp", cachedTimeStamp);
-
-//     if (!cachedTimeStamp) return;
-
-//     const relativeMillis = differenceInMilliseconds(
-//       Date.now(),
-//       parseInt(cachedTimeStamp)
-//     );
-//     const elapsedMins = Math.floor(relativeMillis / 60000);
-//     const elapsedSeconds = parseFloat(
-//       ((relativeMillis % 60000) / 1000).toFixed(0)
-//     );
-//     console.log("min", min, "sec", sec);
-//     console.log("elapsedMins", elapsedMins, "elapsedSeconds", elapsedSeconds);
-//     setMin(min + elapsedMins);
-//     setMin(sec + elapsedSeconds);
-//     // setStart(true);
-//   };
-
-//   const getTime = () => ({ msec, sec, min });
-
-//   // Expose following functions to parent via ref
-//   useImperativeHandle(ref, () => ({
-//     handleReset,
-//     getTime,
-//     hasStarted,
-//   }));
-// });
 
 const styles = StyleSheet.create({
   parent: {
