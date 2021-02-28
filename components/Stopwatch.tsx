@@ -4,10 +4,11 @@ import React, { Component } from "react";
 import { View, StyleSheet, AppState, AppStateStatus } from "react-native";
 import { Colors } from "../constants/Colors";
 import { Text } from "@ui-kitten/components";
-import { Button } from "./Button";
 import AsyncStorage from "@react-native-community/async-storage";
 import { StorageKeys } from "../constants/StorageKeys";
 import { differenceInMilliseconds } from "date-fns";
+import { Icon } from "./Icon";
+import { Margin } from "../constants/Sizes";
 
 let padToTwo = (number: number) => (number <= 9 ? `0${number}` : number);
 
@@ -154,21 +155,26 @@ export class Stopwatch extends Component<Props, State> {
     const { started, msec, sec, min } = this.state;
     return (
       <View>
-        <View style={styles.parent}>
-          <Text style={styles.child}>{padToTwo(min) + " : "}</Text>
-          <Text style={styles.child}>{padToTwo(sec) + " : "}</Text>
-          <Text style={styles.child}>{padToTwo(msec)}</Text>
-        </View>
-        <View style={styles.buttonParent}>
-          <Button appearance="ghost" onPress={() => this.handleReset()}>
-            Reset
-          </Button>
-          <Button
-            appearance="ghost"
+        <View style={styles.container}>
+          <View style={styles.textWrapper}>
+            <Text style={styles.text}>{padToTwo(min) + " : "}</Text>
+            <Text style={styles.text}>{padToTwo(sec)}</Text>
+            {/* <Text style={styles.child}>{padToTwo(sec) + " : "}</Text>
+          <Text style={styles.child}>{padToTwo(msec)}</Text> */}
+          </View>
+          <Icon
+            name={!started ? "play-circle-outline" : "stop-circle-outline"}
+            size="md"
+            fill={Colors.orange}
+            style={styles.playIcon}
             onPress={() => (started ? this.stop() : this.start())}
-          >
-            {!started ? "Start" : "Stop"}
-          </Button>
+          />
+          <Icon
+            name="refresh-outline"
+            size="md"
+            fill={Colors.orange}
+            onPress={() => this.handleReset()}
+          />
         </View>
       </View>
     );
@@ -176,23 +182,24 @@ export class Stopwatch extends Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
-  parent: {
+  container: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: Margin.md,
+  },
+  playIcon: {
+    marginRight: Margin.sm,
+  },
+  textWrapper: {
     alignSelf: "center",
     display: "flex",
     flexDirection: "row",
-    width: 200,
+    marginRight: Margin.lg,
+    width: 120,
   },
-  child: {
+  text: {
     fontSize: 40,
-  },
-  buttonParent: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  buttonText: {
-    color: Colors.orange,
-    fontSize: 20,
-    alignSelf: "center",
   },
 });
