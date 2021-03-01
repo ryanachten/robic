@@ -32,6 +32,10 @@ export const EffortTillPersonalBest = ({
   }
   const pbTotal = pb.sets.reduce(netWeightReducer, 0);
   const currentTotal = currentSets.reduce(netWeightFormReducer, 0);
+  if (isNaN(currentTotal) || isNaN(pbTotal)) {
+    return null;
+  }
+
   if (pbTotal >= currentTotal) {
     const pbSetCount = pb.sets.length;
     const pbAvgReps = Math.floor(
