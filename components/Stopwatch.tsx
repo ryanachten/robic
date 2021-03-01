@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: Margin.md,
   },
   playIcon: {
-    marginRight: Margin.sm,
+    marginRight: Margin.md,
   },
   textWrapper: {
     alignSelf: "center",
