@@ -77,10 +77,6 @@ export class Stopwatch extends Component<Props, State> {
     }
   }
 
-  getTime() {
-    return this.state;
-  }
-
   stop() {
     if (this.animationRequest) {
       cancelAnimationFrame(this.animationRequest);

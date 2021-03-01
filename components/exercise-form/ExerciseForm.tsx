@@ -79,8 +79,7 @@ export const ExerciseForm = ({
     if (!stopwatchRef.current) {
       return;
     }
-    const { getTime, handleReset } = stopwatchRef.current;
-    const { started, msec, sec, min } = getTime();
+    const { started, msec, sec, min } = stopwatchRef.current.state;
     if (started) {
       const timeTaken = new Date(0);
       timeTaken.setMilliseconds(msec);
@@ -88,14 +87,13 @@ export const ExerciseForm = ({
       timeTaken.setMinutes(min);
       exercise.timeTaken = timeTaken.toISOString();
     }
-
     await createExercise(exercise);
 
     // If there's an error, we don't clear state
     // to give user another attempt at submission
     if (!error) {
       setSets(initialSet);
-      handleReset();
+      stopwatchRef.current.handleReset();
       navigation.navigate("Exercises", {
         screen: "ExerciseDetailScreen",
         params: {
@@ -122,7 +120,7 @@ export const ExerciseForm = ({
         <Button
           style={styles.button}
           loading={loading}
-          onPress={submitExercise}
+          onPress={() => submitExercise()}
         >
           Done
         </Button>
