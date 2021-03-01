@@ -19,6 +19,7 @@ type State = {
   msec: number;
   sec: number;
   min: number;
+  shouldRestoreStopwatch: Boolean;
 };
 
 export class Stopwatch extends Component<Props, State> {
@@ -28,6 +29,7 @@ export class Stopwatch extends Component<Props, State> {
   then: number;
   startTime: number;
   initState: State = {
+    shouldRestoreStopwatch: false,
     started: false,
     msec: 0,
     sec: 0,
@@ -129,15 +131,19 @@ export class Stopwatch extends Component<Props, State> {
         StorageKeys.StopwatchInactive,
         Date.now().toString()
       );
+      this.setState({
+        shouldRestoreStopwatch: true,
+      });
     }
   }
 
   async handleForeground() {
+    const { shouldRestoreStopwatch } = this.state;
     const cachedTimeStamp = await AsyncStorage.getItem(
       StorageKeys.StopwatchInactive
     );
 
-    if (!cachedTimeStamp) return;
+    if (!shouldRestoreStopwatch || !cachedTimeStamp) return;
 
     const relativeMillis = differenceInMilliseconds(
       Date.now(),
@@ -150,6 +156,7 @@ export class Stopwatch extends Component<Props, State> {
     this.setState((prevState) => ({
       min: prevState.min + elapsedMins,
       sec: prevState.sec + elapsedSeconds,
+      shouldRestoreStopwatch: false,
     }));
     AsyncStorage.removeItem(StorageKeys.StopwatchInactive);
     this.start();
