@@ -8,7 +8,7 @@ import React, {
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ExerciseForPost } from "../../reducers/exercise";
-import { ExerciseDefinition, Set } from "../../constants/Interfaces";
+import { ExerciseDefinition, FormSet, Set } from "../../constants/Interfaces";
 import { ErrorToast } from "../ErrorToast";
 import { Button } from "../Button";
 import { Stopwatch } from "../Stopwatch";
@@ -28,8 +28,8 @@ export const ExerciseForm = ({
 }: {
   definition: ExerciseDefinition;
 }) => {
-  const initialSet: Set[] = [{ reps: 1, value: 5 }];
-  const [sets, setSets] = useState<Set[]>(initialSet);
+  const initialSet: FormSet[] = [{ reps: "1", value: "5" }];
+  const [sets, setSets] = useState<FormSet[]>(initialSet);
 
   const {
     state: { loading, error },
@@ -52,7 +52,7 @@ export const ExerciseForm = ({
 
   const updateSet = (index: number, field: "reps" | "value", value: string) => {
     const updatedSets = [...sets];
-    updatedSets[index][field] = parseInt(value);
+    updatedSets[index][field] = value;
     setSets(updatedSets);
   };
 
@@ -68,8 +68,12 @@ export const ExerciseForm = ({
   };
 
   const submitExercise = async () => {
+    const setsForSumission: Set[] = sets.map(({ reps, value }) => ({
+      reps: parseFloat(reps),
+      value: parseFloat(value),
+    }));
     const exercise: ExerciseForPost = {
-      sets,
+      sets: setsForSumission,
       definition: id,
     };
     if (!stopwatchRef.current) {

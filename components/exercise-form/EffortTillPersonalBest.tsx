@@ -1,13 +1,16 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Card, Text } from "@ui-kitten/components";
-import { Set } from "../../constants/Interfaces";
+import { FormSet, Set } from "../../constants/Interfaces";
 import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
 
 const netWeightReducer = (accumulator: number, { reps, value }: Set) =>
   (accumulator += reps * value);
+
+const netWeightFormReducer = (accumulator: number, { reps, value }: FormSet) =>
+  (accumulator += parseFloat(reps) * parseFloat(value));
 
 const totalRepReducer = (accumulator: number, { reps }: Set) =>
   (accumulator += reps);
@@ -18,7 +21,7 @@ export const EffortTillPersonalBest = ({
   definitionState,
 }: {
   id: string;
-  currentSets: Set[];
+  currentSets: FormSet[];
   definitionState: ExerciseDefinitionState;
 }) => {
   const { definitions } = definitionState;
@@ -28,7 +31,7 @@ export const EffortTillPersonalBest = ({
     return null;
   }
   const pbTotal = pb.sets.reduce(netWeightReducer, 0);
-  const currentTotal = currentSets.reduce(netWeightReducer, 0);
+  const currentTotal = currentSets.reduce(netWeightFormReducer, 0);
   if (pbTotal >= currentTotal) {
     const pbSetCount = pb.sets.length;
     const pbAvgReps = Math.floor(

@@ -52,6 +52,12 @@ export type Set = {
   value: number;
 };
 
+// Used for exercise form
+export type FormSet = {
+  reps: string;
+  value: string;
+};
+
 export type PersonalBest = {
   topNetExercise: Exercise | null;
   topAvgValue: number;
