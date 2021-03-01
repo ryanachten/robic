@@ -123,13 +123,16 @@ export class Stopwatch extends Component<Props, State> {
   }
 
   handleBackground() {
-    this.stop();
-
-    AsyncStorage.setItem(StorageKeys.StopwatchInactive, Date.now().toString());
+    if (this.state.started) {
+      this.stop();
+      AsyncStorage.setItem(
+        StorageKeys.StopwatchInactive,
+        Date.now().toString()
+      );
+    }
   }
 
   async handleForeground() {
-    this.stop();
     const cachedTimeStamp = await AsyncStorage.getItem(
       StorageKeys.StopwatchInactive
     );
@@ -148,6 +151,7 @@ export class Stopwatch extends Component<Props, State> {
       min: prevState.min + elapsedMins,
       sec: prevState.sec + elapsedSeconds,
     }));
+    AsyncStorage.removeItem(StorageKeys.StopwatchInactive);
     this.start();
   }
 
