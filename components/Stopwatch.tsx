@@ -90,7 +90,7 @@ export class Stopwatch extends Component<Props, State> {
     let { msec, sec, min } = this.state;
     if (msec < 100 - this.framesPerMillisecond) {
       msec += this.framesPerMillisecond;
-    } else if (sec !== 59) {
+    } else if (sec < 59) {
       msec = 0;
       sec += 1;
     } else {
