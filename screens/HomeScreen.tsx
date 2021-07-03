@@ -10,7 +10,7 @@ import { IndexPath, Select, SelectItem, Spinner } from "@ui-kitten/components";
 import { ErrorToast, ExerciseForm, Background, HintCard } from "../components";
 import {
   AnalyticsContext,
-  ExerciseDefintionContext,
+  ExerciseDefinitionContext,
 } from "../services/context";
 import { Margin } from "../constants/Sizes";
 import { useNavigation } from "@react-navigation/native";
@@ -23,15 +23,15 @@ const sortExercisesAlphabetically = (
 
 export default function HomeScreen() {
   const {
-    state: { definitions: unsortedDefintions, error, loading },
+    state: { definitions: unsortedDefinitions, error, loading },
     actions: { getDefinitions },
-  } = useContext(ExerciseDefintionContext);
+  } = useContext(ExerciseDefinitionContext);
 
   const nav = useNavigation();
 
   const sortedDefinitions = useMemo(
-    () => unsortedDefintions.sort(sortExercisesAlphabetically),
-    [unsortedDefintions]
+    () => unsortedDefinitions.sort(sortExercisesAlphabetically),
+    [unsortedDefinitions]
   );
 
   const {
@@ -47,7 +47,7 @@ export default function HomeScreen() {
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
     new IndexPath(0)
   );
-  const selectedDefintion = sortedDefinitions[selectedIndex.row];
+  const selectedDefinition = sortedDefinitions[selectedIndex.row];
 
   const goToExerciseScreen = useCallback(
     () =>
@@ -73,11 +73,11 @@ export default function HomeScreen() {
           onPress={goToExerciseScreen}
         />
       )}
-      {selectedDefintion && (
+      {selectedDefinition && (
         <>
           <Select
             label="Select exercise"
-            value={selectedDefintion.title}
+            value={selectedDefinition.title}
             style={styles.picker}
             selectedIndex={selectedIndex}
             onSelect={(i) => {
@@ -90,7 +90,7 @@ export default function HomeScreen() {
               <SelectItem key={id} title={title} />
             ))}
           </Select>
-          <ExerciseForm definition={selectedDefintion} />
+          <ExerciseForm definition={selectedDefinition} />
         </>
       )}
     </Background>

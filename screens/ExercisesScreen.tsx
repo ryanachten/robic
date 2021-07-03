@@ -27,7 +27,7 @@ import {
   Text,
   Card,
 } from "@ui-kitten/components";
-import { ExerciseDefintionContext } from "../services/context";
+import { ExerciseDefinitionContext } from "../services/context";
 import { formatRelativeDate } from "../utilities/dateHelpers";
 
 enum SortBy {
@@ -48,7 +48,7 @@ export default function ExercisesScreen({ navigation }: Props) {
   const {
     state: { definitions, error, loading },
     actions: { getDefinitions },
-  } = useContext(ExerciseDefintionContext);
+  } = useContext(ExerciseDefinitionContext);
 
   useEffect(() => {
     getDefinitions();

@@ -23,7 +23,7 @@ export const ExerciseContext = createContext<{
   actions: ExerciseActions;
 }>({});
 
-export const ExerciseDefintionContext = createContext<{
+export const ExerciseDefinitionContext = createContext<{
   state: ExerciseDefinitionState;
   actions: ExerciseDefinitionActions;
 }>({});

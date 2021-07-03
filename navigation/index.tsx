@@ -19,7 +19,7 @@ import { userReducer, userActions, initialUserState } from "../reducers/user";
 import {
   UserContext,
   AuthContext,
-  ExerciseDefintionContext,
+  ExerciseDefinitionContext,
   AnalyticsContext,
   ExerciseContext,
 } from "../services/context";
@@ -79,7 +79,7 @@ function RootNavigator() {
     []
   );
   const exerciseContext = useMemo(() => exerciseActions(exerciseDispatch), []);
-  const exerciseDefintionContext = useMemo(
+  const exerciseDefinitionContext = useMemo(
     () => exerciseDefinitionActions(exerciseDefinitionDispatch),
     []
   );
@@ -101,10 +101,10 @@ function RootNavigator() {
     <AuthContext.Provider value={{ state: auth, actions: authContext }}>
       <UserContext.Provider value={{ state: user, actions: userContext }}>
         {auth.token ? (
-          <ExerciseDefintionContext.Provider
+          <ExerciseDefinitionContext.Provider
             value={{
               state: exerciseDefinition,
-              actions: exerciseDefintionContext,
+              actions: exerciseDefinitionContext,
             }}
           >
             <ExerciseContext.Provider
@@ -133,7 +133,7 @@ function RootNavigator() {
                 </Stack.Navigator>
               </AnalyticsContext.Provider>
             </ExerciseContext.Provider>
-          </ExerciseDefintionContext.Provider>
+          </ExerciseDefinitionContext.Provider>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Root" component={UnauthenticatedNavigator} />

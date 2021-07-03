@@ -18,7 +18,10 @@ import {
 } from "../components";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
-import { ExerciseContext, ExerciseDefintionContext } from "../services/context";
+import {
+  ExerciseContext,
+  ExerciseDefinitionContext,
+} from "../services/context";
 import { useScreenFocus } from "../hooks/useScreenFocus";
 import { FlatList } from "react-native-gesture-handler";
 
@@ -30,7 +33,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const {
     state: { definitions, error, loading },
     actions: { getDefinitionById },
-  } = useContext(ExerciseDefintionContext);
+  } = useContext(ExerciseDefinitionContext);
 
   const {
     actions: { getExercisesByDefinition },
