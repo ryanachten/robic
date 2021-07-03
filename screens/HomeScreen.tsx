@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { StyleSheet, View } from "react-native";
 import { IndexPath, Select, SelectItem, Spinner } from "@ui-kitten/components";
 import { ErrorToast, ExerciseForm, Background, HintCard } from "../components";
@@ -21,8 +27,11 @@ export default function HomeScreen() {
     actions: { getDefinitions },
   } = useContext(ExerciseDefintionContext);
 
-  const sortedDefinitions = unsortedDefintions.sort(
-    sortExercisesAlphabetically
+  const nav = useNavigation();
+
+  const sortedDefinitions = useMemo(
+    () => unsortedDefintions.sort(sortExercisesAlphabetically),
+    [unsortedDefintions]
   );
 
   const {
@@ -40,11 +49,13 @@ export default function HomeScreen() {
   );
   const selectedDefintion = sortedDefinitions[selectedIndex.row];
 
-  const nav = useNavigation();
-  const goToExerciseScreen = () =>
-    nav.navigate("Exercises", {
-      screen: "ExerciseEditScreen",
-    });
+  const goToExerciseScreen = useCallback(
+    () =>
+      nav.navigate("Exercises", {
+        screen: "ExerciseEditScreen",
+      }),
+    []
+  );
 
   return (
     <Background>

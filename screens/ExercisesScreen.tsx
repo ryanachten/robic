@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { StyleSheet, RefreshControl, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -26,13 +32,13 @@ import { formatRelativeDate } from "../utilities/dateHelpers";
 
 enum SortBy {
   lastActive = "lastActive",
-  lastImprovement = "lastImprovement",
+  mostImprovement = "mostImprovement",
   numberOfSessions = "numberOfSessions",
 }
 
 const sortOptions = [
   { value: SortBy.lastActive, label: "Last Active" },
-  { value: SortBy.lastImprovement, label: "Last Improvement" },
+  { value: SortBy.mostImprovement, label: "Most Improvement" },
   { value: SortBy.numberOfSessions, label: "Number of Sessions" },
 ];
 
@@ -52,14 +58,39 @@ export default function ExercisesScreen({ navigation }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
     new IndexPath(0)
   );
-  const sortBy = sortOptions[selectedIndex.row];
+  const sortBy = useMemo(
+    () => sortOptions[selectedIndex.row],
+    [selectedIndex.row]
+  );
+  const sortExercises = useCallback(
+    (a, b) => {
+      switch (sortBy.value) {
+        case SortBy.mostImprovement:
+          return sortByImprovment(a, b);
+        case SortBy.numberOfSessions:
+          return sortByNumberOfSessions(a, b);
+        default:
+          return sortByDate(a, b);
+      }
+    },
+    [sortBy.value]
+  );
+  const filterExercises = useCallback(
+    (e) => filterBySearchTerm(e, searchTerm),
+    [searchTerm]
+  );
+
+  const navigateToEdit = useCallback(
+    () => navigation.navigate("ExerciseEditScreen", {}),
+    []
+  );
 
   return (
     <Background>
       <ErrorToast error={error} />
       <Button
         appearance="outline"
-        onPress={() => navigation.navigate("ExerciseEditScreen", {})}
+        onPress={navigateToEdit}
         style={styles.addExerciseButton}
         accessoryRight={() => (
           <Icon fill={Colors.orange} name="plus-circle-outline" size="sm" />
@@ -93,17 +124,8 @@ export default function ExercisesScreen({ navigation }: Props) {
         }
       >
         {definitions
-          ?.sort((a, b) => {
-            switch (sortBy.value) {
-              case SortBy.lastImprovement:
-                return sortByImprovment(a, b);
-              case SortBy.numberOfSessions:
-                return sortByNumberOfSessions(a, b);
-              default:
-                return sortByDate(a, b);
-            }
-          })
-          .filter((e) => filterBySearchTerm(e, searchTerm))
+          ?.sort(sortExercises)
+          .filter(filterExercises)
           .map(
             ({
               id,
