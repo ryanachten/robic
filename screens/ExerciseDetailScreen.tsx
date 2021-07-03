@@ -1,5 +1,10 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
-import { ScrollView, StyleSheet, RefreshControl } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  RefreshControl,
+  SectionList,
+} from "react-native";
 import { Spinner, Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -15,6 +20,7 @@ import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 import { ExerciseContext, ExerciseDefintionContext } from "../services/context";
 import { useScreenFocus } from "../hooks/useScreenFocus";
+import { FlatList } from "react-native-gesture-handler";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
@@ -27,14 +33,13 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   } = useContext(ExerciseDefintionContext);
 
   const {
-    actions: { getExercisesByDefintion },
+    actions: { getExercisesByDefinition },
   } = useContext(ExerciseContext);
 
   useScreenFocus(() => {
     if (definitionId) {
-      console.log("focus!");
       getDefinitionById(definitionId);
-      getExercisesByDefintion(definitionId);
+      getExercisesByDefinition(definitionId);
     }
   });
 
@@ -44,7 +49,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   );
 
   const fetchExercise = useCallback(
-    () => getDefinitionById(exercise ? exercise.id : ""),
+    () => definitionId && getDefinitionById(definitionId),
     [definitionId, loading]
   );
 
@@ -69,28 +74,27 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       >
         Edit
       </Button>
-      <ScrollView
-        style={styles.container}
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={fetchExercise} />
-        }
-      >
-        {exercise && (
-          <>
-            <DefinitionDetail definition={exercise} />
-            <ExerciseHistory definitionId={exercise.id} />
-          </>
-        )}
-      </ScrollView>
+      {exercise && (
+        <FlatList
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={fetchExercise} />
+          }
+          keyExtractor={(item) => item.id}
+          data={[exercise]}
+          renderItem={({ item }) => (
+            <>
+              <DefinitionDetail definition={item} />
+              <ExerciseHistory definitionId={item.id} />
+            </>
+          )}
+        />
+      )}
       <ErrorToast error={error} />
     </Background>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-  },
   editButton: {
     marginBottom: Margin.md,
   },
