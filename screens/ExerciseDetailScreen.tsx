@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, RefreshControl } from "react-native";
-import { Text } from "@ui-kitten/components";
+import { Spinner, Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
 import { StackScreenProps } from "@react-navigation/stack";
 import {
@@ -31,8 +31,8 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   } = useContext(ExerciseContext);
 
   useScreenFocus(() => {
-    console.log("focus!");
     if (definitionId) {
+      console.log("focus!");
       getDefinitionById(definitionId);
       getExercisesByDefintion(definitionId);
     }
@@ -40,19 +40,21 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
 
   const exercise = useMemo(
     () => definitions.find((def) => def.id === definitionId),
-    [definitionId]
+    [definitionId, loading]
   );
 
-  const fetchExercise = useCallback(() => {
-    console.log("get exercise!");
+  const fetchExercise = useCallback(
+    () => getDefinitionById(exercise ? exercise.id : ""),
+    [definitionId, loading]
+  );
 
-    getDefinitionById(exercise ? exercise.id : "");
-  }, [definitionId]);
-
-  const navigateToEditScreen = () =>
-    navigation.navigate("ExerciseEditScreen", {
-      definition: exercise,
-    });
+  const navigateToEditScreen = useCallback(
+    () =>
+      navigation.navigate("ExerciseEditScreen", {
+        definition: exercise,
+      }),
+    [definitionId, loading]
+  );
 
   return (
     <Background>
@@ -69,9 +71,9 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       </Button>
       <ScrollView
         style={styles.container}
-        // refreshControl={
-        //   <RefreshControl refreshing={loading} onRefresh={fetchExercise} />
-        // }
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={fetchExercise} />
+        }
       >
         {exercise && (
           <>
