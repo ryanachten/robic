@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { ScrollView, StyleSheet, RefreshControl } from "react-native";
+import React, { useCallback, useContext, useMemo } from "react";
+import { StyleSheet, RefreshControl } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -13,7 +13,12 @@ import {
 } from "../components";
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
-import { ExerciseContext, ExerciseDefintionContext } from "../services/context";
+import {
+  ExerciseContext,
+  ExerciseDefinitionContext,
+} from "../services/context";
+import { useScreenFocus } from "../hooks/useScreenFocus";
+import { FlatList } from "react-native-gesture-handler";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
@@ -23,25 +28,36 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const {
     state: { definitions, error, loading },
     actions: { getDefinitionById },
-  } = useContext(ExerciseDefintionContext);
+  } = useContext(ExerciseDefinitionContext);
 
   const {
-    actions: { getExercisesByDefintion },
+    actions: { getExercisesByDefinition },
   } = useContext(ExerciseContext);
 
-  useEffect(() => {
+  useScreenFocus(() => {
     if (definitionId) {
       getDefinitionById(definitionId);
-      getExercisesByDefintion(definitionId);
+      getExercisesByDefinition(definitionId);
     }
-  }, []);
+  });
 
-  const exercise = definitions.find((def) => def.id === definitionId);
+  const exercise = useMemo(
+    () => definitions.find((def) => def.id === definitionId),
+    [definitionId, loading]
+  );
 
-  const navigateToEditScreen = () =>
-    navigation.navigate("ExerciseEditScreen", {
-      definition: exercise,
-    });
+  const fetchExercise = useCallback(
+    () => definitionId && getDefinitionById(definitionId),
+    [definitionId, loading]
+  );
+
+  const navigateToEditScreen = useCallback(
+    () =>
+      navigation.navigate("ExerciseEditScreen", {
+        definition: exercise,
+      }),
+    [definitionId, loading]
+  );
 
   return (
     <Background>
@@ -56,31 +72,27 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       >
         Edit
       </Button>
-      <ScrollView
-        style={styles.container}
-        refreshControl={
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={() => getDefinitionById(exercise ? exercise.id : "")}
-          />
-        }
-      >
-        {exercise && (
-          <>
-            <DefinitionDetail definition={exercise} />
-            <ExerciseHistory definitionId={exercise.id} />
-          </>
-        )}
-      </ScrollView>
+      {exercise && (
+        <FlatList
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={fetchExercise} />
+          }
+          keyExtractor={(item) => item.id}
+          data={[exercise]}
+          renderItem={({ item }) => (
+            <>
+              <DefinitionDetail definition={item} />
+              <ExerciseHistory definitionId={item.id} />
+            </>
+          )}
+        />
+      )}
       <ErrorToast error={error} />
     </Background>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-  },
   editButton: {
     marginBottom: Margin.md,
   },

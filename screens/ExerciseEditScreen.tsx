@@ -8,7 +8,7 @@ import {
   ExerciseDefinitionForCreate,
   ExerciseDefinitionForEdit,
 } from "../reducers/exerciseDefinition";
-import { ExerciseDefintionContext, UserContext } from "../services/context";
+import { ExerciseDefinitionContext, UserContext } from "../services/context";
 import { Background, Button } from "../components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
@@ -28,7 +28,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
   const {
     state: { error, loading },
     actions: { createDefinition, editDefinition },
-  } = useContext(ExerciseDefintionContext);
+  } = useContext(ExerciseDefinitionContext);
 
   const [selectedUnitIndex, setSelectedUnitIndex] = useState<IndexPath>(
     new IndexPath(0)

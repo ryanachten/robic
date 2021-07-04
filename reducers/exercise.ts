@@ -35,7 +35,7 @@ export type ExerciseAction =
     };
 
 export type ExerciseActions = {
-  getExercisesByDefintion: (definitionId: string) => Promise<void>;
+  getExercisesByDefinition: (definitionId: string) => Promise<void>;
   createExercise: (exercise: ExerciseForPost) => Promise<void>;
   deleteExercise: (id: string) => Promise<void>;
 };
@@ -49,7 +49,7 @@ export const initialExerciseState: ExerciseState = {
 export const exerciseActions = (
   dispatch: React.Dispatch<ExerciseAction>
 ): ExerciseActions => ({
-  getExercisesByDefintion: async (definitionId: string) => {
+  getExercisesByDefinition: async (definitionId: string) => {
     dispatch({
       type: baseTypes.LOADING,
     });

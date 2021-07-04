@@ -17,7 +17,7 @@ import { Colors } from "../../constants/Colors";
 import { Icon } from "../Icon";
 import {
   ExerciseContext,
-  ExerciseDefintionContext,
+  ExerciseDefinitionContext,
 } from "../../services/context";
 import { PreviousAttempts } from "./PreviousAttempts";
 import { EffortTillPersonalBest } from "./EffortTillPersonalBest";
@@ -38,7 +38,7 @@ export const ExerciseForm = ({
   const {
     state: definitionState,
     actions: { getDefinitionById },
-  } = useContext(ExerciseDefintionContext);
+  } = useContext(ExerciseDefinitionContext);
 
   const stopwatchRef = useRef<ElementRef<typeof Stopwatch>>(null);
 
