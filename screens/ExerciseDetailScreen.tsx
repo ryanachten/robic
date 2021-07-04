@@ -1,11 +1,6 @@
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  RefreshControl,
-  SectionList,
-} from "react-native";
-import { Spinner, Text } from "@ui-kitten/components";
+import React, { useCallback, useContext, useMemo } from "react";
+import { StyleSheet, RefreshControl } from "react-native";
+import { Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
 import { StackScreenProps } from "@react-navigation/stack";
 import {

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 
-// Refresh plant feed on init load and subsequent focuses
+// Execute given function on screen focus
 export function useScreenFocus(func: () => void) {
   const nav = useNavigation();
   useEffect(() => {
