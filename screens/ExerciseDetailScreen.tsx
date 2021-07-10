@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { StyleSheet, RefreshControl } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
@@ -17,13 +17,15 @@ import {
   ExerciseContext,
   ExerciseDefinitionContext,
 } from "../services/context";
-import { useScreenFocus } from "../hooks/useScreenFocus";
 import { FlatList } from "react-native-gesture-handler";
+import { useIsFocused } from "@react-navigation/native";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
 export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const definitionId = route.params ? route.params.definitionId : null;
+
+  const isFocused = useIsFocused();
 
   const {
     state: { definitions, error, loading },
@@ -34,12 +36,12 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
     actions: { getExercisesByDefinition },
   } = useContext(ExerciseContext);
 
-  useScreenFocus(() => {
-    if (definitionId) {
+  useEffect(() => {
+    if (definitionId && isFocused) {
       getDefinitionById(definitionId);
       getExercisesByDefinition(definitionId);
     }
-  });
+  }, [isFocused]);
 
   const exercise = useMemo(
     () => definitions.find((def) => def.id === definitionId),
