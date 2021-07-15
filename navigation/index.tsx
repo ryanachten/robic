@@ -39,6 +39,7 @@ import {
   exerciseReducer,
   initialExerciseState,
 } from "../reducers/exercise";
+import LoadingScreen from "../screens/LoadingScreen";
 
 export default function Navigation({
   colorScheme,
@@ -96,6 +97,10 @@ function RootNavigator() {
     await authContext.restoreToken();
     await userContext.restoreUser();
   };
+
+  if (auth.loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <AuthContext.Provider value={{ state: auth, actions: authContext }}>

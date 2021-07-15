@@ -29,9 +29,8 @@ export default function HomeScreen() {
 
   const nav = useNavigation();
 
-  const sortedDefinitions = useMemo(
-    () => unsortedDefinitions.sort(sortExercisesAlphabetically),
-    [unsortedDefinitions]
+  const sortedDefinitions = unsortedDefinitions.sort(
+    sortExercisesAlphabetically
   );
 
   const {
