@@ -1,21 +1,11 @@
-import { ExerciseDefinition, MuscleGroup, Unit } from "../constants/Interfaces";
+import {
+  ExerciseDefinition,
+  ExerciseDefinitionForCreate,
+  ExerciseDefinitionForEdit,
+} from "../constants/Interfaces";
 import Axios, { AxiosResponse } from "axios";
 import { EXERCISE_DEFINITION_URL } from "../constants/Api";
 import { BaseState, BaseActions, baseTypes } from "./base";
-
-export type ExerciseDefinitionForCreate = {
-  title: string;
-  unit: Unit;
-  user: string;
-  primaryMuscleGroup: MuscleGroup[];
-};
-
-export type ExerciseDefinitionForEdit = {
-  id: string;
-  title: string;
-  unit: Unit;
-  primaryMuscleGroup: MuscleGroup[];
-};
 
 export enum exerciseDefinitionTypes {
   GET_DEFINITIONS = "GET_DEFINITIONS",

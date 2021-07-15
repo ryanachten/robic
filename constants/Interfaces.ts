@@ -109,3 +109,17 @@ export interface Analytics {
   exerciseFrequency: AnalyticsItem[];
   exerciseProgress: AnalyticsItem[];
 }
+
+export type ExerciseDefinitionForCreate = {
+  title: string;
+  unit: Unit;
+  user: string;
+  primaryMuscleGroup: MuscleGroup[];
+};
+
+export type ExerciseDefinitionForEdit = {
+  id: string;
+  title: string;
+  unit: Unit;
+  primaryMuscleGroup: MuscleGroup[];
+};
