@@ -1,20 +1,12 @@
 import { createReducer } from "@reduxjs/toolkit";
-import actionCreatorFactory from "typescript-fsa";
 import {
-  ExerciseDefinition,
-  ExerciseDefinitionForCreate,
-  ExerciseDefinitionForEdit,
-} from "../constants/Interfaces";
+  createDefinition,
+  requestDefinitionById,
+  requestDefinitions,
+  updateDefinition,
+} from "../actions";
+import { ExerciseDefinition } from "../constants/Interfaces";
 import { BaseState } from "./base.reducer";
-
-const actionCreator = actionCreatorFactory();
-
-enum exerciseDefinitionTypes {
-  GET_DEFINITIONS = "GET_DEFINITIONS",
-  GET_DEFINITION_BY_ID = "GET_DEFINITION_BY_ID",
-  CREATE_DEFINITION = "CREATE_DEFINITION",
-  UPDATE_DEFINITION = "UPDATE_DEFINITION",
-}
 
 export type ExerciseDefinitionState = BaseState & {
   definitions: ExerciseDefinition[];
@@ -33,26 +25,6 @@ export const initialDefinitionState: ExerciseDefinitionState = {
   error: null,
 };
 
-export const requestDefinitions = actionCreator.async<
-  undefined,
-  Array<ExerciseDefinition>
->(exerciseDefinitionTypes.GET_DEFINITIONS);
-
-export const requestDefinitionById = actionCreator.async<
-  { id: string },
-  ExerciseDefinition
->(exerciseDefinitionTypes.GET_DEFINITION_BY_ID);
-
-export const createDefinition = actionCreator.async<
-  { definition: ExerciseDefinitionForCreate },
-  ExerciseDefinition
->(exerciseDefinitionTypes.CREATE_DEFINITION);
-
-export const updateDefinition = actionCreator.async<
-  { definition: ExerciseDefinitionForEdit },
-  ExerciseDefinition
->(exerciseDefinitionTypes.CREATE_DEFINITION);
-
 export const exerciseDefinitionReducer = createReducer(
   initialDefinitionState,
   (builder) => {
@@ -61,6 +33,8 @@ export const exerciseDefinitionReducer = createReducer(
       state.definitionsLoading = true;
     });
     builder.addCase(requestDefinitions.done, (state, { payload }) => {
+      console.log("payload", payload);
+
       state.definitions = payload.result;
       state.definitionsLoading = false;
     });
