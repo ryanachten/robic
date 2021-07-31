@@ -1,10 +1,6 @@
 import { createContext } from "react";
 import { AuthActions, AuthState } from "../reducers/auth";
 import { UserActions, UserState } from "../reducers/user";
-import {
-  ExerciseDefinitionActions,
-  ExerciseDefinitionState,
-} from "../reducers/exerciseDefinition";
 import { AnalyticsActions, AnalyticsState } from "../reducers/analytics";
 import { ExerciseActions, ExerciseState } from "../reducers/exercise";
 
@@ -21,11 +17,6 @@ export const UserContext = createContext<{
 export const ExerciseContext = createContext<{
   state: ExerciseState;
   actions: ExerciseActions;
-}>({});
-
-export const ExerciseDefinitionContext = createContext<{
-  state: ExerciseDefinitionState;
-  actions: ExerciseDefinitionActions;
 }>({});
 
 export const AnalyticsContext = createContext<{

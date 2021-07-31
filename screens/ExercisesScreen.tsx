@@ -1,20 +1,16 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { StyleSheet, RefreshControl, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
+import * as actions from "../actions";
 import { Background, Button, ErrorToast, Icon } from "../components";
 import { ExercisesParamList } from "../navigation/types";
 import { ExerciseDefinition } from "../constants/Interfaces";
 import {
   filterBySearchTerm,
+  SortBy,
   sortByDate,
-  sortByImprovment,
+  sortByImprovement,
   sortByNumberOfSessions,
 } from "../utilities/searchHelpers";
 import { FontSize, Margin } from "../constants/Sizes";
@@ -27,14 +23,13 @@ import {
   Text,
   Card,
 } from "@ui-kitten/components";
-import { ExerciseDefinitionContext } from "../services/context";
 import { formatRelativeDate } from "../utilities/dateHelpers";
-
-enum SortBy {
-  lastActive = "lastActive",
-  mostImprovement = "mostImprovement",
-  numberOfSessions = "numberOfSessions",
-}
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getDefinitionError,
+  getDefinitions,
+  isDefinitionsLoading,
+} from "../selectors/exerciseDefinition.selectors";
 
 const sortOptions = [
   { value: SortBy.lastActive, label: "Last Active" },
@@ -45,13 +40,17 @@ const sortOptions = [
 type Props = StackScreenProps<ExercisesParamList, "ExercisesScreen">;
 
 export default function ExercisesScreen({ navigation }: Props) {
-  const {
-    state: { definitions, error, loading },
-    actions: { getDefinitions },
-  } = useContext(ExerciseDefinitionContext);
+  const dispatch = useDispatch();
+
+  const error = useSelector(getDefinitionError);
+  const loading = useSelector(isDefinitionsLoading);
+  const definitions = useSelector(getDefinitions);
+
+  const fetchDefinitions = () =>
+    dispatch(actions.requestDefinitions.started(undefined));
 
   useEffect(() => {
-    getDefinitions();
+    fetchDefinitions();
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,7 +65,7 @@ export default function ExercisesScreen({ navigation }: Props) {
     (a, b) => {
       switch (sortBy.value) {
         case SortBy.mostImprovement:
-          return sortByImprovment(a, b);
+          return sortByImprovement(a, b);
         case SortBy.numberOfSessions:
           return sortByNumberOfSessions(a, b);
         default:
@@ -120,7 +119,7 @@ export default function ExercisesScreen({ navigation }: Props) {
       </Select>
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={getDefinitions} />
+          <RefreshControl refreshing={loading} onRefresh={fetchDefinitions} />
         }
       >
         {definitions

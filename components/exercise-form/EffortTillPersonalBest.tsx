@@ -2,9 +2,10 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Card, Text } from "@ui-kitten/components";
 import { FormSet, Set } from "../../constants/Interfaces";
-import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
+import { useSelector } from "react-redux";
+import { getDefinitionById } from "../../selectors/exerciseDefinition.selectors";
 
 const netWeightReducer = (accumulator: number, { reps, value }: Set) =>
   (accumulator += reps * value);
@@ -18,14 +19,11 @@ const totalRepReducer = (accumulator: number, { reps }: Set) =>
 export const EffortTillPersonalBest = ({
   id,
   currentSets,
-  definitionState,
 }: {
   id: string;
   currentSets: FormSet[];
-  definitionState: ExerciseDefinitionState;
 }) => {
-  const { definitions } = definitionState;
-  const definition = definitions.find((def) => def.id === id);
+  const definition = useSelector(getDefinitionById(id));
   const pb = definition?.personalBest?.topNetExercise;
   if (!pb) {
     return null;

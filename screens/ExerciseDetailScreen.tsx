@@ -1,8 +1,12 @@
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect } from "react";
+import { StackScreenProps } from "@react-navigation/stack";
+import { FlatList } from "react-native-gesture-handler";
+import { useIsFocused } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 import { StyleSheet, RefreshControl } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
-import { StackScreenProps } from "@react-navigation/stack";
+import * as actions from "../actions";
 import {
   Background,
   ErrorToast,
@@ -14,39 +18,31 @@ import {
 import { FontSize, Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 import {
-  ExerciseContext,
-  ExerciseDefinitionContext,
-} from "../services/context";
-import { FlatList } from "react-native-gesture-handler";
-import { useIsFocused } from "@react-navigation/native";
+  getDefinitionById,
+  getDefinitionError,
+  isDefinitionLoading,
+} from "../selectors/exerciseDefinition.selectors";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
 export default function ExerciseDetailScreen({ route, navigation }: Props) {
-  const definitionId = route.params ? route.params.definitionId : null;
+  const { definitionId } = route.params;
 
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const definition = useSelector(getDefinitionById(definitionId));
+  const loading = useSelector(isDefinitionLoading);
+  const error = useSelector(getDefinitionError);
 
-  const {
-    state: { definitions, error, loading },
-    actions: { getDefinitionById },
-  } = useContext(ExerciseDefinitionContext);
-
-  const {
-    actions: { getExercisesByDefinition },
-  } = useContext(ExerciseContext);
+  const fetchDefinitionById = (definitionId: string) =>
+    dispatch(actions.requestDefinitionById.started({ id: definitionId }));
 
   useEffect(() => {
     if (definitionId && isFocused) {
       getDefinitionById(definitionId);
-      getExercisesByDefinition(definitionId);
+      fetchDefinitionById(definitionId);
     }
   }, [isFocused]);
-
-  const exercise = useMemo(
-    () => definitions.find((def) => def.id === definitionId),
-    [definitionId, loading]
-  );
 
   const fetchExercise = useCallback(
     () => definitionId && getDefinitionById(definitionId),
@@ -56,14 +52,14 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const navigateToEditScreen = useCallback(
     () =>
       navigation.navigate("ExerciseEditScreen", {
-        definition: exercise,
+        definition,
       }),
     [definitionId, loading]
   );
 
   return (
     <Background>
-      <Text style={styles.title}>{exercise?.title}</Text>
+      <Text style={styles.title}>{definition?.title}</Text>
       <Button
         appearance="outline"
         onPress={navigateToEditScreen}
@@ -74,13 +70,13 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       >
         Edit
       </Button>
-      {exercise && (
+      {definition && (
         <FlatList
           refreshControl={
             <RefreshControl refreshing={loading} onRefresh={fetchExercise} />
           }
           keyExtractor={(item) => item.id}
-          data={[exercise]}
+          data={[definition]}
           renderItem={({ item }) => (
             <>
               <DefinitionDetail definition={item} />

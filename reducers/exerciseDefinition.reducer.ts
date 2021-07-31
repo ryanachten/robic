@@ -33,8 +33,6 @@ export const exerciseDefinitionReducer = createReducer(
       state.definitionsLoading = true;
     });
     builder.addCase(requestDefinitions.done, (state, { payload }) => {
-      console.log("payload", payload);
-
       state.definitions = payload.result;
       state.definitionsLoading = false;
     });

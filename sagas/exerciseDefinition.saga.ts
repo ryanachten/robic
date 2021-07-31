@@ -10,10 +10,12 @@ import { ExerciseDefinition } from "../constants/Interfaces";
 
 function* fetchDefinitons() {
   try {
-    const plants: Array<ExerciseDefinition> = yield call(Api.fetchDefinitions);
-    yield put(requestDefinitions.done({ result: plants }));
+    const defintions: Array<ExerciseDefinition> = yield call(
+      Api.fetchDefinitions
+    );
+    yield put(requestDefinitions.done({ result: defintions }));
   } catch (error) {
-    yield put(requestDefinitions.failed(error));
+    // yield put(requestDefinitions.failed(error));
   }
 }
 

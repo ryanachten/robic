@@ -1,10 +1,16 @@
 import { ExerciseDefinition } from "../constants/Interfaces";
 
+export enum SortBy {
+  lastActive = "lastActive",
+  mostImprovement = "mostImprovement",
+  numberOfSessions = "numberOfSessions",
+}
+
 // Alphbetical sort fallback
 export const sortAlpha = (a: ExerciseDefinition, b: ExerciseDefinition) =>
   a.title > b.title ? 1 : -1;
 
-export const sortByImprovment = (
+export const sortByImprovement = (
   a: ExerciseDefinition,
   b: ExerciseDefinition
 ): 1 | -1 => {

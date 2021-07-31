@@ -1,22 +1,21 @@
 import { Card, Toggle } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 import { Margin } from "../../constants/Sizes";
-import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
+import {
+  getDefinitionById,
+  isDefinitionLoading,
+} from "../../selectors/exerciseDefinition.selectors";
 import { ExerciseCard } from "../ExerciseCard";
 
-export const PreviousAttempts = ({
-  id,
-  definitionState,
-}: {
-  id: string;
-  definitionState: ExerciseDefinitionState;
-}) => {
+export const PreviousAttempts = ({ id }: { id: string }) => {
+  const definition = useSelector(getDefinitionById(id));
+  const loading = useSelector(isDefinitionLoading);
+
   const [showLastActivity, setShowLastActivity] = useState<boolean>(true);
   const [showPersonalBest, setShowPersonalBest] = useState<boolean>(true);
 
-  const { definitions, loading } = definitionState;
-  const definition = definitions.find((def) => def.id === id);
   if (definition) {
     const { lastSession, personalBest: pb } = definition;
     if (!lastSession && !pb) {

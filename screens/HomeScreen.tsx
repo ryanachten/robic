@@ -1,45 +1,36 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { IndexPath, Select, SelectItem, Spinner } from "@ui-kitten/components";
+import * as actions from "../actions";
 import { ErrorToast, ExerciseForm, Background, HintCard } from "../components";
-import {
-  AnalyticsContext,
-  ExerciseDefinitionContext,
-} from "../services/context";
+import { AnalyticsContext } from "../services/context";
 import { Margin } from "../constants/Sizes";
 import { useNavigation } from "@react-navigation/native";
-import { ExerciseDefinition } from "../constants/Interfaces";
-
-const sortExercisesAlphabetically = (
-  a: ExerciseDefinition,
-  b: ExerciseDefinition
-): number => (a.title > b.title ? 1 : -1);
+import {
+  getDefinitionError,
+  getSortedDefintionsByTitle,
+  isDefinitionsLoading,
+} from "../selectors/exerciseDefinition.selectors";
 
 export default function HomeScreen() {
-  const {
-    state: { definitions: unsortedDefinitions, error, loading },
-    actions: { getDefinitions },
-  } = useContext(ExerciseDefinitionContext);
-
   const nav = useNavigation();
+  const dispatch = useDispatch();
 
-  const sortedDefinitions = unsortedDefinitions.sort(
-    sortExercisesAlphabetically
-  );
+  const error = useSelector(getDefinitionError);
+  const loading = useSelector(isDefinitionsLoading);
+  const sortedDefinitions = useSelector(getSortedDefintionsByTitle);
 
   const {
     actions: { getAnalytics },
   } = useContext(AnalyticsContext);
 
+  const fetchDefinitions = () =>
+    dispatch(actions.requestDefinitions.started(undefined));
+
   // Get definitions and analytics on mount
   useEffect(() => {
-    getDefinitions();
+    fetchDefinitions();
     getAnalytics();
   }, []);
 

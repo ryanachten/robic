@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../reducers";
+import { sortAlpha } from "../utilities/searchHelpers";
 
 export const isDefinitionsLoading = createSelector(
   ({ exerciseDefinition }: RootState) => exerciseDefinition.definitionsLoading,
@@ -17,14 +18,27 @@ export const isCreateDefinitionLoading = createSelector(
   (state) => state
 );
 
+export const isUpdateDefinitionLoading = createSelector(
+  ({ exerciseDefinition }: RootState) =>
+    exerciseDefinition.updateDefinitionLoading,
+  (state) => state
+);
+
 export const getDefinitionError = createSelector(
-  ({ exerciseDefinition }: RootState) => exerciseDefinition.error,
+  (state: RootState) => state.exerciseDefinition.error,
   (state) => state
 );
 
 export const getDefinitions = createSelector(
-  ({ exerciseDefinition }: RootState) => exerciseDefinition.definitions,
+  ({ exerciseDefinition }: RootState) => {
+    return [...exerciseDefinition.definitions];
+  },
   (state) => state
+);
+
+export const getSortedDefintionsByTitle = createSelector(
+  getDefinitions,
+  (defintions) => defintions.sort(sortAlpha)
 );
 
 export const getDefinitionById = (id: string) =>

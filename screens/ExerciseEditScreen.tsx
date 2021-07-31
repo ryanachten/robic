@@ -1,34 +1,50 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { ExercisesParamList } from "../navigation/types";
-import { MuscleGroup, Unit } from "../constants/Interfaces";
+import { useDispatch, useSelector } from "react-redux";
 import { StackScreenProps } from "@react-navigation/stack";
-import { ErrorToast } from "../components/ErrorToast";
+import { Input, IndexPath, Select, SelectItem } from "@ui-kitten/components";
+import * as actions from "../actions";
+import { ExercisesParamList } from "../navigation/types";
 import {
   ExerciseDefinitionForCreate,
   ExerciseDefinitionForEdit,
-} from "../reducers/exerciseDefinition";
-import { ExerciseDefinitionContext, UserContext } from "../services/context";
+  MuscleGroup,
+  Unit,
+} from "../constants/Interfaces";
+import { ErrorToast } from "../components/ErrorToast";
+import { UserContext } from "../services/context";
 import { Background, Button } from "../components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
-import { Input, IndexPath, Select, SelectItem } from "@ui-kitten/components";
+import {
+  getDefinitionError,
+  isCreateDefinitionLoading,
+  isUpdateDefinitionLoading,
+} from "../selectors/exerciseDefinition.selectors";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
 const sortMuscleGroups = (a: string, b: string): number => (a > b ? 1 : -1);
 
+// TODO: use https://www.npmjs.com/package/@adobe/redux-saga-promise
 export default function ExerciseEditScreen({ navigation, route }: Props) {
+  const dispatch = useDispatch();
+
   const [title, setTitle] = useState("");
+
+  const error = useSelector(getDefinitionError);
+  const updateLoading = useSelector(isUpdateDefinitionLoading);
+  const createLoading = useSelector(isCreateDefinitionLoading);
+
+  const createDefinition = (definition: ExerciseDefinitionForCreate) =>
+    dispatch(actions.createDefinition.started({ definition }));
+
+  const editDefinition = (definition: ExerciseDefinitionForEdit) =>
+    dispatch(actions.updateDefinition.started({ definition }));
 
   const {
     state: { user },
   } = useContext(UserContext);
-
-  const {
-    state: { error, loading },
-    actions: { createDefinition, editDefinition },
-  } = useContext(ExerciseDefinitionContext);
 
   const [selectedUnitIndex, setSelectedUnitIndex] = useState<IndexPath>(
     new IndexPath(0)
@@ -75,14 +91,14 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
       primaryMuscleGroup: muscleGroups,
     };
 
-    const definition = await createDefinition(exercise);
+    await createDefinition(exercise);
 
     if (!error) {
-      if (definition) {
-        navigation.navigate("ExerciseDetailScreen", {
-          definitionId: definition.id,
-        });
-      }
+      // if (definitionId) {
+      //   navigation.navigate("ExerciseDetailScreen", {
+      //     definitionId,
+      //   });
+      // }
     }
   };
 
@@ -97,14 +113,14 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
       primaryMuscleGroup: muscleGroups,
     };
 
-    const definition = await editDefinition(exercise);
+    await editDefinition(exercise);
 
     if (!error) {
-      if (definition) {
-        navigation.navigate("ExerciseDetailScreen", {
-          definitionId: definition.id,
-        });
-      }
+      // if (definition) {
+      //   navigation.navigate("ExerciseDetailScreen", {
+      //     definitionId: definition,
+      //   });
+      // }
     }
   };
 
@@ -142,11 +158,11 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
         ))}
       </Select>
       {existingDefinition ? (
-        <Button loading={loading} onPress={() => updateExercise()}>
+        <Button loading={updateLoading} onPress={() => updateExercise()}>
           Update exercise
         </Button>
       ) : (
-        <Button loading={loading} onPress={() => createExercise()}>
+        <Button loading={createLoading} onPress={() => createExercise()}>
           Create exercise
         </Button>
       )}

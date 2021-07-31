@@ -1,5 +1,3 @@
-import { Action, Failure } from "typescript-fsa";
-
 export type BaseState = {
   error: string | null;
 };

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as actions from "../../actions";
 import { ExerciseForPost } from "../../reducers/exercise";
 import { ExerciseDefinition, FormSet, Set } from "../../constants/Interfaces";
 import { ErrorToast } from "../ErrorToast";
@@ -15,13 +16,11 @@ import { Stopwatch } from "../Stopwatch";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
 import { Icon } from "../Icon";
-import {
-  ExerciseContext,
-  ExerciseDefinitionContext,
-} from "../../services/context";
+import { ExerciseContext } from "../../services/context";
 import { PreviousAttempts } from "./PreviousAttempts";
 import { EffortTillPersonalBest } from "./EffortTillPersonalBest";
 import { SetList } from "./SetList";
+import { useDispatch } from "react-redux";
 
 export const ExerciseForm = ({
   definition: { id },
@@ -29,25 +28,26 @@ export const ExerciseForm = ({
   definition: ExerciseDefinition;
 }) => {
   const initialSet: FormSet[] = [{ reps: "1", value: "5" }];
+
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const [sets, setSets] = useState<FormSet[]>(initialSet);
 
   const {
     state: { loading, error },
     actions: { createExercise },
   } = useContext(ExerciseContext);
-  const {
-    state: definitionState,
-    actions: { getDefinitionById },
-  } = useContext(ExerciseDefinitionContext);
 
   const stopwatchRef = useRef<ElementRef<typeof Stopwatch>>(null);
 
-  const navigation = useNavigation();
+  const fetchDefinitionById = (definitionId: string) =>
+    dispatch(actions.requestDefinitionById.started({ id: definitionId }));
 
   // Reset form if definition ID changes
   useEffect(() => {
     setSets(initialSet);
-    getDefinitionById(id);
+    fetchDefinitionById(id);
   }, [id]);
 
   const updateSet = (index: number, field: "reps" | "value", value: string) => {
@@ -126,12 +126,8 @@ export const ExerciseForm = ({
         </Button>
       </View>
       <ScrollView>
-        <PreviousAttempts id={id} definitionState={definitionState} />
-        <EffortTillPersonalBest
-          id={id}
-          currentSets={sets}
-          definitionState={definitionState}
-        />
+        <PreviousAttempts id={id} />
+        <EffortTillPersonalBest id={id} currentSets={sets} />
         <SetList sets={sets} updateSet={updateSet} removeSet={removeSet} />
       </ScrollView>
       <ErrorToast error={error} />
