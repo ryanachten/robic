@@ -24,11 +24,6 @@ import {
 } from "../services/context";
 import { authReducer, authActions, initialAuthState } from "../reducers/auth";
 import {
-  exerciseDefinitionActions,
-  exerciseDefinitionReducer,
-  initialExerciseDefinitionState,
-} from "../reducers/exerciseDefinition";
-import {
   analyticsActions,
   analyticsReducer,
   initialAnalyticsState,
@@ -60,10 +55,6 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const [user, userDispatch] = useReducer(userReducer, initialUserState);
   const [auth, authDispatch] = useReducer(authReducer, initialAuthState);
-  const [exerciseDefinition, exerciseDefinitionDispatch] = useReducer(
-    exerciseDefinitionReducer,
-    initialExerciseDefinitionState
-  );
   const [exercises, exerciseDispatch] = useReducer(
     exerciseReducer,
     initialExerciseState

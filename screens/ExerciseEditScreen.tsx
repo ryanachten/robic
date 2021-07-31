@@ -18,6 +18,7 @@ import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import {
   getDefinitionError,
+  getDefinitions,
   isCreateDefinitionLoading,
   isUpdateDefinitionLoading,
 } from "../selectors/exerciseDefinition.selectors";
@@ -26,7 +27,6 @@ type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
 const sortMuscleGroups = (a: string, b: string): number => (a > b ? 1 : -1);
 
-// TODO: use https://www.npmjs.com/package/@adobe/redux-saga-promise
 export default function ExerciseEditScreen({ navigation, route }: Props) {
   const dispatch = useDispatch();
 
@@ -94,11 +94,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
     await createDefinition(exercise);
 
     if (!error) {
-      // if (definitionId) {
-      //   navigation.navigate("ExerciseDetailScreen", {
-      //     definitionId,
-      //   });
-      // }
+      navigation.navigate("ExercisesScreen");
     }
   };
 
@@ -116,11 +112,9 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
     await editDefinition(exercise);
 
     if (!error) {
-      // if (definition) {
-      //   navigation.navigate("ExerciseDetailScreen", {
-      //     definitionId: definition,
-      //   });
-      // }
+      navigation.navigate("ExerciseDetailScreen", {
+        definitionId: existingDefinition.id,
+      });
     }
   };
 

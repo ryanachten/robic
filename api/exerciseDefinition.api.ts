@@ -50,7 +50,7 @@ export const updateDefinition = async (
   definition: ExerciseDefinitionForEdit
 ): Promise<ExerciseDefinition> => {
   try {
-    const { data: result } = await axios.post<ExerciseDefinition>(
+    const { data: result } = await axios.put<ExerciseDefinition>(
       `${EXERCISE_DEFINITION_URL}/${definition.id}`,
       definition
     );

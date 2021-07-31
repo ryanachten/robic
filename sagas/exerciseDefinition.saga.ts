@@ -15,7 +15,7 @@ function* fetchDefinitons() {
     );
     yield put(requestDefinitions.done({ result: defintions }));
   } catch (error) {
-    // yield put(requestDefinitions.failed(error));
+    yield put(requestDefinitions.failed(error));
   }
 }
 
