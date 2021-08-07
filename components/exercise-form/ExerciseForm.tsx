@@ -1,48 +1,49 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  ElementRef,
-  useContext,
-} from "react";
+import React, { useState, useEffect, useRef, ElementRef } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../actions";
-import { ExerciseForPost } from "../../reducers/exercise";
-import { ExerciseDefinition, FormSet, Set } from "../../constants/Interfaces";
+import {
+  ExerciseDefinition,
+  ExerciseForCreate,
+  FormSet,
+  Set,
+} from "../../constants/Interfaces";
 import { ErrorToast } from "../ErrorToast";
 import { Button } from "../Button";
 import { Stopwatch } from "../Stopwatch";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
 import { Icon } from "../Icon";
-import { ExerciseContext } from "../../services/context";
 import { PreviousAttempts } from "./PreviousAttempts";
 import { EffortTillPersonalBest } from "./EffortTillPersonalBest";
 import { SetList } from "./SetList";
-import { useDispatch } from "react-redux";
+import {
+  getExercisesError,
+  isDefinitionExercisesLoading,
+} from "../../selectors/exercise.selectors";
 
 export const ExerciseForm = ({
   definition: { id },
 }: {
   definition: ExerciseDefinition;
 }) => {
-  const initialSet: FormSet[] = [{ reps: "1", value: "5" }];
-
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  const stopwatchRef = useRef<ElementRef<typeof Stopwatch>>(null);
+
+  const initialSet: FormSet[] = [{ reps: "1", value: "5" }];
   const [sets, setSets] = useState<FormSet[]>(initialSet);
 
-  const {
-    state: { loading, error },
-    actions: { createExercise },
-  } = useContext(ExerciseContext);
-
-  const stopwatchRef = useRef<ElementRef<typeof Stopwatch>>(null);
+  const loading = useSelector(isDefinitionExercisesLoading);
+  const error = useSelector(getExercisesError);
 
   const fetchDefinitionById = (definitionId: string) =>
     dispatch(actions.requestDefinitionById.started({ id: definitionId }));
+
+  const createExercise = (exercise: ExerciseForCreate) =>
+    dispatch(actions.createExercise.started({ exercise }));
 
   // Reset form if definition ID changes
   useEffect(() => {
@@ -72,12 +73,12 @@ export const ExerciseForm = ({
       reps: parseFloat(reps),
       value: parseFloat(value),
     }));
-    const exercise: ExerciseForPost = {
+    const exercise: ExerciseForCreate = {
       sets: setsForSumission,
       definition: id,
     };
     if (!stopwatchRef.current) {
-      return;
+      return console.warn("ExerciseForm: Couldn't find stopwatch ref");
     }
     const { started, msec, sec, min } = stopwatchRef.current.state;
     if (started) {

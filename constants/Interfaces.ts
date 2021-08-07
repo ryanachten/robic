@@ -84,6 +84,12 @@ export interface Exercise {
   netValue: number;
 }
 
+export type ExerciseForCreate = {
+  definition: string;
+  sets: Set[];
+  timeTaken?: string;
+};
+
 export interface ExerciseDefinition {
   id: string;
   title: string;

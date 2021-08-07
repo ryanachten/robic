@@ -1,13 +1,7 @@
-import { Exercise, Set } from "../constants/Interfaces";
+import { Exercise, ExerciseForCreate } from "../constants/Interfaces";
 import axios, { AxiosResponse } from "axios";
 import { EXERCISE_URL } from "../constants/Api";
 import { BaseState, BaseActions, baseTypes } from "./base";
-
-export type ExerciseForPost = {
-  definition: string;
-  sets: Set[];
-  timeTaken?: string;
-};
 
 export enum exerciseTypes {
   GET_EXERCISES_BY_DEFINITION = "GET_EXERCISES_BY_DEFINITION",
@@ -36,7 +30,7 @@ export type ExerciseAction =
 
 export type ExerciseActions = {
   getExercisesByDefinition: (definitionId: string) => Promise<void>;
-  createExercise: (exercise: ExerciseForPost) => Promise<void>;
+  createExercise: (exercise: ExerciseForCreate) => Promise<void>;
   deleteExercise: (id: string) => Promise<void>;
 };
 
@@ -70,7 +64,7 @@ export const exerciseActions = (
       dispatch({ type: baseTypes.ERROR, error: e.message });
     }
   },
-  createExercise: async (exercise: ExerciseForPost) => {
+  createExercise: async (exercise: ExerciseForCreate) => {
     dispatch({
       type: baseTypes.LOADING,
     });

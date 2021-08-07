@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import { rootSaga } from "../sagas";
+import { exerciseReducer } from "./exercise.reducer";
 import { exerciseDefinitionReducer } from "./exerciseDefinition.reducer";
 
 const sagaMiddleWare = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: {
+    exercise: exerciseReducer,
     exerciseDefinition: exerciseDefinitionReducer,
   },
   middleware: (getDefaultMiddleware) =>
