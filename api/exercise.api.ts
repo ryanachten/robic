@@ -2,9 +2,15 @@ import axios from "axios";
 import { EXERCISE_URL } from "../constants/Api";
 import { Exercise, ExerciseForCreate } from "../constants/Interfaces";
 
-export const fetchDefinitionExercises = async (): Promise<Array<Exercise>> => {
+export const fetchDefinitionExercises = async (
+  definitionId: string
+): Promise<Array<Exercise>> => {
   try {
-    const { data: result } = await axios.get<Array<Exercise>>(EXERCISE_URL);
+    const { data: result } = await axios.get<Array<Exercise>>(EXERCISE_URL, {
+      params: {
+        definition: definitionId,
+      },
+    });
     return result;
   } catch (error) {
     throw `${error}`;

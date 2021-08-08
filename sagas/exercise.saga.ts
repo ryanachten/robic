@@ -7,10 +7,20 @@ import {
 import * as Api from "../api";
 import { Exercise } from "../constants/Interfaces";
 
-function* fetchDefinitonExercises() {
+function* fetchDefinitonExercises({
+  payload: { definitionId },
+}: ReturnType<typeof requestDefinitionExercises.started>) {
   try {
-    const exercises: Array<Exercise> = yield call(Api.fetchDefinitionExercises);
-    yield put(requestDefinitionExercises.done({ result: exercises }));
+    const exercises: Array<Exercise> = yield call(
+      Api.fetchDefinitionExercises,
+      definitionId
+    );
+    yield put(
+      requestDefinitionExercises.done({
+        result: exercises,
+        params: { definitionId },
+      })
+    );
   } catch (error) {
     yield put(requestDefinitionExercises.failed(error));
   }

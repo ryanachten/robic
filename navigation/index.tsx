@@ -20,7 +20,6 @@ import {
   UserContext,
   AuthContext,
   AnalyticsContext,
-  ExerciseContext,
 } from "../services/context";
 import { authReducer, authActions, initialAuthState } from "../reducers/auth";
 import {
@@ -28,11 +27,6 @@ import {
   analyticsReducer,
   initialAnalyticsState,
 } from "../reducers/analytics";
-import {
-  exerciseActions,
-  exerciseReducer,
-  initialExerciseState,
-} from "../reducers/exercise";
 import LoadingScreen from "../screens/LoadingScreen";
 
 export default function Navigation({
@@ -55,10 +49,6 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const [user, userDispatch] = useReducer(userReducer, initialUserState);
   const [auth, authDispatch] = useReducer(authReducer, initialAuthState);
-  const [exercises, exerciseDispatch] = useReducer(
-    exerciseReducer,
-    initialExerciseState
-  );
   const [analytics, analyticsDispatch] = useReducer(
     analyticsReducer,
     initialAnalyticsState
@@ -69,7 +59,6 @@ function RootNavigator() {
     () => authActions(authDispatch, userDispatch),
     []
   );
-  const exerciseContext = useMemo(() => exerciseActions(exerciseDispatch), []);
   const analyticsContext = useMemo(
     () => analyticsActions(analyticsDispatch),
     []
@@ -92,29 +81,22 @@ function RootNavigator() {
     <AuthContext.Provider value={{ state: auth, actions: authContext }}>
       <UserContext.Provider value={{ state: user, actions: userContext }}>
         {auth.token ? (
-          <ExerciseContext.Provider
+          <AnalyticsContext.Provider
             value={{
-              state: exercises,
-              actions: exerciseContext,
+              state: analytics,
+              actions: analyticsContext,
             }}
           >
-            <AnalyticsContext.Provider
-              value={{
-                state: analytics,
-                actions: analyticsContext,
-              }}
-            >
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Root" component={AuthenticatedNavigator} />
-                <Stack.Screen name="Settings" component={SettingsNavigator} />
-                <Stack.Screen
-                  name="NotFound"
-                  component={NotFoundScreen}
-                  options={{ title: "Oops!" }}
-                />
-              </Stack.Navigator>
-            </AnalyticsContext.Provider>
-          </ExerciseContext.Provider>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Root" component={AuthenticatedNavigator} />
+              <Stack.Screen name="Settings" component={SettingsNavigator} />
+              <Stack.Screen
+                name="NotFound"
+                component={NotFoundScreen}
+                options={{ title: "Oops!" }}
+              />
+            </Stack.Navigator>
+          </AnalyticsContext.Provider>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Root" component={UnauthenticatedNavigator} />

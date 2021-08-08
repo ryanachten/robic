@@ -39,7 +39,6 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
 
   useEffect(() => {
     if (definitionId && isFocused) {
-      getDefinitionById(definitionId);
       fetchDefinitionById(definitionId);
     }
   }, [isFocused]);

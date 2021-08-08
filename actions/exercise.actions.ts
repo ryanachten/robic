@@ -10,7 +10,7 @@ enum exerciseTypes {
 }
 
 export const requestDefinitionExercises = actionCreator.async<
-  undefined,
+  { definitionId: string },
   Array<Exercise>
 >(exerciseTypes.GET_EXERCISES_BY_DEFINITION);
 

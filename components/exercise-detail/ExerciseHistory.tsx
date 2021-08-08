@@ -9,26 +9,43 @@ import {
   Modal,
   Text,
 } from "@ui-kitten/components/ui";
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../actions";
 import { ModalBackground } from "../../constants/Colors";
 import { Margin } from "../../constants/Sizes";
-import { ExerciseContext } from "../../services/context";
+import {
+  getExercisesByDefinition,
+  getExercisesError,
+  isDeleteExerciseLoading,
+} from "../../selectors/exercise.selectors";
 import { formatRelativeDate } from "../../utilities/dateHelpers";
 import { Button } from "../Button";
 import { ErrorToast } from "../ErrorToast";
 
 export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
-  const {
-    state: { exercises: allExercises, error, loading },
-    actions: { deleteExercise },
-  } = useContext(ExerciseContext);
+  const dispatch = useDispatch();
+
+  const exercises = useSelector(getExercisesByDefinition(definitionId));
+  const loading = useSelector(isDeleteExerciseLoading);
+  const error = useSelector(getExercisesError);
+
+  const getDefinitionExercises = () =>
+    dispatch(actions.requestDefinitionExercises.started({ definitionId }));
+
+  const deleteExercise = (exerciseId: string) =>
+    dispatch(actions.deleteExercise.started({ exerciseId }));
 
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
     new IndexPath(0)
   );
   const [visible, setVisible] = useState(false);
   const [deleteId, setDeleteId] = useState("");
+
+  useEffect(() => {
+    getDefinitionExercises();
+  }, [definitionId]);
 
   const toggleModal = (active: Boolean, id?: string) => {
     if (active && id) {
@@ -39,8 +56,6 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
       setDeleteId("");
     }
   };
-
-  const exercises = allExercises.filter((e) => e.definition === definitionId);
 
   const deleteExerciseById = async (id: string) => {
     await deleteExercise(id);
@@ -87,43 +102,42 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
           title="History"
           accessoryLeft={(props) => <Icon {...props} name="clock-outline" />}
         >
-          {exercises
-            .sort((a, b) => (new Date(a.date) > new Date(b.date) ? -1 : 1))
-            .map(({ id, date, sets }, i) => (
-              <MenuItem
-                key={i}
-                title={(props) => (
-                  <View style={styles.itemContent}>
-                    <Text
-                      {...props}
-                      category="s1"
-                      style={[props?.style, styles.itemTitle]}
-                    >
-                      {formatRelativeDate(date)}
-                    </Text>
-                    <View style={styles.setWrapper}>
-                      {sets.map(({ reps, value }, j) => (
-                        <Text
-                          {...props}
-                          key={j}
-                          style={[props?.style, styles.setText]}
-                          category="p2"
-                        >
-                          {`${reps} reps x ${value} kg`}
-                        </Text>
-                      ))}
-                    </View>
-                  </View>
-                )}
-                accessoryRight={(props) => (
-                  <Icon
+          {exercises.map(({ id, date, sets }, i) => (
+            <MenuItem
+              style={styles.menuItem}
+              key={i}
+              title={(props) => (
+                <View style={styles.itemContent}>
+                  <Text
                     {...props}
-                    name="slash-outline"
-                    onPress={() => toggleModal(true, id)}
-                  />
-                )}
-              />
-            ))}
+                    category="s1"
+                    style={[props?.style, styles.itemTitle]}
+                  >
+                    {formatRelativeDate(date)}
+                  </Text>
+                  <View style={styles.setWrapper}>
+                    {sets.map(({ reps, value }, j) => (
+                      <Text
+                        {...props}
+                        key={j}
+                        style={[props?.style, styles.setText]}
+                        category="p2"
+                      >
+                        {`${reps} reps x ${value} kg`}
+                      </Text>
+                    ))}
+                  </View>
+                </View>
+              )}
+              accessoryRight={(props) => (
+                <Icon
+                  {...props}
+                  name="slash-outline"
+                  onPress={() => toggleModal(true, id)}
+                />
+              )}
+            />
+          ))}
         </MenuGroup>
       </Menu>
       <ErrorToast error={error} />
@@ -132,6 +146,9 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
 };
 
 const styles = StyleSheet.create({
+  menuItem: {
+    maxWidth: "100%",
+  },
   itemContent: {
     display: "flex",
     width: "90%",

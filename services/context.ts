@@ -2,7 +2,6 @@ import { createContext } from "react";
 import { AuthActions, AuthState } from "../reducers/auth";
 import { UserActions, UserState } from "../reducers/user";
 import { AnalyticsActions, AnalyticsState } from "../reducers/analytics";
-import { ExerciseActions, ExerciseState } from "../reducers/exercise";
 
 export const AuthContext = createContext<{
   state: Partial<AuthState>;
@@ -12,11 +11,6 @@ export const AuthContext = createContext<{
 export const UserContext = createContext<{
   state: UserState;
   actions: UserActions;
-}>({});
-
-export const ExerciseContext = createContext<{
-  state: ExerciseState;
-  actions: ExerciseActions;
 }>({});
 
 export const AnalyticsContext = createContext<{
