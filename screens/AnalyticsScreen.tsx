@@ -1,5 +1,5 @@
 import { Spinner, Text } from "@ui-kitten/components";
-import React, { useContext } from "react";
+import React from "react";
 import {
   RefreshControl,
   ScrollView,
@@ -9,16 +9,26 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../actions";
 import { Background, BarChart, ErrorToast, PieChart } from "../components";
 import { AnalyticsItem } from "../constants/Interfaces";
 import { Margin } from "../constants/Sizes";
-import { AnalyticsContext } from "../services/context";
+import {
+  getAnalytics,
+  getAnalyticsError,
+  isAnalyticsLoading,
+} from "../selectors/analytics.selectors";
 
 export default function AnalyticsScreen() {
-  const {
-    state: { analytics, loading, error },
-    actions: { getAnalytics },
-  } = useContext(AnalyticsContext);
+  const dispatch = useDispatch();
+
+  const analytics = useSelector(getAnalytics);
+  const loading = useSelector(isAnalyticsLoading);
+  const error = useSelector(getAnalyticsError);
+
+  const fetchAnalytics = () =>
+    dispatch(actions.requestAnalytics.started(undefined));
 
   const resultsPerChart = 20;
 
@@ -28,7 +38,7 @@ export default function AnalyticsScreen() {
         refreshControl={
           <RefreshControl
             refreshing={loading && Boolean(analytics)}
-            onRefresh={() => getAnalytics()}
+            onRefresh={() => fetchAnalytics()}
           />
         }
       >
@@ -49,11 +59,13 @@ export default function AnalyticsScreen() {
                 />
               )}
             </View>
+
             <AnalyticsChart
               title="Muscle group frequency"
               data={analytics.muscleGroupFrequency}
               variant="pie"
             />
+
             <AnalyticsChart
               title="Most frequent exercises"
               data={analytics.exerciseFrequency.splice(0, resultsPerChart)}

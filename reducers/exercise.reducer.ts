@@ -1,4 +1,4 @@
-import { Exercise, Set } from "../constants/Interfaces";
+import { Exercise } from "../constants/Interfaces";
 import { BaseState } from "./base.reducer";
 import { createReducer } from "@reduxjs/toolkit";
 import {
@@ -6,18 +6,6 @@ import {
   deleteExercise,
   requestDefinitionExercises,
 } from "../actions";
-
-export type ExerciseForCreate = {
-  definition: string;
-  sets: Set[];
-  timeTaken?: string;
-};
-
-export enum exerciseTypes {
-  GET_EXERCISES_BY_DEFINITION = "GET_EXERCISES_BY_DEFINITION",
-  CREATE_EXERCISE = "CREATE_EXERCISE",
-  DELETE_EXERCISE = "DELETE_EXERCISE",
-}
 
 export type ExerciseState = BaseState & {
   exercises: Exercise[];

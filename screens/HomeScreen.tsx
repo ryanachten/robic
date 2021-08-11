@@ -1,10 +1,9 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { IndexPath, Select, SelectItem, Spinner } from "@ui-kitten/components";
 import * as actions from "../actions";
 import { ErrorToast, ExerciseForm, Background, HintCard } from "../components";
-import { AnalyticsContext } from "../services/context";
 import { Margin } from "../constants/Sizes";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -21,9 +20,8 @@ export default function HomeScreen() {
   const loading = useSelector(isDefinitionsLoading);
   const sortedDefinitions = useSelector(getSortedDefintionsByTitle);
 
-  const {
-    actions: { getAnalytics },
-  } = useContext(AnalyticsContext);
+  const fetchAnalytics = () =>
+    dispatch(actions.requestAnalytics.started(undefined));
 
   const fetchDefinitions = () =>
     dispatch(actions.requestDefinitions.started(undefined));
@@ -31,7 +29,7 @@ export default function HomeScreen() {
   // Get definitions and analytics on mount
   useEffect(() => {
     fetchDefinitions();
-    getAnalytics();
+    fetchAnalytics();
   }, []);
 
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(
