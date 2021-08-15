@@ -3,18 +3,18 @@ import { StyleSheet } from "react-native";
 import { Button, Card, Modal, Text } from "@ui-kitten/components";
 import { Background, Link, Logo, PrivacyPolicy } from "../components";
 import { Margin } from "../constants/Sizes";
-import { AuthContext, UserContext } from "../services/context";
+import { AuthContext } from "../services/context";
 import Constants from "expo-constants";
 import { ModalBackground } from "../constants/Colors";
+import { useSelector } from "react-redux";
+import { getUser } from "../selectors/user.selectors";
 
 export default function SettingsScreen() {
-  const {
-    state: { user },
-  } = useContext(UserContext);
   const {
     actions: { signOut },
   } = useContext(AuthContext);
 
+  const user = useSelector(getUser);
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
 
   const appVersionNumber = Constants.manifest.version;

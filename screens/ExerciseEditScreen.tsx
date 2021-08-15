@@ -12,16 +12,15 @@ import {
   Unit,
 } from "../constants/Interfaces";
 import { ErrorToast } from "../components/ErrorToast";
-import { UserContext } from "../services/context";
 import { Background, Button } from "../components";
 import { Colors } from "../constants/Colors";
 import { Margin } from "../constants/Sizes";
 import {
   getDefinitionError,
-  getDefinitions,
   isCreateDefinitionLoading,
   isUpdateDefinitionLoading,
 } from "../selectors/exerciseDefinition.selectors";
+import { getUser } from "../selectors/user.selectors";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseEditScreen">;
 
@@ -32,6 +31,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
 
   const [title, setTitle] = useState("");
 
+  const user = useSelector(getUser);
   const error = useSelector(getDefinitionError);
   const updateLoading = useSelector(isUpdateDefinitionLoading);
   const createLoading = useSelector(isCreateDefinitionLoading);
@@ -41,10 +41,6 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
 
   const editDefinition = (definition: ExerciseDefinitionForEdit) =>
     dispatch(actions.updateDefinition.started({ definition }));
-
-  const {
-    state: { user },
-  } = useContext(UserContext);
 
   const [selectedUnitIndex, setSelectedUnitIndex] = useState<IndexPath>(
     new IndexPath(0)

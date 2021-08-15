@@ -15,10 +15,12 @@ import AuthenticatedNavigator, {
   SettingsNavigator,
 } from "./AuthenticatedNavigator";
 import { useEffect, useReducer, useMemo } from "react";
-import { userReducer, userActions, initialUserState } from "../reducers/user";
-import { UserContext, AuthContext } from "../services/context";
+import { userReducer, initialUserState } from "../reducers/user";
+import { AuthContext } from "../services/context";
 import { authReducer, authActions, initialAuthState } from "../reducers/auth";
 import LoadingScreen from "../screens/LoadingScreen";
+import { useDispatch } from "react-redux";
+import { requestRestoreUser } from "../actions";
 
 export default function Navigation({
   colorScheme,
@@ -38,10 +40,12 @@ export default function Navigation({
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const dispatch = useDispatch();
   const [user, userDispatch] = useReducer(userReducer, initialUserState);
   const [auth, authDispatch] = useReducer(authReducer, initialAuthState);
 
-  const userContext = useMemo(() => userActions(userDispatch), []);
+  const restoreUser = () => dispatch(requestRestoreUser.started(undefined));
+
   const authContext = useMemo(
     () => authActions(authDispatch, userDispatch),
     []
@@ -53,7 +57,7 @@ function RootNavigator() {
 
   const initApp = async () => {
     await authContext.restoreToken();
-    await userContext.restoreUser();
+    restoreUser();
   };
 
   if (auth.loading) {
@@ -62,28 +66,26 @@ function RootNavigator() {
 
   return (
     <AuthContext.Provider value={{ state: auth, actions: authContext }}>
-      <UserContext.Provider value={{ state: user, actions: userContext }}>
-        {auth.token ? (
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Root" component={AuthenticatedNavigator} />
-            <Stack.Screen name="Settings" component={SettingsNavigator} />
-            <Stack.Screen
-              name="NotFound"
-              component={NotFoundScreen}
-              options={{ title: "Oops!" }}
-            />
-          </Stack.Navigator>
-        ) : (
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Root" component={UnauthenticatedNavigator} />
-            <Stack.Screen
-              name="NotFound"
-              component={NotFoundScreen}
-              options={{ title: "Oops!" }}
-            />
-          </Stack.Navigator>
-        )}
-      </UserContext.Provider>
+      {auth.token ? (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Root" component={AuthenticatedNavigator} />
+          <Stack.Screen name="Settings" component={SettingsNavigator} />
+          <Stack.Screen
+            name="NotFound"
+            component={NotFoundScreen}
+            options={{ title: "Oops!" }}
+          />
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Root" component={UnauthenticatedNavigator} />
+          <Stack.Screen
+            name="NotFound"
+            component={NotFoundScreen}
+            options={{ title: "Oops!" }}
+          />
+        </Stack.Navigator>
+      )}
     </AuthContext.Provider>
   );
 }

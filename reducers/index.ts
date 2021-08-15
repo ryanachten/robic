@@ -4,6 +4,7 @@ import { rootSaga } from "../sagas";
 import { analyticsReducer } from "./analytics.reducer";
 import { exerciseReducer } from "./exercise.reducer";
 import { exerciseDefinitionReducer } from "./exerciseDefinition.reducer";
+import { userReducer } from "./user.reducer";
 
 const sagaMiddleWare = createSagaMiddleware();
 
@@ -12,6 +13,7 @@ export const store = configureStore({
     analytics: analyticsReducer,
     exercise: exerciseReducer,
     exerciseDefinition: exerciseDefinitionReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleWare),
