@@ -33,4 +33,5 @@ export const userReducer = createReducer(initialUserState, (builder) => {
     state.loading = false;
     state.error = `${payload}`;
   });
+  // Login user
 });

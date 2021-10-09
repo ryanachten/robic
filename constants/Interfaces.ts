@@ -129,3 +129,17 @@ export type ExerciseDefinitionForEdit = {
   unit: Unit;
   primaryMuscleGroup: MuscleGroup[];
 };
+
+export type Token = string | null;
+
+export type UserForCreate = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
+
+export type UserForLogin = {
+  email: string;
+  password: string;
+};
