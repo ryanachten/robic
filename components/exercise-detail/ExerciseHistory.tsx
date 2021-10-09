@@ -20,7 +20,7 @@ import { ErrorToast } from "../ErrorToast";
 
 export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
   const {
-    state: { exercises: allExercises, error, loading },
+    state: { exercises: allExercises, error, loadingExercises },
     actions: { deleteExercise },
   } = useContext(ExerciseContext);
 
@@ -67,7 +67,7 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
           </Text>
           <View style={styles.modalButtonWrapper}>
             <Button
-              loading={loading}
+              loading={loadingExercises}
               status="danger"
               onPress={() => deleteExerciseById(deleteId)}
             >

@@ -4,8 +4,8 @@ export type BaseState = {
 };
 
 export enum baseTypes {
-  ERROR = 'ERROR',
-  LOADING = 'LOADING',
+  ERROR = "ERROR",
+  LOADING = "LOADING",
 }
 
 export type BaseActions =
