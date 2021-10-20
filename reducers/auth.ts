@@ -13,7 +13,6 @@ export enum authTypes {
   SIGN_IN = "SIGN_IN",
   LOADING_SIGN_UP = "LOADING_SIGN_UP",
   SIGN_UP = "SIGN_UP",
-  LOADING_SIGN_OUT = "LOADING_SIGN_OUT",
   SIGN_OUT = "SIGN_OUT",
 }
 
@@ -141,6 +140,11 @@ export const authReducer = (
         loadingSignIn: false,
         token: action.token,
         error: null,
+      };
+    case authTypes.LOADING_SIGN_UP:
+      return {
+        ...state,
+        loadingSignUp: true,
       };
     case authTypes.SIGN_UP:
       return {

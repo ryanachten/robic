@@ -16,7 +16,7 @@ import { AnalyticsContext } from "../services/context";
 
 export default function AnalyticsScreen() {
   const {
-    state: { analytics, loading, error },
+    state: { analytics, loadingAnalytics, error },
     actions: { getAnalytics },
   } = useContext(AnalyticsContext);
 
@@ -27,7 +27,7 @@ export default function AnalyticsScreen() {
       <ScrollView
         refreshControl={
           <RefreshControl
-            refreshing={loading && Boolean(analytics)}
+            refreshing={loadingAnalytics && Boolean(analytics)}
             onRefresh={() => getAnalytics()}
           />
         }
