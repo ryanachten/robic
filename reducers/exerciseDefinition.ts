@@ -72,7 +72,6 @@ export type ExerciseDefinitionActions = {
 
 export const initialExerciseDefinitionState: ExerciseDefinitionState = {
   definitions: [],
-  // loading: false,
   loadingDefinitions: false,
   loadingDefinition: false,
   savingDefinition: false,

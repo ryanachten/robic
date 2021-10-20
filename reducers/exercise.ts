@@ -50,7 +50,6 @@ export type ExerciseActions = {
 };
 
 export const initialExerciseState: ExerciseState = {
-  // loading: false,
   exercises: [],
   loadingExercises: false,
   savingExercise: false,
