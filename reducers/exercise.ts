@@ -10,18 +10,18 @@ export type ExerciseForPost = {
 };
 
 export enum exerciseTypes {
-  GET_EXERCISES_BY_DEFINITION = "GET_EXERCISES_BY_DEFINITION",
   LOADING_EXERCISES = "LOADING_EXERCISES",
+  GET_EXERCISES_BY_DEFINITION = "GET_EXERCISES_BY_DEFINITION",
+  LOADING_CREATE_EXERCISE = "LOADING_CREATE_EXERCISE",
   CREATE_EXERCISE = "CREATE_EXERCISE",
-  SAVING_EXERCISE = "SAVING_EXERCISE",
+  LOADING_DELETE_EXERCISE = "LOADING_DELETE_EXERCISE",
   DELETE_EXERCISE = "DELETE_EXERCISE",
-  DELETING_EXERCISE = "DELETING_EXERCISE",
 }
 
 export type ExerciseState = BaseState & {
   loadingExercises: boolean;
-  savingExercise: boolean;
-  deletingExercise: boolean;
+  loadingCreateExercise: boolean;
+  loadingDeleteExercise: boolean;
   exercises: Exercise[];
 };
 
@@ -36,12 +36,12 @@ export type ExerciseAction =
       type: exerciseTypes.CREATE_EXERCISE;
       exercise: Exercise;
     }
-  | { type: exerciseTypes.SAVING_EXERCISE }
+  | { type: exerciseTypes.LOADING_CREATE_EXERCISE }
   | {
       type: exerciseTypes.DELETE_EXERCISE;
       id: string;
     }
-  | { type: exerciseTypes.DELETING_EXERCISE };
+  | { type: exerciseTypes.LOADING_DELETE_EXERCISE };
 
 export type ExerciseActions = {
   getExercisesByDefinition: (definitionId: string) => Promise<void>;
@@ -52,8 +52,8 @@ export type ExerciseActions = {
 export const initialExerciseState: ExerciseState = {
   exercises: [],
   loadingExercises: false,
-  savingExercise: false,
-  deletingExercise: false,
+  loadingCreateExercise: false,
+  loadingDeleteExercise: false,
   error: null,
 };
 
@@ -83,7 +83,7 @@ export const exerciseActions = (
   },
   createExercise: async (exercise: ExerciseForPost) => {
     dispatch({
-      type: exerciseTypes.SAVING_EXERCISE,
+      type: exerciseTypes.LOADING_CREATE_EXERCISE,
     });
     try {
       const { data }: AxiosResponse<Exercise> = await axios.post(
@@ -100,7 +100,7 @@ export const exerciseActions = (
   },
   deleteExercise: async (id: string) => {
     dispatch({
-      type: exerciseTypes.DELETING_EXERCISE,
+      type: exerciseTypes.LOADING_DELETE_EXERCISE,
     });
     try {
       await axios.delete(`${EXERCISE_URL}/${id}`);
@@ -122,9 +122,9 @@ export const exerciseReducer = (
     case baseTypes.ERROR:
       return {
         ...state,
-        savingExercise: false,
+        loadingCreateExercise: false,
         loadingExercises: false,
-        deletingExercise: false,
+        loadingDeleteExercise: false,
         error: action.error,
       };
     case exerciseTypes.LOADING_EXERCISES: {
@@ -144,10 +144,10 @@ export const exerciseReducer = (
         loadingExercises: false,
         exercises: [...existingExercises, ...newExercises],
       };
-    case exerciseTypes.SAVING_EXERCISE: {
+    case exerciseTypes.LOADING_CREATE_EXERCISE: {
       return {
         ...state,
-        savingExercise: true,
+        loadingCreateExercise: true,
       };
     }
     case exerciseTypes.CREATE_EXERCISE: {
@@ -156,14 +156,14 @@ export const exerciseReducer = (
       exercises[index] = action.exercise;
       return {
         ...state,
-        savingExercise: false,
+        loadingCreateExercise: false,
         exercises: [...exercises],
       };
     }
     case exerciseTypes.DELETE_EXERCISE: {
       return {
         ...state,
-        deletingExercise: true,
+        loadingDeleteExercise: true,
       };
     }
     case exerciseTypes.DELETE_EXERCISE: {
@@ -171,7 +171,7 @@ export const exerciseReducer = (
       const updatedExercises = [...exercises].filter((e) => e.id !== action.id);
       return {
         ...state,
-        deletingExercise: false,
+        loadingDeleteExercise: false,
         exercises: [...updatedExercises],
       };
     }

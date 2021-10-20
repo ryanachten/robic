@@ -18,22 +18,22 @@ export type ExerciseDefinitionForEdit = {
 };
 
 export enum exerciseDefinitionTypes {
-  GET_DEFINITIONS = "GET_DEFINITIONS",
   LOADING_DEFINITIONS = "LOADING_DEFINITIONS",
-  GET_DEFINITION_BY_ID = "GET_DEFINITION_BY_ID",
+  GET_DEFINITIONS = "GET_DEFINITIONS",
   LOADING_DEFINITION = "LOADING_DEFINITION",
+  GET_DEFINITION_BY_ID = "GET_DEFINITION_BY_ID",
+  LOADING_CREATE_DEFINITION = "LOADING_CREATE_DEFINITION",
   CREATE_DEFINITION = "CREATE_DEFINITION",
-  SAVING_DEFINITION = "SAVING_DEFINITION",
+  LOADING_UPDATE_DEFINITION = "LOADING_UPDATE_DEFINITION",
   UPDATE_DEFINITION = "UPDATE_DEFINITION",
-  UPDATING_DEFINITION = "UPDATING_DEFINITION",
 }
 
 export type ExerciseDefinitionState = BaseState & {
   definitions: ExerciseDefinition[];
   loadingDefinitions: boolean;
   loadingDefinition: boolean;
-  savingDefinition: boolean;
-  updatingDefinition: boolean;
+  loadingSavingDefinition: boolean;
+  loadingUpdateDefinition: boolean;
 };
 
 export type ExerciseDefinitionAction =
@@ -48,12 +48,12 @@ export type ExerciseDefinitionAction =
       type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID;
       definition: ExerciseDefinition;
     }
-  | { type: exerciseDefinitionTypes.SAVING_DEFINITION }
+  | { type: exerciseDefinitionTypes.LOADING_CREATE_DEFINITION }
   | {
       type: exerciseDefinitionTypes.CREATE_DEFINITION;
       definition: ExerciseDefinition;
     }
-  | { type: exerciseDefinitionTypes.UPDATING_DEFINITION }
+  | { type: exerciseDefinitionTypes.LOADING_UPDATE_DEFINITION }
   | {
       type: exerciseDefinitionTypes.UPDATE_DEFINITION;
       definition: ExerciseDefinition;
@@ -74,8 +74,8 @@ export const initialExerciseDefinitionState: ExerciseDefinitionState = {
   definitions: [],
   loadingDefinitions: false,
   loadingDefinition: false,
-  savingDefinition: false,
-  updatingDefinition: false,
+  loadingSavingDefinition: false,
+  loadingUpdateDefinition: false,
   error: null,
 };
 
@@ -117,7 +117,7 @@ export const exerciseDefinitionActions = (
   },
   createDefinition: async (definition: ExerciseDefinitionForCreate) => {
     dispatch({
-      type: exerciseDefinitionTypes.SAVING_DEFINITION,
+      type: exerciseDefinitionTypes.LOADING_CREATE_DEFINITION,
     });
     try {
       const { data }: AxiosResponse<ExerciseDefinition> = await Axios.post(
@@ -136,7 +136,7 @@ export const exerciseDefinitionActions = (
   },
   editDefinition: async (definition: ExerciseDefinitionForEdit) => {
     dispatch({
-      type: exerciseDefinitionTypes.UPDATING_DEFINITION,
+      type: exerciseDefinitionTypes.LOADING_UPDATE_DEFINITION,
     });
     try {
       const { data }: AxiosResponse<ExerciseDefinition> = await Axios.put(
@@ -165,8 +165,8 @@ export const exerciseDefinitionReducer = (
         ...state,
         loadingDefinition: false,
         loadingDefinitions: false,
-        updatingDefinition: false,
-        savingDefinition: false,
+        loadingUpdateDefinition: false,
+        loadingSavingDefinition: false,
         error: action.error,
       };
     case exerciseDefinitionTypes.LOADING_DEFINITIONS:
@@ -204,21 +204,21 @@ export const exerciseDefinitionReducer = (
         loadingDefinition: false,
         definitions,
       };
-    case exerciseDefinitionTypes.SAVING_DEFINITION:
+    case exerciseDefinitionTypes.LOADING_CREATE_DEFINITION:
       return {
         ...state,
-        savingDefinition: true,
+        loadingSavingDefinition: true,
       };
     case exerciseDefinitionTypes.CREATE_DEFINITION:
       return {
         ...state,
-        savingDefinition: false,
+        loadingSavingDefinition: false,
         definitions: [...state.definitions, action.definition],
       };
-    case exerciseDefinitionTypes.UPDATING_DEFINITION:
+    case exerciseDefinitionTypes.LOADING_UPDATE_DEFINITION:
       return {
         ...state,
-        updatingDefinition: true,
+        loadingUpdateDefinition: true,
       };
     case exerciseDefinitionTypes.UPDATE_DEFINITION:
       const existingDefintions = [...state.definitions];
@@ -235,7 +235,7 @@ export const exerciseDefinitionReducer = (
       });
       return {
         ...state,
-        updatingDefinition: false,
+        loadingUpdateDefinition: false,
         definitions: existingDefintions,
       };
     default:
