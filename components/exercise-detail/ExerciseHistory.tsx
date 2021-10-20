@@ -20,7 +20,7 @@ import { ErrorToast } from "../ErrorToast";
 
 export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
   const {
-    state: { exercises: allExercises, error, loading },
+    state: { exercises: allExercises, error, loadingDeleteExercise },
     actions: { deleteExercise },
   } = useContext(ExerciseContext);
 
@@ -67,7 +67,7 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
           </Text>
           <View style={styles.modalButtonWrapper}>
             <Button
-              loading={loading}
+              loading={loadingDeleteExercise}
               status="danger"
               onPress={() => deleteExerciseById(deleteId)}
             >
@@ -82,6 +82,7 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
       <Menu
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}
+        style={styles.menu}
       >
         <MenuGroup
           title="History"
@@ -132,6 +133,9 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
 };
 
 const styles = StyleSheet.create({
+  menu: {
+    maxWidth: "100%",
+  },
   itemContent: {
     display: "flex",
     width: "90%",

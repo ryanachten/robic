@@ -9,7 +9,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const {
-    state: { error, loading },
+    state: { error, loadingSignIn },
     actions: { signIn },
   } = useContext(AuthContext);
 
@@ -37,7 +37,7 @@ export default function LoginScreen() {
           onChange={(e) => setPassword(e.nativeEvent.text)}
           style={styles.input}
         />
-        <Button loading={loading} onPress={() => signIn(email, password)}>
+        <Button loading={loadingSignIn} onPress={() => signIn(email, password)}>
           Login
         </Button>
       </ScrollView>

@@ -4,15 +4,13 @@ import { ANALYTICS_URL } from "../constants/Api";
 import { BaseState, BaseActions, baseTypes } from "./base";
 
 export enum analyticsTypes {
+  LOADIN_GET_ANALYTICS = "LOADIN_GET_ANALYTICS",
   GET_ANALYTICS = "GET_ANALYTICS",
 }
 
-export type AnalyticsState = BaseState & {
-  analytics: Analytics | null;
-};
-
 export type AnalyticsAction =
   | BaseActions
+  | { type: analyticsTypes.LOADIN_GET_ANALYTICS }
   | {
       type: analyticsTypes.GET_ANALYTICS;
       analytics: Analytics;
@@ -22,9 +20,14 @@ export type AnalyticsActions = {
   getAnalytics: () => Promise<void>;
 };
 
+export type AnalyticsState = BaseState & {
+  loadingAnalytics: boolean;
+  analytics: Analytics | null;
+};
+
 export const initialAnalyticsState: AnalyticsState = {
   analytics: null,
-  loading: false,
+  loadingAnalytics: false,
   error: null,
 };
 
@@ -33,7 +36,7 @@ export const analyticsActions = (
 ): AnalyticsActions => ({
   getAnalytics: async () => {
     dispatch({
-      type: baseTypes.LOADING,
+      type: analyticsTypes.LOADIN_GET_ANALYTICS,
     });
     try {
       const { data }: AxiosResponse<Analytics> = await axios.get(ANALYTICS_URL);
@@ -52,23 +55,22 @@ export const analyticsReducer = (
   action: AnalyticsAction
 ): AnalyticsState => {
   switch (action.type) {
-    case baseTypes.LOADING:
+    case analyticsTypes.LOADIN_GET_ANALYTICS:
       return {
         ...state,
-        error: null,
-        loading: true,
-      };
-    case baseTypes.ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: action.error,
+        loadingAnalytics: true,
       };
     case analyticsTypes.GET_ANALYTICS:
       return {
         ...state,
-        loading: false,
+        loadingAnalytics: false,
         analytics: action.analytics,
+      };
+    case baseTypes.ERROR:
+      return {
+        ...state,
+        loadingAnalytics: false,
+        error: action.error,
       };
     default:
       return state;

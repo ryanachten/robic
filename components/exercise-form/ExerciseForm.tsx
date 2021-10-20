@@ -32,7 +32,7 @@ export const ExerciseForm = ({
   const [sets, setSets] = useState<FormSet[]>(initialSet);
 
   const {
-    state: { loading, error },
+    state: { loadingCreateExercise, error },
     actions: { createExercise },
   } = useContext(ExerciseContext);
   const {
@@ -119,7 +119,7 @@ export const ExerciseForm = ({
         </Button>
         <Button
           style={styles.button}
-          loading={loading}
+          loading={loadingCreateExercise}
           onPress={() => submitExercise()}
         >
           Done

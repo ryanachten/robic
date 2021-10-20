@@ -98,7 +98,7 @@ function RootNavigator() {
     await userContext.restoreUser();
   };
 
-  if (auth.loading) {
+  if (auth.loadingSignIn || auth.loadingSignUp) {
     return <LoadingScreen />;
   }
 

@@ -10,17 +10,24 @@ export type ExerciseForPost = {
 };
 
 export enum exerciseTypes {
+  LOADING_EXERCISES = "LOADING_EXERCISES",
   GET_EXERCISES_BY_DEFINITION = "GET_EXERCISES_BY_DEFINITION",
+  LOADING_CREATE_EXERCISE = "LOADING_CREATE_EXERCISE",
   CREATE_EXERCISE = "CREATE_EXERCISE",
+  LOADING_DELETE_EXERCISE = "LOADING_DELETE_EXERCISE",
   DELETE_EXERCISE = "DELETE_EXERCISE",
 }
 
 export type ExerciseState = BaseState & {
+  loadingExercises: boolean;
+  loadingCreateExercise: boolean;
+  loadingDeleteExercise: boolean;
   exercises: Exercise[];
 };
 
 export type ExerciseAction =
   | BaseActions
+  | { type: exerciseTypes.LOADING_EXERCISES }
   | {
       type: exerciseTypes.GET_EXERCISES_BY_DEFINITION;
       exercises: Exercise[];
@@ -29,10 +36,12 @@ export type ExerciseAction =
       type: exerciseTypes.CREATE_EXERCISE;
       exercise: Exercise;
     }
+  | { type: exerciseTypes.LOADING_CREATE_EXERCISE }
   | {
       type: exerciseTypes.DELETE_EXERCISE;
       id: string;
-    };
+    }
+  | { type: exerciseTypes.LOADING_DELETE_EXERCISE };
 
 export type ExerciseActions = {
   getExercisesByDefinition: (definitionId: string) => Promise<void>;
@@ -42,7 +51,9 @@ export type ExerciseActions = {
 
 export const initialExerciseState: ExerciseState = {
   exercises: [],
-  loading: false,
+  loadingExercises: false,
+  loadingCreateExercise: false,
+  loadingDeleteExercise: false,
   error: null,
 };
 
@@ -51,7 +62,7 @@ export const exerciseActions = (
 ): ExerciseActions => ({
   getExercisesByDefinition: async (definitionId: string) => {
     dispatch({
-      type: baseTypes.LOADING,
+      type: exerciseTypes.LOADING_EXERCISES,
     });
     try {
       const { data }: AxiosResponse<Exercise[]> = await axios.get(
@@ -72,7 +83,7 @@ export const exerciseActions = (
   },
   createExercise: async (exercise: ExerciseForPost) => {
     dispatch({
-      type: baseTypes.LOADING,
+      type: exerciseTypes.LOADING_CREATE_EXERCISE,
     });
     try {
       const { data }: AxiosResponse<Exercise> = await axios.post(
@@ -89,7 +100,7 @@ export const exerciseActions = (
   },
   deleteExercise: async (id: string) => {
     dispatch({
-      type: baseTypes.LOADING,
+      type: exerciseTypes.LOADING_DELETE_EXERCISE,
     });
     try {
       await axios.delete(`${EXERCISE_URL}/${id}`);
@@ -108,18 +119,20 @@ export const exerciseReducer = (
   action: ExerciseAction
 ): ExerciseState => {
   switch (action.type) {
-    case baseTypes.LOADING:
-      return {
-        ...state,
-        error: null,
-        loading: true,
-      };
     case baseTypes.ERROR:
       return {
         ...state,
-        loading: false,
+        loadingCreateExercise: false,
+        loadingExercises: false,
+        loadingDeleteExercise: false,
         error: action.error,
       };
+    case exerciseTypes.LOADING_EXERCISES: {
+      return {
+        ...state,
+        loadingExercises: true,
+      };
+    }
     case exerciseTypes.GET_EXERCISES_BY_DEFINITION:
       const newExercises = [...action.exercises];
       const newExerciseIds = newExercises.map((e) => e.id);
@@ -128,17 +141,29 @@ export const exerciseReducer = (
       );
       return {
         ...state,
-        loading: false,
+        loadingExercises: false,
         exercises: [...existingExercises, ...newExercises],
       };
+    case exerciseTypes.LOADING_CREATE_EXERCISE: {
+      return {
+        ...state,
+        loadingCreateExercise: true,
+      };
+    }
     case exerciseTypes.CREATE_EXERCISE: {
       const { exercises } = state;
       const index = exercises.findIndex(({ id }) => action.exercise.id === id);
       exercises[index] = action.exercise;
       return {
         ...state,
-        loading: false,
+        loadingCreateExercise: false,
         exercises: [...exercises],
+      };
+    }
+    case exerciseTypes.DELETE_EXERCISE: {
+      return {
+        ...state,
+        loadingDeleteExercise: true,
       };
     }
     case exerciseTypes.DELETE_EXERCISE: {
@@ -146,7 +171,7 @@ export const exerciseReducer = (
       const updatedExercises = [...exercises].filter((e) => e.id !== action.id);
       return {
         ...state,
-        loading: false,
+        loadingDeleteExercise: false,
         exercises: [...updatedExercises],
       };
     }

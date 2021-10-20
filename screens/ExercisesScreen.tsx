@@ -46,7 +46,7 @@ type Props = StackScreenProps<ExercisesParamList, "ExercisesScreen">;
 
 export default function ExercisesScreen({ navigation }: Props) {
   const {
-    state: { definitions, error, loading },
+    state: { definitions, error, loadingDefinitions },
     actions: { getDefinitions },
   } = useContext(ExerciseDefinitionContext);
 
@@ -120,7 +120,10 @@ export default function ExercisesScreen({ navigation }: Props) {
       </Select>
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={getDefinitions} />
+          <RefreshControl
+            refreshing={loadingDefinitions}
+            onRefresh={getDefinitions}
+          />
         }
       >
         {definitions

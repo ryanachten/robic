@@ -15,7 +15,7 @@ export const PreviousAttempts = ({
   const [showLastActivity, setShowLastActivity] = useState<boolean>(true);
   const [showPersonalBest, setShowPersonalBest] = useState<boolean>(true);
 
-  const { definitions, loading } = definitionState;
+  const { definitions, loadingDefinition } = definitionState;
   const definition = definitions.find((def) => def.id === id);
   if (definition) {
     const { lastSession, personalBest: pb } = definition;
@@ -25,7 +25,7 @@ export const PreviousAttempts = ({
     return (
       <View style={styles.root}>
         <View style={styles.controlWrapper}>
-          {!loading && (
+          {!loadingDefinition && (
             <>
               {pb && pb.topNetExercise && (
                 <Toggle

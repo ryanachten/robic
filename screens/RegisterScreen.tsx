@@ -13,7 +13,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const [signedUp, setSignedUp] = useState(false);
   const {
-    state: { error, loading },
+    state: { error, loadingSignUp },
     actions: { signUp },
   } = useContext(AuthContext);
 
@@ -78,7 +78,11 @@ export default function RegisterScreen() {
             onPress={goToLoginScreen}
           />
         )}
-        <Button style={styles.button} loading={loading} onPress={attemptSignUp}>
+        <Button
+          style={styles.button}
+          loading={loadingSignUp}
+          onPress={attemptSignUp}
+        >
           Register
         </Button>
       </ScrollView>

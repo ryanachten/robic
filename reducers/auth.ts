@@ -9,22 +9,21 @@ import Axios from "axios";
 
 export enum authTypes {
   RESTORE_TOKEN = "RESTORE_TOKEN",
+  LOADING_SIGN_IN = "LOADING_SIGN_IN",
   SIGN_IN = "SIGN_IN",
+  LOADING_SIGN_UP = "LOADING_SIGN_UP",
   SIGN_UP = "SIGN_UP",
   SIGN_OUT = "SIGN_OUT",
 }
 
 type Token = string | null;
 
-export type AuthState = BaseState & {
-  signedOut: boolean;
-  token: Token;
-};
-
 export type AuthAction =
   | BaseActions
+  | { type: authTypes.LOADING_SIGN_UP }
   | { type: authTypes.SIGN_UP }
   | { type: authTypes.SIGN_OUT }
+  | { type: authTypes.LOADING_SIGN_IN }
   | { type: authTypes.SIGN_IN; token: Token }
   | { type: authTypes.RESTORE_TOKEN; token: Token };
 
@@ -35,8 +34,16 @@ export type AuthActions = {
   signUp: (user: UserForRegister) => Promise<void>;
 };
 
+export type AuthState = BaseState & {
+  loadingSignIn: boolean;
+  loadingSignUp: boolean;
+  signedOut: boolean;
+  token: Token;
+};
+
 export const initialAuthState: AuthState = {
-  loading: true,
+  loadingSignIn: false,
+  loadingSignUp: false,
   signedOut: false,
   token: null,
   error: null,
@@ -65,7 +72,7 @@ export const authActions = (
     }
   },
   signIn: async (email, password) => {
-    dispatch({ type: baseTypes.LOADING });
+    dispatch({ type: authTypes.LOADING_SIGN_IN });
     try {
       const {
         data,
@@ -95,7 +102,7 @@ export const authActions = (
     dispatch({ type: authTypes.SIGN_OUT });
   },
   signUp: async ({ firstName, lastName, email, password }: UserForRegister) => {
-    dispatch({ type: baseTypes.LOADING });
+    dispatch({ type: authTypes.LOADING_SIGN_UP });
     try {
       await Axios.post(REGISTER_URL, {
         firstName,
@@ -119,22 +126,31 @@ export const authReducer = (
       return {
         ...state,
         token: action.token,
-        loading: false,
         error: null,
+      };
+    case authTypes.LOADING_SIGN_IN:
+      return {
+        ...state,
+        loadingSignIn: true,
       };
     case authTypes.SIGN_IN:
       return {
         ...state,
         signedOut: false,
-        loading: false,
+        loadingSignIn: false,
         token: action.token,
         error: null,
+      };
+    case authTypes.LOADING_SIGN_UP:
+      return {
+        ...state,
+        loadingSignUp: true,
       };
     case authTypes.SIGN_UP:
       return {
         ...state,
         signedOut: true,
-        loading: false,
+        loadingSignUp: false,
         token: null,
         error: null,
       };
@@ -142,24 +158,16 @@ export const authReducer = (
       return {
         ...state,
         signedOut: true,
-        loading: false,
         error: null,
         token: null,
       };
     case baseTypes.ERROR:
       return {
         ...state,
+        loadingSignIn: false,
+        loadingSignUp: false,
         signedOut: true,
-        loading: false,
         error: action.error,
-        token: null,
-      };
-    case baseTypes.LOADING:
-      return {
-        ...state,
-        signedOut: true,
-        loading: true,
-        error: null,
         token: null,
       };
     default:
