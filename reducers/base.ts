@@ -1,5 +1,5 @@
 export type BaseState = {
-  loading: boolean;
+  // loading: boolean;
   error: string | null;
 };
 
@@ -8,11 +8,10 @@ export enum baseTypes {
   LOADING = "LOADING",
 }
 
-export type BaseActions =
-  | {
-      type: baseTypes.ERROR;
-      error: string;
-    }
-  | {
-      type: baseTypes.LOADING;
-    };
+export type BaseActions = {
+  type: baseTypes.ERROR;
+  error: string;
+};
+// | {
+//     type: baseTypes.LOADING;
+//   };

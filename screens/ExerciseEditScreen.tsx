@@ -26,7 +26,7 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
   } = useContext(UserContext);
 
   const {
-    state: { error, loading },
+    state: { error, updatingDefinition, savingDefinition },
     actions: { createDefinition, editDefinition },
   } = useContext(ExerciseDefinitionContext);
 
@@ -142,11 +142,11 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
         ))}
       </Select>
       {existingDefinition ? (
-        <Button loading={loading} onPress={() => updateExercise()}>
+        <Button loading={updatingDefinition} onPress={() => updateExercise()}>
           Update exercise
         </Button>
       ) : (
-        <Button loading={loading} onPress={() => createExercise()}>
+        <Button loading={savingDefinition} onPress={() => createExercise()}>
           Create exercise
         </Button>
       )}

@@ -19,29 +19,41 @@ export type ExerciseDefinitionForEdit = {
 
 export enum exerciseDefinitionTypes {
   GET_DEFINITIONS = "GET_DEFINITIONS",
+  LOADING_DEFINITIONS = "LOADING_DEFINITIONS",
   GET_DEFINITION_BY_ID = "GET_DEFINITION_BY_ID",
+  LOADING_DEFINITION = "LOADING_DEFINITION",
   CREATE_DEFINITION = "CREATE_DEFINITION",
+  SAVING_DEFINITION = "SAVING_DEFINITION",
   UPDATE_DEFINITION = "UPDATE_DEFINITION",
+  UPDATING_DEFINITION = "UPDATING_DEFINITION",
 }
 
 export type ExerciseDefinitionState = BaseState & {
   definitions: ExerciseDefinition[];
+  loadingDefinitions: boolean;
+  loadingDefinition: boolean;
+  savingDefinition: boolean;
+  updatingDefinition: boolean;
 };
 
 export type ExerciseDefinitionAction =
   | BaseActions
+  | { type: exerciseDefinitionTypes.LOADING_DEFINITIONS }
   | {
       type: exerciseDefinitionTypes.GET_DEFINITIONS;
       definitions: ExerciseDefinition[];
     }
+  | { type: exerciseDefinitionTypes.LOADING_DEFINITION }
   | {
       type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID;
       definition: ExerciseDefinition;
     }
+  | { type: exerciseDefinitionTypes.SAVING_DEFINITION }
   | {
       type: exerciseDefinitionTypes.CREATE_DEFINITION;
       definition: ExerciseDefinition;
     }
+  | { type: exerciseDefinitionTypes.UPDATING_DEFINITION }
   | {
       type: exerciseDefinitionTypes.UPDATE_DEFINITION;
       definition: ExerciseDefinition;
@@ -60,7 +72,11 @@ export type ExerciseDefinitionActions = {
 
 export const initialExerciseDefinitionState: ExerciseDefinitionState = {
   definitions: [],
-  loading: false,
+  // loading: false,
+  loadingDefinitions: false,
+  loadingDefinition: false,
+  savingDefinition: false,
+  updatingDefinition: false,
   error: null,
 };
 
@@ -69,7 +85,7 @@ export const exerciseDefinitionActions = (
 ): ExerciseDefinitionActions => ({
   getDefinitions: async () => {
     dispatch({
-      type: baseTypes.LOADING,
+      type: exerciseDefinitionTypes.LOADING_DEFINITIONS,
     });
     try {
       const { data }: AxiosResponse<ExerciseDefinition[]> = await Axios.get(
@@ -85,7 +101,7 @@ export const exerciseDefinitionActions = (
   },
   getDefinitionById: async (id: string) => {
     dispatch({
-      type: baseTypes.LOADING,
+      type: exerciseDefinitionTypes.LOADING_DEFINITION,
     });
     try {
       const { data }: AxiosResponse<ExerciseDefinition> = await Axios.get(
@@ -102,7 +118,7 @@ export const exerciseDefinitionActions = (
   },
   createDefinition: async (definition: ExerciseDefinitionForCreate) => {
     dispatch({
-      type: baseTypes.LOADING,
+      type: exerciseDefinitionTypes.SAVING_DEFINITION,
     });
     try {
       const { data }: AxiosResponse<ExerciseDefinition> = await Axios.post(
@@ -121,7 +137,7 @@ export const exerciseDefinitionActions = (
   },
   editDefinition: async (definition: ExerciseDefinitionForEdit) => {
     dispatch({
-      type: baseTypes.LOADING,
+      type: exerciseDefinitionTypes.UPDATING_DEFINITION,
     });
     try {
       const { data }: AxiosResponse<ExerciseDefinition> = await Axios.put(
@@ -145,23 +161,30 @@ export const exerciseDefinitionReducer = (
   action: ExerciseDefinitionAction
 ): ExerciseDefinitionState => {
   switch (action.type) {
-    case baseTypes.LOADING:
-      return {
-        ...state,
-        error: null,
-        loading: true,
-      };
     case baseTypes.ERROR:
       return {
         ...state,
-        loading: false,
+        loadingDefinition: false,
+        loadingDefinitions: false,
+        updatingDefinition: false,
+        savingDefinition: false,
         error: action.error,
+      };
+    case exerciseDefinitionTypes.LOADING_DEFINITIONS:
+      return {
+        ...state,
+        loadingDefinitions: true,
       };
     case exerciseDefinitionTypes.GET_DEFINITIONS:
       return {
         ...state,
-        loading: false,
+        loadingDefinitions: false,
         definitions: [...action.definitions],
+      };
+    case exerciseDefinitionTypes.LOADING_DEFINITION:
+      return {
+        ...state,
+        loadingDefinition: true,
       };
     case exerciseDefinitionTypes.GET_DEFINITION_BY_ID:
       const fullDefinition = action.definition;
@@ -171,7 +194,7 @@ export const exerciseDefinitionReducer = (
       if (!state.definitions.length || definitionIndex === -1) {
         return {
           ...state,
-          loading: false,
+          loadingDefinition: false,
           definitions: [fullDefinition],
         };
       }
@@ -179,14 +202,24 @@ export const exerciseDefinitionReducer = (
       definitions[definitionIndex] = fullDefinition as ExerciseDefinition;
       return {
         ...state,
-        loading: false,
+        loadingDefinition: false,
         definitions,
+      };
+    case exerciseDefinitionTypes.SAVING_DEFINITION:
+      return {
+        ...state,
+        savingDefinition: true,
       };
     case exerciseDefinitionTypes.CREATE_DEFINITION:
       return {
         ...state,
-        loading: false,
+        savingDefinition: false,
         definitions: [...state.definitions, action.definition],
+      };
+    case exerciseDefinitionTypes.UPDATING_DEFINITION:
+      return {
+        ...state,
+        updatingDefinition: true,
       };
     case exerciseDefinitionTypes.UPDATE_DEFINITION:
       const existingDefintions = [...state.definitions];
@@ -203,7 +236,7 @@ export const exerciseDefinitionReducer = (
       });
       return {
         ...state,
-        loading: false,
+        updatingDefinition: false,
         definitions: existingDefintions,
       };
     default:

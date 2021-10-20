@@ -28,7 +28,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const isFocused = useIsFocused();
 
   const {
-    state: { definitions, error, loading },
+    state: { definitions, error, loadingDefinition },
     actions: { getDefinitionById },
   } = useContext(ExerciseDefinitionContext);
 
@@ -45,12 +45,12 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
 
   const exercise = useMemo(
     () => definitions.find((def) => def.id === definitionId),
-    [definitionId, loading]
+    [definitionId, loadingDefinition]
   );
 
   const fetchExercise = useCallback(
     () => definitionId && getDefinitionById(definitionId),
-    [definitionId, loading]
+    [definitionId, loadingDefinition]
   );
 
   const navigateToEditScreen = useCallback(
@@ -58,7 +58,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       navigation.navigate("ExerciseEditScreen", {
         definition: exercise,
       }),
-    [definitionId, loading]
+    [definitionId, loadingDefinition]
   );
 
   return (
@@ -77,7 +77,10 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       {exercise && (
         <FlatList
           refreshControl={
-            <RefreshControl refreshing={loading} onRefresh={fetchExercise} />
+            <RefreshControl
+              refreshing={loadingDefinition}
+              onRefresh={fetchExercise}
+            />
           }
           keyExtractor={(item) => item.id}
           data={[exercise]}

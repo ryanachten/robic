@@ -23,7 +23,7 @@ const sortExercisesAlphabetically = (
 
 export default function HomeScreen() {
   const {
-    state: { definitions: unsortedDefinitions, error, loading },
+    state: { definitions: unsortedDefinitions, error, loadingDefinitions },
     actions: { getDefinitions },
   } = useContext(ExerciseDefinitionContext);
 
@@ -59,12 +59,12 @@ export default function HomeScreen() {
   return (
     <Background>
       <ErrorToast error={error} />
-      {loading && (
+      {loadingDefinitions && (
         <View style={styles.spinner}>
           <Spinner size="giant" />
         </View>
       )}
-      {!loading && !sortedDefinitions.length && (
+      {!loadingDefinitions && !sortedDefinitions.length && (
         <HintCard
           title="You've got no exercises!"
           body="Create an exercise to get started"

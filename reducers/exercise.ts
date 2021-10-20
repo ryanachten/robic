@@ -50,7 +50,7 @@ export type ExerciseActions = {
 };
 
 export const initialExerciseState: ExerciseState = {
-  loading: false,
+  // loading: false,
   exercises: [],
   loadingExercises: false,
   savingExercise: false,
@@ -128,6 +128,12 @@ export const exerciseReducer = (
         deletingExercise: false,
         error: action.error,
       };
+    case exerciseTypes.LOADING_EXERCISES: {
+      return {
+        ...state,
+        loadingExercises: true,
+      };
+    }
     case exerciseTypes.GET_EXERCISES_BY_DEFINITION:
       const newExercises = [...action.exercises];
       const newExerciseIds = newExercises.map((e) => e.id);
@@ -139,6 +145,12 @@ export const exerciseReducer = (
         loadingExercises: false,
         exercises: [...existingExercises, ...newExercises],
       };
+    case exerciseTypes.SAVING_EXERCISE: {
+      return {
+        ...state,
+        savingExercise: true,
+      };
+    }
     case exerciseTypes.CREATE_EXERCISE: {
       const { exercises } = state;
       const index = exercises.findIndex(({ id }) => action.exercise.id === id);
@@ -147,6 +159,12 @@ export const exerciseReducer = (
         ...state,
         savingExercise: false,
         exercises: [...exercises],
+      };
+    }
+    case exerciseTypes.DELETE_EXERCISE: {
+      return {
+        ...state,
+        deletingExercise: true,
       };
     }
     case exerciseTypes.DELETE_EXERCISE: {
