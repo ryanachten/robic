@@ -29,8 +29,9 @@ export const PrivacyPolicy = () => {
       <Text style={styles.spacingSmall}>
         You have the right to ask for a copy of any personal information we hold
         about you, and to ask for it to be corrected if you think it is wrong.
-        If you’d like to ask for a copy of your information, or to have it
-        corrected, please contact us at:{" "}
+        If you would like to ask for a copy of your information, or to have it
+        corrected, please contact us at hello.robic@gmail.com or raise an issue
+        on our GitHub account:
       </Text>
       <Link url="https://github.com/ryanachten/Robic/issues">Robic GitHub</Link>
     </Card>
