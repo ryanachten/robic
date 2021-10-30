@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { IndexPath, Select, SelectItem, Spinner } from "@ui-kitten/components";
 import { ErrorToast, ExerciseForm, Background, HintCard } from "../components";
@@ -50,8 +44,11 @@ export default function HomeScreen() {
 
   const goToExerciseScreen = useCallback(
     () =>
-      nav.navigate("Exercises", {
-        screen: "ExerciseEditScreen",
+      nav.navigate("Root", {
+        screen: "Exercises",
+        params: {
+          screen: "ExerciseEditScreen",
+        },
       }),
     []
   );

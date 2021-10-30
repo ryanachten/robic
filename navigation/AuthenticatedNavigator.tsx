@@ -5,9 +5,9 @@ import {
 } from "@react-navigation/bottom-tabs";
 import {
   createStackNavigator,
-  StackHeaderLeftButtonProps,
   StackNavigationOptions,
 } from "@react-navigation/stack";
+import { StackHeaderLeftButtonProps } from "@react-navigation/stack/lib/typescript/src/types";
 
 import {
   AuthenticatedParamList,
@@ -25,7 +25,6 @@ import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
 import { Icon } from "../components";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import { View } from "react-native";
 
 const BottomTab = createBottomTabNavigator<AuthenticatedParamList>();
 
@@ -35,7 +34,7 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
     onSelect={(index) => navigation.navigate(state.routeNames[index])}
   >
     <BottomNavigationTab
-      title="Home"
+      title="Workout"
       icon={(props) => <Icon {...props} name="flash-outline" />}
     />
     <BottomNavigationTab
@@ -53,7 +52,7 @@ export default function AuthenticatedNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Start"
-      tabBar={(props) => <BottomTabBar {...props} />}
+      tabBar={(props: BottomTabBarProps) => <BottomTabBar {...props} />}
     >
       <BottomTab.Screen name="Start" component={HomeNavigator} />
       <BottomTab.Screen name="Exercises" component={ExerciseNavigator} />
@@ -80,7 +79,7 @@ function HomeNavigator() {
         name="HomeScreen"
         component={HomeScreen}
         options={{
-          headerTitle: "Home",
+          headerTitle: "Workout",
         }}
       />
     </HomeStack.Navigator>
