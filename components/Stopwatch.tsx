@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { View, StyleSheet, AppState, AppStateStatus } from "react-native";
 import { Colors } from "../constants/Colors";
 import { Text } from "@ui-kitten/components";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "../constants/StorageKeys";
 import { differenceInMilliseconds } from "date-fns";
 import { Icon } from "./Icon";

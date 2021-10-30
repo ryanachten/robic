@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../constants/Interfaces";
 import { StorageKeys } from "../constants/StorageKeys";
 import { BaseActions, BaseState, baseTypes } from "./base";

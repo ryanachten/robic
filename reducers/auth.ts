@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../constants/Interfaces";
 import { LOGIN_URL, REGISTER_URL } from "../constants/Api";
 import { UserAction, userTypes } from "./user";
