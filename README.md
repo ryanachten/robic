@@ -29,5 +29,5 @@ Repository for the Robic API - `RobicServer` can be found [here](https://github.
 
 ## Building Robic
 
-- Run Expo Build against target platform `expo build:android -t apk`
+- Run Expo Build against target platform `expo build:android -t app-bundle`
 - You can then test the latest build on a real mobile device using the Expo Go application
