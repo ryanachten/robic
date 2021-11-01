@@ -20,7 +20,7 @@ export default function AnalyticsScreen() {
     actions: { getAnalytics },
   } = useContext(AnalyticsContext);
 
-  const resultsPerChart = 20;
+  const resultsPerChart = 5;
 
   return (
     <Background style={{ padding: 0 }}>
@@ -73,7 +73,6 @@ export default function AnalyticsScreen() {
               containerStyle={{
                 marginTop: Margin.lg,
               }}
-              negative={true}
               title="Least exercise progress"
               data={analytics.exerciseProgress.splice(
                 analytics.exerciseProgress.length - resultsPerChart,
@@ -111,13 +110,11 @@ type AnalyticsChartProps = {
   data: AnalyticsItem[];
   variant?: "pie" | "bar";
   title: string;
-  negative?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 };
 
 const AnalyticsChart = ({
   data,
-  negative,
   containerStyle,
   title,
   variant,
@@ -141,7 +138,6 @@ const AnalyticsChart = ({
   return (
     <BarChart
       containerStyle={containerStyle}
-      negative={negative}
       title={title}
       barProps={{
         data,

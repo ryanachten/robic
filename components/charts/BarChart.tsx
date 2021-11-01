@@ -9,7 +9,6 @@ import { Colors } from "../../constants/Colors";
 import { Margin } from "../../constants/Sizes";
 
 export type BarChartProps = ChartProps & {
-  negative?: boolean;
   barProps?: VictoryBarProps;
   containerStyle?: StyleProp<ViewStyle>;
 };
@@ -18,10 +17,9 @@ export const BarChart = ({
   chartProps,
   barProps,
   containerStyle,
-  negative,
   title,
 }: BarChartProps) => {
-  const maxLabelLength = 8;
+  const maxLabelLength = 12;
   const { max, min } = getMaxMin(barProps);
   const defaultColor = Colors.orange;
   const labels: string[] = [];
@@ -40,6 +38,8 @@ export const BarChart = ({
       <VictoryChart theme={VictoryTheme.material} {...chartProps}>
         <VictoryBar
           animate={true}
+          barRatio={0.8}
+          domainPadding={{ x: 25 }}
           style={{
             data: {
               fill: (d) => {
@@ -55,13 +55,9 @@ export const BarChart = ({
         />
         <VictoryAxis
           tickLabelComponent={
-            <VictoryLabel
-              textAnchor="end"
-              text={(d) => labels[d.index as number]}
-            />
+            <VictoryLabel text={(d) => labels[d.index as number]} />
           }
           style={{
-            tickLabels: { angle: negative ? 90 : -90 },
             grid: { stroke: "none" },
           }}
         />
