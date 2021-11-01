@@ -27,10 +27,11 @@ export const PieChart = ({ chartProps, pieProps, title }: PieChartProps) => {
         <VictoryPie
           labelPosition="centroid"
           labelPlacement="parallel"
+          padAngle={2}
           style={{
             data: {
               fill: (d) => {
-                const percent = (d.datum.endAngle - d.datum.startAngle) / 360;
+                const percent = (d.datum.endAngle - d.datum.startAngle) / 90;
                 return lerpColor(Colors.orange, Colors.red, percent);
               },
             },
