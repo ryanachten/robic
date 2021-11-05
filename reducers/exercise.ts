@@ -51,7 +51,7 @@ export type ExerciseActions = {
 
 export const initialExerciseState: ExerciseState = {
   exercises: [],
-  loadingExercises: false,
+  loadingExercises: true,
   loadingCreateExercise: false,
   loadingDeleteExercise: false,
   error: null,
