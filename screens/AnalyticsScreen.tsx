@@ -72,6 +72,7 @@ export default function AnalyticsScreen() {
             <AnalyticsChart
               containerStyle={{
                 marginTop: Margin.lg,
+                marginBottom: Margin.lg,
               }}
               title="Least exercise progress"
               data={analytics.exerciseProgress.splice(
