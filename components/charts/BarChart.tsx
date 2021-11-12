@@ -19,7 +19,7 @@ export const BarChart = ({
   containerStyle,
   title,
 }: BarChartProps) => {
-  const maxLabelLength = 12;
+  const maxLabelLength = 11;
   const { max, min } = getMaxMin(barProps);
   const defaultColor = Colors.orange;
   const labels: string[] = [];
