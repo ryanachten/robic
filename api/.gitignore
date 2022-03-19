@@ -1,0 +1,7 @@
+.DS_STORE
+.env
+.vs/*
+.vscode/*
+bin/*
+obj/*
+startup.sh
