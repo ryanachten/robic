@@ -1,28 +1,6 @@
-# RobicServer
+# Robic API
 
-![Robic Feature Image](./Info/images/Robic_FeatureImage_2.jpg "Robic Feature Image")
-
-## What is RobicServer?
-
-RobicServer is the API for the [Robic mobile application](https://github.com/ryanachten/Robic).
-
-Robic helps athletes and enthusiasts track their workouts and provides analytics to follow their progress.
-
-![Robic Stack](./Info/images/Robic_Stack.jpg "Robic Stack")
-
-## Robic Stack
-
-**Robic Client**
-
-Built using React Native, Expo, TypeScript and UI Kitten.
-
-**Robic Server**
-
-Built using .NET and MongoDB.
-
-Repository for the Robic API - `RobicServer` can be found [here](https://github.com/ryanachten/RobicServer).
-
-![Robic Exercise User Flow](./Info/images/Robic_Architecture.png "Robic Exercise User Flow")
+![Robic Architecture](../docs/images/Robic_Architecture.png "Robic Architecture")
 
 ## Robic Architecture
 
@@ -32,9 +10,7 @@ RobicServer is divided into three layers:
 - The **service layer** comprised predominantly of Mediator queries and commands
 - The **repository layer** which functions as a data access layer to the MongoDB database
 
-![Robic Workout User Flow](./Info/images/Robic_Flow_1.jpg "Robic Workout User Flow")
-
-## Developing with RobicServer
+## Developing with Robic API
 
 ### Developing using environment variables
 
@@ -71,9 +47,7 @@ docker run --rm -e TokenKey="token key" -e DatabaseName="database name" -e Conne
 
 ```
 
-![Robic Exercise User Flow](./Info/images/Robic_Flow_2.jpg "Robic Exercise User Flow")
-
-## Developing locally with React Native
+### Developing locally with React Native
 
 To run with iOS simulator, we need to run the server in HTTPS. However, iOS does not seem to work with `localhost` domains when running .NET Core locally. To work around this, we route the local server using [ngrok](https://ngrok.com/).
 
@@ -82,7 +56,3 @@ Steps:
 - Run .NET Core while watching for changes: `dotnet watch run`
 - Point ngrok at localhost: `ngrok http https://localhost:5001`
 - Use forwarding address printed by ngrok as API URL for React Native local development
-
-![Robic Analytics User Flow](./Info/images/Robic_Flow_3.jpg "Robic Analytics User Flow")
-
-Developed and designed by Ryan Achten

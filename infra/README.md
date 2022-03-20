@@ -1,4 +1,4 @@
-# robic - infrastructure
+# Robic Infrastructure
 
 - Install Terraform (using `v1.1.4` at the time of writing)
 - Set environment variables:
