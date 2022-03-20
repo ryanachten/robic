@@ -4,4 +4,6 @@
 .vscode/*
 bin/*
 obj/*
+out/*
 startup.sh
+startup.ps1
