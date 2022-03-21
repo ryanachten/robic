@@ -1,0 +1,9 @@
+.DS_STORE
+.env
+.vs/*
+.vscode/*
+bin/*
+obj/*
+out/*
+startup.sh
+startup.ps1

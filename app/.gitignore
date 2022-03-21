@@ -18,3 +18,6 @@ web-build/
 
 # Logs
 yarn-error.log
+
+# Google Console Developer API Key
+pc-api-*
