@@ -1,4 +1,4 @@
-const API_DOMAIN = "https://robic.herokuapp.com";
+const API_DOMAIN = "http://35.174.97.134";
 const API_URL = `${API_DOMAIN}/api`;
 
 // Unauthorized endpoints

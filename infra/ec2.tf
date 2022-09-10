@@ -10,3 +10,9 @@ resource "aws_instance" "server" {
   user_data_replace_on_change = true # ensures instance is recreated when launch data changes
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
 }
+
+// Elastic IP to create a static IP for the EC2
+resource "aws_eip" "static_ip" {
+  instance = aws_instance.server.id
+  vpc      = true
+}

@@ -40,10 +40,14 @@ For simplicity's sake, we keep this in `startup.sh` (omitted from Git)
 cd /api
 
 # build Docker image
-docker build -t robic -f .\Dockerfile .
+docker build -t ryanachten/robic -f .\Dockerfile .
 
 # run Docker container available on http://localhost:8080/
-docker run --rm -e TokenKey="token key" -e DatabaseName="database name" -e ConnectionString="MongoDB connection string" -p 8080:80 robic
+docker run --rm -e TokenKey="token key" -e DatabaseName="database name" -e ConnectionString="MongoDB connection string" -p 8080:80 ryanachten/robic
+
+# push changes to Docker Hub if things are looking good (requires Docker Hub login)
+docker login
+docker push ryanachten/robic
 
 ```
 
