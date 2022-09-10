@@ -1,13 +1,12 @@
-provider "heroku" {
-  email   = var.heroku_email
-  api_key = var.heroku_api_key
-}
-
 terraform {
   required_providers {
-    heroku = {
-      source  = "heroku/heroku"
-      version = "~> 4.8.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "4.30.0"
     }
   }
+}
+
+provider "aws" {
+  region = "us-east-1"
 }
