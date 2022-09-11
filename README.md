@@ -8,6 +8,8 @@ Robic is a mobile application for simple exercise tracking and analysis.
 
 Robic helps athletes and enthusiasts track their workouts and provides analytics to follow their progress.
 
+View our [Privacy Policy](./docs/PrivacyPolicy.md).
+
 ![Robic Workout User Flow](./docs/images/Robic_Flow_1.jpg "Robic Workout User Flow")
 
 Some of the features Robic provides are:
