@@ -1,5 +1,3 @@
-# Robic
-
 ## Privacy Policy
 
 We collect personal information from you, including information about your:

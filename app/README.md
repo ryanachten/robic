@@ -1,5 +1,4 @@
-# Robic App
-## Developing with Robic
+## Application Development
 
 ### Running Robic
 
