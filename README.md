@@ -1,5 +1,3 @@
-# Robic
-
 ![Robic Feature Image](./docs/images/Robic_FeatureImage_2.jpg "Robic Feature Image")
 
 ## What is Robic?
@@ -7,6 +5,10 @@
 Robic is a mobile application for simple exercise tracking and analysis.
 
 Robic helps athletes and enthusiasts track their workouts and provides analytics to follow their progress.
+
+### Get started!
+- Download for Android at the [Google Play Store](https://play.google.com/store/apps/details?id=com.app.robic) 
+- View our [Privacy Policy](./docs/PrivacyPolicy.md)
 
 ![Robic Workout User Flow](./docs/images/Robic_Flow_1.jpg "Robic Workout User Flow")
 
