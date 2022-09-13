@@ -1,0 +1,15 @@
+#! /bin/bash
+# Startup script for Linux:
+# - Installs Docker
+# - Pulls server Docker image
+# - Runs the Docker container
+
+# Update and install Docker
+sudo yum update -y
+sudo yum install -y docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user # ec2-user is the default username used for remote instance connect
+
+# Run Docker container
+docker pull ryanachten/robic:latest
+docker run -p 80:80 -e TokenKey="${token_key}" -e DatabaseName="${database_name}" -e ConnectionString="${connection_string}" ryanachten/robic
