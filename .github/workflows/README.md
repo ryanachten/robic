@@ -8,7 +8,8 @@ graph TD;
     
     changes-->|app|loginExpo[Login into Expo Application Services]
         -->buildAndroid[Build Android app]
-        -->submitAndroid[Submit Android app to Google Play]
+        -->loginEas((Verify build in EAS))
+        -->submitAndroid[Manually submit Android app to Google Play]
 
     changes-->|infra|assumeRole[Assume AWS role with credentials]
         -->terraformInit[Initialise Terraform]

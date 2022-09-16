@@ -2,7 +2,6 @@
   "expo": {
     "name": "Robic",
     "slug": "Robic",
-    "version": "4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -23,7 +22,6 @@
     },
     "ios": {
       "bundleIdentifier": "com.app.robic",
-      "buildNumber": "2",
       "supportsTablet": true
     },
     "web": {
