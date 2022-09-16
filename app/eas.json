@@ -10,7 +10,14 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "android": {
+        "autoIncrement": true
+      },
+      "ios": {
+        "autoIncrement": true
+      }
+    }
   },
   "submit": {
     "production": {}
