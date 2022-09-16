@@ -4,7 +4,7 @@
 
 ## Robic Architecture
 
-RobicServer is divided into three layers:
+Robic's API is divided into three layers:
 
 - The **controller layer** for receiving and responding to incoming requests
 - The **service layer** comprised predominantly of Mediator queries and commands

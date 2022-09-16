@@ -2,7 +2,7 @@ name: App Deployment
 on:
   push:
     branches:
-      - feature/add-ci-cd
+      - master
     paths:
       - '**/app/**'
 jobs:

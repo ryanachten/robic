@@ -1,3 +1,7 @@
+# CI/CD Development
+
+Robic's mobile application and API deployments are automated using the following steps using GitHub Actions.
+
 ```mermaid
 graph TD;
     start[Merge to master]-->changes{Changes in directory}
@@ -10,11 +14,4 @@ graph TD;
         -->buildAndroid[Build Android app]
         -->loginEas((Verify build in EAS))
         -->submitAndroid[Manually submit Android app to Google Play]
-
-    changes-->|infra|assumeRole[Assume AWS role with credentials]
-        -->terraformInit[Initialise Terraform]
-        -->terraformPlan[Generate Terraform Plan output]
-        -->verifyChanges{Verify Plan output}
-        -->|Good|applyPlan[Apply Terraform Plan]
-        verifyChanges-->|Bad|abort[Abort infrastructure updates]
 ```

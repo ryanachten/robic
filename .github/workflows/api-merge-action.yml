@@ -2,7 +2,7 @@ name: Api Deployment
 on:
   push:
     branches:
-      - feature/add-ci-cd
+      - master
     paths:
       - '**/api/**'
 jobs:

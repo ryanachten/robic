@@ -40,7 +40,8 @@ Documentation specific to different aspects of Robic development can be found in
 Of specific note are:
 - [Developing the Robic App](./app/README.md)
 - [Developing the Robic API](./api/README.md)
-- [Developing the Robic infrastructure](./infra/README.md)
+- [Developing the Robic Infrastructure](./infra/README.md)
+- [Developing the Robic CI/CD](./.github/workflows/README.md)
 
 ![Robic Analytics User Flow](./docs/images/Robic_Flow_3.jpg "Robic Analytics User Flow")
 
