@@ -1,46 +1,39 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RobicServer.Command;
 using RobicServer.Models;
 using RobicServer.Models.DTOs;
 using RobicServer.Query;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace RobicServer.Controllers;
 
-[Authorize]
-[Route("api/[controller]")]
-[ApiController]
-public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : ControllerBase
+public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : BaseController
 {
     [HttpGet]
     public async Task<IActionResult> GetDefinition()
     {
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        var definitions = await mediator.Send(new GetExerciseDefinitions
+        var response = await mediator.Send(new GetExerciseDefinitions
         {
-            UserId = userId
+            UserId = _userId
         });
-        var defintionsToReturn = mapper.Map<List<ExerciseDefinitionForListDto>>(definitions);
-        return Ok(defintionsToReturn);
+        var definitions = mapper.Map<List<ExerciseDefinitionForListDto>>(response);
+
+        return Ok(definitions);
     }
 
-    [HttpGet("{id:length(24)}", Name = "GetExerciseDefinition")]
-    public async Task<IActionResult> GetExeciseDefinition(string id)
+    [HttpGet("{id:length(24)}")]
+    public async Task<IActionResult> GetExerciseDefinition(string id)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
             DefinitionId = id
         });
-        if (definition == null)
-            return NotFound();
+        if (definition == null) return NotFound();
 
-        if (definition.User != User.FindFirst(ClaimTypes.NameIdentifier).Value)
-            return Unauthorized();
+        if (definition.User != _userId) return Unauthorized();
 
         return Ok(definition);
     }
@@ -48,14 +41,11 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
     [HttpPost]
     public async Task<IActionResult> CreateDefinition(ExerciseDefinition exerciseToCreate)
     {
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-        if (exerciseToCreate.User != userId)
-            return Unauthorized();
+        if (exerciseToCreate.User != _userId) return Unauthorized();
 
         var definition = await mediator.Send(new CreateExerciseDefinition
         {
-            UserId = userId,
+            UserId = _userId,
             Definition = exerciseToCreate
         });
 
@@ -70,11 +60,9 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
             DefinitionId = updatedExercise.Id
         });
 
-        if (definition == null)
-            return NotFound();
+        if (definition == null) return NotFound();
 
-        if (definition.User != User.FindFirst(ClaimTypes.NameIdentifier).Value)
-            return Unauthorized();
+        if (definition.User != _userId) return Unauthorized();
 
         var updatedDefinition = await mediator.Send(new UpdateExerciseDefinition
         {
@@ -92,12 +80,9 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
         {
             DefinitionId = id
         });
-        if (definition == null)
-            return NotFound();
 
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        if (definition.User != userId)
-            return Unauthorized();
+        if (definition == null) return NotFound();
+        if (definition.User != _userId) return Unauthorized();
 
         await mediator.Send(new DeleteExerciseDefinition
         {
