@@ -1,20 +1,21 @@
 using MediatR;
 using RobicServer.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class DeleteUserHandler : IRequestHandler<DeleteUser>
 {
-    public class DeleteUserHandler : RequestHandler<DeleteUser>
+    private readonly IUserRepository _userRepo;
+
+    public DeleteUserHandler(IUnitOfWork unitOfWork)
     {
-        private readonly IUserRepository _userRepo;
+        _userRepo = unitOfWork.UserRepo;
+    }
 
-        public DeleteUserHandler(IUnitOfWork unitOfWork)
-        {
-            _userRepo = unitOfWork.UserRepo;
-        }
-        protected override async void Handle(DeleteUser request)
-        {
-
-            await _userRepo.DeleteUser(request.User);
-        }
+    public async Task Handle(DeleteUser request, CancellationToken cancellationToken)
+    {
+        await _userRepo.DeleteUser(request.User);
     }
 }
