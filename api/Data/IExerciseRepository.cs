@@ -8,8 +8,8 @@ public interface IExerciseRepository
 {
     Task<IEnumerable<Exercise>> GetDefinitionExercises(string definitionId);
     Task<Exercise> GetExerciseById(string id);
-    Task<Exercise> CreateExercise(Exercise exercise, ExerciseDefinition definiton);
+    Task<Exercise> CreateExercise(Exercise exercise, ExerciseDefinition definition);
     Task<Exercise> UpdateExercise(Exercise exercise);
-    Task DeleteExercise(string id, ExerciseDefinition definiton);
-    Task<PersonalBest> GetPersonalBest(string defintionId);
+    Task DeleteExercise(string id, ExerciseDefinition definition);
+    Task<PersonalBest?> GetPersonalBest(string definitionId);
 }

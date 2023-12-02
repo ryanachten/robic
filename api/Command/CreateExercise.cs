@@ -5,6 +5,6 @@ namespace RobicServer.Command;
 
 public class CreateExercise : IRequest<Exercise>
 {
-    public ExerciseDefinition Definition { get; set; }
-    public Exercise Exercise { get; set; }
+    public required ExerciseDefinition Definition { get; set; }
+    public required Exercise Exercise { get; set; }
 }

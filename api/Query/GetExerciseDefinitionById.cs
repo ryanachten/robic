@@ -5,6 +5,5 @@ namespace RobicServer.Query;
 
 public class GetExerciseDefinitionById : IRequest<ExerciseDefinition>
 {
-
-    public string DefinitionId { get; set; }
+    public required string DefinitionId { get; set; }
 }

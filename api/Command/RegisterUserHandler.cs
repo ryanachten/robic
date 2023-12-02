@@ -15,6 +15,7 @@ public class RegisterUserHandler(IUnitOfWork unitOfWork) : IRequestHandler<Regis
         {
             throw new ArgumentException($"Email {request.User.Email} already registered to Robic");
         }
+
         return await unitOfWork.AuthRepo.Register(request.User, request.Password);
     }
 }

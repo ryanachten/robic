@@ -46,8 +46,7 @@ public class AuthController(IMapper mapper, IMediator mediator) : ControllerBase
             Email = userLoginDetails.Email,
             Password = userLoginDetails.Password
         });
-        if (user == null)
-            return Unauthorized();
+        if (user == null) return Unauthorized();
 
         var userDetails = mapper.Map<UserForDetailDto>(user);
 
@@ -65,9 +64,10 @@ public class AuthController(IMapper mapper, IMediator mediator) : ControllerBase
             new Claim(ClaimTypes.Email, user.Email),
         };
 
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TokenKey"))
-        );
+        var tokenKey = Environment.GetEnvironmentVariable("TokenKey");
+        if (tokenKey == null) throw new UnauthorizedAccessException("Missing singing token key in environment configurtion");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

@@ -10,6 +10,5 @@ public class DeleteExerciseHandler(IUnitOfWork unitOfWork) : IRequestHandler<Del
     public async Task Handle(DeleteExercise request, CancellationToken cancellationToken)
     {
         await unitOfWork.ExerciseRepo.DeleteExercise(request.ExerciseId, request.Definition);
-
     }
 }

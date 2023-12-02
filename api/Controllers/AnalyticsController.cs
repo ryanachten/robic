@@ -10,9 +10,11 @@ public class AnalyticsController(IMediator mediator) : BaseController
     [HttpGet]
     public async Task<IActionResult> Get()
     {
+        if (UserId == null) return Unauthorized();
+
         var analytics = await mediator.Send(new GetAnalytics
         {
-            UserId = _userId
+            UserId = UserId
         });
 
         return Ok(analytics);

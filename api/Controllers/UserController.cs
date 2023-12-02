@@ -13,7 +13,7 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
     [HttpGet("{id:length(24)}", Name = "GetUser")]
     public async Task<IActionResult> Get(string id)
     {
-        if (_userId != id) return Unauthorized();
+        if (UserId != id) return Unauthorized();
 
         var user = await mediator.Send(new GetUserById
         {
@@ -30,7 +30,7 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
     [HttpDelete("{id:length(24)}")]
     public async Task<IActionResult> Delete(string id)
     {
-        if (_userId != id) return Unauthorized();
+        if (UserId != id) return Unauthorized();
 
         var user = await mediator.Send(new GetUserById
         {

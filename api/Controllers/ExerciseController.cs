@@ -18,7 +18,7 @@ public class ExerciseController(IMediator mediator) : BaseController
         });
 
         if (definition == null) return NotFound();
-        if (definition.User != _userId) return Unauthorized();
+        if (definition.User != UserId) return Unauthorized();
 
         var exercises = await mediator.Send(new GetExercisesByDefinition
         {
@@ -52,7 +52,7 @@ public class ExerciseController(IMediator mediator) : BaseController
             DefinitionId = exercise.Definition
         });
 
-        if (definition == null || definition.User != _userId) return Unauthorized();
+        if (definition == null || definition.User != UserId) return Unauthorized();
 
         var createdExercise = await mediator.Send(new CreateExercise
         {
@@ -97,7 +97,7 @@ public class ExerciseController(IMediator mediator) : BaseController
             DefinitionId = exercise.Definition
         });
 
-        if (definition == null || definition.User != _userId)
+        if (definition == null || definition.User != UserId)
             return Unauthorized();
 
         await mediator.Send(new DeleteExercise
@@ -116,6 +116,6 @@ public class ExerciseController(IMediator mediator) : BaseController
             DefinitionId = definitionId
         });
 
-        return definition != null && definition.User == _userId;
+        return definition != null && definition.User == UserId;
     }
 }

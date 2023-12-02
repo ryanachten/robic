@@ -11,21 +11,21 @@ public class User : Document
 {
 
     [BsonElement("firstName")]
-    public string FirstName { get; set; }
+    public required string FirstName { get; set; }
 
     [BsonElement("lastName")]
-    public string LastName { get; set; }
+    public required string LastName { get; set; }
 
     [BsonElement("email")]
-    public string Email { get; set; }
+    public required string Email { get; set; }
 
     [BsonElement("passwordHash")]
-    public byte[] PasswordHash { get; set; }
+    public byte[] PasswordHash { get; set; } = [];
 
     [BsonElement("passwordSalt")]
-    public byte[] PasswordSalt { get; set; }
+    public byte[] PasswordSalt { get; set; } = [];
 
     [BsonElement("exercises")]
     [BsonRepresentation(BsonType.ObjectId)]
-    public ICollection<string> Exercises { get; set; }
+    public List<string> Exercises { get; set; } = [];
 }

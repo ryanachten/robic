@@ -9,10 +9,8 @@ namespace RobicServer.Controllers;
 [ApiController]
 public partial class BaseController : ControllerBase
 {
-    protected readonly string? _userId;
-
-    public BaseController()
+    protected string? UserId
     {
-        _userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        get => User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 }

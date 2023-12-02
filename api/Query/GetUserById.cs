@@ -5,5 +5,5 @@ namespace RobicServer.Query;
 
 public class GetUserById : IRequest<User>
 {
-    public string UserId { get; set; }
+    public required string UserId { get; set; }
 }

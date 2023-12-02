@@ -6,9 +6,9 @@ namespace RobicServer.Models.DTOs;
 
 public class ExerciseDefinitionForListDto
 {
-    public string Id { get; set; }
-    public string Title { get; set; }
-    public ICollection<string> History { get; set; }
+    public required string Id { get; set; }
+    public required string Title { get; set; }
+    public List<string> History { get; set; } = [];
 
 #nullable enable
     public Exercise? LastSession { get; set; }

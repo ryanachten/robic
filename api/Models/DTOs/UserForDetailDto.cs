@@ -4,9 +4,9 @@ namespace RobicServer.Models.DTOs;
 
 public class UserForDetailDto
 {
-    public string Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public ICollection<string> Exercises { get; set; }
+    public required string Id { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required string Email { get; set; }
+    public List<string> Exercises { get; set; } = [];
 }

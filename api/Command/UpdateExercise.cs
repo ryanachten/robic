@@ -5,5 +5,5 @@ namespace RobicServer.Command;
 
 public class UpdateExercise : IRequest<Exercise>
 {
-    public Exercise Exercise { get; set; }
+    public required Exercise Exercise { get; set; }
 }

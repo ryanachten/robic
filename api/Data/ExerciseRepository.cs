@@ -18,7 +18,8 @@ public class ExerciseRepository(
 
         await exerciseContext.InsertOneAsync(exercise);
 
-        Exercise latestExercise = await exerciseContext.FindByIdAsync(definition.History.LastOrDefault());
+        var latestExerciseId = definition.History.LastOrDefault();
+        var latestExercise = latestExerciseId == null ? null : await exerciseContext.FindByIdAsync(latestExerciseId);
 
         // Add exercise to definition history
         definition.History.Add(exercise.Id);
@@ -33,13 +34,12 @@ public class ExerciseRepository(
         return exercise;
     }
 
-    public async Task DeleteExercise(string id, ExerciseDefinition definiton)
+    public async Task DeleteExercise(string id, ExerciseDefinition definition)
     {
         await exerciseContext.DeleteByIdAsync(id);
 
-        // Remove exercise from definition history
-        definiton.History.Remove(id);
-        await exerciseDefinitionContext.ReplaceOneAsync(definiton);
+        definition.History.Remove(id);
+        await exerciseDefinitionContext.ReplaceOneAsync(definition);
     }
 
     public Task<IEnumerable<Exercise>> GetDefinitionExercises(string definitionId)
@@ -53,14 +53,12 @@ public class ExerciseRepository(
         return await exerciseContext.FindByIdAsync(id);
     }
 
-    public async Task<PersonalBest> GetPersonalBest(string definitionId)
+    public async Task<PersonalBest?> GetPersonalBest(string definitionId)
     {
         var exercises = await GetDefinitionExercises(definitionId);
-        if (exercises == null || exercises.Count() == 0)
-        {
-            return null;
-        }
-        Exercise exerciseWithHighestNetValue = null;
+        if (exercises == null || !exercises.Any()) return null;
+
+        Exercise? exerciseWithHighestNetValue = null;
         double highestAvgValue = 0;
         int highestReps = 0;
         int highestSets = 0;
@@ -87,12 +85,12 @@ public class ExerciseRepository(
                     totalValue += (int)s.Value;
                 }
             }
-            double avgValue = totalValue / e.Sets.Count();
+            double avgValue = totalValue / e.Sets.Count;
             if (avgValue > highestAvgValue)
                 highestAvgValue = avgValue;
 
             if (e.Sets.Count > 0)
-                history.Add(this.GetPersonalBestHistory(e));
+                history.Add(GetPersonalBestHistory(e));
         }
 
         return new PersonalBest
@@ -105,13 +103,13 @@ public class ExerciseRepository(
         };
     }
 
-    public async Task<Exercise> UpdateExercise(Exercise updatedExercise)
+    public async Task<Exercise> UpdateExercise(Exercise exercise)
     {
-        await exerciseContext.ReplaceOneAsync(updatedExercise);
-        return updatedExercise;
+        await exerciseContext.ReplaceOneAsync(exercise);
+        return exercise;
     }
 
-    private PersonalBestHistory GetPersonalBestHistory(Exercise exercise)
+    private static PersonalBestHistory GetPersonalBestHistory(Exercise exercise)
     {
         var totalReps = 0.0;
         var totalValue = 0.0;
@@ -126,6 +124,7 @@ public class ExerciseRepository(
                 totalValue += (double)s.Value;
             }
         }
+
         var record = new PersonalBestHistory()
         {
             Date = exercise.Date,
@@ -135,10 +134,11 @@ public class ExerciseRepository(
             AvgReps = totalReps / exercise.Sets.Count,
             AvgValue = totalValue / exercise.Sets.Count,
         };
+
         return record;
     }
 
-    private double GetLatestExerciseImprovement(Exercise newExercise, Exercise lastExercise)
+    private static double GetLatestExerciseImprovement(Exercise newExercise, Exercise lastExercise)
     {
         var newNetValue = ExerciseUtilities.GetNetExerciseValue(newExercise);
         var lastNetValue = ExerciseUtilities.GetNetExerciseValue(lastExercise);

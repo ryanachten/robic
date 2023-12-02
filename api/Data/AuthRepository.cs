@@ -5,11 +5,10 @@ namespace RobicServer.Data;
 
 public class AuthRepository(IMongoRepository<User> userRepo) : IAuthRepository
 {
-    public async Task<User> Login(string email, string password)
+    public async Task<User?> Login(string username, string password)
     {
-        var user = await userRepo.FindOneAsync(user => user.Email == email);
-        if (user == null)
-            return null;
+        var user = await userRepo.FindOneAsync(user => user.Email == username);
+        if (user == null) return null;
 
         if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             return null;
@@ -19,20 +18,19 @@ public class AuthRepository(IMongoRepository<User> userRepo) : IAuthRepository
 
     public async Task<User> Register(User user, string password)
     {
-        byte[] passwordHash, passwordSalt;
-        CreatePasswordHash(password, out passwordHash, out passwordSalt);
+        CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
         user.PasswordSalt = passwordSalt;
         user.PasswordHash = passwordHash;
-        user.Exercises = new string[] { };
+        user.Exercises = [];
 
         await userRepo.InsertOneAsync(user);
 
         return user;
     }
 
-    public async Task<bool> UserExists(string email)
+    public async Task<bool> UserExists(string username)
     {
-        var user = await userRepo.FindOneAsync(user => user.Email == email);
+        var user = await userRepo.FindOneAsync(user => user.Email == username);
         return user != null;
     }
 
@@ -51,10 +49,9 @@ public class AuthRepository(IMongoRepository<User> userRepo) : IAuthRepository
 
     private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
     {
-        using (var hmac = new System.Security.Cryptography.HMACSHA512())
-        {
-            passwordSalt = hmac.Key;
-            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-        }
+        using var hmac = new System.Security.Cryptography.HMACSHA512();
+
+        passwordSalt = hmac.Key;
+        passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
     }
 }

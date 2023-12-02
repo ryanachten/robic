@@ -15,10 +15,13 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
     [HttpGet]
     public async Task<IActionResult> GetDefinition()
     {
+        if (UserId == null) return Unauthorized();
+
         var response = await mediator.Send(new GetExerciseDefinitions
         {
-            UserId = _userId
+            UserId = UserId
         });
+
         var definitions = mapper.Map<List<ExerciseDefinitionForListDto>>(response);
 
         return Ok(definitions);
@@ -33,7 +36,7 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
         });
         if (definition == null) return NotFound();
 
-        if (definition.User != _userId) return Unauthorized();
+        if (definition.User != UserId) return Unauthorized();
 
         return Ok(definition);
     }
@@ -41,11 +44,11 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
     [HttpPost]
     public async Task<IActionResult> CreateDefinition(ExerciseDefinition exerciseToCreate)
     {
-        if (exerciseToCreate.User != _userId) return Unauthorized();
+        if (exerciseToCreate.User != UserId) return Unauthorized();
 
         var definition = await mediator.Send(new CreateExerciseDefinition
         {
-            UserId = _userId,
+            UserId = UserId,
             Definition = exerciseToCreate
         });
 
@@ -62,7 +65,7 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
 
         if (definition == null) return NotFound();
 
-        if (definition.User != _userId) return Unauthorized();
+        if (definition.User != UserId) return Unauthorized();
 
         var updatedDefinition = await mediator.Send(new UpdateExerciseDefinition
         {
@@ -82,7 +85,7 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
         });
 
         if (definition == null) return NotFound();
-        if (definition.User != _userId) return Unauthorized();
+        if (definition.User != UserId) return Unauthorized();
 
         await mediator.Send(new DeleteExerciseDefinition
         {

@@ -1,9 +1,8 @@
 using RobicServer.Models;
-using System.Linq;
 
 namespace RobicServer.Helpers;
 
-public class ExerciseUtilities(IQueryable<Exercise> exercises)
+public static class ExerciseUtilities
 {
     public static double GetNetExerciseValue(Exercise exercise)
     {

@@ -5,5 +5,5 @@ namespace RobicServer.Command;
 
 public class DeleteExerciseDefinition : IRequest
 {
-    public ExerciseDefinition Definition { get; set; }
+    public required ExerciseDefinition Definition { get; set; }
 }

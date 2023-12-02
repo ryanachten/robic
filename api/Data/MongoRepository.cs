@@ -20,12 +20,12 @@ public class MongoRepository<TDocument> : IMongoRepository<TDocument>
         _collection = database.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
     }
 
-    private protected string GetCollectionName(Type documentType)
+    private static protected string? GetCollectionName(Type documentType)
     {
-        return ((BsonCollectionAttribute)documentType.GetCustomAttributes(
+        return documentType.GetCustomAttributes(
                 typeof(BsonCollectionAttribute),
-                true)
-            .FirstOrDefault())?.CollectionName;
+                true).Cast<BsonCollectionAttribute>()
+            .FirstOrDefault()?.CollectionName;
     }
 
     public virtual IQueryable<TDocument> AsQueryable()

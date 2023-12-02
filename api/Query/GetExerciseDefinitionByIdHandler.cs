@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace RobicServer.Query;
 
-public class GetExerciseDefinitionByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetExerciseDefinitionById, ExerciseDefinition>
+public class GetExerciseDefinitionByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetExerciseDefinitionById, ExerciseDefinition?>
 {
-    public async Task<ExerciseDefinition> Handle(GetExerciseDefinitionById request, CancellationToken cancellationToken)
+    public async Task<ExerciseDefinition?> Handle(GetExerciseDefinitionById request, CancellationToken cancellationToken)
     {
         var definition = await unitOfWork.ExerciseDefinitionRepo.GetExerciseDefinition(request.DefinitionId);
         if (definition != null)

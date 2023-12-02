@@ -10,8 +10,8 @@ public class AnalyticsRepository : IAnalyticsRepository
 {
     private readonly IMongoRepository<Exercise> _exerciseRepo;
     private readonly IMongoRepository<ExerciseDefinition> _exerciseDefinitionRepo;
-    private List<ExerciseDefinition> _userExerciseDefinitions;
-    private List<Exercise> _userExercises;
+    private List<ExerciseDefinition> _userExerciseDefinitions = [];
+    private List<Exercise> _userExercises = [];
 
     public AnalyticsRepository(
         IMongoRepository<Exercise> exerciseRepo,
@@ -39,12 +39,12 @@ public class AnalyticsRepository : IAnalyticsRepository
 
     private List<AnalyticsItem> GetExerciseProgress()
     {
-        List<AnalyticsItem> exerciseProgress = _userExercises.GroupBy(e => e.Definition).Select(g =>
+        var exerciseProgress = _userExercises.GroupBy(e => e.Definition).Select(g =>
         {
-            ExerciseDefinition def = _userExerciseDefinitions.FirstOrDefault(d => d.Id == g.First().Definition);
-            Exercise firstExercise = _userExercises.FirstOrDefault(ex => ex.Id == def.History?.FirstOrDefault());
+            var def = _userExerciseDefinitions.Find(d => d.Id == g.First().Definition);
+            var firstExercise = _userExercises.Find(ex => ex.Id == def?.History?.FirstOrDefault());
 
-            var total = g.Sum(t => (double)t.NetValue);
+            var total = g.Sum(t => t.NetValue) ?? 0.0;
             var numberOfSessions = g.Count();
 
             double progressPercent = 0.0;
@@ -57,7 +57,7 @@ public class AnalyticsRepository : IAnalyticsRepository
             }
             return new AnalyticsItem
             {
-                Marker = def.Title,
+                Marker = def?.Title ?? string.Empty,
                 Count = progressPercent,
             };
         }).OrderByDescending(a => a.Count).ToList();
@@ -67,8 +67,7 @@ public class AnalyticsRepository : IAnalyticsRepository
 
     private List<AnalyticsItem> GetExerciseFrequency()
     {
-        // Increment muscle group by occurance
-        List<AnalyticsItem> exerciseFrequency = _userExerciseDefinitions.Select(
+        return _userExerciseDefinitions.Select(
             (def) =>
             {
                 return new AnalyticsItem
@@ -78,17 +77,16 @@ public class AnalyticsRepository : IAnalyticsRepository
                 };
             }
         ).OrderByDescending(a => a.Count).ToList();
-        return exerciseFrequency;
     }
 
     private List<AnalyticsItem> GetMuscleGroupFrequency()
     {
-        // Increment muscle group by occurance
-        Dictionary<string, int> muscleGroupFrequency = new Dictionary<string, int>();
+        // Increment muscle group by occurrence
+        var muscleGroupFrequency = new Dictionary<string, int>();
         _userExercises.GroupBy(e => e.Definition).ToList().ForEach(g =>
         {
-            ExerciseDefinition exerciseDefiniton = _userExerciseDefinitions.FirstOrDefault(def => def.Id == g.First().Definition);
-            exerciseDefiniton.PrimaryMuscleGroup.ForEach(m =>
+            var exerciseDefinition = _userExerciseDefinitions.Find(def => def.Id == g.First().Definition);
+            exerciseDefinition?.PrimaryMuscleGroup.ForEach(m =>
              {
                  if (muscleGroupFrequency.ContainsKey(m))
                  {
@@ -102,7 +100,7 @@ public class AnalyticsRepository : IAnalyticsRepository
         });
 
         // Convert dictionary to analytics list
-        List<AnalyticsItem> muscleGroupFrequencyList = new List<AnalyticsItem>();
+        var muscleGroupFrequencyList = new List<AnalyticsItem>();
         foreach (KeyValuePair<string, int> muscleGroup in muscleGroupFrequency)
         {
             muscleGroupFrequencyList.Add(new AnalyticsItem()
@@ -112,6 +110,7 @@ public class AnalyticsRepository : IAnalyticsRepository
             });
         }
         muscleGroupFrequencyList.Sort((a, b) => a.Count < b.Count ? 1 : -1);
+
         return muscleGroupFrequencyList;
     }
 
@@ -120,7 +119,7 @@ public class AnalyticsRepository : IAnalyticsRepository
     {
         _userExerciseDefinitions = _exerciseDefinitionRepo.FilterBy(e => e.User == userId).ToList();
 
-        var exericseIds = _userExerciseDefinitions.Select(e => e.Id);
-        _userExercises = _exerciseRepo.FilterBy(e => exericseIds.Contains(e.Definition)).ToList();
+        var exerciseIds = _userExerciseDefinitions.Select(e => e.Id);
+        _userExercises = _exerciseRepo.FilterBy(e => exerciseIds.Contains(e.Definition)).ToList();
     }
 }

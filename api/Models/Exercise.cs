@@ -12,7 +12,7 @@ public class Exercise : Document
 {
     [BsonElement("definition")]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Definition { get; set; }
+    public required string Definition { get; set; }
 
     [BsonElement("date")]
     public DateTime Date { get; set; }
@@ -21,7 +21,7 @@ public class Exercise : Document
     public DateTime TimeTaken { get; set; }
 
     [BsonElement("sets")]
-    public ICollection<Set> Sets { get; set; }
+    public List<Set> Sets { get; set; } = [];
 
     public double? NetValue
     {
@@ -32,11 +32,8 @@ public class Exercise : Document
             {
                 if (set.Reps.HasValue && set.Value.HasValue)
                 {
-                    if (total == null)
-                    {
-                        total = 0.0;
-                    }
-                    total += ((int)set.Reps * (double)set.Value);
+                    total ??= 0.0;
+                    total += set.Reps * set.Value;
                 }
 
             }

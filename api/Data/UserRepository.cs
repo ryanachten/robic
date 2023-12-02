@@ -14,10 +14,10 @@ public class UserRepository(
         // Clean up associated user data
         foreach (var definitionId in user.Exercises)
         {
-            var definiton = await exerciseDefinitionContext.FindByIdAsync(definitionId);
-            foreach (var exerciseId in definiton.History)
+            var definition = await exerciseDefinitionContext.FindByIdAsync(definitionId);
+            foreach (var exerciseId in definition.History)
             {
-                // Remove all associated exercise sesssions
+                // Remove all associated exercise sessions
                 await exerciseContext.DeleteByIdAsync(exerciseId);
             }
             // Remove all associated exercise definitions

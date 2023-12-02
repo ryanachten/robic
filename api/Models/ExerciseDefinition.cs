@@ -12,56 +12,31 @@ namespace RobicServer.Models;
 public class ExerciseDefinition : Document
 {
     [BsonElement("title")]
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     // TODO: should be enum or something
     [BsonElement("unit")]
-    public string Unit { get; set; }
+    public required string Unit { get; set; }
 
     // TODO: should be enum or something
     [BsonElement("type")]
-    public string Type { get; set; }
+    public required string Type { get; set; }
 
     [BsonElement("user")]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string User { get; set; }
+    public required string User { get; set; }
 
     [BsonElement("history")]
     [BsonRepresentation(BsonType.ObjectId)]
-    private ICollection<string> history;
-    public ICollection<string> History
-    {
-        get
-        {
-            if (history == null)
-            {
-                history = new List<string>();
-            }
-            return history;
-        }
-        set { history = value; }
-    }
-
+    public List<string> History { get; set; } = [];
 
     [BsonElement("childExercises")]
     [BsonRepresentation(BsonType.ObjectId)]
-    public ICollection<string> ChildExercises { get; set; }
+    public List<string> ChildExercises { get; set; } = [];
 
     [BsonElement("primaryMuscleGroup")]
     [BsonRepresentation(BsonType.String)]
-    private List<string> primaryMuscleGroup;
-    public List<string> PrimaryMuscleGroup
-    {
-        get
-        {
-            if (primaryMuscleGroup == null)
-            {
-                primaryMuscleGroup = new List<string>();
-            }
-            return primaryMuscleGroup;
-        }
-        set { primaryMuscleGroup = value; }
-    }
+    public List<string> PrimaryMuscleGroup { get; set; } = [];
 
     // Computed properties
     [BsonElement("lastSession")]
