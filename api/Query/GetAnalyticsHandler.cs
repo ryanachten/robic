@@ -1,22 +1,15 @@
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Query
+namespace RobicServer.Query;
+
+public class GetAnalyticsHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAnalytics, Analytics>
 {
-    public class GetAnalyticsHandler : IRequestHandler<GetAnalytics, Analytics>
+    public Task<Analytics> Handle(GetAnalytics request, CancellationToken cancellationToken)
     {
-        private readonly IAnalyticsRepository _analyticsRepo;
-
-        public GetAnalyticsHandler(IUnitOfWork unitOfWork)
-        {
-            _analyticsRepo = unitOfWork.AnalyticsRepo;
-        }
-        public Task<Analytics> Handle(GetAnalytics request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(_analyticsRepo.GetUserAnalytics(request.UserId));
-        }
+        return Task.FromResult(unitOfWork.AnalyticsRepo.GetUserAnalytics(request.UserId));
     }
 }

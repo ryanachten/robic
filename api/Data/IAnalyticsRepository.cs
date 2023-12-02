@@ -1,10 +1,8 @@
-using System.Threading.Tasks;
 using RobicServer.Models;
 
-namespace RobicServer.Data
+namespace RobicServer.Data;
+
+public interface IAnalyticsRepository
 {
-    public interface IAnalyticsRepository
-    {
-        Analytics GetUserAnalytics(string userId);
-    }
+    Analytics GetUserAnalytics(string userId);
 }

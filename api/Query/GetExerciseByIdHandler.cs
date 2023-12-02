@@ -1,22 +1,15 @@
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Query
+namespace RobicServer.Query;
+
+public class GetExerciseByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetExerciseById, Exercise>
 {
-    public class GetExerciseByIdHandler : IRequestHandler<GetExerciseById, Exercise>
+    public Task<Exercise> Handle(GetExerciseById request, CancellationToken cancellationToken)
     {
-        private readonly IExerciseRepository _exerciseRepo;
-
-        public GetExerciseByIdHandler(IUnitOfWork unitOfWork)
-        {
-            _exerciseRepo = unitOfWork.ExerciseRepo;
-        }
-        public Task<Exercise> Handle(GetExerciseById request, CancellationToken cancellationToken)
-        {
-            return _exerciseRepo.GetExerciseById(request.ExerciseId);
-        }
+        return unitOfWork.ExerciseRepo.GetExerciseById(request.ExerciseId);
     }
 }

@@ -2,15 +2,14 @@ using AutoMapper;
 using RobicServer.Models;
 using RobicServer.Models.DTOs;
 
-namespace RobicServer.Helpers
+namespace RobicServer.Helpers;
+
+public class AutoMapperProfiles : Profile
 {
-    public class AutoMapperProfiles : Profile
+    public AutoMapperProfiles()
     {
-        public AutoMapperProfiles()
-        {
-            CreateMap<UserForRegisterDto, User>();
-            CreateMap<User, UserForDetailDto>();
-            CreateMap<ExerciseDefinition, ExerciseDefinitionForListDto>();
-        }
+        CreateMap<UserForRegisterDto, User>();
+        CreateMap<User, UserForDetailDto>();
+        CreateMap<ExerciseDefinition, ExerciseDefinitionForListDto>();
     }
 }

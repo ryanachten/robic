@@ -1,11 +1,10 @@
-using System.Threading.Tasks;
 using RobicServer.Models;
+using System.Threading.Tasks;
 
-namespace RobicServer.Data
+namespace RobicServer.Data;
+
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        Task<User> GetUser(string id);
-        Task DeleteUser(User user);
-    }
+    Task<User> GetUser(string id);
+    Task DeleteUser(User user);
 }

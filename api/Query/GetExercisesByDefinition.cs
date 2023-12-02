@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using MediatR;
 using RobicServer.Models;
+using System.Collections.Generic;
 
-namespace RobicServer.Query
+namespace RobicServer.Query;
+
+public class GetExercisesByDefinition : IRequest<IEnumerable<Exercise>>
 {
-    public class GetExercisesByDefinition : IRequest<IEnumerable<Exercise>>
-    {
-        public string DefinitionId { get; set; }
-    }
+    public string DefinitionId { get; set; }
 }

@@ -1,26 +1,20 @@
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class RegisterUserHandler(IUnitOfWork unitOfWork) : IRequestHandler<RegisterUser, User>
 {
-    public class RegisterUserHandler : IRequestHandler<RegisterUser, User>
+    public async Task<User> Handle(RegisterUser request, CancellationToken cancellationToken)
     {
-        private readonly IAuthRepository _authRepo;
-
-        public RegisterUserHandler(IUnitOfWork unitOfWork)
+        if (await unitOfWork.AuthRepo.UserExists(request.User.Email))
         {
-            _authRepo = unitOfWork.AuthRepo;
+            throw new ArgumentException($"Email {request.User.Email} already registered to Robic");
         }
-        public async Task<User> Handle(RegisterUser request, CancellationToken cancellationToken)
-        {
-            if (await _authRepo.UserExists(request.User.Email))
-            {
-                throw new System.Exception($"Email {request.User.Email} already registered to Robic");
-            }
-            return await _authRepo.Register(request.User, request.Password);
-        }
+        return await unitOfWork.AuthRepo.Register(request.User, request.Password);
     }
 }

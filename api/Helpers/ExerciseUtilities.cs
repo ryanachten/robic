@@ -1,27 +1,18 @@
-using System.Collections.Generic;
-using System.Linq;
 using RobicServer.Models;
+using System.Linq;
 
-namespace RobicServer.Helpers
+namespace RobicServer.Helpers;
+
+public class ExerciseUtilities(IQueryable<Exercise> exercises)
 {
-    public class ExerciseUtilities
+    public static double GetNetExerciseValue(Exercise exercise)
     {
-        private readonly IQueryable<Exercise> _exercises;
-
-        public ExerciseUtilities(IQueryable<Exercise> exercises)
+        double total = 0.0;
+        foreach (Set set in exercise.Sets)
         {
-            _exercises = exercises;
+            if (set.Reps.HasValue && set.Value.HasValue)
+                total += (double)set.Reps * (double)set.Value;
         }
-
-        public static double GetNetExerciseValue(Exercise exercise)
-        {
-            double total = 0.0;
-            foreach (Set set in exercise.Sets)
-            {
-                if (set.Reps.HasValue && set.Value.HasValue)
-                    total += (double)set.Reps * (double)set.Value;
-            }
-            return total;
-        }
+        return total;
     }
 }

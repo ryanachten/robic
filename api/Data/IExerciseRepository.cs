@@ -1,16 +1,15 @@
+using RobicServer.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using RobicServer.Models;
 
-namespace RobicServer.Data
+namespace RobicServer.Data;
+
+public interface IExerciseRepository
 {
-    public interface IExerciseRepository
-    {
-        Task<IEnumerable<Exercise>> GetDefinitionExercises(string definitionId);
-        Task<Exercise> GetExerciseById(string id);
-        Task<Exercise> CreateExercise(Exercise exercise, ExerciseDefinition definiton);
-        Task<Exercise> UpdateExercise(Exercise exercise);
-        Task DeleteExercise(string id, ExerciseDefinition definiton);
-        Task<PersonalBest> GetPersonalBest(string defintionId);
-    }
+    Task<IEnumerable<Exercise>> GetDefinitionExercises(string definitionId);
+    Task<Exercise> GetExerciseById(string id);
+    Task<Exercise> CreateExercise(Exercise exercise, ExerciseDefinition definiton);
+    Task<Exercise> UpdateExercise(Exercise exercise);
+    Task DeleteExercise(string id, ExerciseDefinition definiton);
+    Task<PersonalBest> GetPersonalBest(string defintionId);
 }

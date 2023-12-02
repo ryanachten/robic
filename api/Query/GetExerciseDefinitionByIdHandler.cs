@@ -4,26 +4,16 @@ using RobicServer.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RobicServer.Query
+namespace RobicServer.Query;
+
+public class GetExerciseDefinitionByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetExerciseDefinitionById, ExerciseDefinition>
 {
-    public class GetExerciseDefinitionByIdHandler : IRequestHandler<GetExerciseDefinitionById, ExerciseDefinition>
+    public async Task<ExerciseDefinition> Handle(GetExerciseDefinitionById request, CancellationToken cancellationToken)
     {
-        private readonly IExerciseDefinitionRepository _definitionRepo;
-        private readonly IExerciseRepository _exerciseRepo;
+        var definition = await unitOfWork.ExerciseDefinitionRepo.GetExerciseDefinition(request.DefinitionId);
+        if (definition != null)
+            definition.PersonalBest = await unitOfWork.ExerciseRepo.GetPersonalBest(definition.Id);
 
-        public GetExerciseDefinitionByIdHandler(IUnitOfWork unitOfWork)
-        {
-            _definitionRepo = unitOfWork.ExerciseDefinitionRepo;
-            _exerciseRepo = unitOfWork.ExerciseRepo;
-        }
-
-        public async Task<ExerciseDefinition> Handle(GetExerciseDefinitionById request, CancellationToken cancellationToken)
-        {
-            var definition = await _definitionRepo.GetExerciseDefinition(request.DefinitionId);
-            if (definition != null)
-                definition.PersonalBest = await _exerciseRepo.GetPersonalBest(definition.Id);
-
-            return definition;
-        }
+        return definition;
     }
 }

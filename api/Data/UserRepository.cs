@@ -1,43 +1,34 @@
-using System.Threading.Tasks;
 using RobicServer.Models;
+using System.Threading.Tasks;
 
-namespace RobicServer.Data
+namespace RobicServer.Data;
+
+public class UserRepository(
+    IMongoRepository<User> userContext,
+    IMongoRepository<Exercise> exerciseContext,
+    IMongoRepository<ExerciseDefinition> exerciseDefinitionContext
+) : IUserRepository
 {
-    public class UserRepository : IUserRepository
+    public async Task DeleteUser(User user)
     {
-        private readonly IMongoRepository<User> _userContext;
-        private readonly IMongoRepository<Exercise> _exerciseContext;
-        private readonly IMongoRepository<ExerciseDefinition> _exerciseDefinitionContext;
-
-        public UserRepository(IMongoRepository<User> userContext, IMongoRepository<Exercise> exerciseContext,
-            IMongoRepository<ExerciseDefinition> exerciseDefinitionContext)
+        // Clean up associated user data
+        foreach (var definitionId in user.Exercises)
         {
-            _userContext = userContext;
-            _exerciseContext = exerciseContext;
-            _exerciseDefinitionContext = exerciseDefinitionContext;
-        }
-
-        public async Task DeleteUser(User user)
-        {
-            // Clean up associated user data
-            foreach (var definitionId in user.Exercises)
+            var definiton = await exerciseDefinitionContext.FindByIdAsync(definitionId);
+            foreach (var exerciseId in definiton.History)
             {
-                var definiton = await _exerciseDefinitionContext.FindByIdAsync(definitionId);
-                foreach (var exerciseId in definiton.History)
-                {
-                    // Remove all associated exercise sesssions
-                    await _exerciseContext.DeleteByIdAsync(exerciseId);
-                }
-                // Remove all associated exercise definitions
-                await _exerciseDefinitionContext.DeleteByIdAsync(definitionId);
+                // Remove all associated exercise sesssions
+                await exerciseContext.DeleteByIdAsync(exerciseId);
             }
-
-            await _userContext.DeleteByIdAsync(user.Id);
+            // Remove all associated exercise definitions
+            await exerciseDefinitionContext.DeleteByIdAsync(definitionId);
         }
 
-        public async Task<User> GetUser(string id)
-        {
-            return await _userContext.FindByIdAsync(id);
-        }
+        await userContext.DeleteByIdAsync(user.Id);
+    }
+
+    public async Task<User> GetUser(string id)
+    {
+        return await userContext.FindByIdAsync(id);
     }
 }

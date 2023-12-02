@@ -1,10 +1,9 @@
 using MediatR;
 using RobicServer.Models;
 
-namespace RobicServer.Query
+namespace RobicServer.Query;
+
+public class GetExerciseById : IRequest<Exercise>
 {
-    public class GetExerciseById : IRequest<Exercise>
-    {
-        public string ExerciseId { get; set; }
-    }
+    public string ExerciseId { get; set; }
 }

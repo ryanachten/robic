@@ -1,65 +1,57 @@
+using RobicServer.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using RobicServer.Models;
 
-namespace RobicServer.Data
+namespace RobicServer.Data;
+
+public class ExerciseDefinitionRepository(
+    IMongoRepository<ExerciseDefinition> exerciseDefinitionContext,
+    IMongoRepository<Exercise> exerciseContext,
+    IMongoRepository<User> userContext
+) : IExerciseDefinitionRepository
 {
-    public class ExerciseDefinitionRepository : IExerciseDefinitionRepository
+    public async Task<ExerciseDefinition> CreateDefinition(string userId, ExerciseDefinition definition)
     {
-        private readonly IMongoRepository<ExerciseDefinition> _exerciseDefinitionContext;
-        private readonly IMongoRepository<Exercise> _exerciseContext;
-        private readonly IMongoRepository<User> _userContext;
+        await exerciseDefinitionContext.InsertOneAsync(definition);
 
-        public ExerciseDefinitionRepository(IMongoRepository<ExerciseDefinition> exerciseDefinitionContext, IMongoRepository<Exercise> exerciseContext, IMongoRepository<User> userContext)
-        {
-            _exerciseDefinitionContext = exerciseDefinitionContext;
-            _exerciseContext = exerciseContext;
-            _userContext = userContext;
-        }
+        // Update user's exercises with new exercise
+        User user = await userContext.FindByIdAsync(userId);
+        user.Exercises.Add(definition.Id);
+        await userContext.ReplaceOneAsync(user);
+        return definition;
+    }
 
-        public async Task<ExerciseDefinition> CreateDefinition(string userId, ExerciseDefinition definition)
-        {
-            await _exerciseDefinitionContext.InsertOneAsync(definition);
+    public async Task DeleteDefinition(ExerciseDefinition definition)
+    {
+        await exerciseDefinitionContext.DeleteByIdAsync(definition.Id);
 
-            // Update user's exercises with new exercise
-            User user = await _userContext.FindByIdAsync(userId);
-            user.Exercises.Add(definition.Id);
-            await _userContext.ReplaceOneAsync(user);
-            return definition;
-        }
+        // Remove definition from user exercises
+        User user = await userContext.FindByIdAsync(definition.User);
+        user.Exercises.Remove(definition.Id);
+        await userContext.ReplaceOneAsync(user);
 
-        public async Task DeleteDefinition(ExerciseDefinition definition)
-        {
-            await _exerciseDefinitionContext.DeleteByIdAsync(definition.Id);
+        // Remove exercises associated with definition
+        await exerciseContext.DeleteManyAsync(e => e.Definition == definition.Id);
+    }
 
-            // Remove definition from user exercises
-            User user = await _userContext.FindByIdAsync(definition.User);
-            user.Exercises.Remove(definition.Id);
-            await _userContext.ReplaceOneAsync(user);
+    public async Task<ExerciseDefinition> GetExerciseDefinition(string id)
+    {
+        return await exerciseDefinitionContext.FindByIdAsync(id);
+    }
 
-            // Remove exercises associated with definition
-            await _exerciseContext.DeleteManyAsync(e => e.Definition == definition.Id);
-        }
+    public Task<IEnumerable<ExerciseDefinition>> GetUserDefinitions(string userId)
+    {
+        return exerciseDefinitionContext.FilterByAsync(defintion => defintion.User == userId);
+    }
 
-        public async Task<ExerciseDefinition> GetExerciseDefinition(string id)
-        {
-            return await _exerciseDefinitionContext.FindByIdAsync(id);
-        }
+    public async Task<ExerciseDefinition> UpdateDefinition(ExerciseDefinition existingDefinition, ExerciseDefinition updatedDefinition)
+    {
+        existingDefinition.Title = updatedDefinition.Title;
+        existingDefinition.Unit = updatedDefinition.Unit;
+        existingDefinition.PrimaryMuscleGroup = updatedDefinition.PrimaryMuscleGroup;
 
-        public Task<IEnumerable<ExerciseDefinition>> GetUserDefinitions(string userId)
-        {
-            return _exerciseDefinitionContext.FilterByAsync(defintion => defintion.User == userId);
-        }
+        await exerciseDefinitionContext.ReplaceOneAsync(existingDefinition);
 
-        public async Task<ExerciseDefinition> UpdateDefinition(ExerciseDefinition existingDefinition, ExerciseDefinition updatedDefinition)
-        {
-            existingDefinition.Title = updatedDefinition.Title;
-            existingDefinition.Unit = updatedDefinition.Unit;
-            existingDefinition.PrimaryMuscleGroup = updatedDefinition.PrimaryMuscleGroup;
-
-            await _exerciseDefinitionContext.ReplaceOneAsync(existingDefinition);
-
-            return existingDefinition;
-        }
+        return existingDefinition;
     }
 }

@@ -1,12 +1,11 @@
 using MediatR;
 using RobicServer.Models;
 
-namespace RobicServer.Command
-{
-    public class UpdateExerciseDefinition : IRequest<ExerciseDefinition>
-    {
-        public ExerciseDefinition ExistingDefinition { get; set; }
+namespace RobicServer.Command;
 
-        public ExerciseDefinition UpdatedDefinition { get; set; }
-    }
+public class UpdateExerciseDefinition : IRequest<ExerciseDefinition>
+{
+    public ExerciseDefinition ExistingDefinition { get; set; }
+
+    public ExerciseDefinition UpdatedDefinition { get; set; }
 }

@@ -1,10 +1,9 @@
 using MediatR;
 using RobicServer.Models;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class DeleteUser : IRequest
 {
-    public class DeleteUser : IRequest
-    {
-        public User User { get; set; }
-    }
+    public User User { get; set; }
 }
