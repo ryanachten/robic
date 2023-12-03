@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace RobicServer.Models;
 
-public abstract class SetBase
+public abstract class BaseSet
 {
     // TODO: Both value and reps are currently nullable
     // in the database; consider if best approach later
@@ -15,20 +15,21 @@ public abstract class SetBase
 }
 
 [BsonIgnoreExtraElements]
-public class SetExercise : SetBase
+public class SetExercise : BaseSet
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public required string Id { get; set; }
 }
 
-public class Set : SetBase
+public class Set : BaseSet
 {
+    // TODO: is this ID actually used or needed?
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public required string Id { get; set; }
 
 
     [BsonElement("exercises")]
-    public SetExercise[] Exercises { get; set; } = [];
+    public SetExercise[]? Exercises { get; set; }
 }

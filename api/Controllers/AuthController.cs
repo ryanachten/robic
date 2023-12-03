@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RobicServer.Command;
 using RobicServer.Models;
-using RobicServer.Models.DTOs;
+using RobicServer.Models.DTOs.User;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,7 +18,7 @@ namespace RobicServer.Controllers;
 public class AuthController(IMapper mapper, IMediator mediator) : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<IActionResult> Register(UserForRegisterDto userDetails)
+    public async Task<IActionResult> Register(RegisterUserDto userDetails)
     {
         var userToRegister = mapper.Map<User>(userDetails);
         try
@@ -28,7 +28,7 @@ public class AuthController(IMapper mapper, IMediator mediator) : ControllerBase
                 User = userToRegister,
                 Password = userDetails.Password
             });
-            var userForReturn = mapper.Map<UserForDetailDto>(registeredUser);
+            var userForReturn = mapper.Map<UserDetailDto>(registeredUser);
 
             return CreatedAtRoute("GetUser", new { controller = "User", id = registeredUser.Id }, userForReturn);
         }
@@ -39,7 +39,7 @@ public class AuthController(IMapper mapper, IMediator mediator) : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(UserForLoginDto userLoginDetails)
+    public async Task<IActionResult> Login(LoginUserDto userLoginDetails)
     {
         var user = await mediator.Send(new LoginUser
         {
@@ -48,7 +48,7 @@ public class AuthController(IMapper mapper, IMediator mediator) : ControllerBase
         });
         if (user == null) return Unauthorized();
 
-        var userDetails = mapper.Map<UserForDetailDto>(user);
+        var userDetails = mapper.Map<UserDetailDto>(user);
 
         return Ok(new
         {

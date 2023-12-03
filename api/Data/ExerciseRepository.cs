@@ -59,9 +59,9 @@ public class ExerciseRepository(
         if (exercises == null || !exercises.Any()) return null;
 
         Exercise? exerciseWithHighestNetValue = null;
-        double highestAvgValue = 0;
-        int highestReps = 0;
-        int highestSets = 0;
+        var highestAvgValue = 0.0;
+        var highestReps = 0;
+        var highestSets = 0;
         var history = new List<PersonalBestHistory>();
 
         foreach (var e in exercises)
@@ -72,12 +72,12 @@ public class ExerciseRepository(
             if (e.Sets.Count > highestSets)
                 highestSets = e.Sets.Count;
 
-            double totalValue = 0;
+            var totalValue = 0.0;
             foreach (var s in e.Sets)
             {
                 if (s.Reps.HasValue && s.Reps > highestReps)
                 {
-                    highestReps = (int)s.Reps;
+                    highestReps = s.Reps ?? 0;
                 }
 
                 if (s.Value.HasValue)
@@ -85,7 +85,7 @@ public class ExerciseRepository(
                     totalValue += (int)s.Value;
                 }
             }
-            double avgValue = totalValue / e.Sets.Count;
+            var avgValue = totalValue / e.Sets.Count;
             if (avgValue > highestAvgValue)
                 highestAvgValue = avgValue;
 

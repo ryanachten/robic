@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RobicServer.Models.DTOs;
+namespace RobicServer.Models.DTOs.User;
 
-public class UserForRegisterDto
+public class RegisterUserDto
 {
     public required string FirstName { get; set; }
 

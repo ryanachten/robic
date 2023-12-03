@@ -2,8 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RobicServer.Command;
-using RobicServer.Models;
-using RobicServer.Models.DTOs;
+using RobicServer.Models.DTOs.ExerciseDefinition;
 using RobicServer.Query;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,12 +21,12 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
             UserId = UserId
         });
 
-        var definitions = mapper.Map<List<ExerciseDefinitionForListDto>>(response);
+        var definitions = mapper.Map<List<ListExerciseDefinitionDto>>(response);
 
         return Ok(definitions);
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet("{id:length(24)}", Name = "GetExerciseDefinition")]
     public async Task<IActionResult> GetExerciseDefinition(string id)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
@@ -42,7 +41,7 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateDefinition(ExerciseDefinition exerciseToCreate)
+    public async Task<IActionResult> CreateDefinition(UpdateExerciseDefinitionDto exerciseToCreate)
     {
         if (exerciseToCreate.User != UserId) return Unauthorized();
 
@@ -56,11 +55,11 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
     }
 
     [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(ExerciseDefinition updatedExercise)
+    public async Task<IActionResult> Update(UpdateExerciseDefinitionDto updatedExercise, [FromRoute] string id)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
-            DefinitionId = updatedExercise.Id
+            DefinitionId = id
         });
 
         if (definition == null) return NotFound();

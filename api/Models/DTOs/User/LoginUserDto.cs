@@ -1,6 +1,6 @@
-namespace RobicServer.Models.DTOs;
+namespace RobicServer.Models.DTOs.User;
 
-public class UserForLoginDto
+public class LoginUserDto
 {
     public required string Email { get; set; }
 

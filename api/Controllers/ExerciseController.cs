@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RobicServer.Command;
-using RobicServer.Models;
+using RobicServer.Models.DTOs.Exercise;
 using RobicServer.Query;
 using System.Threading.Tasks;
 
@@ -45,7 +45,7 @@ public class ExerciseController(IMediator mediator) : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateExercise(Exercise exercise)
+    public async Task<IActionResult> CreateExercise(UpdateExerciseDto exercise)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
@@ -64,7 +64,7 @@ public class ExerciseController(IMediator mediator) : BaseController
     }
 
     [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> UpdateExercise(string id, Exercise updatedExercise)
+    public async Task<IActionResult> UpdateExercise(string id, UpdateExerciseDto updatedExercise)
     {
         var isUserExercise = await IsUsersDefinition(updatedExercise.Definition);
         if (!isUserExercise) return Unauthorized();

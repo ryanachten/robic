@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RobicServer.Command;
-using RobicServer.Models.DTOs;
+using RobicServer.Models.DTOs.User;
 using RobicServer.Query;
 using System.Threading.Tasks;
 
@@ -22,7 +22,7 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
 
         if (user == null) return NotFound();
 
-        var userForReturn = mapper.Map<UserForDetailDto>(user);
+        var userForReturn = mapper.Map<UserDetailDto>(user);
 
         return Ok(userForReturn);
     }
