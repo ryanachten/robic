@@ -1,23 +1,16 @@
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Query
+namespace RobicServer.Query;
+
+public class GetExercisesByDefinitionHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetExercisesByDefinition, IEnumerable<Exercise>>
 {
-    public class GetExercisesByDefinitionHandler : IRequestHandler<GetExercisesByDefinition, IEnumerable<Exercise>>
+    public Task<IEnumerable<Exercise>> Handle(GetExercisesByDefinition request, CancellationToken cancellationToken)
     {
-        private readonly IExerciseRepository _exerciseRepository;
-
-        public GetExercisesByDefinitionHandler(IUnitOfWork unitOfWork)
-        {
-            _exerciseRepository = unitOfWork.ExerciseRepo;
-        }
-        public Task<IEnumerable<Exercise>> Handle(GetExercisesByDefinition request, CancellationToken cancellationToken)
-        {
-            return _exerciseRepository.GetDefinitionExercises(request.DefinitionId);
-        }
+        return unitOfWork.ExerciseRepo.GetDefinitionExercises(request.DefinitionId);
     }
 }

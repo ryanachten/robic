@@ -1,24 +1,17 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class CreateExerciseDefinitionHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateExerciseDefinition, ExerciseDefinition>
 {
-    public class CreateExerciseDefinitionHandler : IRequestHandler<CreateExerciseDefinition, ExerciseDefinition>
+    public async Task<ExerciseDefinition> Handle(CreateExerciseDefinition request, CancellationToken cancellationToken)
     {
-        private readonly IExerciseDefinitionRepository _definitionRepo;
-
-        public CreateExerciseDefinitionHandler(IUnitOfWork unitOfWork)
-        {
-            _definitionRepo = unitOfWork.ExerciseDefinitionRepo;
-        }
-
-        public async Task<ExerciseDefinition> Handle(CreateExerciseDefinition request, CancellationToken cancellationToken)
-        {
-           return await _definitionRepo.CreateDefinition(request.UserId, request.Definition);
-        }
+        var definition = mapper.Map<ExerciseDefinition>(request.Definition);
+        return await unitOfWork.ExerciseDefinitionRepo.CreateDefinition(request.UserId, definition);
     }
 }

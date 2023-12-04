@@ -1,10 +1,9 @@
 using MediatR;
 using RobicServer.Models;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class DeleteExerciseDefinition : IRequest
 {
-    public class DeleteExerciseDefinition : IRequest
-    {
-        public ExerciseDefinition Definition { get; set; }
-    }
+    public required ExerciseDefinition Definition { get; set; }
 }

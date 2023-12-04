@@ -1,22 +1,15 @@
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Query
+namespace RobicServer.Query;
+
+public class GetUserByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetUserById, User>
 {
-    public class GetUserByIdHandler : IRequestHandler<GetUserById, User>
+    public Task<User> Handle(GetUserById request, CancellationToken cancellationToken)
     {
-        private readonly IUserRepository _userRepo;
-
-        public GetUserByIdHandler(IUnitOfWork unitOfWork)
-        {
-            _userRepo = unitOfWork.UserRepo;
-        }
-        public Task<User> Handle(GetUserById request, CancellationToken cancellationToken)
-        {
-            return _userRepo.GetUser(request.UserId);
-        }
+        return unitOfWork.UserRepo.GetUser(request.UserId);
     }
 }

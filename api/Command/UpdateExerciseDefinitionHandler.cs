@@ -1,23 +1,17 @@
-using System.Threading;
-using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class UpdateExerciseDefinitionHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateExerciseDefinition, ExerciseDefinition>
 {
-    public class UpdateExerciseDefinitionHandler : IRequestHandler<UpdateExerciseDefinition, ExerciseDefinition>
+    public async Task<ExerciseDefinition> Handle(UpdateExerciseDefinition request, CancellationToken cancellationToken)
     {
-        private readonly IExerciseDefinitionRepository _definitionRepo;
-
-        public UpdateExerciseDefinitionHandler(IUnitOfWork unitOfWork)
-        {
-            _definitionRepo = unitOfWork.ExerciseDefinitionRepo;
-        }
-
-        public async Task<ExerciseDefinition> Handle(UpdateExerciseDefinition request, CancellationToken cancellationToken)
-        {
-            return await _definitionRepo.UpdateDefinition(request.ExistingDefinition, request.UpdatedDefinition);
-        }
+        var definition = mapper.Map<ExerciseDefinition>(request.UpdatedDefinition);
+        return await unitOfWork.ExerciseDefinitionRepo.UpdateDefinition(request.ExistingDefinition, definition);
     }
 }

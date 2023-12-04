@@ -1,36 +1,22 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using RobicServer.Query;
+using System.Threading.Tasks;
 
-namespace RobicServer.Controllers
+namespace RobicServer.Controllers;
+
+public class AnalyticsController(IMediator mediator) : BaseController
 {
-
-    [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AnalyticsController : ControllerBase
+    [HttpGet]
+    public async Task<IActionResult> Get()
     {
-        private readonly IMediator _mediator;
+        if (UserId == null) return Unauthorized();
 
-        public AnalyticsController(
-            IMediator mediator
-        )
+        var analytics = await mediator.Send(new GetAnalytics
         {
-            _mediator = mediator;
-        }
+            UserId = UserId
+        });
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var analytics = await _mediator.Send(new GetAnalytics
-            {
-                UserId = userId
-            });
-            return Ok(analytics);
-        }
+        return Ok(analytics);
     }
 }

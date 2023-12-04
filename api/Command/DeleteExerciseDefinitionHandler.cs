@@ -1,20 +1,14 @@
 using MediatR;
 using RobicServer.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class DeleteExerciseDefinitionHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteExerciseDefinition>
 {
-    public class DeleteExerciseDefinitionHandler : RequestHandler<DeleteExerciseDefinition>
+    public async Task Handle(DeleteExerciseDefinition request, CancellationToken cancellationToken)
     {
-        private readonly IExerciseDefinitionRepository _definitionRepo;
-
-        public DeleteExerciseDefinitionHandler(IUnitOfWork unitOfWork)
-        {
-            _definitionRepo = unitOfWork.ExerciseDefinitionRepo;
-        }
-
-        protected override async void Handle(DeleteExerciseDefinition request)
-        {
-            await _definitionRepo.DeleteDefinition(request.Definition);
-        }
+        await unitOfWork.ExerciseDefinitionRepo.DeleteDefinition(request.Definition);
     }
 }

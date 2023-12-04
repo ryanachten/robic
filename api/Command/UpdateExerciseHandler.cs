@@ -1,22 +1,17 @@
-using System.Threading;
-using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class UpdateExerciseHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateExercise, Exercise>
 {
-    public class UpdateExerciseHandler : IRequestHandler<UpdateExercise, Exercise>
+    public Task<Exercise> Handle(UpdateExercise request, CancellationToken cancellationToken)
     {
-        private readonly IExerciseRepository _exerciseRepo;
-
-        public UpdateExerciseHandler(IUnitOfWork unitOfWork)
-        {
-            _exerciseRepo = unitOfWork.ExerciseRepo;
-        }
-        public Task<Exercise> Handle(UpdateExercise request, CancellationToken cancellationToken)
-        {
-            return _exerciseRepo.UpdateExercise(request.Exercise);
-        }
+        var exercise = mapper.Map<Exercise>(request.Exercise);
+        return unitOfWork.ExerciseRepo.UpdateExercise(exercise);
     }
 }

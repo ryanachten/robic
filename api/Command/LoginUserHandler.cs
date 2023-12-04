@@ -1,22 +1,15 @@
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using RobicServer.Data;
 using RobicServer.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class LoginUserHandler(IUnitOfWork unitOfWork) : IRequestHandler<LoginUser, User>
 {
-    public class LoginUserHandler : IRequestHandler<LoginUser, User>
+    public Task<User> Handle(LoginUser request, CancellationToken cancellationToken)
     {
-        private readonly IAuthRepository _authRepo;
-
-        public LoginUserHandler(IUnitOfWork unitOfWork)
-        {
-            _authRepo = unitOfWork.AuthRepo;
-        }
-        public Task<User> Handle(LoginUser request, CancellationToken cancellationToken)
-        {
-            return _authRepo.Login(request.Email.ToLower(), request.Password);
-        }
+        return unitOfWork.AuthRepo.Login(request.Email.ToLower(), request.Password);
     }
 }

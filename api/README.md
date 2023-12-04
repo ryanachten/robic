@@ -32,9 +32,8 @@ dotnet run
 
 For simplicity's sake, we keep this in `startup.sh` (omitted from Git)
 
-**Note:** when deploying to a remote environment, these variables will need to be set (i.e. in our case we use Heroku, so we need to set them via https://devcenter.heroku.com/articles/config-vars#managing-config-vars )
-
 ### Developing with Docker
+
 ```bash
 # from api directory
 cd /api
@@ -43,7 +42,7 @@ cd /api
 docker build -t ryanachten/robic -f .\Dockerfile .
 
 # run Docker container available on http://localhost:8080/
-docker run --rm -e TokenKey="token key" -e DatabaseName="database name" -e ConnectionString="MongoDB connection string" -p 8080:80 ryanachten/robic
+docker run -it -e TokenKey="token key" -e DatabaseName="database name" -e ConnectionString="MongoDB connection string" -p 5000:80 ryanachten/robic
 
 # push changes to Docker Hub if things are looking good (requires Docker Hub login)
 docker login

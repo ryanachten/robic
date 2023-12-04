@@ -1,10 +1,10 @@
 using MediatR;
 using RobicServer.Models;
+using RobicServer.Models.DTOs.Exercise;
 
-namespace RobicServer.Command
+namespace RobicServer.Command;
+
+public class UpdateExercise : IRequest<Exercise>
 {
-    public class UpdateExercise : IRequest<Exercise>
-    {
-        public Exercise Exercise { get; set; }
-    }
+    public required UpdateExerciseDto Exercise { get; set; }
 }

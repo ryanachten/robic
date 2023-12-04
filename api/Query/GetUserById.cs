@@ -1,10 +1,9 @@
 using MediatR;
 using RobicServer.Models;
 
-namespace RobicServer.Query
+namespace RobicServer.Query;
+
+public class GetUserById : IRequest<User>
 {
-    public class GetUserById : IRequest<User>
-    {
-        public string UserId { get; set; }
-    }
+    public required string UserId { get; set; }
 }
