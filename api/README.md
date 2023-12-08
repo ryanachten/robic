@@ -17,16 +17,16 @@ Robic's API is divided into three layers:
 Robic uses a number of environment variables to prevent sensitive environment variables being exposed to a public codebase such as this. To setup your local environment for development, you will need to set the following environment variables:
 
 - `TokenKey` - secret token used for password hashing
-- `DatabaseName` - MongoDB database name
-- `ConnectionString` - MongoDB database connection string
+- `MongoDatabaseName` - MongoDB database name
+- `MongoConnectionString` - MongoDB database connection string
 
 This can be prefixed prior to calling `dotnet watch run`.
 i.e.
 
 ```
 TokenKey="123abc" \
-DatabaseName="robic_database" \
-ConnectionString="mongodb://User:host.com:port/robic_database?retryWrites=false" \
+MongoDatabaseName="robic_database" \
+MongoConnectionString="mongodb://User:host.com:port/robic_database?retryWrites=false" \
 dotnet run
 ```
 
@@ -42,7 +42,7 @@ cd /api
 docker build -t ryanachten/robic -f .\Dockerfile .
 
 # run Docker container available on http://localhost:8080/
-docker run -it -e TokenKey="token key" -e DatabaseName="database name" -e ConnectionString="MongoDB connection string" -p 5000:80 ryanachten/robic
+docker run -it -e TokenKey="token key" -e MongoDatabaseName="database name" -e MongoConnectionString="MongoDB connection string" -p 5000:80 ryanachten/robic
 
 # push changes to Docker Hub if things are looking good (requires Docker Hub login)
 docker login

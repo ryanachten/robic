@@ -16,7 +16,7 @@ public class MongoRepository<TDocument> : IMongoRepository<TDocument>
 
     public MongoRepository()
     {
-        var database = new MongoClient(Environment.GetEnvironmentVariable("ConnectionString")).GetDatabase(Environment.GetEnvironmentVariable("DatabaseName"));
+        var database = new MongoClient(Environment.GetEnvironmentVariable("MongoConnectionString")).GetDatabase(Environment.GetEnvironmentVariable("MongoDatabaseName"));
         _collection = database.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
     }
 

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Robic.Service.Command;
 
-public class LoginUserHandler(IUnitOfWork unitOfWork) : IRequestHandler<LoginUser, User>
+public class LoginUserHandler(IUnitOfWork unitOfWork) : IRequestHandler<LoginUser, User?>
 {
-    public Task<User> Handle(LoginUser request, CancellationToken cancellationToken)
+    public Task<User?> Handle(LoginUser request, CancellationToken cancellationToken)
     {
         return unitOfWork.AuthRepo.Login(request.Email.ToLower(), request.Password);
     }
