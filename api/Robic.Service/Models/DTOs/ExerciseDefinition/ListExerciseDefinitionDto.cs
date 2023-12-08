@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ExerciseModel = RobicServer.Models.Exercise;
+using ExerciseModel = Robic.Service.Models.Exercise;
 
-namespace RobicServer.Models.DTOs.ExerciseDefinition;
+namespace Robic.Service.Models.DTOs.ExerciseDefinition;
 
 public class ListExerciseDefinitionDto
 {

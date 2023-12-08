@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RobicServer.Query;
+using Robic.Service.Query;
 using System.Threading.Tasks;
 
-namespace RobicServer.Controllers;
+namespace Robic.Service.Controllers;
 
 public class AnalyticsController(IMediator mediator) : BaseController
 {

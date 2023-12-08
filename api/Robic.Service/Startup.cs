@@ -6,12 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using RobicServer.Data;
+using Robic.Service.Data;
 using System;
 using System.Reflection;
 using System.Text;
 
-namespace RobicServer;
+namespace Robic.Service;
 
 public class Startup(IConfiguration configuration)
 {

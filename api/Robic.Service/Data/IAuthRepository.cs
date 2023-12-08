@@ -1,7 +1,7 @@
-using RobicServer.Models;
+using Robic.Service.Models;
 using System.Threading.Tasks;
 
-namespace RobicServer.Data;
+namespace Robic.Service.Data;
 
 public interface IAuthRepository
 {

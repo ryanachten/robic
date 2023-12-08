@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RobicServer.Models.DTOs.User;
+namespace Robic.Service.Models.DTOs.User;
 
 public class RegisterUserDto
 {

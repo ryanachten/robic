@@ -1,11 +1,11 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using RobicServer.Helpers;
+using Robic.Service.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace RobicServer.Models;
+namespace Robic.Service.Models;
 
 [BsonCollection("exercisedefinitions")]
 [BsonIgnoreExtraElements]

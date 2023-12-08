@@ -1,7 +1,7 @@
-using RobicServer.Models;
+using Robic.Service.Models;
 using System.Threading.Tasks;
 
-namespace RobicServer.Data;
+namespace Robic.Service.Data;
 
 public class AuthRepository(IMongoRepository<User> userRepo) : IAuthRepository
 {

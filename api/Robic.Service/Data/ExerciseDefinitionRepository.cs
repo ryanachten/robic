@@ -1,8 +1,8 @@
-using RobicServer.Models;
+using Robic.Service.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RobicServer.Data;
+namespace Robic.Service.Data;
 
 public class ExerciseDefinitionRepository(
     IMongoRepository<ExerciseDefinition> exerciseDefinitionContext,

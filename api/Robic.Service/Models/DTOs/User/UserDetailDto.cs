@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RobicServer.Models.DTOs.User;
+namespace Robic.Service.Models.DTOs.User;
 
 public class UserDetailDto
 {

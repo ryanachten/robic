@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RobicServer.Models.DTOs.Exercise;
+namespace Robic.Service.Models.DTOs.Exercise;
 
 public class UpdateSetDto : BaseSet
 {

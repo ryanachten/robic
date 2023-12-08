@@ -1,4 +1,4 @@
-﻿namespace RobicServer.Models.DTOs.ExerciseDefinition;
+﻿namespace Robic.Service.Models.DTOs.ExerciseDefinition;
 
 public class UpdateExerciseDefinitionDto
 {

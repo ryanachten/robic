@@ -1,11 +1,11 @@
-using RobicServer.Helpers;
-using RobicServer.Models;
+using Robic.Service.Helpers;
+using Robic.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RobicServer.Data;
+namespace Robic.Service.Data;
 
 public class ExerciseRepository(
     IMongoRepository<Exercise> exerciseContext,

@@ -1,6 +1,6 @@
 using System;
 
-namespace RobicServer.Helpers;
+namespace Robic.Service.Helpers;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public class BsonCollectionAttribute : Attribute

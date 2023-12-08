@@ -1,4 +1,4 @@
-namespace RobicServer.Data;
+namespace Robic.Service.Data;
 
 public interface IUnitOfWork
 {

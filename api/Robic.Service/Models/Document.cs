@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace RobicServer.Models;
+namespace Robic.Service.Models;
 
 public interface IDocument
 {

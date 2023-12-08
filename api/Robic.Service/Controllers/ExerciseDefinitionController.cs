@@ -1,13 +1,13 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RobicServer.Command;
-using RobicServer.Models.DTOs.ExerciseDefinition;
-using RobicServer.Query;
+using Robic.Service.Command;
+using Robic.Service.Models.DTOs.ExerciseDefinition;
+using Robic.Service.Query;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RobicServer.Controllers;
+namespace Robic.Service.Controllers;
 
 public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : BaseController
 {

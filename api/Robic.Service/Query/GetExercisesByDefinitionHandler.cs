@@ -1,11 +1,11 @@
 using MediatR;
-using RobicServer.Data;
-using RobicServer.Models;
+using Robic.Service.Data;
+using Robic.Service.Models;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RobicServer.Query;
+namespace Robic.Service.Query;
 
 public class GetExercisesByDefinitionHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetExercisesByDefinition, IEnumerable<Exercise>>
 {

@@ -1,11 +1,11 @@
 using MediatR;
-using RobicServer.Data;
-using RobicServer.Models;
+using Robic.Service.Data;
+using Robic.Service.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RobicServer.Command;
+namespace Robic.Service.Command;
 
 public class RegisterUserHandler(IUnitOfWork unitOfWork) : IRequestHandler<RegisterUser, User>
 {

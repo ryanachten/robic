@@ -1,7 +1,7 @@
 using MediatR;
-using RobicServer.Models;
+using Robic.Service.Models;
 
-namespace RobicServer.Command;
+namespace Robic.Service.Command;
 
 public class DeleteExercise : IRequest
 {

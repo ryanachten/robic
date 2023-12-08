@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using RobicServer.Models;
-using RobicServer.Models.DTOs.ExerciseDefinition;
+using Robic.Service.Models;
+using Robic.Service.Models.DTOs.ExerciseDefinition;
 
-namespace RobicServer.Command;
+namespace Robic.Service.Command;
 
 public class CreateExerciseDefinition : IRequest<ExerciseDefinition>
 {

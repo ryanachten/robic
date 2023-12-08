@@ -1,10 +1,10 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using RobicServer.Helpers;
+using Robic.Service.Helpers;
 using System;
 using System.Collections.Generic;
 
-namespace RobicServer.Models;
+namespace Robic.Service.Models;
 
 [BsonCollection("exercises")]
 [BsonIgnoreExtraElements]

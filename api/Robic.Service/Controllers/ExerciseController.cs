@@ -1,11 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RobicServer.Command;
-using RobicServer.Models.DTOs.Exercise;
-using RobicServer.Query;
+using Robic.Service.Command;
+using Robic.Service.Models.DTOs.Exercise;
+using Robic.Service.Query;
 using System.Threading.Tasks;
 
-namespace RobicServer.Controllers;
+namespace Robic.Service.Controllers;
 
 public class ExerciseController(IMediator mediator) : BaseController
 {

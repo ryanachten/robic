@@ -1,4 +1,4 @@
-namespace RobicServer.Models.DTOs.User;
+namespace Robic.Service.Models.DTOs.User;
 
 public class LoginUserDto
 {

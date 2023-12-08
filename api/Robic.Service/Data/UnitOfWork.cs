@@ -1,6 +1,6 @@
-using RobicServer.Models;
+using Robic.Service.Models;
 
-namespace RobicServer.Data;
+namespace Robic.Service.Data;
 
 public class UnitOfWork(
     IMongoRepository<User> userContext,

@@ -1,6 +1,6 @@
-using RobicServer.Models;
+using Robic.Service.Models;
 
-namespace RobicServer.Helpers;
+namespace Robic.Service.Helpers;
 
 public static class ExerciseUtilities
 {

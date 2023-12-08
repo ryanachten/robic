@@ -1,12 +1,12 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RobicServer.Command;
-using RobicServer.Models.DTOs.User;
-using RobicServer.Query;
+using Robic.Service.Command;
+using Robic.Service.Models.DTOs.User;
+using Robic.Service.Query;
 using System.Threading.Tasks;
 
-namespace RobicServer.Controllers;
+namespace Robic.Service.Controllers;
 
 public class UserController(IMapper mapper, IMediator mediator) : BaseController
 {

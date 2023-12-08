@@ -1,13 +1,13 @@
 using MongoDB.Driver;
-using RobicServer.Helpers;
-using RobicServer.Models;
+using Robic.Service.Helpers;
+using Robic.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace RobicServer.Data;
+namespace Robic.Service.Data;
 
 public class MongoRepository<TDocument> : IMongoRepository<TDocument>
     where TDocument : IDocument

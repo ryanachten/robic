@@ -1,10 +1,10 @@
 using AutoMapper;
-using RobicServer.Models;
-using RobicServer.Models.DTOs.Exercise;
-using RobicServer.Models.DTOs.ExerciseDefinition;
-using RobicServer.Models.DTOs.User;
+using Robic.Service.Models;
+using Robic.Service.Models.DTOs.Exercise;
+using Robic.Service.Models.DTOs.ExerciseDefinition;
+using Robic.Service.Models.DTOs.User;
 
-namespace RobicServer.Helpers;
+namespace Robic.Service.Helpers;
 
 public class AutoMapperProfiles : Profile
 {

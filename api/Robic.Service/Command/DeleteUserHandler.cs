@@ -1,9 +1,9 @@
 using MediatR;
-using RobicServer.Data;
+using Robic.Service.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RobicServer.Command;
+namespace Robic.Service.Command;
 
 public class DeleteUserHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteUser>
 {

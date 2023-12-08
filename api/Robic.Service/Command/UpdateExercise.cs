@@ -1,8 +1,8 @@
 using MediatR;
-using RobicServer.Models;
-using RobicServer.Models.DTOs.Exercise;
+using Robic.Service.Models;
+using Robic.Service.Models.DTOs.Exercise;
 
-namespace RobicServer.Command;
+namespace Robic.Service.Command;
 
 public class UpdateExercise : IRequest<Exercise>
 {

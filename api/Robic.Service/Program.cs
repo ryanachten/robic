@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System;
 
-namespace RobicServer;
+namespace Robic.Service;
 
 public class Program
 {
