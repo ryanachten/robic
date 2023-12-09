@@ -8,8 +8,6 @@ public class UnitOfWork(
     IMongoRepository<ExerciseDefinition> exerciseDefinitionContext
 ) : IUnitOfWork
 {
-    public IAuthRepository AuthRepo => new AuthRepository(userContext);
-
     public IExerciseRepository ExerciseRepo => new ExerciseRepository(exerciseContext, exerciseDefinitionContext);
 
     public IExerciseDefinitionRepository ExerciseDefinitionRepo => new ExerciseDefinitionRepository(exerciseDefinitionContext, exerciseContext, userContext);

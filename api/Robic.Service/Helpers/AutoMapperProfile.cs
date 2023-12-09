@@ -7,11 +7,12 @@ using RepositoryModel = Robic.Repository.Models;
 
 namespace Robic.Service.Helpers;
 
-public class AutoMapperProfiles : Profile
+public class AutoMapperProfile : Profile
 {
-    public AutoMapperProfiles()
+    public AutoMapperProfile()
     {
         CreateMap<RepositoryModel.User, User>();
+        CreateMap<RepositoryModel.User, UserDetailDto>();
         CreateMap<RegisterUserDto, User>();
         CreateMap<User, UserDetailDto>();
         CreateMap<ExerciseDefinition, ListExerciseDefinitionDto>();
@@ -22,5 +23,12 @@ public class AutoMapperProfiles : Profile
                 opt => opt.MapFrom(src => src.Sets)
             );
         CreateMap<UpdateSetDto, Set>();
+    }
+
+    public static IMapper CreateMapper()
+    {
+        return new MapperConfiguration(
+            x => x.AddProfile(new AutoMapperProfile())
+        ).CreateMapper();
     }
 }

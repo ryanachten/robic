@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Protocols.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
 using Robic.Service.Data;
+using Robic.Service.Helpers;
 using Robic.Service.StartupExtensions;
 using System;
 using System.Reflection;
@@ -25,15 +26,17 @@ public class Startup(IConfiguration configuration)
         var connectionString = Environment.GetEnvironmentVariable("MySQLConnectionString") ?? throw new InvalidConfigurationException("Missing connection string");
 
         services.AddCors();
-        services.AddAutoMapper(typeof(AuthRepository).Assembly);
-
         services.AddMySqlDataSource(connectionString);
+
+        services.AddSingleton(AutoMapperProfile.CreateMapper());
         services.AddRepositories();
+
         // TODO: Remove MongoDB repositories
         services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
         services.AddScoped<IExerciseRepository, ExerciseRepository>();
         services.AddScoped<IExerciseDefinitionRepository, ExerciseDefinitionRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
