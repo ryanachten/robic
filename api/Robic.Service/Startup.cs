@@ -5,8 +5,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Protocols.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MySqlConnector;
 using Robic.Service.Data;
+using Robic.Service.StartupExtensions;
 using System;
 using System.Reflection;
 using System.Text;
@@ -18,9 +21,15 @@ public class Startup(IConfiguration configuration)
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        var tokenKey = Environment.GetEnvironmentVariable("TokenKey") ?? throw new InvalidConfigurationException("Missing token key");
+        var connectionString = Environment.GetEnvironmentVariable("MySQLConnectionString") ?? throw new InvalidConfigurationException("Missing connection string");
+
         services.AddCors();
         services.AddAutoMapper(typeof(AuthRepository).Assembly);
 
+        services.AddMySqlDataSource(connectionString);
+        services.AddRepositories();
+        // TODO: Remove MongoDB repositories
         services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
         services.AddScoped<IExerciseRepository, ExerciseRepository>();
         services.AddScoped<IExerciseDefinitionRepository, ExerciseDefinitionRepository>();
@@ -31,8 +40,7 @@ public class Startup(IConfiguration configuration)
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                        .GetBytes(Environment.GetEnvironmentVariable("TokenKey"))),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenKey)),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };

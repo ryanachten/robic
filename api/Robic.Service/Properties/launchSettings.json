@@ -6,7 +6,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TokenKey": "token here",
         "MongoDatabaseName": "db here",
-        "MongoConnectionString": "connection string here"
+        "MongoConnectionString": "connection string here",
+        "MySQLConnectionString": "connection string here"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }

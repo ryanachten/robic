@@ -19,6 +19,8 @@ public class User : Document
     [BsonElement("email")]
     public required string Email { get; set; }
 
+    // TODO: remove password hash and salt from service model
+
     [BsonElement("passwordHash")]
     public byte[] PasswordHash { get; set; } = [];
 

@@ -1,15 +1,35 @@
+using AutoMapper;
 using MediatR;
-using Robic.Service.Data;
+using Robic.Repository;
 using Robic.Service.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Robic.Service.Command;
 
-public class LoginUserHandler(IUnitOfWork unitOfWork) : IRequestHandler<LoginUser, User?>
+public class LoginUserHandler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<LoginUser, User?>
 {
-    public Task<User?> Handle(LoginUser request, CancellationToken cancellationToken)
+    public async Task<User?> Handle(LoginUser request, CancellationToken cancellationToken)
     {
-        return unitOfWork.AuthRepo.Login(request.Email.ToLower(), request.Password);
+        var user = await userRepository.GetUserByEmail(request.Email.ToLower());
+        if (user == null) return null;
+
+        if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            return null;
+
+        return mapper.Map<User>(user);
+    }
+
+    private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+    {
+        using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+
+        var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        for (int i = 0; i < computedHash.Length; i++)
+        {
+            if (passwordHash[i] != computedHash[i]) return false;
+        }
+
+        return true;
     }
 }

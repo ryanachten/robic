@@ -10,7 +10,7 @@ namespace Robic.Service.Controllers;
 
 public class UserController(IMapper mapper, IMediator mediator) : BaseController
 {
-    [HttpGet("{id:length(24)}", Name = "GetUser")]
+    [HttpGet("{id}", Name = "GetUser")]
     public async Task<IActionResult> Get(string id)
     {
         if (UserId != id) return Unauthorized();
