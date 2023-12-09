@@ -7,4 +7,6 @@ public interface IUserRepository
 {
     Task CreateUser(RegisterUserDto registerUser);
     Task<User?> GetUserByEmail(string email);
+    Task<User?> GetUserById(string userId);
+    Task DeleteUserById(string userId);
 }

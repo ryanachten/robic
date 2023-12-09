@@ -27,7 +27,7 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
         return Ok(userForReturn);
     }
 
-    [HttpDelete("{id:length(24)}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
         if (UserId != id) return Unauthorized();
@@ -38,9 +38,9 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
         });
         if (user == null) return NotFound();
 
-        await mediator.Send(new DeleteUser
+        await mediator.Send(new DeleteUserById
         {
-            User = user
+            UserId = id
         });
 
         return NoContent();

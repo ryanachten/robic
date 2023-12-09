@@ -14,7 +14,5 @@ public class UnitOfWork(
 
     public IExerciseDefinitionRepository ExerciseDefinitionRepo => new ExerciseDefinitionRepository(exerciseDefinitionContext, exerciseContext, userContext);
 
-    public IUserRepository UserRepo => new UserRepository(userContext, exerciseContext, exerciseDefinitionContext);
-
     public IAnalyticsRepository AnalyticsRepo => new AnalyticsRepository(exerciseContext, exerciseDefinitionContext);
 }

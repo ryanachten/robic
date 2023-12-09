@@ -34,4 +34,35 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
 
         return users.FirstOrDefault();
     }
+
+    public async Task<User?> GetUserById(string userId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+        var sql = @"
+            SELECT Id, FirstName, LastName, Email, PasswordHash, PasswordSalt 
+            FROM Users 
+            WHERE Id = @userId;
+        ";
+
+        var users = await connection.QueryAsync<User>(sql, new
+        {
+            userId,
+        });
+
+        return users.FirstOrDefault();
+    }
+
+    public async Task DeleteUserById(string userId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+        var sql = @"
+            DELETE FROM Users 
+            WHERE Id = @userId;
+        ";
+
+        await connection.ExecuteAsync(sql, new
+        {
+            userId,
+        });
+    }
 }
