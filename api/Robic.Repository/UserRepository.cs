@@ -10,23 +10,23 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
     public async Task CreateUser(RegisterUserDto registerUser)
     {
         using var connection = await database.OpenConnectionAsync();
+
         var sql = @"
             INSERT INTO Users (FirstName, LastName, Email, PasswordHash, PasswordSalt)
             VALUES (@FirstName, @LastName, @Email, @PasswordHash, @PasswordSalt);
         ";
-
         await connection.ExecuteAsync(sql, registerUser);
     }
 
     public async Task<User?> GetUserByEmail(string email)
     {
         using var connection = await database.OpenConnectionAsync();
+
         var sql = @"
             SELECT Id, FirstName, LastName, Email, PasswordHash, PasswordSalt 
             FROM Users 
             WHERE Email = @email;
         ";
-
         var users = await connection.QueryAsync<User>(sql, new
         {
             email,
@@ -38,12 +38,12 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
     public async Task<User?> GetUserById(string userId)
     {
         using var connection = await database.OpenConnectionAsync();
+
         var sql = @"
             SELECT Id, FirstName, LastName, Email, PasswordHash, PasswordSalt 
             FROM Users 
             WHERE Id = @userId;
         ";
-
         var users = await connection.QueryAsync<User>(sql, new
         {
             userId,
@@ -55,11 +55,11 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
     public async Task DeleteUserById(string userId)
     {
         using var connection = await database.OpenConnectionAsync();
+
         var sql = @"
             DELETE FROM Users 
             WHERE Id = @userId;
         ";
-
         await connection.ExecuteAsync(sql, new
         {
             userId,

@@ -13,9 +13,14 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<RepositoryModel.User, User>();
         CreateMap<RepositoryModel.User, UserDetailDto>();
+        CreateMap<RepositoryModel.ExerciseDefinition, ExerciseDefinition>()
+            .ForMember(
+                dest => dest.User,
+                opt => opt.MapFrom(src => src.UserId)
+            );
+        CreateMap<RepositoryModel.ExerciseDefinition, ListExerciseDefinitionDto>();
         CreateMap<RegisterUserDto, User>();
         CreateMap<User, UserDetailDto>();
-        CreateMap<ExerciseDefinition, ListExerciseDefinitionDto>();
         CreateMap<UpdateExerciseDefinitionDto, ExerciseDefinition>();
         CreateMap<UpdateExerciseDto, Exercise>()
             .ForMember(

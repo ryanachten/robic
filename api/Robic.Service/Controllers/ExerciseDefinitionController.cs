@@ -1,32 +1,26 @@
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Robic.Service.Command;
 using Robic.Service.Models.DTOs.ExerciseDefinition;
 using Robic.Service.Query;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Robic.Service.Controllers;
 
-public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : BaseController
+public class ExerciseDefinitionController(IMediator mediator) : BaseController
 {
     [HttpGet]
-    public async Task<IActionResult> GetDefinition()
+    public async Task<IActionResult> GetDefinitions()
     {
-        if (UserId == null) return Unauthorized();
-
         var response = await mediator.Send(new GetExerciseDefinitions
         {
-            UserId = UserId
+            UserId = GetUserId()
         });
 
-        var definitions = mapper.Map<List<ListExerciseDefinitionDto>>(response);
-
-        return Ok(definitions);
+        return Ok(response);
     }
 
-    [HttpGet("{id:length(24)}", Name = "GetExerciseDefinition")]
+    [HttpGet("{id}", Name = "GetExerciseDefinition")]
     public async Task<IActionResult> GetExerciseDefinition(string id)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
@@ -43,11 +37,18 @@ public class ExerciseDefinitionController(IMapper mapper, IMediator mediator) : 
     [HttpPost]
     public async Task<IActionResult> CreateDefinition(UpdateExerciseDefinitionDto exerciseToCreate)
     {
-        if (exerciseToCreate.User != UserId) return Unauthorized();
+        if (exerciseToCreate.User != GetUserId()) return Unauthorized();
+
+        var existingDefinition = await mediator.Send(new GetExerciseDefinitionByTitle()
+        {
+            Title = exerciseToCreate.Title,
+            UserId = exerciseToCreate.User
+        });
+        if (existingDefinition != null) return BadRequest($"Exercise definition with title {exerciseToCreate.Title} already exists");
 
         var definition = await mediator.Send(new CreateExerciseDefinition
         {
-            UserId = UserId,
+            UserId = exerciseToCreate.User,
             Definition = exerciseToCreate
         });
 
