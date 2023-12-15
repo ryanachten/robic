@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Robic.Service.Models.Deprecated;
+using Robic.Service.Models;
 
 namespace Robic.Service.Query;
 

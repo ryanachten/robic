@@ -48,4 +48,13 @@ public class MongoExerciseDefinition : Document
     public double? LastImprovement { get; set; }
 
     public PersonalBest? PersonalBest { get; set; }
+
+    public static MongoExerciseDefinition MockDefinition() => new MongoExerciseDefinition()
+    {
+        Id = "1",
+        Type = "tmp",
+        Unit = "tmp",
+        Title = "tmp",
+        User = "1"
+    };
 }

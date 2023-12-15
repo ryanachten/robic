@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Robic.Service.Models.Deprecated;
+using Robic.Service.Models;
 using Robic.Service.Models.DTOs.ExerciseDefinition;
 
 namespace Robic.Service.Command;

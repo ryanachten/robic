@@ -1,19 +1,21 @@
-﻿using MediatR;
-using Robic.Service.Data;
-using Robic.Service.Models.Deprecated;
+﻿using AutoMapper;
+using MediatR;
+using Robic.Repository;
+using Robic.Service.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Robic.Service.Query;
 
-public class GetExerciseDefinitionByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetExerciseDefinitionById, MongoExerciseDefinition?>
+public class GetExerciseDefinitionByIdHandler(IExerciseDefinitionRepository exerciseDefinitionRepository, IMapper mapper) : IRequestHandler<GetExerciseDefinitionById, ExerciseDefinition?>
 {
-    public async Task<MongoExerciseDefinition?> Handle(GetExerciseDefinitionById request, CancellationToken cancellationToken)
+    public async Task<ExerciseDefinition?> Handle(GetExerciseDefinitionById request, CancellationToken cancellationToken)
     {
-        var definition = await unitOfWork.ExerciseDefinitionRepo.GetExerciseDefinition(request.DefinitionId);
-        if (definition != null)
-            definition.PersonalBest = await unitOfWork.ExerciseRepo.GetPersonalBest(definition.Id);
+        var definition = await exerciseDefinitionRepository.GetDefinitionById(request.DefinitionId);
+        // TODO: implement personal best
+        //if (definition != null)
+        //    definition.PersonalBest = await unitOfWork.ExerciseRepo.GetPersonalBest(definition.Id);
 
-        return definition;
+        return mapper.Map<ExerciseDefinition>(definition);
     }
 }

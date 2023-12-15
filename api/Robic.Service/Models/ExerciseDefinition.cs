@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Robic.Service.Models.Deprecated;
+namespace Robic.Service.Models;
 
 public class ExerciseDefinition
 {

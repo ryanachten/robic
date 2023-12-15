@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Robic.Repository;
-using Robic.Service.Models.Deprecated;
+using Robic.Service.Models;
 using System.Threading;
 using System.Threading.Tasks;
 

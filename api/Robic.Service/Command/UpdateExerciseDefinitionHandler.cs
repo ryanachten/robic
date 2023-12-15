@@ -1,17 +1,24 @@
 using AutoMapper;
 using MediatR;
-using Robic.Service.Data;
-using Robic.Service.Models.Deprecated;
+using Robic.Repository;
+using Robic.Service.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Robic.Service.Command;
 
-public class UpdateExerciseDefinitionHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateExerciseDefinition, MongoExerciseDefinition>
+public class UpdateExerciseDefinitionHandler(IExerciseDefinitionRepository exerciseDefinitionRepository, IMapper mapper)
+    : IRequestHandler<UpdateExerciseDefinition, ExerciseDefinition?>
 {
-    public async Task<MongoExerciseDefinition> Handle(UpdateExerciseDefinition request, CancellationToken cancellationToken)
+    public async Task<ExerciseDefinition?> Handle(UpdateExerciseDefinition request, CancellationToken cancellationToken)
     {
-        var definition = mapper.Map<MongoExerciseDefinition>(request.UpdatedDefinition);
-        return await unitOfWork.ExerciseDefinitionRepo.UpdateDefinition(request.ExistingDefinition, definition);
+        await exerciseDefinitionRepository.UpdateDefinition(new()
+        {
+            Id = request.DefinitionId,
+            Title = request.UpdatedDefinition.Title,
+            Unit = request.UpdatedDefinition.Unit,
+        });
+        var definition = await exerciseDefinitionRepository.GetDefinitionById(request.DefinitionId);
+        return mapper.Map<ExerciseDefinition>(definition);
     }
 }

@@ -7,17 +7,6 @@ namespace Robic.Repository;
 
 public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseDefinitionRepository
 {
-    public async Task CreateDefinition(CreateExerciseDefinitionDto createExerciseDefinition)
-    {
-        using var connection = await database.OpenConnectionAsync();
-
-        var sql = @"
-            INSERT INTO ExerciseDefinitions (Title, Unit, UserId)
-            VALUES (@Title, @Unit, @UserId);
-        ";
-        await connection.ExecuteAsync(sql, createExerciseDefinition);
-    }
-
     public async Task<ExerciseDefinition?> GetDefinitionById(int exerciseDefinitionId)
     {
         using var connection = await database.OpenConnectionAsync();
@@ -67,5 +56,42 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         {
             userId
         });
+    }
+
+    public async Task CreateDefinition(CreateExerciseDefinitionDto createExerciseDefinition)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            INSERT INTO ExerciseDefinitions (Title, Unit, UserId)
+            VALUES (@Title, @Unit, @UserId);
+        ";
+        await connection.ExecuteAsync(sql, createExerciseDefinition);
+    }
+
+    public async Task DeleteDefinitionById(int exerciseDefinitionId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            DELETE FROM ExerciseDefinitions
+            WHERE Id = @exerciseDefinitionId;
+        ";
+        await connection.ExecuteAsync(sql, new
+        {
+            exerciseDefinitionId
+        });
+    }
+
+    public async Task UpdateDefinition(UpdateExerciseDefinitionDto createExerciseDefinition)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            UPDATE ExerciseDefinitions
+            SET Title = @Title, Unit = @Unit
+            WHERE Id = @Id;
+        ";
+        await connection.ExecuteAsync(sql, createExerciseDefinition);
     }
 }

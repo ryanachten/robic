@@ -21,15 +21,15 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
     }
 
     [HttpGet("{id}", Name = "GetExerciseDefinition")]
-    public async Task<IActionResult> GetExerciseDefinition(string id)
+    public async Task<IActionResult> GetExerciseDefinitionById(int id)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
             DefinitionId = id
         });
-        if (definition == null) return NotFound();
 
-        if (definition.User != UserId) return Unauthorized();
+        if (definition == null) return NotFound();
+        if (definition.UserId != GetUserId()) return Unauthorized();
 
         return Ok(definition);
     }
@@ -55,8 +55,8 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
         return CreatedAtRoute("GetExerciseDefinition", new { id = definition.Id }, definition);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(UpdateExerciseDefinitionDto updatedExercise, [FromRoute] string id)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateDefinition(UpdateExerciseDefinitionDto updatedExercise, [FromRoute] int id)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
@@ -64,20 +64,20 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
         });
 
         if (definition == null) return NotFound();
-
-        if (definition.User != UserId) return Unauthorized();
+        if (definition.UserId != GetUserId()) return Unauthorized();
 
         var updatedDefinition = await mediator.Send(new UpdateExerciseDefinition
         {
-            ExistingDefinition = definition,
+            DefinitionId = id,
             UpdatedDefinition = updatedExercise
         });
+        if (updatedDefinition == null) return NotFound();
 
         return Ok(updatedDefinition);
     }
 
-    [HttpDelete("{id:length(24)}")]
-    public async Task<IActionResult> Delete(string id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteDefinition(int id)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
@@ -85,11 +85,11 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
         });
 
         if (definition == null) return NotFound();
-        if (definition.User != UserId) return Unauthorized();
+        if (definition.UserId != GetUserId()) return Unauthorized();
 
         await mediator.Send(new DeleteExerciseDefinition
         {
-            Definition = definition
+            DefinitionId = id
         });
 
         return NoContent();
