@@ -1,0 +1,20 @@
+using Robic.Service.Models;
+
+namespace Robic.Service.Data;
+
+public class UnitOfWork(
+    IMongoRepository<User> userContext,
+    IMongoRepository<Exercise> exerciseContext,
+    IMongoRepository<ExerciseDefinition> exerciseDefinitionContext
+) : IUnitOfWork
+{
+    public IAuthRepository AuthRepo => new AuthRepository(userContext);
+
+    public IExerciseRepository ExerciseRepo => new ExerciseRepository(exerciseContext, exerciseDefinitionContext);
+
+    public IExerciseDefinitionRepository ExerciseDefinitionRepo => new ExerciseDefinitionRepository(exerciseDefinitionContext, exerciseContext, userContext);
+
+    public IUserRepository UserRepo => new UserRepository(userContext, exerciseContext, exerciseDefinitionContext);
+
+    public IAnalyticsRepository AnalyticsRepo => new AnalyticsRepository(exerciseContext, exerciseDefinitionContext);
+}
