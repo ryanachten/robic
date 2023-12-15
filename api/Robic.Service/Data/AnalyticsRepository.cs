@@ -1,5 +1,6 @@
 using Robic.Service.Helpers;
 using Robic.Service.Models;
+using Robic.Service.Models.Deprecated;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,13 @@ namespace Robic.Service.Data;
 public class AnalyticsRepository : IAnalyticsRepository
 {
     private readonly IMongoRepository<Exercise> _exerciseRepo;
-    private readonly IMongoRepository<ExerciseDefinition> _exerciseDefinitionRepo;
-    private List<ExerciseDefinition> _userExerciseDefinitions = [];
+    private readonly IMongoRepository<MongoExerciseDefinition> _exerciseDefinitionRepo;
+    private List<MongoExerciseDefinition> _userExerciseDefinitions = [];
     private List<Exercise> _userExercises = [];
 
     public AnalyticsRepository(
         IMongoRepository<Exercise> exerciseRepo,
-        IMongoRepository<ExerciseDefinition> exerciseDefinitionRepo
+        IMongoRepository<MongoExerciseDefinition> exerciseDefinitionRepo
     )
     {
         _exerciseRepo = exerciseRepo;

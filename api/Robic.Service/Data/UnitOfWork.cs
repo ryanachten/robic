@@ -1,11 +1,12 @@
 using Robic.Service.Models;
+using Robic.Service.Models.Deprecated;
 
 namespace Robic.Service.Data;
 
 public class UnitOfWork(
     IMongoRepository<User> userContext,
     IMongoRepository<Exercise> exerciseContext,
-    IMongoRepository<ExerciseDefinition> exerciseDefinitionContext
+    IMongoRepository<MongoExerciseDefinition> exerciseDefinitionContext
 ) : IUnitOfWork
 {
     public IExerciseRepository ExerciseRepo => new ExerciseRepository(exerciseContext, exerciseDefinitionContext);

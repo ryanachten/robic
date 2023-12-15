@@ -1,4 +1,4 @@
-using Robic.Service.Models;
+using Robic.Service.Models.Deprecated;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,9 +6,9 @@ namespace Robic.Service.Data;
 
 public interface IExerciseDefinitionRepository
 {
-    Task<IEnumerable<ExerciseDefinition>> GetUserDefinitions(string userId);
-    Task<ExerciseDefinition> GetExerciseDefinition(string id);
-    Task<ExerciseDefinition> CreateDefinition(string userId, ExerciseDefinition definition);
-    Task<ExerciseDefinition> UpdateDefinition(ExerciseDefinition existingDefinition, ExerciseDefinition updatedDefinition);
-    Task DeleteDefinition(ExerciseDefinition definition);
+    Task<IEnumerable<MongoExerciseDefinition>> GetUserDefinitions(string userId);
+    Task<MongoExerciseDefinition> GetExerciseDefinition(string id);
+    Task<MongoExerciseDefinition> CreateDefinition(string userId, MongoExerciseDefinition definition);
+    Task<MongoExerciseDefinition> UpdateDefinition(MongoExerciseDefinition existingDefinition, MongoExerciseDefinition updatedDefinition);
+    Task DeleteDefinition(MongoExerciseDefinition definition);
 }

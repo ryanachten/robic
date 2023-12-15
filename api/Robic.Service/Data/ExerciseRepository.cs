@@ -1,5 +1,6 @@
 using Robic.Service.Helpers;
 using Robic.Service.Models;
+using Robic.Service.Models.Deprecated;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace Robic.Service.Data;
 
 public class ExerciseRepository(
     IMongoRepository<Exercise> exerciseContext,
-    IMongoRepository<ExerciseDefinition> exerciseDefinitionContext
+    IMongoRepository<MongoExerciseDefinition> exerciseDefinitionContext
 ) : IExerciseRepository
 {
-    public async Task<Exercise> CreateExercise(Exercise exercise, ExerciseDefinition definition)
+    public async Task<Exercise> CreateExercise(Exercise exercise, MongoExerciseDefinition definition)
     {
         exercise.Date = DateTime.Now;
 
@@ -34,7 +35,7 @@ public class ExerciseRepository(
         return exercise;
     }
 
-    public async Task DeleteExercise(string id, ExerciseDefinition definition)
+    public async Task DeleteExercise(string id, MongoExerciseDefinition definition)
     {
         await exerciseContext.DeleteByIdAsync(id);
 

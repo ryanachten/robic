@@ -2,7 +2,7 @@
 using MediatR;
 using Robic.Repository;
 using Robic.Repository.Models.DTOs.ExerciseDefinition;
-using Robic.Service.Models;
+using Robic.Service.Models.Deprecated;
 using System.Threading;
 using System.Threading.Tasks;
 

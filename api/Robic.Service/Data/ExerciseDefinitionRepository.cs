@@ -1,16 +1,17 @@
 using Robic.Service.Models;
+using Robic.Service.Models.Deprecated;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Robic.Service.Data;
 
 public class ExerciseDefinitionRepository(
-    IMongoRepository<ExerciseDefinition> exerciseDefinitionContext,
+    IMongoRepository<MongoExerciseDefinition> exerciseDefinitionContext,
     IMongoRepository<Exercise> exerciseContext,
     IMongoRepository<User> userContext
 ) : IExerciseDefinitionRepository
 {
-    public async Task<ExerciseDefinition> CreateDefinition(string userId, ExerciseDefinition definition)
+    public async Task<MongoExerciseDefinition> CreateDefinition(string userId, MongoExerciseDefinition definition)
     {
         await exerciseDefinitionContext.InsertOneAsync(definition);
 
@@ -21,7 +22,7 @@ public class ExerciseDefinitionRepository(
         return definition;
     }
 
-    public async Task DeleteDefinition(ExerciseDefinition definition)
+    public async Task DeleteDefinition(MongoExerciseDefinition definition)
     {
         await exerciseDefinitionContext.DeleteByIdAsync(definition.Id);
 
@@ -34,17 +35,17 @@ public class ExerciseDefinitionRepository(
         await exerciseContext.DeleteManyAsync(e => e.Definition == definition.Id);
     }
 
-    public async Task<ExerciseDefinition> GetExerciseDefinition(string id)
+    public async Task<MongoExerciseDefinition> GetExerciseDefinition(string id)
     {
         return await exerciseDefinitionContext.FindByIdAsync(id);
     }
 
-    public Task<IEnumerable<ExerciseDefinition>> GetUserDefinitions(string userId)
+    public Task<IEnumerable<MongoExerciseDefinition>> GetUserDefinitions(string userId)
     {
         return exerciseDefinitionContext.FilterByAsync(defintion => defintion.User == userId);
     }
 
-    public async Task<ExerciseDefinition> UpdateDefinition(ExerciseDefinition existingDefinition, ExerciseDefinition updatedDefinition)
+    public async Task<MongoExerciseDefinition> UpdateDefinition(MongoExerciseDefinition existingDefinition, MongoExerciseDefinition updatedDefinition)
     {
         existingDefinition.Title = updatedDefinition.Title;
         existingDefinition.Unit = updatedDefinition.Unit;
