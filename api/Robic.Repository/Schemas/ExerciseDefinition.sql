@@ -1,7 +1,7 @@
-CREATE TABLE ExerciseDefinitions (
+CREATE TABLE ExerciseDefinition (
   Id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Title nvarchar(255) NOT NULL,
   Unit varchar(100) NOT NULL,
   UserId int NOT NULL,
-  FOREIGN KEY (UserId) REFERENCES Users(Id)
+  FOREIGN KEY (UserId) REFERENCES User(Id)
 );

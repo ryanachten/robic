@@ -13,7 +13,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
 
         var sql = @"
             SELECT Id, Title, Unit, UserId
-            FROM ExerciseDefinitions
+            FROM ExerciseDefinition
             WHERE Id = @exerciseDefinitionId;
         ";
         var definitions = await connection.QueryAsync<ExerciseDefinition>(sql, new
@@ -31,7 +31,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
 
         var sql = @"
             SELECT Id, Title, Unit, UserId
-            FROM ExerciseDefinitions
+            FROM ExerciseDefinition
             WHERE Title = @title AND UserId = @userId;
         ";
         var definitions = await connection.QueryAsync<ExerciseDefinition>(sql, new
@@ -49,7 +49,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
 
         var sql = @"
             SELECT Id, Title, Unit, UserId
-            FROM ExerciseDefinitions
+            FROM ExerciseDefinition
             WHERE UserId = @userId;
         ";
         return await connection.QueryAsync<ExerciseDefinition>(sql, new
@@ -63,7 +63,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            INSERT INTO ExerciseDefinitions (Title, Unit, UserId)
+            INSERT INTO ExerciseDefinition (Title, Unit, UserId)
             VALUES (@Title, @Unit, @UserId);
         ";
         await connection.ExecuteAsync(sql, createExerciseDefinition);
@@ -74,7 +74,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            DELETE FROM ExerciseDefinitions
+            DELETE FROM ExerciseDefinition
             WHERE Id = @exerciseDefinitionId;
         ";
         await connection.ExecuteAsync(sql, new
@@ -88,7 +88,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            UPDATE ExerciseDefinitions
+            UPDATE ExerciseDefinition
             SET Title = @Title, Unit = @Unit
             WHERE Id = @Id;
         ";

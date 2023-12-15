@@ -12,7 +12,7 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            INSERT INTO Users (FirstName, LastName, Email, PasswordHash, PasswordSalt)
+            INSERT INTO User (FirstName, LastName, Email, PasswordHash, PasswordSalt)
             VALUES (@FirstName, @LastName, @Email, @PasswordHash, @PasswordSalt);
         ";
         await connection.ExecuteAsync(sql, registerUser);
@@ -24,7 +24,7 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
 
         var sql = @"
             SELECT Id, FirstName, LastName, Email, PasswordHash, PasswordSalt 
-            FROM Users 
+            FROM User 
             WHERE Email = @email;
         ";
         var users = await connection.QueryAsync<User>(sql, new
@@ -41,7 +41,7 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
 
         var sql = @"
             SELECT Id, FirstName, LastName, Email, PasswordHash, PasswordSalt 
-            FROM Users 
+            FROM User 
             WHERE Id = @userId;
         ";
         var users = await connection.QueryAsync<User>(sql, new
@@ -57,7 +57,7 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            DELETE FROM Users 
+            DELETE FROM User 
             WHERE Id = @userId;
         ";
         await connection.ExecuteAsync(sql, new
