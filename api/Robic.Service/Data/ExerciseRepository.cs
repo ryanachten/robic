@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace Robic.Service.Data;
 
 public class ExerciseRepository(
-    IMongoRepository<Exercise> exerciseContext,
+    IMongoRepository<MongoExercise> exerciseContext,
     IMongoRepository<MongoExerciseDefinition> exerciseDefinitionContext
 ) : IExerciseRepository
 {
-    public async Task<Exercise> CreateExercise(Exercise exercise, MongoExerciseDefinition definition)
+    public async Task<MongoExercise> CreateExercise(MongoExercise exercise, MongoExerciseDefinition definition)
     {
         exercise.Date = DateTime.Now;
 
@@ -43,13 +43,13 @@ public class ExerciseRepository(
         await exerciseDefinitionContext.ReplaceOneAsync(definition);
     }
 
-    public Task<IEnumerable<Exercise>> GetDefinitionExercises(string definitionId)
+    public Task<IEnumerable<MongoExercise>> GetDefinitionExercises(string definitionId)
     {
         // Filter exercises to only those  associated with the user's definitions
         return exerciseContext.FilterByAsync(exercise => exercise.Definition == definitionId);
     }
 
-    public async Task<Exercise> GetExerciseById(string id)
+    public async Task<MongoExercise> GetExerciseById(string id)
     {
         return await exerciseContext.FindByIdAsync(id);
     }
@@ -59,7 +59,7 @@ public class ExerciseRepository(
         var exercises = await GetDefinitionExercises(definitionId);
         if (exercises == null || !exercises.Any()) return null;
 
-        Exercise? exerciseWithHighestNetValue = null;
+        MongoExercise? exerciseWithHighestNetValue = null;
         var highestAvgValue = 0.0;
         var highestReps = 0;
         var highestSets = 0;
@@ -104,13 +104,13 @@ public class ExerciseRepository(
         };
     }
 
-    public async Task<Exercise> UpdateExercise(Exercise exercise)
+    public async Task<MongoExercise> UpdateExercise(MongoExercise exercise)
     {
         await exerciseContext.ReplaceOneAsync(exercise);
         return exercise;
     }
 
-    private static PersonalBestHistory GetPersonalBestHistory(Exercise exercise)
+    private static PersonalBestHistory GetPersonalBestHistory(MongoExercise exercise)
     {
         var totalReps = 0.0;
         var totalValue = 0.0;
@@ -139,7 +139,7 @@ public class ExerciseRepository(
         return record;
     }
 
-    private static double GetLatestExerciseImprovement(Exercise newExercise, Exercise lastExercise)
+    private static double GetLatestExerciseImprovement(MongoExercise newExercise, MongoExercise lastExercise)
     {
         var newNetValue = ExerciseUtilities.GetNetExerciseValue(newExercise);
         var lastNetValue = ExerciseUtilities.GetNetExerciseValue(lastExercise);

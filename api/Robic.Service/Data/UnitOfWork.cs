@@ -5,7 +5,7 @@ namespace Robic.Service.Data;
 
 public class UnitOfWork(
     IMongoRepository<User> userContext,
-    IMongoRepository<Exercise> exerciseContext,
+    IMongoRepository<MongoExercise> exerciseContext,
     IMongoRepository<MongoExerciseDefinition> exerciseDefinitionContext
 ) : IUnitOfWork
 {

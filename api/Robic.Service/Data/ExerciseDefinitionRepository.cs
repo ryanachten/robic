@@ -7,7 +7,7 @@ namespace Robic.Service.Data;
 
 public class ExerciseDefinitionRepository(
     IMongoRepository<MongoExerciseDefinition> exerciseDefinitionContext,
-    IMongoRepository<Exercise> exerciseContext,
+    IMongoRepository<MongoExercise> exerciseContext,
     IMongoRepository<User> userContext
 ) : IExerciseDefinitionRepository
 {

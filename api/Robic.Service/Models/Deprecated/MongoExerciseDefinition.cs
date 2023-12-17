@@ -41,7 +41,7 @@ public class MongoExerciseDefinition : Document
 
     // Computed properties
     [BsonElement("lastSession")]
-    public Exercise? LastSession { get; set; }
+    public MongoExercise? LastSession { get; set; }
 
     [BsonElement("lastImprovement")]
     [Range(0, 100, ErrorMessage = "Value for {0} must be a percentage between {1} and {2}")]

@@ -7,10 +7,10 @@ namespace Robic.Service.Data;
 
 public interface IExerciseRepository
 {
-    Task<IEnumerable<Exercise>> GetDefinitionExercises(string definitionId);
-    Task<Exercise> GetExerciseById(string id);
-    Task<Exercise> CreateExercise(Exercise exercise, MongoExerciseDefinition definition);
-    Task<Exercise> UpdateExercise(Exercise exercise);
+    Task<IEnumerable<MongoExercise>> GetDefinitionExercises(string definitionId);
+    Task<MongoExercise> GetExerciseById(string id);
+    Task<MongoExercise> CreateExercise(MongoExercise exercise, MongoExerciseDefinition definition);
+    Task<MongoExercise> UpdateExercise(MongoExercise exercise);
     Task DeleteExercise(string id, MongoExerciseDefinition definition);
     Task<PersonalBest?> GetPersonalBest(string definitionId);
 }

@@ -9,13 +9,13 @@ namespace Robic.Service.Data;
 
 public class AnalyticsRepository : IAnalyticsRepository
 {
-    private readonly IMongoRepository<Exercise> _exerciseRepo;
+    private readonly IMongoRepository<MongoExercise> _exerciseRepo;
     private readonly IMongoRepository<MongoExerciseDefinition> _exerciseDefinitionRepo;
     private List<MongoExerciseDefinition> _userExerciseDefinitions = [];
-    private List<Exercise> _userExercises = [];
+    private List<MongoExercise> _userExercises = [];
 
     public AnalyticsRepository(
-        IMongoRepository<Exercise> exerciseRepo,
+        IMongoRepository<MongoExercise> exerciseRepo,
         IMongoRepository<MongoExerciseDefinition> exerciseDefinitionRepo
     )
     {

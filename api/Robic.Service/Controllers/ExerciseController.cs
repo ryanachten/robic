@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Robic.Service.Command;
+using Robic.Service.Models.Deprecated;
 using Robic.Service.Models.DTOs.Exercise;
 using Robic.Service.Query;
 using System.Threading.Tasks;
@@ -10,36 +11,29 @@ namespace Robic.Service.Controllers;
 public class ExerciseController(IMediator mediator) : BaseController
 {
     [HttpGet]
-    public async Task<IActionResult> GetDefinitionExercises([FromQuery(Name = "definition")] string definitionId)
+    public async Task<IActionResult> GetDefinitionExercises([FromQuery(Name = "definition")] int definitionId)
     {
-        var definition = await mediator.Send(new GetExerciseDefinitionById
-        {
-            DefinitionId = definitionId
-        });
-
-        if (definition == null) return NotFound();
-        if (definition.User != UserId) return Unauthorized();
-
         var exercises = await mediator.Send(new GetExercisesByDefinition
         {
-            DefinitionId = definitionId
+            DefinitionId = definitionId,
+            UserId = GetUserId()
         });
 
         return Ok(exercises);
     }
 
-    [HttpGet("{id:length(24)}", Name = "GetExercise")]
-    public async Task<IActionResult> GetExerciseById(string id)
+    [HttpGet("{id}", Name = "GetExercise")]
+    public async Task<IActionResult> GetExerciseById(int id)
     {
         var exercise = await mediator.Send(new GetExerciseById
         {
-            ExerciseId = id
+            ExerciseId = id,
         });
 
         if (exercise == null) return NotFound();
 
-        var isUserExercise = await IsUsersDefinition(exercise.Definition);
-        if (!isUserExercise) return Unauthorized();
+        var isUserDefinition = await IsUserDefinition(exercise.DefinitionId);
+        if (!isUserDefinition) return Unauthorized();
 
         return Ok(exercise);
     }
@@ -47,16 +41,12 @@ public class ExerciseController(IMediator mediator) : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateExercise(UpdateExerciseDto exercise)
     {
-        var definition = await mediator.Send(new GetExerciseDefinitionById
-        {
-            DefinitionId = exercise.Definition
-        });
-
-        if (definition == null || definition.User != UserId) return Unauthorized();
+        var isUserDefinition = await IsUserDefinition(exercise.DefinitionId);
+        if (!isUserDefinition) return Unauthorized();
 
         var createdExercise = await mediator.Send(new CreateExercise
         {
-            Definition = definition,
+            UserId = GetUserId(),
             Exercise = exercise
         });
 
@@ -94,28 +84,28 @@ public class ExerciseController(IMediator mediator) : BaseController
 
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
-            DefinitionId = exercise.Definition
+            DefinitionId = int.Parse(exercise.Definition)
         });
 
-        if (definition == null || definition.User != UserId)
+        if (definition == null || definition.UserId != GetUserId())
             return Unauthorized();
 
         await mediator.Send(new DeleteExercise
         {
             ExerciseId = id,
-            Definition = definition
+            Definition = MongoExerciseDefinition.MockDefinition()
         });
 
         return NoContent();
     }
 
-    private async Task<bool> IsUsersDefinition(string definitionId)
+    private async Task<bool> IsUserDefinition(int definitionId)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
             DefinitionId = definitionId
         });
 
-        return definition != null && definition.User == UserId;
+        return definition != null && definition.UserId == GetUserId();
     }
 }
