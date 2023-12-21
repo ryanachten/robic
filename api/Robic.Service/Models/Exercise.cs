@@ -5,11 +5,11 @@ namespace Robic.Service.Models;
 
 public class Exercise
 {
-    public required int Id { get; set; }
+    public int Id { get; set; }
     public required int DefinitionId { get; set; }
-    public DateTime Date { get; set; }
-    public DateTime TimeTaken { get; set; }
-    public List<Set> Sets { get; set; } = [];
+    public required DateTime Date { get; set; }
+    public required DateTime TimeTaken { get; set; }
+    public required List<Set> Sets { get; set; }
 
     public double? NetValue
     {

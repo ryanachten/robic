@@ -3,10 +3,9 @@ using MediatR;
 using Robic.Repository;
 using Robic.Service.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using RepositorySet = Robic.Repository.Models.ExerciseSet;
+using RepositoryExerciseDtos = Robic.Repository.Models.DTOs.Exercise;
 
 namespace Robic.Service.Command;
 
@@ -25,13 +24,8 @@ public class CreateExerciseHandler(
             UserId = request.UserId,
         });
 
-        var sets = mapper.Map<List<RepositorySet>>(request.Exercise.Sets);
-        await exerciseSetRepository.CreateSet(sets.Select((RepositorySet set, int i) =>
-        {
-            set.SetOrder = i;
-            set.ExerciseId = createdExercise.Id;
-            return set;
-        }));
+        var sets = mapper.Map<List<RepositoryExerciseDtos.CreateExerciseSetDto>>(request.Exercise.Sets);
+        await exerciseSetRepository.CreateSet(createdExercise.Id, sets);
 
         var createdSets = await exerciseSetRepository.GetExerciseSets(createdExercise.Id);
         var exercise = mapper.Map<Exercise>(createdExercise);

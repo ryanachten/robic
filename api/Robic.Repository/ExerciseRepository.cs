@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MySqlConnector;
 using Robic.Repository.Models;
+using Robic.Repository.Models.DTOs.Exercise;
 
 namespace Robic.Repository;
 
@@ -16,15 +17,24 @@ public class ExerciseRepository(MySqlDataSource database) : IExerciseRepository
             SELECT LAST_INSERT_ID();
         ";
 
-        var insertedId = await connection.QueryAsync<int>(sql, exercise);
-        exercise.Id = insertedId.First();
+        var insertedId = await connection.QueryFirstAsync<int>(sql, exercise);
+        exercise.Id = insertedId;
 
         return exercise;
     }
 
-    public Task DeleteExerciseById(int id)
+    public async Task DeleteExerciseById(int id)
     {
-        throw new NotImplementedException();
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            DELETE FROM Exercise
+            WHERE Id = @Id;
+        ";
+        await connection.ExecuteAsync(sql, new
+        {
+            id
+        });
     }
 
     public async Task<IEnumerable<Exercise>> GetDefinitionExercises(int userId, int definitionId)
@@ -52,15 +62,26 @@ public class ExerciseRepository(MySqlDataSource database) : IExerciseRepository
             FROM Exercise
             WHERE Id = @id;
         ";
-        var results = await connection.QueryAsync<Exercise>(sql, new
+        return await connection.QueryFirstOrDefaultAsync<Exercise>(sql, new
         {
             id
         });
-        return results.FirstOrDefault();
     }
 
-    public Task UpdateExercise(int id, Exercise updatedExercise)
+    public async Task UpdateExercise(int id, UpdateExerciseDto updatedExercise)
     {
-        throw new NotImplementedException();
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            UPDATE Exercise
+            SET TimeTaken = @TimeTaken
+            WHERE Id = @Id;
+        ";
+
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id,
+            updatedExercise.TimeTaken,
+        });
     }
 }

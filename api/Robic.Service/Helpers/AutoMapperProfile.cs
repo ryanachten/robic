@@ -17,11 +17,13 @@ public class AutoMapperProfile : Profile
         CreateMap<RepositoryModel.ExerciseDefinition, ExerciseDefinition>();
         CreateMap<RepositoryModel.ExerciseDefinition, ListExerciseDefinitionDto>();
         CreateMap<RepositoryModel.Exercise, Exercise>();
-        CreateMap<RepositoryModel.ExerciseSet, Set>().ReverseMap();
+        CreateMap<RepositoryModel.ExerciseSet, Set>();
+        CreateMap<Set, RepositoryModel.DTOs.Exercise.CreateExerciseSetDto>();
         CreateMap<RegisterUserDto, User>();
         CreateMap<User, UserDetailDto>();
         CreateMap<UpdateExerciseDefinitionDto, MongoExerciseDefinition>();
-        CreateMap<UpdateExerciseDto, MongoExercise>()
+        CreateMap<UpdateExerciseDto, RepositoryModel.DTOs.Exercise.UpdateExerciseDto>();
+        CreateMap<UpdateExerciseDto, Exercise>()
             .ForMember(
                 dest => dest.Sets,
                 opt => opt.MapFrom(src => src.Sets)

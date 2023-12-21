@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Robic.Service.Command;
-using Robic.Service.Models.Deprecated;
 using Robic.Service.Models.DTOs.Exercise;
 using Robic.Service.Query;
 using System.Threading.Tasks;
@@ -53,11 +52,11 @@ public class ExerciseController(IMediator mediator) : BaseController
         return CreatedAtRoute("GetExercise", new { id = createdExercise.Id }, createdExercise);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> UpdateExercise(string id, UpdateExerciseDto updatedExercise)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateExercise(int id, UpdateExerciseDto updatedExercise)
     {
-        var isUserExercise = await IsUsersDefinition(updatedExercise.Definition);
-        if (!isUserExercise) return Unauthorized();
+        var isUserDefinition = await IsUserDefinition(updatedExercise.DefinitionId);
+        if (!isUserDefinition) return Unauthorized();
 
         var exercise = await mediator.Send(new GetExerciseById
         {
@@ -67,14 +66,15 @@ public class ExerciseController(IMediator mediator) : BaseController
 
         var result = await mediator.Send(new UpdateExercise
         {
+            ExerciseId = exercise.Id,
             Exercise = updatedExercise
         });
 
         return Ok(result);
     }
 
-    [HttpDelete("{id:length(24)}")]
-    public async Task<IActionResult> DeleteExercise(string id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteExercise(int id)
     {
         var exercise = await mediator.Send(new GetExerciseById
         {
@@ -82,18 +82,12 @@ public class ExerciseController(IMediator mediator) : BaseController
         });
         if (exercise == null) return NotFound();
 
-        var definition = await mediator.Send(new GetExerciseDefinitionById
-        {
-            DefinitionId = int.Parse(exercise.Definition)
-        });
-
-        if (definition == null || definition.UserId != GetUserId())
-            return Unauthorized();
+        var isUserExercise = await IsUserDefinition(exercise.DefinitionId);
+        if (!isUserExercise) return Unauthorized();
 
         await mediator.Send(new DeleteExercise
         {
             ExerciseId = id,
-            Definition = MongoExerciseDefinition.MockDefinition()
         });
 
         return NoContent();
