@@ -21,7 +21,7 @@ public class RegisterUserHandler(IUserRepository userRepository, IMapper mapper)
 
         CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-        await userRepository.CreateUser(new RegisterUserDto()
+        var userId = await userRepository.CreateUser(new RegisterUserDto()
         {
             FirstName = request.User.FirstName,
             LastName = request.User.LastName,
@@ -30,8 +30,7 @@ public class RegisterUserHandler(IUserRepository userRepository, IMapper mapper)
             PasswordSalt = passwordSalt,
         });
 
-        var registeredUser = await userRepository.GetUserByEmail(request.User.Email);
-
+        var registeredUser = await userRepository.GetUserById(userId);
         return mapper.Map<User>(registeredUser);
     }
 

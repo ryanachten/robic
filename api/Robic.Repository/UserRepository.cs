@@ -7,15 +7,18 @@ namespace Robic.Repository;
 
 public class UserRepository(MySqlDataSource database) : IUserRepository
 {
-    public async Task CreateUser(RegisterUserDto registerUser)
+    public async Task<int> CreateUser(RegisterUserDto registerUser)
     {
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
             INSERT INTO User (FirstName, LastName, Email, PasswordHash, PasswordSalt)
             VALUES (@FirstName, @LastName, @Email, @PasswordHash, @PasswordSalt);
+            SELECT LAST_INSERT_ID();
         ";
-        await connection.ExecuteAsync(sql, registerUser);
+        var insertedId = await connection.QueryFirstAsync<int>(sql, registerUser);
+
+        return insertedId;
     }
 
     public async Task<User?> GetUserByEmail(string email)
@@ -35,7 +38,7 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
         return users.FirstOrDefault();
     }
 
-    public async Task<User?> GetUserById(string userId)
+    public async Task<User?> GetUserById(int userId)
     {
         using var connection = await database.OpenConnectionAsync();
 
@@ -52,7 +55,7 @@ public class UserRepository(MySqlDataSource database) : IUserRepository
         return users.FirstOrDefault();
     }
 
-    public async Task DeleteUserById(string userId)
+    public async Task DeleteUserById(int userId)
     {
         using var connection = await database.OpenConnectionAsync();
 

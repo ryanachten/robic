@@ -8,7 +8,7 @@ public interface IExerciseDefinitionRepository
     Task<ExerciseDefinition?> GetDefinitionById(int exerciseDefinitionId);
     Task<ExerciseDefinition?> GetDefinitionByTitle(int userId, string title);
     Task<IEnumerable<ExerciseDefinition>?> GetUserDefinitions(int userId);
-    Task CreateDefinition(CreateExerciseDefinitionDto createExerciseDefinition);
+    Task<ExerciseDefinition> CreateDefinition(ExerciseDefinition exerciseDefinition);
     Task UpdateDefinition(UpdateExerciseDefinitionDto createExerciseDefinition);
     Task DeleteDefinitionById(int exerciseDefinitionId);
 

@@ -5,8 +5,8 @@ namespace Robic.Repository;
 
 public interface IUserRepository
 {
-    Task CreateUser(RegisterUserDto registerUser);
+    Task<int> CreateUser(RegisterUserDto registerUser);
     Task<User?> GetUserByEmail(string email);
-    Task<User?> GetUserById(string userId);
-    Task DeleteUserById(string userId);
+    Task<User?> GetUserById(int userId);
+    Task DeleteUserById(int userId);
 }

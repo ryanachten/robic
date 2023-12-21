@@ -47,7 +47,7 @@ public class LoginUserHandler(IUserRepository userRepository, IMapper mapper) : 
     private static string GenerateToken(UserDetailDto user)
     {
         var claims = new[]{
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
         };
 

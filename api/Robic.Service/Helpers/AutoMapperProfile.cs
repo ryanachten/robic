@@ -1,6 +1,5 @@
 using AutoMapper;
 using Robic.Service.Models;
-using Robic.Service.Models.Deprecated;
 using Robic.Service.Models.DTOs.Exercise;
 using Robic.Service.Models.DTOs.ExerciseDefinition;
 using Robic.Service.Models.DTOs.User;
@@ -15,13 +14,14 @@ public class AutoMapperProfile : Profile
         CreateMap<RepositoryModel.User, User>();
         CreateMap<RepositoryModel.User, UserDetailDto>();
         CreateMap<RepositoryModel.ExerciseDefinition, ExerciseDefinition>();
+        CreateMap<RepositoryModel.ExerciseDefinition, ExerciseDefinition>();
         CreateMap<RepositoryModel.ExerciseDefinition, ListExerciseDefinitionDto>();
         CreateMap<RepositoryModel.Exercise, Exercise>();
         CreateMap<RepositoryModel.ExerciseSet, Set>();
         CreateMap<Set, RepositoryModel.DTOs.Exercise.CreateExerciseSetDto>();
         CreateMap<RegisterUserDto, User>();
         CreateMap<User, UserDetailDto>();
-        CreateMap<UpdateExerciseDefinitionDto, MongoExerciseDefinition>();
+        CreateMap<UpdateExerciseDefinitionDto, RepositoryModel.ExerciseDefinition>();
         CreateMap<UpdateExerciseDto, RepositoryModel.DTOs.Exercise.UpdateExerciseDto>();
         CreateMap<UpdateExerciseDto, Exercise>()
             .ForMember(

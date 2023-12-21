@@ -37,18 +37,17 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateDefinition(UpdateExerciseDefinitionDto exerciseToCreate)
     {
-        if (exerciseToCreate.User != GetUserId()) return Unauthorized();
+        if (exerciseToCreate.UserId != GetUserId()) return Unauthorized();
 
         var existingDefinition = await mediator.Send(new GetExerciseDefinitionByTitle()
         {
             Title = exerciseToCreate.Title,
-            UserId = exerciseToCreate.User
+            UserId = exerciseToCreate.UserId
         });
         if (existingDefinition != null) return BadRequest($"Exercise definition with title {exerciseToCreate.Title} already exists");
 
         var definition = await mediator.Send(new CreateExerciseDefinition
         {
-            UserId = exerciseToCreate.User,
             Definition = exerciseToCreate
         });
 

@@ -58,15 +58,19 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         });
     }
 
-    public async Task CreateDefinition(CreateExerciseDefinitionDto createExerciseDefinition)
+    public async Task<ExerciseDefinition> CreateDefinition(ExerciseDefinition exerciseDefinition)
     {
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
             INSERT INTO ExerciseDefinition (Title, Unit, UserId)
             VALUES (@Title, @Unit, @UserId);
+            SELECT LAST_INSERT_ID();
         ";
-        await connection.ExecuteAsync(sql, createExerciseDefinition);
+        var insertedId = await connection.QueryFirstAsync<int>(sql, exerciseDefinition);
+        exerciseDefinition.Id = insertedId;
+
+        return exerciseDefinition;
     }
 
     public async Task DeleteDefinitionById(int exerciseDefinitionId)

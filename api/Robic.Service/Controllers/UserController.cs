@@ -11,9 +11,9 @@ namespace Robic.Service.Controllers;
 public class UserController(IMapper mapper, IMediator mediator) : BaseController
 {
     [HttpGet("{id}", Name = "GetUser")]
-    public async Task<IActionResult> Get(string id)
+    public async Task<IActionResult> Get(int id)
     {
-        if (UserId != id) return Unauthorized();
+        if (GetUserId() != id) return Unauthorized();
 
         var user = await mediator.Send(new GetUserById
         {
@@ -28,9 +28,9 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete(int id)
     {
-        if (UserId != id) return Unauthorized();
+        if (GetUserId() != id) return Unauthorized();
 
         var user = await mediator.Send(new GetUserById
         {
