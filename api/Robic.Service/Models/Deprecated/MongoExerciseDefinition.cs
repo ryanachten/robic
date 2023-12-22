@@ -47,7 +47,7 @@ public class MongoExerciseDefinition : Document
     [Range(0, 100, ErrorMessage = "Value for {0} must be a percentage between {1} and {2}")]
     public double? LastImprovement { get; set; }
 
-    public PersonalBest? PersonalBest { get; set; }
+    public MongoPersonalBest? PersonalBest { get; set; }
 
     public static MongoExerciseDefinition MockDefinition() => new MongoExerciseDefinition()
     {

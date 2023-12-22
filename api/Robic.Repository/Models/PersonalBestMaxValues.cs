@@ -1,8 +1,7 @@
-namespace Robic.Service.Models;
+﻿namespace Robic.Repository.Models;
 
-public class PersonalBest
+public class PersonalBestMaxValues
 {
-    public Exercise? TopNetExercise { get; set; }
     public double? TopAvgValue { get; set; }
     public int? TopReps { get; set; }
     public int? TopSets { get; set; }

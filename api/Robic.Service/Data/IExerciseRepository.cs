@@ -1,4 +1,3 @@
-using Robic.Service.Models;
 using Robic.Service.Models.Deprecated;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,5 +11,5 @@ public interface IExerciseRepository
     Task<MongoExercise> CreateExercise(MongoExercise exercise, MongoExerciseDefinition definition);
     Task<MongoExercise> UpdateExercise(MongoExercise exercise);
     Task DeleteExercise(string id, MongoExerciseDefinition definition);
-    Task<PersonalBest?> GetPersonalBest(string definitionId);
+    Task<MongoPersonalBest?> GetPersonalBest(string definitionId);
 }

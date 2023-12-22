@@ -18,6 +18,7 @@ public class AutoMapperProfile : Profile
         CreateMap<RepositoryModel.ExerciseDefinition, ListExerciseDefinitionDto>();
         CreateMap<RepositoryModel.Exercise, Exercise>();
         CreateMap<RepositoryModel.ExerciseSet, Set>();
+        CreateMap<RepositoryModel.PersonalBestMaxValues, PersonalBest>();
         CreateMap<Set, RepositoryModel.DTOs.Exercise.CreateExerciseSetDto>();
         CreateMap<RegisterUserDto, User>();
         CreateMap<User, UserDetailDto>();

@@ -54,7 +54,7 @@ public class ExerciseRepository(
         return await exerciseContext.FindByIdAsync(id);
     }
 
-    public async Task<PersonalBest?> GetPersonalBest(string definitionId)
+    public async Task<MongoPersonalBest?> GetPersonalBest(string definitionId)
     {
         var exercises = await GetDefinitionExercises(definitionId);
         if (exercises == null || !exercises.Any()) return null;
@@ -63,7 +63,7 @@ public class ExerciseRepository(
         var highestAvgValue = 0.0;
         var highestReps = 0;
         var highestSets = 0;
-        var history = new List<PersonalBestHistory>();
+        var history = new List<ExerciseHistoryItem>();
 
         foreach (var e in exercises)
         {
@@ -94,7 +94,7 @@ public class ExerciseRepository(
                 history.Add(GetPersonalBestHistory(e));
         }
 
-        return new PersonalBest
+        return new MongoPersonalBest
         {
             TopNetExercise = exerciseWithHighestNetValue,
             TopAvgValue = highestAvgValue,
@@ -110,7 +110,7 @@ public class ExerciseRepository(
         return exercise;
     }
 
-    private static PersonalBestHistory GetPersonalBestHistory(MongoExercise exercise)
+    private static ExerciseHistoryItem GetPersonalBestHistory(MongoExercise exercise)
     {
         var totalReps = 0.0;
         var totalValue = 0.0;
@@ -126,7 +126,7 @@ public class ExerciseRepository(
             }
         }
 
-        var record = new PersonalBestHistory()
+        var record = new ExerciseHistoryItem()
         {
             Date = exercise.Date,
             NetValue = exercise.NetValue,

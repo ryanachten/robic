@@ -76,7 +76,7 @@ public class ExerciseSetRepository(MySqlDataSource database) : IExerciseSetRepos
         });
     }
 
-    public async Task<IEnumerable<ExerciseSet>> GetPersonalBestSets(int definitionId)
+    public async Task<IEnumerable<ExerciseSet>> GetPersonalBestExerciseSets(int definitionId)
     {
         using var connection = await database.OpenConnectionAsync();
 
@@ -93,6 +93,31 @@ public class ExerciseSetRepository(MySqlDataSource database) : IExerciseSetRepos
             );
         ";
         return await connection.QueryAsync<ExerciseSet>(sql, new
+        {
+            definitionId
+        });
+    }
+
+    public async Task<PersonalBestMaxValues> GetPersonalBestMaxValues(int definitionId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            SELECT 
+                MAX(SetCount) as TopSets,
+                MAX(RepCount) as TopReps,
+                MAX(AvgValue) as TopAvgValue
+            FROM (
+                SELECT 
+                    COUNT(Id) AS SetCount,
+                    SUM(Reps) AS RepCount,
+                    SUM(Reps * Value) / COUNT(Id) AS AvgValue
+                FROM ExerciseSet
+                WHERE DefinitionId = @definitionId
+                GROUP BY ExerciseId
+            ) as ExerciseSets;
+        ";
+        return await connection.QuerySingleAsync<PersonalBestMaxValues>(sql, new
         {
             definitionId
         });
