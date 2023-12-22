@@ -26,13 +26,15 @@ public class GetExerciseDefinitionByIdHandler(
         var primaryMuscleGroups = GetPrimaryMuscleGroups(repositoryDefinition.Id);
         var latestExercise = GetLatestExercise(repositoryDefinition.Id);
         var personalBest = GetPersonalBestExercise(repositoryDefinition.Id);
+        var exerciseHistory = GetExerciseHistory(repositoryDefinition.Id);
 
-        await Task.WhenAll(primaryMuscleGroups, latestExercise, personalBest);
+        await Task.WhenAll(primaryMuscleGroups, latestExercise, personalBest, exerciseHistory);
 
         var definition = mapper.Map<ExerciseDefinition>(repositoryDefinition);
         definition.PrimaryMuscleGroup = primaryMuscleGroups.Result;
         definition.LatestSession = latestExercise.Result;
         definition.PersonalBest = personalBest.Result;
+        definition.History = exerciseHistory.Result;
 
         return definition;
     }
@@ -41,6 +43,12 @@ public class GetExerciseDefinitionByIdHandler(
     {
         var muscleGroupResponse = await exerciseMuscleGroupRepository.GetDefinitionMuscleGroups(definitionId);
         return muscleGroupResponse.Select(mg => Enum.Parse<MuscleGroup>(mg)).ToList();
+    }
+
+    private async Task<List<ExerciseHistoryItem>> GetExerciseHistory(int definitionId)
+    {
+        var historyResponse = await exerciseRepository.GetExerciseHistory(definitionId);
+        return mapper.Map<List<ExerciseHistoryItem>>(historyResponse);
     }
 
     private async Task<Exercise?> GetLatestExercise(int definitionId)

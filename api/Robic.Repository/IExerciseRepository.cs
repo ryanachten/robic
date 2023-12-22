@@ -11,4 +11,5 @@ public interface IExerciseRepository
     Task<Exercise> CreateExercise(Exercise exercise);
     Task UpdateExercise(int id, UpdateExerciseDto updatedExercise);
     Task DeleteExerciseById(int id);
+    Task<IEnumerable<ExerciseHistoryItem>> GetExerciseHistory(int definitionId);
 }

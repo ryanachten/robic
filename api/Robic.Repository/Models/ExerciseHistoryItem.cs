@@ -1,11 +1,9 @@
-using System;
-
-namespace Robic.Service.Models;
+namespace Robic.Repository.Models;
 
 public class ExerciseHistoryItem
 {
     public DateTime Date { get; set; }
-    public double? NetValue { get; set; } // TODO: shouldn't be nullable - this is due to mongo code
+    public double NetValue { get; set; }
     public double AvgValue { get; set; }
     public double AvgReps { get; set; }
     public int Sets { get; set; }

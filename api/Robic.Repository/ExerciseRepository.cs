@@ -101,4 +101,29 @@ public class ExerciseRepository(MySqlDataSource database) : IExerciseRepository
             updatedExercise.TimeTaken,
         });
     }
+
+    public async Task<IEnumerable<ExerciseHistoryItem>> GetExerciseHistory(int definitionId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            SELECT 
+                E.Date as Date,
+                E.TimeTaken as TimeTaken,
+                SUM(S.Reps * S.Value) AS NetValue,
+                SUM(S.Value) / COUNT(S.Id) AS AvgValue,
+                SUM(S.Reps) / COUNT(S.Id) AS AvgReps,
+                COUNT(S.Id) as Sets
+            FROM Exercise as E
+            JOIN ExerciseSet AS S ON E.Id = S.ExerciseId
+            WHERE E.DefinitionId = @definitionId
+            GROUP BY ExerciseId
+            ORDER BY E.Date DESC;
+        ";
+
+        return await connection.QueryAsync<ExerciseHistoryItem>(sql, new
+        {
+            definitionId
+        });
+    }
 }
