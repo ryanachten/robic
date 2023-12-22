@@ -14,6 +14,7 @@ using Robic.Service.StartupExtensions;
 using System;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Robic.Service;
 
@@ -49,7 +50,9 @@ public class Startup(IConfiguration configuration)
                 };
             });
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(opts =>
+            opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()
+        ));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,6 +11,7 @@ public static class RepositoryExtensions
         services.AddScoped<IExerciseRepository, ExerciseRepository>();
         services.AddScoped<IExerciseDefinitionRepository, ExerciseDefinitionRepository>();
         services.AddScoped<IExerciseSetRepository, ExerciseSetRepository>();
+        services.AddScoped<IExerciseMuscleGroupRepository, ExerciseMuscleGroupRepository>();
 
         return services;
     }
