@@ -67,6 +67,7 @@ public class ExerciseController(IMediator mediator) : BaseController
         var result = await mediator.Send(new UpdateExercise
         {
             ExerciseId = exercise.Id,
+            DefinitionId = exercise.DefinitionId,
             Exercise = updatedExercise
         });
 

@@ -14,4 +14,6 @@ public class ExerciseDefinition
 
     // TODO: should be enum or something
     public List<string> PrimaryMuscleGroup { get; set; } = [];
+    public Exercise? LatestSession { get; set; }
+    public Exercise? PersonalBest { get; set; }
 }

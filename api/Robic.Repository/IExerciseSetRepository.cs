@@ -5,8 +5,9 @@ namespace Robic.Repository;
 
 public interface IExerciseSetRepository
 {
-    Task CreateSet(int exerciseId, IEnumerable<CreateExerciseSetDto> sets);
+    Task CreateSet(int exerciseId, int definitionId, IEnumerable<CreateExerciseSetDto> sets);
     Task<IEnumerable<ExerciseSet>> GetExerciseSets(int exerciseId);
     Task<IEnumerable<ExerciseSet>> GetExerciseSets(IEnumerable<int> exerciseIds);
     Task DeleteExerciseSets(int exerciseId);
+    Task<IEnumerable<ExerciseSet>> GetPersonalBestSets(int definitionId);
 }

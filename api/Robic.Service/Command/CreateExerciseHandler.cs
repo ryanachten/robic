@@ -25,7 +25,7 @@ public class CreateExerciseHandler(
         });
 
         var sets = mapper.Map<List<RepositoryExerciseDtos.CreateExerciseSetDto>>(request.Exercise.Sets);
-        await exerciseSetRepository.CreateSet(createdExercise.Id, sets);
+        await exerciseSetRepository.CreateSet(createdExercise.Id, createdExercise.DefinitionId, sets);
 
         var createdSets = await exerciseSetRepository.GetExerciseSets(createdExercise.Id);
         var exercise = mapper.Map<Exercise>(createdExercise);

@@ -53,6 +53,23 @@ public class ExerciseRepository(MySqlDataSource database) : IExerciseRepository
         });
     }
 
+    public async Task<Exercise?> GetLatestDefinitionExercise(int definitionId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            SELECT Id, DefinitionId, Date, TimeTaken
+            FROM Exercise
+            WHERE DefinitionId = @definitionId
+            ORDER BY Date DESC
+            LIMIT 1;
+        ";
+        return await connection.QueryFirstOrDefaultAsync<Exercise?>(sql, new
+        {
+            definitionId
+        });
+    }
+
     public async Task<Exercise?> GetExerciseById(int id)
     {
         using var connection = await database.OpenConnectionAsync();

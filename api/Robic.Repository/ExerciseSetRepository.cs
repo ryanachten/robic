@@ -7,12 +7,13 @@ namespace Robic.Repository;
 
 public class ExerciseSetRepository(MySqlDataSource database) : IExerciseSetRepository
 {
-    public async Task CreateSet(int exerciseId, IEnumerable<CreateExerciseSetDto> sets)
+    public async Task CreateSet(int exerciseId, int definitionId, IEnumerable<CreateExerciseSetDto> sets)
     {
         var updatedSets = sets.Select((CreateExerciseSetDto set, int i) =>
             new ExerciseSet()
             {
                 ExerciseId = exerciseId,
+                DefinitionId = definitionId,
                 SetOrder = i,
                 Reps = set.Reps,
                 Value = set.Value
@@ -21,8 +22,8 @@ public class ExerciseSetRepository(MySqlDataSource database) : IExerciseSetRepos
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            INSERT INTO ExerciseSet (ExerciseId, SetOrder, Reps, Value)
-            VALUES (@ExerciseId, @SetOrder, @Reps, @Value);
+            INSERT INTO ExerciseSet (ExerciseId, DefinitionId, SetOrder, Reps, Value)
+            VALUES (@ExerciseId, @DefinitionId, @SetOrder, @Reps, @Value);
         ";
 
         await connection.ExecuteAsync(sql, updatedSets);
@@ -48,7 +49,7 @@ public class ExerciseSetRepository(MySqlDataSource database) : IExerciseSetRepos
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            SELECT Id, ExerciseId, SetOrder, Reps, Value
+            SELECT Id, ExerciseId, DefinitionId, SetOrder, Reps, Value
             FROM ExerciseSet
             WHERE ExerciseId = @exerciseId
             ORDER BY SetOrder;
@@ -64,7 +65,7 @@ public class ExerciseSetRepository(MySqlDataSource database) : IExerciseSetRepos
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            SELECT Id, ExerciseId, SetOrder, Reps, Value
+            SELECT Id, ExerciseId, DefinitionId, SetOrder, Reps, Value
             FROM ExerciseSet
             WHERE ExerciseId IN @exerciseIds
             ORDER BY SetOrder;
@@ -72,6 +73,28 @@ public class ExerciseSetRepository(MySqlDataSource database) : IExerciseSetRepos
         return await connection.QueryAsync<ExerciseSet>(sql, new
         {
             exerciseIds,
+        });
+    }
+
+    public async Task<IEnumerable<ExerciseSet>> GetPersonalBestSets(int definitionId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            SELECT Id, ExerciseId, SetOrder, Reps, Value
+            FROM ExerciseSet
+            WHERE ExerciseId = (
+                SELECT ExerciseId
+                FROM ExerciseSet
+                WHERE DefinitionId = @definitionId
+                GROUP BY ExerciseId
+                ORDER BY SUM(Reps * Value) DESC, ExerciseId DESC
+                LIMIT 1
+            );
+        ";
+        return await connection.QueryAsync<ExerciseSet>(sql, new
+        {
+            definitionId
         });
     }
 }

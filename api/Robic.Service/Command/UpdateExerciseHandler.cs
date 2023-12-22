@@ -22,7 +22,7 @@ public class UpdateExerciseHandler(
         await exerciseSetRepository.DeleteExerciseSets(request.ExerciseId);
 
         var updatedSets = mapper.Map<List<RepositoryExerciseDtos.CreateExerciseSetDto>>(request.Exercise.Sets);
-        await exerciseSetRepository.CreateSet(request.ExerciseId, updatedSets);
+        await exerciseSetRepository.CreateSet(request.ExerciseId, request.DefinitionId, updatedSets);
 
         return mapper.Map<Exercise>(request.Exercise);
     }
