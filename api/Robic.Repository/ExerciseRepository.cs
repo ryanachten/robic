@@ -117,7 +117,7 @@ public class ExerciseRepository(MySqlDataSource database) : IExerciseRepository
             FROM Exercise as E
             JOIN ExerciseSet AS S ON E.Id = S.ExerciseId
             WHERE E.DefinitionId = @definitionId
-            GROUP BY ExerciseId
+            GROUP BY S.ExerciseId
             ORDER BY E.Date DESC;
         ";
 
