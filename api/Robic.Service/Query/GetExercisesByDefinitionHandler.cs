@@ -16,7 +16,7 @@ public class GetExercisesByDefinitionHandler(
 {
     public async Task<IEnumerable<Exercise>> Handle(GetExercisesByDefinition request, CancellationToken cancellationToken)
     {
-        var repositoryExercises = await exerciseRepository.GetDefinitionExercises(request.DefinitionId, request.UserId);
+        var repositoryExercises = await exerciseRepository.GetDefinitionExercises(request.UserId, request.DefinitionId);
         var repositorySets = await exerciseSetRepository.GetExerciseSets(repositoryExercises.Select(e => e.Id));
 
         var exercises = mapper.Map<List<Exercise>>(repositoryExercises);

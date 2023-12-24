@@ -5,5 +5,5 @@ namespace Robic.Service.Query;
 
 public class GetAnalytics : IRequest<Analytics>
 {
-    public string UserId { get; set; }
+    public int UserId { get; set; }
 }

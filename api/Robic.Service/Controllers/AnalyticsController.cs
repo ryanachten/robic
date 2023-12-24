@@ -7,14 +7,13 @@ namespace Robic.Service.Controllers;
 
 public class AnalyticsController(IMediator mediator) : BaseController
 {
+    // TODO: analytics isn't really a restful resource - reconsider this as an endpoint
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        if (UserId == null) return Unauthorized();
-
         var analytics = await mediator.Send(new GetAnalytics
         {
-            UserId = UserId
+            UserId = GetUserId()
         });
 
         return Ok(analytics);

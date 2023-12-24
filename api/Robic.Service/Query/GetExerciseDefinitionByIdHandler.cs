@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Robic.Service.Query;
 
+// TODO: this contract is massive - let's break it up into multiple endpoints
 public class GetExerciseDefinitionByIdHandler(
     IExerciseDefinitionRepository exerciseDefinitionRepository,
     IExerciseRepository exerciseRepository,

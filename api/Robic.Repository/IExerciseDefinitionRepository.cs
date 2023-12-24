@@ -11,4 +11,6 @@ public interface IExerciseDefinitionRepository
     Task<ExerciseDefinition> CreateDefinition(ExerciseDefinition exerciseDefinition);
     Task UpdateDefinition(UpdateExerciseDefinitionDto createExerciseDefinition);
     Task DeleteDefinitionById(int exerciseDefinitionId);
+    Task<IEnumerable<AnalyticsItem>> GetDefinitionFrequencies(int userId);
+    Task<IEnumerable<AnalyticsItem>> GetDefinitionProgress(int userId);
 }

@@ -132,4 +132,70 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
             userId
         });
     }
+
+    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionFrequencies(int userId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            SELECT 
+                D.Title as Marker,
+                COUNT(E.Id) as Count
+            FROM ExerciseDefinition as D 
+            JOIN Exercise as E on D.Id = E.DefinitionId 
+            WHERE D.UserId = @userId
+            GROUP BY D.Id
+            ORDER BY Count DESC, Marker;
+        ";
+        return await connection.QueryAsync<AnalyticsItem>(sql, new
+        {
+            userId
+        });
+    }
+
+    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionProgress(int userId)
+    {
+        using var connection = await database.OpenConnectionAsync();
+
+        var sql = @"
+            SELECT 
+                D.Title as Marker,
+                -- get total improvement by comparing the net value of the first and last exercise sessions
+                COALESCE((
+                    SELECT 
+                        (latest.NetValue - earliest.NetValue) / earliest.NetValue * 100 AS ImprovementPercentage
+                    FROM (
+                        SELECT 
+                            Exercise.Id AS ExerciseId,
+                            SUM(ExerciseSet.Reps * ExerciseSet.Value) AS NetValue
+                        FROM Exercise
+                        JOIN ExerciseSet ON Exercise.Id = ExerciseSet.ExerciseId
+                        WHERE Exercise.DefinitionId = D.Id
+                        GROUP BY Exercise.Id
+                        ORDER BY Exercise.Date DESC
+                        LIMIT 1
+                    ) AS latest
+                    JOIN (
+                        SELECT 
+                            Exercise.Id AS ExerciseId,
+                            SUM(ExerciseSet.Reps * ExerciseSet.Value) AS NetValue
+                        FROM Exercise
+                        JOIN ExerciseSet ON Exercise.Id = ExerciseSet.ExerciseId
+                        WHERE Exercise.DefinitionId = D.Id
+                        GROUP BY Exercise.Id
+                        ORDER BY Exercise.Date ASC
+                        LIMIT 1
+                    ) AS earliest ON latest.ExerciseId <> earliest.ExerciseId
+                ), 0) as Count
+            FROM ExerciseDefinition as D
+            JOIN Exercise AS E ON D.Id = E.DefinitionId
+            WHERE D.UserId = @userId
+            GROUP BY D.Id
+            ORDER BY Count DESC, Marker;
+        ";
+        return await connection.QueryAsync<AnalyticsItem>(sql, new
+        {
+            userId
+        });
+    }
 }

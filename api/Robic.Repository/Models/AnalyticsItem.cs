@@ -1,4 +1,4 @@
-namespace Robic.Service.Models;
+namespace Robic.Repository.Models;
 
 public class AnalyticsItem
 {
