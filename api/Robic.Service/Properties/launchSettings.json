@@ -2,6 +2,8 @@
   "profiles": {
     "Robic.Service": {
       "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://localhost:5001/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TokenKey": "token here",

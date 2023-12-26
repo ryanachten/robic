@@ -10,8 +10,11 @@ namespace Robic.Service.Controllers;
 
 public class UserController(IMapper mapper, IMediator mediator) : BaseController
 {
+    /// <summary>
+    /// Retrieves a user
+    /// </summary>
     [HttpGet("{id}", Name = "GetUser")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> GetUser(int id)
     {
         if (GetUserId() != id) return Unauthorized();
 
@@ -27,8 +30,11 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
         return Ok(userForReturn);
     }
 
+    /// <summary>
+    /// Deletes a user and associated resources
+    /// </summary>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteUser(int id)
     {
         if (GetUserId() != id) return Unauthorized();
 
