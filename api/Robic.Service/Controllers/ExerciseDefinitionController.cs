@@ -21,7 +21,7 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
     {
         var response = await mediator.Send(new GetExerciseDefinitions
         {
-            UserId = GetUserId()
+            UserId = UserId
         });
 
         return Ok(response);
@@ -42,7 +42,7 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
         });
 
         if (definition == null) return NotFound();
-        if (definition.UserId != GetUserId()) return Forbid();
+        if (definition.UserId != UserId) return Forbid();
 
         return Ok(definition);
     }
@@ -56,7 +56,7 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateDefinition(UpdateExerciseDefinitionDto exerciseToCreate)
     {
-        if (exerciseToCreate.UserId != GetUserId()) return Forbid();
+        if (exerciseToCreate.UserId != UserId) return Forbid();
 
         var existingDefinition = await mediator.Send(new GetExerciseDefinitionByTitle()
         {
@@ -88,7 +88,7 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
         });
 
         if (definition == null) return NotFound();
-        if (definition.UserId != GetUserId()) return Forbid();
+        if (definition.UserId != UserId) return Forbid();
 
         var updatedDefinition = await mediator.Send(new UpdateExerciseDefinition
         {
@@ -115,7 +115,7 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
         });
 
         if (definition == null) return NotFound();
-        if (definition.UserId != GetUserId()) return Forbid();
+        if (definition.UserId != UserId) return Forbid();
 
         await mediator.Send(new DeleteExerciseDefinition
         {

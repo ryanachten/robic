@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Authentication;
+using Robic.Service.Helpers;
 using System.Security.Claims;
 
 namespace Robic.Service.Controllers;
@@ -9,16 +9,15 @@ namespace Robic.Service.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Produces("application/json")]
+[RequireUserClaims]
 public partial class BaseController : ControllerBase
 {
-    protected int GetUserId()
+    public int UserId
     {
-        var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        // TODO: this should really be an action filter
-        if (userId == null)
+        get
         {
-            throw new InvalidCredentialException("Missing user ID in claims");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(userId!); // Won't be missing due to RequireUserClaims attribute above
         }
-        return int.Parse(userId);
     }
 }

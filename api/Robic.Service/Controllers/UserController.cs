@@ -16,7 +16,7 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
     [HttpGet("{id}", Name = "GetUser")]
     public async Task<IActionResult> GetUser(int id)
     {
-        if (GetUserId() != id) return Unauthorized();
+        if (UserId != id) return Unauthorized();
 
         var user = await mediator.Send(new GetUserById
         {
@@ -36,7 +36,7 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
-        if (GetUserId() != id) return Unauthorized();
+        if (UserId != id) return Unauthorized();
 
         var user = await mediator.Send(new GetUserById
         {

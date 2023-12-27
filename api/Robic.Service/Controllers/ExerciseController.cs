@@ -22,7 +22,7 @@ public class ExerciseController(IMediator mediator) : BaseController
         var exercises = await mediator.Send(new GetExercisesByDefinition
         {
             DefinitionId = definitionId,
-            UserId = GetUserId()
+            UserId = UserId
         });
 
         return Ok(exercises);
@@ -33,7 +33,7 @@ public class ExerciseController(IMediator mediator) : BaseController
     /// </summary>
     [HttpGet("{id}", Name = "GetExercise")]
     [ProducesResponseType(typeof(Exercise), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExerciseById(int id)
     {
@@ -45,7 +45,7 @@ public class ExerciseController(IMediator mediator) : BaseController
         if (exercise == null) return NotFound();
 
         var isUserDefinition = await IsUserDefinition(exercise.DefinitionId);
-        if (!isUserDefinition) return Unauthorized();
+        if (!isUserDefinition) return Forbid();
 
         return Ok(exercise);
     }
@@ -63,7 +63,7 @@ public class ExerciseController(IMediator mediator) : BaseController
 
         var createdExercise = await mediator.Send(new CreateExercise
         {
-            UserId = GetUserId(),
+            UserId = UserId,
             Exercise = exercise
         });
 
@@ -131,6 +131,6 @@ public class ExerciseController(IMediator mediator) : BaseController
             DefinitionId = definitionId
         });
 
-        return definition != null && definition.UserId == GetUserId();
+        return definition != null && definition.UserId == UserId;
     }
 }

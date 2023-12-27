@@ -19,7 +19,7 @@ public class AnalyticsController(IMediator mediator) : BaseController
     {
         var analytics = await mediator.Send(new GetAnalytics
         {
-            UserId = GetUserId()
+            UserId = UserId
         });
 
         return Ok(analytics);
