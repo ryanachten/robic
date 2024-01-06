@@ -89,7 +89,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            SELECT 
+           SELECT 
                 D.Id as Id,
                 D.Title as Title,
                 COUNT(E.Id) as SessionCount,
@@ -107,7 +107,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
                         WHERE Exercise.DefinitionId = D.Id
                         GROUP BY Exercise.Id
                         ORDER BY Exercise.Date DESC
-                        LIMIT 2
+                        LIMIT 1
                     ) AS latest
                     JOIN (
                         SELECT 
@@ -118,7 +118,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
                         WHERE Exercise.DefinitionId = D.Id
                         GROUP BY Exercise.Id
                         ORDER BY Exercise.Date DESC
-                        LIMIT 2, 1
+                        LIMIT 1, 1
                     ) AS previous ON latest.ExerciseId <> previous.ExerciseId
                 ) as LastImprovement
             FROM ExerciseDefinition as D
