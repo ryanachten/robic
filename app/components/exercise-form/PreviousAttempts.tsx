@@ -6,20 +6,17 @@ import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
 import { ExerciseCard } from "../ExerciseCard";
 
 export const PreviousAttempts = ({
-  id,
   definitionState,
 }: {
-  id: string;
   definitionState: ExerciseDefinitionState;
 }) => {
   const [showLastActivity, setShowLastActivity] = useState<boolean>(true);
   const [showPersonalBest, setShowPersonalBest] = useState<boolean>(true);
 
-  const { definitions } = definitionState;
-  const definition = definitions.find((def) => def.id === id);
-  if (definition) {
-    const { lastSession, personalBest: pb } = definition;
-    if (!lastSession && !pb) {
+  const { definitionDetail } = definitionState;
+  if (definitionDetail) {
+    const { latestSession, personalBest: pb } = definitionDetail;
+    if (!latestSession && !pb) {
       return null;
     }
     return (
@@ -30,7 +27,7 @@ export const PreviousAttempts = ({
               Personal best
             </Toggle>
           )}
-          {lastSession && (
+          {latestSession && (
             <Toggle checked={showLastActivity} onChange={setShowLastActivity}>
               Last session
             </Toggle>
@@ -43,15 +40,15 @@ export const PreviousAttempts = ({
               title="Personal Best"
               exercise={pb.topNetExercise}
               containerStyle={[
-                showLastActivity && lastSession && styles.exerciseCard,
+                showLastActivity && latestSession && styles.exerciseCard,
               ]}
             />
           )}
-          {showLastActivity && lastSession && (
+          {showLastActivity && latestSession && (
             <ExerciseCard
               icon="clock-outline"
               title="Latest Exercise"
-              exercise={lastSession}
+              exercise={latestSession}
             />
           )}
         </Card>

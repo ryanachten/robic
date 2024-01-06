@@ -1,4 +1,5 @@
-const API_DOMAIN = "http://35.174.97.134";
+// TODO: remove this file once refactor to openapi fetch complete
+const API_DOMAIN = "http://10.0.2.2:5000";
 const API_URL = `${API_DOMAIN}/api`;
 
 // Unauthorized endpoints

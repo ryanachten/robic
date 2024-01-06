@@ -16,17 +16,14 @@ const totalRepReducer = (accumulator: number, { reps }: Set) =>
   (accumulator += reps);
 
 export const EffortTillPersonalBest = ({
-  id,
   currentSets,
   definitionState,
 }: {
-  id: string;
   currentSets: FormSet[];
   definitionState: ExerciseDefinitionState;
 }) => {
-  const { definitions } = definitionState;
-  const definition = definitions.find((def) => def.id === id);
-  const pb = definition?.personalBest?.topNetExercise;
+  const { definitionDetail } = definitionState;
+  const pb = definitionDetail?.personalBest?.topNetExercise;
   if (!pb) {
     return null;
   }

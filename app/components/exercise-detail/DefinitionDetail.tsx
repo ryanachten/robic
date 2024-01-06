@@ -13,23 +13,23 @@ export const DefinitionDetail = ({
   definition: ExerciseDefinition;
 }) => {
   const {
-    type,
+    history,
     primaryMuscleGroup,
-    lastSession,
-    lastImprovement,
+    latestSession,
+    // lastImprovement, // TODO: return as part of detail response
     personalBest: pb,
   } = definition;
 
   return (
     <>
-      {(lastSession || pb) && (
+      {(latestSession || pb) && (
         <Card style={styles.exerciseCards}>
-          {lastSession && (
+          {latestSession && (
             <ExerciseCard
               icon="clock-outline"
               containerStyle={styles.exerciseCard}
               title="Latest Exercise"
-              exercise={lastSession}
+              exercise={latestSession}
             />
           )}
           {pb && pb.topNetExercise && (
@@ -43,29 +43,34 @@ export const DefinitionDetail = ({
       )}
       {pb && (
         <View style={styles.itemWrapper}>
-          <Item label="Top Weight (Avg)" value={pb.topAvgValue.toString()} />
-          <Item label="Top Reps" value={pb.topReps.toString()} />
-          <Item label="Top Sets" value={pb.topSets.toString()} />
+          <Item label="Top Weight (Avg)" value={pb.topAvgValue} />
+          <Item label="Top Reps" value={pb.topReps} />
+          <Item label="Top Sets" value={pb.topSets} />
         </View>
       )}
       <View style={styles.itemWrapper}>
-        {type && <Item label="Type" value={type} />}
         {primaryMuscleGroup && (
           <Item label="Muscles groups" value={primaryMuscleGroup.join(", ")} />
         )}
-        {lastImprovement ? (
+        {/* {lastImprovement ? (
           <Item label="Last improvement" value={`${lastImprovement}%`} />
-        ) : null}
+        ) : null} */}
       </View>
-      {pb && <ExerciseDetailAnalytics history={pb.history} />}
+      {pb && <ExerciseDetailAnalytics history={history} />}
     </>
   );
 };
 
-const Item = ({ label, value }: { label: string; value: string }) => (
+const Item = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number | null | undefined;
+}) => (
   <View style={styles.item}>
     <Text style={styles.label}>{label}</Text>
-    <Text>{value}</Text>
+    <Text>{value ?? "--"}</Text>
   </View>
 );
 

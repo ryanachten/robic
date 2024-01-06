@@ -1,23 +1,5 @@
-export enum MuscleGroup {
-  Chest = "Chest",
-  Forearms = "Forearms",
-  Lats = "Lats",
-  // MIDDLE_BACK = "Middle Back",
-  Back = "Lower Back",
-  Neck = "Neck",
-  Hamstrings = "Hamstrings",
-  Quadriceps = "Quadriceps",
-  Calves = "Calves",
-  Triceps = "Triceps",
-  Traps = "Traps",
-  Shoulders = "Shoulders",
-  Abdominals = "Abdominals",
-  Obliques = "Obliques",
-  Glutes = "Glutes",
-  Biceps = "Biceps",
-  // ADDUCTORS = "Adductors",
-  // ABDUCTORS = "Abductors"
-}
+import { components } from "../api/robic-swagger";
+export { MuscleGroup } from "../api/robic-swagger";
 
 export enum ExerciseType {
   Circuit = "Circuit",
@@ -31,13 +13,7 @@ export enum Unit {
   bodyweight = "bodyweight",
 }
 
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  exercises: any[];
-}
+export type User = components["schemas"]["UserDetailDto"];
 
 export interface SetExercise {
   id: string;
@@ -46,24 +22,14 @@ export interface SetExercise {
   unit: Unit;
 }
 
-// TODO: doesn't handle nested Set type
 export type Set = {
   reps: number;
   value: number;
 };
 
-// Used for exercise form
 export type FormSet = {
   reps: string;
   value: string;
-};
-
-export type PersonalBest = {
-  topNetExercise: Exercise | null;
-  topAvgValue: number;
-  topReps: Number;
-  topSets: Number;
-  history: PersonalBestHistory[];
 };
 
 export type PersonalBestHistory = {
@@ -75,7 +41,8 @@ export type PersonalBestHistory = {
   timeTaken: number;
 };
 
-export interface Exercise {
+// TODO: remove this after migration
+export interface ExerciseOld {
   id: string;
   date: string;
   definition: string;
@@ -84,24 +51,23 @@ export interface Exercise {
   netValue: number;
 }
 
-export interface ExerciseDefinition {
-  id: string;
-  title: string;
-  lastSession: Exercise | null;
-  lastImprovement: number | null;
-  unit: Unit;
-  type?: ExerciseType;
-  user: string;
-  history: string[];
-  childExercises: ExerciseDefinition[];
-  primaryMuscleGroup?: MuscleGroup[];
-  personalBest?: PersonalBest;
-}
+export type Exercise = components["schemas"]["Exercise"];
+
+export type ExerciseHistoryItem = components["schemas"]["ExerciseHistoryItem"];
+
+export type ExerciseDefinitionSummary =
+  components["schemas"]["ExerciseDefinitionSummary"];
+
+export type ExerciseDefinition = components["schemas"]["ExerciseDefinition"];
+
+export type UpdateExerciseDefinition =
+  components["schemas"]["UpdateExerciseDefinitionDto"];
 
 export type AnalyticsItem = {
   marker: string;
   count: number;
 };
+
 export interface Analytics {
   mostFrequentMuscleGroup: AnalyticsItem | null;
   mostFrequentExercise: AnalyticsItem | null;

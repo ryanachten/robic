@@ -28,7 +28,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const isFocused = useIsFocused();
 
   const {
-    state: { definitions, error, loadingDefinition },
+    state: { definitionDetail, error, loadingDefinition },
     actions: { getDefinitionById },
   } = useContext(ExerciseDefinitionContext);
 
@@ -39,14 +39,9 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   useEffect(() => {
     if (definitionId && isFocused) {
       getDefinitionById(definitionId);
-      getExercisesByDefinition(definitionId);
+      getExercisesByDefinition(definitionId.toString()); // TODO: update later
     }
   }, [isFocused]);
-
-  const exercise = useMemo(
-    () => definitions.find((def) => def.id === definitionId),
-    [definitionId, loadingDefinition]
-  );
 
   const fetchExercise = useCallback(
     () => definitionId && getDefinitionById(definitionId),
@@ -56,14 +51,14 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const navigateToEditScreen = useCallback(
     () =>
       navigation.navigate("ExerciseEditScreen", {
-        definition: exercise,
+        definition: definitionDetail,
       }),
     [definitionId, loadingDefinition]
   );
 
   return (
     <Background>
-      <Text style={styles.title}>{exercise?.title}</Text>
+      <Text style={styles.title}>{definitionDetail?.title}</Text>
       <Button
         appearance="outline"
         onPress={navigateToEditScreen}
@@ -74,7 +69,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
       >
         Edit
       </Button>
-      {exercise && (
+      {definitionDetail && (
         <FlatList
           refreshControl={
             <RefreshControl
@@ -82,8 +77,8 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
               onRefresh={fetchExercise}
             />
           }
-          keyExtractor={(item) => item.id}
-          data={[exercise]}
+          keyExtractor={(item) => item.id.toString()}
+          data={[definitionDetail]}
           renderItem={({ item }) => (
             <>
               <DefinitionDetail definition={item} />

@@ -18,7 +18,7 @@ import { formatRelativeDate } from "../../utilities/dateHelpers";
 import { Button } from "../Button";
 import { ErrorToast } from "../ErrorToast";
 
-export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
+export const ExerciseHistory = ({ definitionId }: { definitionId: number }) => {
   const {
     state: { exercises: allExercises, error, loadingDeleteExercise },
     actions: { deleteExercise },
@@ -40,7 +40,9 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: string }) => {
     }
   };
 
-  const exercises = allExercises.filter((e) => e.definition === definitionId);
+  const exercises = allExercises.filter(
+    (e) => e.definition === definitionId.toString()
+  ); // TODO: update later
 
   const deleteExerciseById = async (id: string) => {
     await deleteExercise(id);

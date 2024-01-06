@@ -8,16 +8,21 @@ import {
 } from "../services/context";
 import { Margin } from "../constants/Sizes";
 import { useNavigation } from "@react-navigation/native";
-import { ExerciseDefinition } from "../constants/Interfaces";
+import { ExerciseDefinitionSummary } from "../constants/Interfaces";
 
+// TODO: do this on the backend
 const sortExercisesAlphabetically = (
-  a: ExerciseDefinition,
-  b: ExerciseDefinition
+  a: ExerciseDefinitionSummary,
+  b: ExerciseDefinitionSummary
 ): number => (a.title > b.title ? 1 : -1);
 
 export default function HomeScreen() {
   const {
-    state: { definitions: unsortedDefinitions, error, loadingDefinitions },
+    state: {
+      definitionSummaries: unsortedDefinitions,
+      error,
+      loadingDefinitions,
+    },
     actions: { getDefinitions },
   } = useContext(ExerciseDefinitionContext);
 

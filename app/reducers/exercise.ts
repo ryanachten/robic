@@ -1,4 +1,4 @@
-import { Exercise, Set } from "../constants/Interfaces";
+import { ExerciseOld, Set } from "../constants/Interfaces";
 import axios, { AxiosResponse } from "axios";
 import { EXERCISE_URL } from "../constants/Api";
 import { BaseState, BaseActions, baseTypes } from "./base";
@@ -22,7 +22,7 @@ export type ExerciseState = BaseState & {
   loadingExercises: boolean;
   loadingCreateExercise: boolean;
   loadingDeleteExercise: boolean;
-  exercises: Exercise[];
+  exercises: ExerciseOld[];
 };
 
 export type ExerciseAction =
@@ -30,11 +30,11 @@ export type ExerciseAction =
   | { type: exerciseTypes.LOADING_EXERCISES }
   | {
       type: exerciseTypes.GET_EXERCISES_BY_DEFINITION;
-      exercises: Exercise[];
+      exercises: ExerciseOld[];
     }
   | {
       type: exerciseTypes.CREATE_EXERCISE;
-      exercise: Exercise;
+      exercise: ExerciseOld;
     }
   | { type: exerciseTypes.LOADING_CREATE_EXERCISE }
   | {
@@ -65,7 +65,7 @@ export const exerciseActions = (
       type: exerciseTypes.LOADING_EXERCISES,
     });
     try {
-      const { data }: AxiosResponse<Exercise[]> = await axios.get(
+      const { data }: AxiosResponse<ExerciseOld[]> = await axios.get(
         EXERCISE_URL,
         {
           params: {
@@ -86,7 +86,7 @@ export const exerciseActions = (
       type: exerciseTypes.LOADING_CREATE_EXERCISE,
     });
     try {
-      const { data }: AxiosResponse<Exercise> = await axios.post(
+      const { data }: AxiosResponse<ExerciseOld> = await axios.post(
         EXERCISE_URL,
         exercise
       );

@@ -9,7 +9,8 @@
     "eject": "expo eject",
     "test": "jest --watchAll",
     "publish": "expo publish",
-    "build:android": "expo build:android -t apk"
+    "build:android": "expo build:android -t apk",
+    "generate-swagger-types": "openapi-typescript ./api/robic-swagger.yaml -o ./api/robic-swagger.ts --enum=true"
   },
   "jest": {
     "preset": "jest-expo"
@@ -36,6 +37,8 @@
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
     "expo-web-browser": "~12.3.2",
+    "openapi-fetch": "^0.8.2",
+    "openapi-typescript": "7.0.0-next.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.6",

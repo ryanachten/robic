@@ -32,10 +32,10 @@ export type HomeParamList = {
 export type ExercisesParamList = {
   ExercisesScreen: undefined;
   ExerciseEditScreen: {
-    definition?: ExerciseDefinition;
+    definition: ExerciseDefinition | null;
   };
   ExerciseDetailScreen: {
-    definitionId: string;
+    definitionId: number;
   };
 };
 

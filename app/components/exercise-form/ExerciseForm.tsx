@@ -8,7 +8,11 @@ import React, {
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ExerciseForPost } from "../../reducers/exercise";
-import { ExerciseDefinition, FormSet, Set } from "../../constants/Interfaces";
+import {
+  ExerciseDefinitionSummary,
+  FormSet,
+  Set,
+} from "../../constants/Interfaces";
 import { ErrorToast } from "../ErrorToast";
 import { Button } from "../Button";
 import { Stopwatch } from "../Stopwatch";
@@ -26,7 +30,7 @@ import { SetList } from "./SetList";
 export const ExerciseForm = ({
   definition: { id },
 }: {
-  definition: ExerciseDefinition;
+  definition: ExerciseDefinitionSummary;
 }) => {
   const initialSet: FormSet[] = [{ reps: "1", value: "5" }];
   const [sets, setSets] = useState<FormSet[]>(initialSet);
@@ -74,7 +78,7 @@ export const ExerciseForm = ({
     }));
     const exercise: ExerciseForPost = {
       sets: setsForSumission,
-      definition: id,
+      definition: id.toString(), // TODO update later
     };
     if (!stopwatchRef.current) {
       return;
@@ -126,9 +130,8 @@ export const ExerciseForm = ({
         </Button>
       </View>
       <ScrollView>
-        <PreviousAttempts id={id} definitionState={definitionState} />
+        <PreviousAttempts definitionState={definitionState} />
         <EffortTillPersonalBest
-          id={id}
           currentSets={sets}
           definitionState={definitionState}
         />

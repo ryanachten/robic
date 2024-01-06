@@ -1,0 +1,742 @@
+openapi: 3.0.1
+info:
+  title: Robic
+  description: Simple exercise tracking and analysis API
+  version: v1
+paths:
+  /api/Analytics:
+    get:
+      tags:
+        - Analytics
+      summary: Returns exercise analytics for a given user
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Analytics'
+  /api/Auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Registers a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/Auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Logs a user in
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/Exercise:
+    get:
+      tags:
+        - Exercise
+      summary: Retrieves list of exercises for a definition
+      parameters:
+        - name: definition
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Exercise'
+    post:
+      tags:
+        - Exercise
+      summary: Creates an exercise
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercise'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  '/api/Exercise/{id}':
+    get:
+      tags:
+        - Exercise
+      summary: Retrieves exercise details
+      operationId: GetExercise
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercise'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    put:
+      tags:
+        - Exercise
+      summary: Updates exercise details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercise'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    delete:
+      tags:
+        - Exercise
+      summary: Deletes an exercise and related resources
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: No Content
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/ExerciseDefinition:
+    get:
+      tags:
+        - ExerciseDefinition
+      summary: Retrieves list of user exercise definitions
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExerciseDefinitionSummary'
+    post:
+      tags:
+        - ExerciseDefinition
+      summary: Creates an exercise definition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDefinitionDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDefinitionDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDefinitionDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExerciseDefinition'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  '/api/ExerciseDefinition/{id}':
+    get:
+      tags:
+        - ExerciseDefinition
+      summary: Retrieves exercise definition details
+      operationId: GetExerciseDefinition
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExerciseDefinition'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    put:
+      tags:
+        - ExerciseDefinition
+      summary: Updates exercise definition details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDefinitionDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDefinitionDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseDefinitionDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExerciseDefinition'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    delete:
+      tags:
+        - ExerciseDefinition
+      summary: Deletes an exercise definition and associated resources
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  '/api/User/{id}':
+    get:
+      tags:
+        - User
+      summary: Retrieves a user
+      operationId: GetUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+    delete:
+      tags:
+        - User
+      summary: Deletes a user and associated resources
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    Analytics:
+      required:
+        - exerciseFrequency
+        - exerciseProgress
+        - mostExerciseProgress
+        - mostFrequentExercise
+        - mostFrequentMuscleGroup
+        - muscleGroupFrequency
+      type: object
+      properties:
+        mostFrequentMuscleGroup:
+          $ref: '#/components/schemas/AnalyticsItem'
+        mostFrequentExercise:
+          $ref: '#/components/schemas/AnalyticsItem'
+        mostExerciseProgress:
+          $ref: '#/components/schemas/AnalyticsItem'
+        muscleGroupFrequency:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
+        exerciseFrequency:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
+        exerciseProgress:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
+      additionalProperties: false
+    AnalyticsItem:
+      required:
+        - count
+        - marker
+      type: object
+      properties:
+        marker:
+          type: string
+        count:
+          type: number
+          format: double
+      additionalProperties: false
+    Exercise:
+      required:
+        - date
+        - definitionId
+        - id
+        - sets
+        - timeTaken
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        definitionId:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
+        timeTaken:
+          type: string
+          format: date-time
+        sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Set'
+        netValue:
+          type: number
+          format: double
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    ExerciseDefinition:
+      required:
+        - history
+        - id
+        - latestSession
+        - personalBest
+        - primaryMuscleGroup
+        - title
+        - unit
+        - userId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        userId:
+          type: integer
+          format: int32
+        title:
+          type: string
+        unit:
+          $ref: '#/components/schemas/Unit'
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExerciseHistoryItem'
+        primaryMuscleGroup:
+          type: array
+          items:
+            $ref: '#/components/schemas/MuscleGroup'
+        latestSession:
+          $ref: '#/components/schemas/Exercise'
+        personalBest:
+          $ref: '#/components/schemas/PersonalBest'
+      additionalProperties: false
+    ExerciseDefinitionSummary:
+      required:
+        - id
+        - sessionCount
+        - title
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+        sessionCount:
+          type: integer
+          format: int32
+        lastSessionDate:
+          type: string
+          format: date-time
+          nullable: true
+        lastImprovement:
+          maximum: 100
+          minimum: 0
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    ExerciseHistoryItem:
+      required:
+        - avgReps
+        - avgValue
+        - date
+        - netValue
+        - sets
+        - timeTaken
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        netValue:
+          type: number
+          format: double
+        avgValue:
+          type: number
+          format: double
+        avgReps:
+          type: number
+          format: double
+        sets:
+          type: integer
+          format: int32
+        timeTaken:
+          type: string
+          format: date-time
+      additionalProperties: false
+    LoginResponseDto:
+      required:
+        - token
+        - userDetails
+      type: object
+      properties:
+        token:
+          type: string
+        userDetails:
+          $ref: '#/components/schemas/UserDetailDto'
+      additionalProperties: false
+    LoginUserDto:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      additionalProperties: false
+    MuscleGroup:
+      enum:
+        - CHEST
+        - FOREARMS
+        - LATS
+        - BACK
+        - NECK
+        - HAMSTRINGS
+        - QUADRICEPS
+        - CALVES
+        - TRICEPS
+        - TRAPS
+        - SHOULDERS
+        - ABDOMINALS
+        - OBLIQUES
+        - GLUTES
+        - BICEPS
+      type: string
+    PersonalBest:
+      required:
+        - topNetExercise
+      type: object
+      properties:
+        topNetExercise:
+          $ref: '#/components/schemas/Exercise'
+        topAvgValue:
+          type: number
+          format: double
+          nullable: true
+        topReps:
+          type: integer
+          format: int32
+          nullable: true
+        topSets:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: { }
+    RegisterUserDto:
+      required:
+        - email
+        - firstName
+        - lastName
+        - password
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          maxLength: 20
+          minLength: 4
+          type: string
+      additionalProperties: false
+    Set:
+      required:
+        - reps
+        - value
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        reps:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Unit:
+      enum:
+        - KG
+        - MIN
+        - BODYWEIGHT
+      type: string
+    UpdateExerciseDefinitionDto:
+      required:
+        - primaryMuscleGroup
+        - title
+        - unit
+        - userId
+      type: object
+      properties:
+        title:
+          type: string
+        unit:
+          type: string
+        userId:
+          type: integer
+          format: int32
+        primaryMuscleGroup:
+          type: array
+          items:
+            $ref: '#/components/schemas/MuscleGroup'
+      additionalProperties: false
+    UpdateExerciseDto:
+      required:
+        - date
+        - definitionId
+        - sets
+        - timeTaken
+      type: object
+      properties:
+        definitionId:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
+        timeTaken:
+          type: string
+          format: date-time
+        sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Set'
+      additionalProperties: false
+    UserDetailDto:
+      required:
+        - email
+        - firstName
+        - id
+        - lastName
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+      additionalProperties: false
