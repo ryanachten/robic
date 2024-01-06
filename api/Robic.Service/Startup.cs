@@ -56,6 +56,9 @@ public class Startup(IConfiguration configuration)
                 Description = "Simple exercise tracking and analysis API",
             });
 
+            options.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
+            options.SupportNonNullableReferenceTypes();
+
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
@@ -67,10 +70,14 @@ public class Startup(IConfiguration configuration)
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.yaml", "Robic API");
+            });
         }
 
-        app.UseHttpsRedirection();
+        // TODO: breaks local development for Android. Ensure this works in production and remove associated redirect code
+        //app.UseHttpsRedirection();
 
         app.UseRouting();
 

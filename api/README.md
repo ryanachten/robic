@@ -52,6 +52,12 @@ docker push ryanachten/robic
 
 ### Developing locally with React Native
 
+#### Android
+
+To run with Android, we need to reference local ports using `http://10.0.2.2:PORT` - see [here](https://developer.android.com/studio/run/emulator-networking#networkaddresses) for more information.
+
+#### iOS
+
 To run with iOS simulator, we need to run the server in HTTPS. However, iOS does not seem to work with `localhost` domains when running .NET Core locally. To work around this, we route the local server using [ngrok](https://ngrok.com/).
 
 Steps:
