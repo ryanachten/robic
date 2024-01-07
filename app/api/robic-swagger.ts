@@ -656,7 +656,7 @@ export interface components {
             /** Format: date-time */
             date: string;
             /** Format: date-time */
-            timeTaken: string;
+            timeTaken?: string | null;
             sets: components["schemas"]["Set"][];
         };
         UserDetailDto: {

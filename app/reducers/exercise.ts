@@ -1,13 +1,7 @@
-import { ExerciseOld, Set } from "../constants/Interfaces";
-import axios, { AxiosResponse } from "axios";
-import { EXERCISE_URL } from "../constants/Api";
+import { Exercise, UpdateExercise } from "../constants/Interfaces";
 import { BaseState, BaseActions, baseTypes } from "./base";
-
-export type ExerciseForPost = {
-  definition: string;
-  sets: Set[];
-  timeTaken?: string;
-};
+import client from "../api/client";
+import { getErrorDetail } from "../utilities";
 
 export enum exerciseTypes {
   LOADING_EXERCISES = "LOADING_EXERCISES",
@@ -22,7 +16,7 @@ export type ExerciseState = BaseState & {
   loadingExercises: boolean;
   loadingCreateExercise: boolean;
   loadingDeleteExercise: boolean;
-  exercises: ExerciseOld[];
+  exercises: Exercise[];
 };
 
 export type ExerciseAction =
@@ -30,23 +24,23 @@ export type ExerciseAction =
   | { type: exerciseTypes.LOADING_EXERCISES }
   | {
       type: exerciseTypes.GET_EXERCISES_BY_DEFINITION;
-      exercises: ExerciseOld[];
+      exercises: Exercise[];
     }
   | {
       type: exerciseTypes.CREATE_EXERCISE;
-      exercise: ExerciseOld;
+      exercise: Exercise;
     }
   | { type: exerciseTypes.LOADING_CREATE_EXERCISE }
   | {
       type: exerciseTypes.DELETE_EXERCISE;
-      id: string;
+      id: number;
     }
   | { type: exerciseTypes.LOADING_DELETE_EXERCISE };
 
 export type ExerciseActions = {
-  getExercisesByDefinition: (definitionId: string) => Promise<void>;
-  createExercise: (exercise: ExerciseForPost) => Promise<void>;
-  deleteExercise: (id: string) => Promise<void>;
+  getExercisesByDefinition: (definitionId: number) => Promise<void>;
+  createExercise: (exercise: UpdateExercise) => Promise<void>;
+  deleteExercise: (id: number) => Promise<void>;
 };
 
 export const initialExerciseState: ExerciseState = {
@@ -60,57 +54,73 @@ export const initialExerciseState: ExerciseState = {
 export const exerciseActions = (
   dispatch: React.Dispatch<ExerciseAction>
 ): ExerciseActions => ({
-  getExercisesByDefinition: async (definitionId: string) => {
+  getExercisesByDefinition: async (definition: number) => {
     dispatch({
       type: exerciseTypes.LOADING_EXERCISES,
     });
-    try {
-      const { data }: AxiosResponse<ExerciseOld[]> = await axios.get(
-        EXERCISE_URL,
-        {
-          params: {
-            definition: definitionId,
-          },
-        }
-      );
-      dispatch({
-        type: exerciseTypes.GET_EXERCISES_BY_DEFINITION,
-        exercises: data,
-      });
-    } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+
+    const { data, error } = await client.GET("/api/Exercise", {
+      params: {
+        query: {
+          definition,
+        },
+      },
+    });
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
+      return;
     }
+
+    dispatch({
+      type: exerciseTypes.GET_EXERCISES_BY_DEFINITION,
+      exercises: data,
+    });
   },
-  createExercise: async (exercise: ExerciseForPost) => {
+  createExercise: async (exercise: UpdateExercise) => {
     dispatch({
       type: exerciseTypes.LOADING_CREATE_EXERCISE,
     });
-    try {
-      const { data }: AxiosResponse<ExerciseOld> = await axios.post(
-        EXERCISE_URL,
-        exercise
-      );
-      dispatch({
-        type: exerciseTypes.CREATE_EXERCISE,
-        exercise: data,
-      });
-    } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+
+    const { data, error } = await client.POST("/api/Exercise", {
+      body: exercise,
+    });
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
+      return;
     }
+
+    dispatch({
+      type: exerciseTypes.CREATE_EXERCISE,
+      exercise: data,
+    });
   },
-  deleteExercise: async (id: string) => {
+  deleteExercise: async (id: number) => {
     dispatch({
       type: exerciseTypes.LOADING_DELETE_EXERCISE,
     });
-    try {
-      await axios.delete(`${EXERCISE_URL}/${id}`);
-      dispatch({
-        type: exerciseTypes.DELETE_EXERCISE,
-        id,
-      });
-    } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+
+    const { error } = await client.DELETE("/api/Exercise/{id}", {
+      params: {
+        path: {
+          id,
+        },
+      },
+    });
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
+      return;
     }
+
+    dispatch({
+      type: exerciseTypes.DELETE_EXERCISE,
+      id,
+    });
   },
 });
 

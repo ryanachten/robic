@@ -1,21 +1,21 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "@ui-kitten/components";
-import { FormSet } from "../../constants/Interfaces";
+import { Set } from "../../constants/Interfaces";
 import { Input } from "../Input";
 import { Icon } from "../Icon";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
 
 type SetListProps = {
-  sets: FormSet[];
+  sets: Set[];
   updateSet: (index: number, field: "reps" | "value", value: string) => void;
   removeSet: (index: number) => void;
 };
 
 export const SetList = ({ sets, updateSet, removeSet }: SetListProps) => (
   <>
-    {sets.map(({ reps, value }: FormSet, index: number) => {
+    {sets.map(({ reps, value }: Set, index: number) => {
       const activeSet = index === 0;
       const setDisplayNumber = sets.length - index;
       return (

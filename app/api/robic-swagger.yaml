@@ -705,7 +705,6 @@ components:
         - date
         - definitionId
         - sets
-        - timeTaken
       type: object
       properties:
         definitionId:
@@ -717,6 +716,7 @@ components:
         timeTaken:
           type: string
           format: date-time
+          nullable: true
         sets:
           type: array
           items:
