@@ -1,16 +1,16 @@
 import { Analytics } from "../constants/Interfaces";
-import axios, { AxiosResponse } from "axios";
-import { ANALYTICS_URL } from "../constants/Api";
 import { BaseState, BaseActions, baseTypes } from "./base";
+import client from "../api/client";
+import { getErrorDetail } from "../utilities";
 
 export enum analyticsTypes {
-  LOADIN_GET_ANALYTICS = "LOADIN_GET_ANALYTICS",
+  LOADING_GET_ANALYTICS = "LOADING_GET_ANALYTICS",
   GET_ANALYTICS = "GET_ANALYTICS",
 }
 
 export type AnalyticsAction =
   | BaseActions
-  | { type: analyticsTypes.LOADIN_GET_ANALYTICS }
+  | { type: analyticsTypes.LOADING_GET_ANALYTICS }
   | {
       type: analyticsTypes.GET_ANALYTICS;
       analytics: Analytics;
@@ -36,17 +36,21 @@ export const analyticsActions = (
 ): AnalyticsActions => ({
   getAnalytics: async () => {
     dispatch({
-      type: analyticsTypes.LOADIN_GET_ANALYTICS,
+      type: analyticsTypes.LOADING_GET_ANALYTICS,
     });
-    try {
-      const { data }: AxiosResponse<Analytics> = await axios.get(ANALYTICS_URL);
-      dispatch({
-        type: analyticsTypes.GET_ANALYTICS,
-        analytics: data,
-      });
-    } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+
+    const { data, error } = await client.GET("/api/Analytics");
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
+      return;
     }
+
+    dispatch({
+      type: analyticsTypes.GET_ANALYTICS,
+      analytics: data,
+    });
   },
 });
 
@@ -55,7 +59,7 @@ export const analyticsReducer = (
   action: AnalyticsAction
 ): AnalyticsState => {
   switch (action.type) {
-    case analyticsTypes.LOADIN_GET_ANALYTICS:
+    case analyticsTypes.LOADING_GET_ANALYTICS:
       return {
         ...state,
         loadingAnalytics: true,

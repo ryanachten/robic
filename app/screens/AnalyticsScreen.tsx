@@ -20,6 +20,7 @@ export default function AnalyticsScreen() {
     actions: { getAnalytics },
   } = useContext(AnalyticsContext);
 
+  // TODO: this limit should be sent to the backend and used in query
   const resultsPerChart = 5;
 
   return (
@@ -59,26 +60,8 @@ export default function AnalyticsScreen() {
               data={analytics.exerciseFrequency.splice(0, resultsPerChart)}
             />
             <AnalyticsChart
-              title="Least frequent exercises"
-              data={analytics.exerciseFrequency.splice(
-                analytics.exerciseFrequency.length - resultsPerChart,
-                analytics.exerciseFrequency.length
-              )}
-            />
-            <AnalyticsChart
               title="Most exercise progress"
               data={analytics.exerciseProgress.splice(0, resultsPerChart)}
-            />
-            <AnalyticsChart
-              containerStyle={{
-                marginTop: Margin.lg,
-                marginBottom: Margin.lg,
-              }}
-              title="Least exercise progress"
-              data={analytics.exerciseProgress.splice(
-                analytics.exerciseProgress.length - resultsPerChart,
-                analytics.exerciseProgress.length
-              )}
             />
           </>
         ) : (

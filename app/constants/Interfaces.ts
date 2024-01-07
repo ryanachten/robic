@@ -19,15 +19,6 @@ export type ExerciseDefinition = components["schemas"]["ExerciseDefinition"];
 export type UpdateExerciseDefinition =
   components["schemas"]["UpdateExerciseDefinitionDto"];
 
-export type AnalyticsItem = {
-  marker: string;
-  count: number;
-};
+export type AnalyticsItem = components["schemas"]["AnalyticsItem"];
 
-export interface Analytics {
-  mostFrequentMuscleGroup: AnalyticsItem | null;
-  mostFrequentExercise: AnalyticsItem | null;
-  muscleGroupFrequency: AnalyticsItem[];
-  exerciseFrequency: AnalyticsItem[];
-  exerciseProgress: AnalyticsItem[];
-}
+export type Analytics = components["schemas"]["Analytics"];

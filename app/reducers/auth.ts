@@ -1,4 +1,3 @@
-import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserAction, userTypes } from "./user";
 import { StorageKeys } from "../constants/StorageKeys";
@@ -70,8 +69,6 @@ export const authActions = (
       // TODO: After restoring token, we may need to validate it in production apps
       token = await AsyncStorage.getItem(StorageKeys.Token);
       clientHeaders.Authorization = `bearer ${token}`;
-      // TODO: deprecated along with Axios
-      Axios.defaults.headers.common["Authorization"] = `bearer ${token}`;
       dispatch({ type: authTypes.RESTORE_TOKEN, token });
     } catch (e) {
       const error = getErrorMessage(e);
@@ -98,8 +95,6 @@ export const authActions = (
     // Dispatch and serialise token
     await AsyncStorage.setItem(StorageKeys.Token, token);
     clientHeaders.Authorization = `bearer ${token}`;
-    // TODO: deprecated along with Axios
-    Axios.defaults.headers.common["Authorization"] = `bearer ${token}`;
     dispatch({ type: authTypes.SIGN_IN, token });
 
     // Dispatch and serialise user
