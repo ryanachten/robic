@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { ExercisesParamList } from "../navigation/types";
-import {
-  MuscleGroup,
-  Unit,
-  UpdateExerciseDefinition,
-} from "../constants/Interfaces";
+import { MuscleGroup, Unit, UpdateExerciseDefinition } from "../api";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
 import { ExerciseDefinitionContext, UserContext } from "../services/context";

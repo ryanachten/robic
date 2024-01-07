@@ -1,4 +1,4 @@
-import { ExerciseDefinition } from "../constants/Interfaces";
+import { ExerciseDefinition } from "../api";
 
 export type RootStackParamList = {
   Root: undefined;

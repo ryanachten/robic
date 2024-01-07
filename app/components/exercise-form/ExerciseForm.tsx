@@ -7,11 +7,7 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {
-  ExerciseDefinitionSummary,
-  Set,
-  UpdateExercise,
-} from "../../constants/Interfaces";
+import { ExerciseDefinitionSummary, Set, UpdateExercise } from "../../api";
 import { ErrorToast } from "../ErrorToast";
 import { Button } from "../Button";
 import { Stopwatch } from "../Stopwatch";

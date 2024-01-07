@@ -1,6 +1,5 @@
-import { Exercise, UpdateExercise } from "../constants/Interfaces";
+import { apiClient, Exercise, UpdateExercise } from "../api";
 import { BaseState, BaseActions, baseTypes } from "./base";
-import client from "../api/client";
 import { getErrorDetail } from "../utilities";
 
 export enum exerciseTypes {
@@ -59,7 +58,7 @@ export const exerciseActions = (
       type: exerciseTypes.LOADING_EXERCISES,
     });
 
-    const { data, error } = await client.GET("/api/Exercise", {
+    const { data, error } = await apiClient.GET("/api/Exercise", {
       params: {
         query: {
           definition,
@@ -83,7 +82,7 @@ export const exerciseActions = (
       type: exerciseTypes.LOADING_CREATE_EXERCISE,
     });
 
-    const { data, error } = await client.POST("/api/Exercise", {
+    const { data, error } = await apiClient.POST("/api/Exercise", {
       body: exercise,
     });
 
@@ -103,7 +102,7 @@ export const exerciseActions = (
       type: exerciseTypes.LOADING_DELETE_EXERCISE,
     });
 
-    const { error } = await client.DELETE("/api/Exercise/{id}", {
+    const { error } = await apiClient.DELETE("/api/Exercise/{id}", {
       params: {
         path: {
           id,

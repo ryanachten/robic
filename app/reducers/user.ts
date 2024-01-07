@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { User } from "../constants/Interfaces";
+import { User } from "../api";
 import { StorageKeys } from "../constants/StorageKeys";
 import { BaseActions, BaseState, baseTypes } from "./base";
 import { getErrorMessage } from "../utilities";

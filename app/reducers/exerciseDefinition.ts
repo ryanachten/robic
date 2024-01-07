@@ -1,11 +1,11 @@
 import {
+  apiClient,
   ExerciseDefinition,
   ExerciseDefinitionSummary,
   UpdateExerciseDefinition,
-} from "../constants/Interfaces";
+} from "../api";
 import { BaseState, BaseActions, baseTypes } from "./base";
 import { getErrorDetail } from "../utilities";
-import client from "../api/client";
 
 export enum exerciseDefinitionTypes {
   LOADING_DEFINITIONS = "LOADING_DEFINITIONS",
@@ -79,7 +79,7 @@ export const exerciseDefinitionActions = (
     dispatch({
       type: exerciseDefinitionTypes.LOADING_DEFINITIONS,
     });
-    const { data, error } = await client.GET("/api/ExerciseDefinition");
+    const { data, error } = await apiClient.GET("/api/ExerciseDefinition");
 
     if (error) {
       const errorDetail = getErrorDetail(error);
@@ -97,13 +97,16 @@ export const exerciseDefinitionActions = (
       type: exerciseDefinitionTypes.LOADING_DEFINITION,
     });
 
-    const { data, error } = await client.GET("/api/ExerciseDefinition/{id}", {
-      params: {
-        path: {
-          id,
+    const { data, error } = await apiClient.GET(
+      "/api/ExerciseDefinition/{id}",
+      {
+        params: {
+          path: {
+            id,
+          },
         },
-      },
-    });
+      }
+    );
 
     if (error) {
       const errorDetail = getErrorDetail(error);
@@ -121,7 +124,7 @@ export const exerciseDefinitionActions = (
       type: exerciseDefinitionTypes.LOADING_CREATE_DEFINITION,
     });
 
-    const { data, error } = await client.POST("/api/ExerciseDefinition", {
+    const { data, error } = await apiClient.POST("/api/ExerciseDefinition", {
       body: definition,
     });
 
@@ -143,14 +146,17 @@ export const exerciseDefinitionActions = (
       type: exerciseDefinitionTypes.LOADING_UPDATE_DEFINITION,
     });
 
-    const { data, error } = await client.PUT("/api/ExerciseDefinition/{id}", {
-      params: {
-        path: {
-          id,
+    const { data, error } = await apiClient.PUT(
+      "/api/ExerciseDefinition/{id}",
+      {
+        params: {
+          path: {
+            id,
+          },
         },
-      },
-      body: definition,
-    });
+        body: definition,
+      }
+    );
 
     if (error) {
       const errorDetail = getErrorDetail(error);

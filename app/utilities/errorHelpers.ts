@@ -1,10 +1,10 @@
-import { components } from "../api/robic-swagger";
+import { ProblemDetails } from "../api";
 
 export const getErrorMessage = (error: unknown) => {
   if (error instanceof Error) return error.message;
   return String(error);
 };
 
-export const getErrorDetail = (e: components["schemas"]["ProblemDetails"]) => {
+export const getErrorDetail = (e: ProblemDetails) => {
   return e.detail ?? "Something went wrong";
 };

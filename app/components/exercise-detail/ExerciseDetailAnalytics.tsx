@@ -1,7 +1,7 @@
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import { ExerciseHistoryItem } from "../../constants/Interfaces";
+import { ExerciseHistoryItem } from "../../api";
 import { Margin } from "../../constants/Sizes";
 import { LineChart } from "../charts";
 

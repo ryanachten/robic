@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { Text } from "@ui-kitten/components";
-import { Exercise } from "../constants/Interfaces";
+import { Exercise } from "../api";
 import { Margin } from "../constants/Sizes";
 import { Colors } from "../constants/Colors";
 import { Icon } from "./Icon";

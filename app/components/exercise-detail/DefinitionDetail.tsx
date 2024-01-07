@@ -2,7 +2,7 @@ import { Card, Text } from "@ui-kitten/components/ui";
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Colors } from "../../constants/Colors";
-import { ExerciseDefinition } from "../../constants/Interfaces";
+import { ExerciseDefinition } from "../../api";
 import { Margin } from "../../constants/Sizes";
 import { ExerciseCard } from "../ExerciseCard";
 import { ExerciseDetailAnalytics } from "./ExerciseDetailAnalytics";

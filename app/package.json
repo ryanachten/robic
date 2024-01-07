@@ -10,7 +10,7 @@
     "test": "jest --watchAll",
     "publish": "expo publish",
     "build:android": "expo build:android -t apk",
-    "generate-swagger-types": "openapi-typescript ./api/robic-swagger.yaml -o ./api/robic-swagger.ts --enum=true"
+    "generate-openapi-types": "openapi-typescript ../api/robic-openapi.yaml -o ./api/robic-openapi.ts --enum=true"
   },
   "jest": {
     "preset": "jest-expo"

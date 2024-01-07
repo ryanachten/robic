@@ -1,5 +1,10 @@
-import { components } from "../api/robic-swagger";
-export { MuscleGroup, Unit } from "../api/robic-swagger";
+import { components } from "./robic-openapi";
+
+/**
+ * Proxies OpenAPI interfaces to make them easier to consume in the application
+ */
+
+export { MuscleGroup, Unit } from "./robic-openapi";
 
 export type User = components["schemas"]["UserDetailDto"];
 
@@ -22,3 +27,5 @@ export type UpdateExerciseDefinition =
 export type AnalyticsItem = components["schemas"]["AnalyticsItem"];
 
 export type Analytics = components["schemas"]["Analytics"];
+
+export type ProblemDetails = components["schemas"]["ProblemDetails"];

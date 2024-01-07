@@ -1,6 +1,5 @@
-import { Analytics } from "../constants/Interfaces";
+import { apiClient, Analytics } from "../api";
 import { BaseState, BaseActions, baseTypes } from "./base";
-import client from "../api/client";
 import { getErrorDetail } from "../utilities";
 
 export enum analyticsTypes {
@@ -39,7 +38,7 @@ export const analyticsActions = (
       type: analyticsTypes.LOADING_GET_ANALYTICS,
     });
 
-    const { data, error } = await client.GET("/api/Analytics");
+    const { data, error } = await apiClient.GET("/api/Analytics");
 
     if (error) {
       const errorDetail = getErrorDetail(error);

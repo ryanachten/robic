@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserAction, userTypes } from "./user";
 import { StorageKeys } from "../constants/StorageKeys";
 import { BaseState, baseTypes, BaseActions } from "./base";
-import client, { clientHeaders } from "../api/client";
+import { apiClient, apiClientHeaders } from "../api";
 import { getErrorDetail, getErrorMessage } from "../utilities";
 
 export enum authTypes {
@@ -68,7 +68,7 @@ export const authActions = (
     try {
       // TODO: After restoring token, we may need to validate it in production apps
       token = await AsyncStorage.getItem(StorageKeys.Token);
-      clientHeaders.Authorization = `bearer ${token}`;
+      apiClientHeaders.Authorization = `bearer ${token}`;
       dispatch({ type: authTypes.RESTORE_TOKEN, token });
     } catch (e) {
       const error = getErrorMessage(e);
@@ -77,7 +77,7 @@ export const authActions = (
   },
   signIn: async (email, password) => {
     dispatch({ type: authTypes.LOADING_SIGN_IN });
-    const { data, error } = await client.POST("/api/Auth/login", {
+    const { data, error } = await apiClient.POST("/api/Auth/login", {
       body: {
         email,
         password,
@@ -94,7 +94,7 @@ export const authActions = (
 
     // Dispatch and serialise token
     await AsyncStorage.setItem(StorageKeys.Token, token);
-    clientHeaders.Authorization = `bearer ${token}`;
+    apiClientHeaders.Authorization = `bearer ${token}`;
     dispatch({ type: authTypes.SIGN_IN, token });
 
     // Dispatch and serialise user
@@ -107,7 +107,7 @@ export const authActions = (
   },
   signUp: async ({ firstName, lastName, email, password }: UserForRegister) => {
     dispatch({ type: authTypes.LOADING_SIGN_UP });
-    const { error } = await client.POST("/api/Auth/register", {
+    const { error } = await apiClient.POST("/api/Auth/register", {
       body: {
         firstName,
         lastName,

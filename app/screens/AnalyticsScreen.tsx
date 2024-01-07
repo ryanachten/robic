@@ -10,7 +10,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { Background, BarChart, ErrorToast, PieChart } from "../components";
-import { AnalyticsItem } from "../constants/Interfaces";
+import { AnalyticsItem } from "../api";
 import { Margin } from "../constants/Sizes";
 import { AnalyticsContext } from "../services/context";
 

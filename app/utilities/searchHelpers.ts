@@ -1,4 +1,4 @@
-import { ExerciseDefinitionSummary } from "../constants/Interfaces";
+import { ExerciseDefinitionSummary } from "../api";
 
 // Alphabetical sort fallback
 export const sortAlpha = (

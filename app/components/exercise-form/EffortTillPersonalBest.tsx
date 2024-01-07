@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Card, Text } from "@ui-kitten/components";
-import { Set } from "../../constants/Interfaces";
+import { Set } from "../../api";
 import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";

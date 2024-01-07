@@ -10,7 +10,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Background, Button, ErrorToast, Icon } from "../components";
 import { ExercisesParamList } from "../navigation/types";
-import { ExerciseDefinitionSummary } from "../constants/Interfaces";
+import { ExerciseDefinitionSummary } from "../api";
 import {
   filterBySearchTerm,
   sortByDate,

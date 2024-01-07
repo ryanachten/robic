@@ -8,7 +8,7 @@ import {
 } from "../services/context";
 import { Margin } from "../constants/Sizes";
 import { useNavigation } from "@react-navigation/native";
-import { ExerciseDefinitionSummary } from "../constants/Interfaces";
+import { ExerciseDefinitionSummary } from "../api";
 
 // TODO: do this on the backend
 const sortExercisesAlphabetically = (
