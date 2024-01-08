@@ -4,42 +4,6 @@
  */
 
 export interface paths {
-    "/api/Analytics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Returns exercise analytics for a given user */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Analytics"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/Auth/register": {
         parameters: {
             query?: never;
@@ -534,18 +498,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/User/analytics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns exercise analytics for a given user */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description Number of results to return for each analytics list */
+                    maxResults?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserAnalytics"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        Analytics: {
-            mostFrequentMuscleGroup: components["schemas"]["AnalyticsItem"];
-            mostFrequentExercise: components["schemas"]["AnalyticsItem"];
-            mostExerciseProgress: components["schemas"]["AnalyticsItem"];
-            muscleGroupFrequency: components["schemas"]["AnalyticsItem"][];
-            exerciseFrequency: components["schemas"]["AnalyticsItem"][];
-            exerciseProgress: components["schemas"]["AnalyticsItem"][];
-        };
         AnalyticsItem: {
             marker: string;
             /** Format: double */
@@ -658,6 +653,14 @@ export interface components {
             /** Format: date-time */
             timeTaken?: string | null;
             sets: components["schemas"]["Set"][];
+        };
+        UserAnalytics: {
+            mostFrequentMuscleGroup: components["schemas"]["AnalyticsItem"];
+            mostFrequentExercise: components["schemas"]["AnalyticsItem"];
+            mostExerciseProgress: components["schemas"]["AnalyticsItem"];
+            muscleGroupFrequency: components["schemas"]["AnalyticsItem"][];
+            exerciseFrequency: components["schemas"]["AnalyticsItem"][];
+            exerciseProgress: components["schemas"]["AnalyticsItem"][];
         };
         UserDetailDto: {
             /** Format: int32 */

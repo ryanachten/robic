@@ -4,18 +4,6 @@ info:
   description: Simple exercise tracking and analysis API
   version: v1
 paths:
-  /api/Analytics:
-    get:
-      tags:
-        - Analytics
-      summary: Returns exercise analytics for a given user
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Analytics'
   /api/Auth/register:
     post:
       tags:
@@ -398,37 +386,27 @@ paths:
       responses:
         '200':
           description: Success
+  /api/User/analytics:
+    get:
+      tags:
+        - User
+      summary: Returns exercise analytics for a given user
+      parameters:
+        - name: maxResults
+          in: query
+          description: Number of results to return for each analytics list
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAnalytics'
 components:
   schemas:
-    Analytics:
-      required:
-        - exerciseFrequency
-        - exerciseProgress
-        - mostExerciseProgress
-        - mostFrequentExercise
-        - mostFrequentMuscleGroup
-        - muscleGroupFrequency
-      type: object
-      properties:
-        mostFrequentMuscleGroup:
-          $ref: '#/components/schemas/AnalyticsItem'
-        mostFrequentExercise:
-          $ref: '#/components/schemas/AnalyticsItem'
-        mostExerciseProgress:
-          $ref: '#/components/schemas/AnalyticsItem'
-        muscleGroupFrequency:
-          type: array
-          items:
-            $ref: '#/components/schemas/AnalyticsItem'
-        exerciseFrequency:
-          type: array
-          items:
-            $ref: '#/components/schemas/AnalyticsItem'
-        exerciseProgress:
-          type: array
-          items:
-            $ref: '#/components/schemas/AnalyticsItem'
-      additionalProperties: false
     AnalyticsItem:
       required:
         - count
@@ -721,6 +699,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Set'
+      additionalProperties: false
+    UserAnalytics:
+      required:
+        - exerciseFrequency
+        - exerciseProgress
+        - mostExerciseProgress
+        - mostFrequentExercise
+        - mostFrequentMuscleGroup
+        - muscleGroupFrequency
+      type: object
+      properties:
+        mostFrequentMuscleGroup:
+          $ref: '#/components/schemas/AnalyticsItem'
+        mostFrequentExercise:
+          $ref: '#/components/schemas/AnalyticsItem'
+        mostExerciseProgress:
+          $ref: '#/components/schemas/AnalyticsItem'
+        muscleGroupFrequency:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
+        exerciseFrequency:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
+        exerciseProgress:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
       additionalProperties: false
     UserDetailDto:
       required:

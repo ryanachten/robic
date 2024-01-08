@@ -1,4 +1,4 @@
-import { apiClient, Analytics } from "../api";
+import { apiClient, UserAnalytics } from "../api";
 import { BaseState, BaseActions, baseTypes } from "./base";
 import { getErrorDetail } from "../utilities";
 
@@ -12,7 +12,7 @@ export type AnalyticsAction =
   | { type: analyticsTypes.LOADING_GET_ANALYTICS }
   | {
       type: analyticsTypes.GET_ANALYTICS;
-      analytics: Analytics;
+      analytics: UserAnalytics;
     };
 
 export type AnalyticsActions = {
@@ -21,7 +21,7 @@ export type AnalyticsActions = {
 
 export type AnalyticsState = BaseState & {
   loadingAnalytics: boolean;
-  analytics: Analytics | null;
+  analytics: UserAnalytics | null;
 };
 
 export const initialAnalyticsState: AnalyticsState = {
@@ -38,7 +38,13 @@ export const analyticsActions = (
       type: analyticsTypes.LOADING_GET_ANALYTICS,
     });
 
-    const { data, error } = await apiClient.GET("/api/Analytics");
+    const { data, error } = await apiClient.GET("/api/User/analytics", {
+      params: {
+        query: {
+          maxResults: 5,
+        },
+      },
+    });
 
     if (error) {
       const errorDetail = getErrorDetail(error);

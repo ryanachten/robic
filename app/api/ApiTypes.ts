@@ -26,6 +26,6 @@ export type UpdateExerciseDefinition =
 
 export type AnalyticsItem = components["schemas"]["AnalyticsItem"];
 
-export type Analytics = components["schemas"]["Analytics"];
+export type UserAnalytics = components["schemas"]["UserAnalytics"];
 
 export type ProblemDetails = components["schemas"]["ProblemDetails"];

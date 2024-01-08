@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Robic.Service.Models;
 
-public class Analytics
+public class UserAnalytics
 {
     public AnalyticsItem? MostFrequentMuscleGroup { get; set; }
     public AnalyticsItem? MostFrequentExercise { get; set; }

@@ -133,7 +133,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         });
     }
 
-    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionFrequencies(int userId)
+    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionFrequencies(int userId, int maxResults)
     {
         using var connection = await database.OpenConnectionAsync();
 
@@ -145,15 +145,17 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
             JOIN Exercise as E on D.Id = E.DefinitionId 
             WHERE D.UserId = @userId
             GROUP BY D.Id
-            ORDER BY Count DESC, Marker;
+            ORDER BY Count DESC, Marker
+            LIMIT @maxResults;
         ";
         return await connection.QueryAsync<AnalyticsItem>(sql, new
         {
-            userId
+            userId,
+            maxResults
         });
     }
 
-    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionProgress(int userId)
+    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionProgress(int userId, int maxResults)
     {
         using var connection = await database.OpenConnectionAsync();
 
@@ -191,11 +193,13 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
             JOIN Exercise AS E ON D.Id = E.DefinitionId
             WHERE D.UserId = @userId
             GROUP BY D.Id
-            ORDER BY Count DESC, Marker;
+            ORDER BY Count DESC, Marker
+            LIMIT @maxResults;
         ";
         return await connection.QueryAsync<AnalyticsItem>(sql, new
         {
-            userId
+            userId,
+            maxResults
         });
     }
 }

@@ -1,7 +1,9 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Robic.Service.Command;
+using Robic.Service.Models;
 using Robic.Service.Models.DTOs.User;
 using Robic.Service.Query;
 using System.Threading.Tasks;
@@ -50,5 +52,23 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
         });
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Returns exercise analytics for a given user
+    /// </summary>
+    /// <param name="maxResults">Number of results to return for each analytics list</param>
+    /// <returns>User analytics</returns>
+    [HttpGet("analytics")]
+    [ProducesResponseType(typeof(UserAnalytics), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUserAnalytics([FromQuery] int maxResults)
+    {
+        var analytics = await mediator.Send(new GetUserAnalytics
+        {
+            UserId = UserId,
+            MaxResults = maxResults
+        });
+
+        return Ok(analytics);
     }
 }

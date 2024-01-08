@@ -20,9 +20,6 @@ export default function AnalyticsScreen() {
     actions: { getAnalytics },
   } = useContext(AnalyticsContext);
 
-  // TODO: this limit should be sent to the backend and used in query
-  const resultsPerChart = 5;
-
   return (
     <Background style={{ padding: 0 }}>
       <ScrollView
@@ -57,11 +54,11 @@ export default function AnalyticsScreen() {
             />
             <AnalyticsChart
               title="Most frequent exercises"
-              data={analytics.exerciseFrequency.splice(0, resultsPerChart)}
+              data={analytics.exerciseFrequency}
             />
             <AnalyticsChart
               title="Most exercise progress"
-              data={analytics.exerciseProgress.splice(0, resultsPerChart)}
+              data={analytics.exerciseProgress}
             />
           </>
         ) : (
