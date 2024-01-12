@@ -15,6 +15,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Robic.Service;
@@ -45,7 +46,7 @@ public class Startup(IConfiguration configuration)
             });
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         services.AddControllers().AddJsonOptions(opts =>
-            opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()
+            opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
         ));
         services.AddSwaggerGen(options =>
         {

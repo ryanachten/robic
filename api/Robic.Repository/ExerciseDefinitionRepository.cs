@@ -12,8 +12,39 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            SELECT Id, Title, Unit, UserId
-            FROM ExerciseDefinition
+            SELECT 
+                 Id, 
+                 Title,
+                 Unit,
+                 UserId,
+                 -- get latest improvement by comparing the net value of the last two exercise sessions
+                 (
+                     SELECT 
+                         (latest.NetValue - previous.NetValue) / previous.NetValue * 100 AS ImprovementPercentage
+                     FROM (
+                         SELECT 
+                             Exercise.Id AS ExerciseId,
+                             SUM(ExerciseSet.Reps * ExerciseSet.Value) AS NetValue
+                         FROM Exercise
+                         JOIN ExerciseSet ON Exercise.Id = ExerciseSet.ExerciseId
+                         WHERE Exercise.DefinitionId = @exerciseDefinitionId
+                         GROUP BY Exercise.Id
+                         ORDER BY Exercise.Date DESC
+                         LIMIT 1
+                     ) AS latest
+                     JOIN (
+                         SELECT 
+                             Exercise.Id AS ExerciseId,
+                             SUM(ExerciseSet.Reps * ExerciseSet.Value) AS NetValue
+                         FROM Exercise
+                         JOIN ExerciseSet ON Exercise.Id = ExerciseSet.ExerciseId
+                         WHERE Exercise.DefinitionId = @exerciseDefinitionId
+                         GROUP BY Exercise.Id
+                         ORDER BY Exercise.Date DESC
+                         LIMIT 1, 1
+                     ) AS previous ON latest.ExerciseId <> previous.ExerciseId
+                 ) as LastImprovement
+             FROM ExerciseDefinition
             WHERE Id = @exerciseDefinitionId;
         ";
         var definitions = await connection.QueryAsync<ExerciseDefinition>(sql, new

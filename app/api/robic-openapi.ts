@@ -569,6 +569,8 @@ export interface components {
             history: components["schemas"]["ExerciseHistoryItem"][];
             primaryMuscleGroup: components["schemas"]["MuscleGroup"][];
             latestSession: components["schemas"]["Exercise"];
+            /** Format: double */
+            lastImprovement?: number | null;
             personalBest: components["schemas"]["PersonalBest"];
         };
         ExerciseDefinitionSummary: {
@@ -780,24 +782,24 @@ export interface operations {
     };
 }
 export enum MuscleGroup {
-    CHEST = "CHEST",
-    FOREARMS = "FOREARMS",
-    LATS = "LATS",
-    BACK = "BACK",
-    NECK = "NECK",
-    HAMSTRINGS = "HAMSTRINGS",
-    QUADRICEPS = "QUADRICEPS",
-    CALVES = "CALVES",
-    TRICEPS = "TRICEPS",
-    TRAPS = "TRAPS",
-    SHOULDERS = "SHOULDERS",
-    ABDOMINALS = "ABDOMINALS",
-    OBLIQUES = "OBLIQUES",
-    GLUTES = "GLUTES",
-    BICEPS = "BICEPS"
+    chest = "chest",
+    forearms = "forearms",
+    lats = "lats",
+    back = "back",
+    neck = "neck",
+    hamstrings = "hamstrings",
+    quadriceps = "quadriceps",
+    calves = "calves",
+    triceps = "triceps",
+    traps = "traps",
+    shoulders = "shoulders",
+    abdominals = "abdominals",
+    obliques = "obliques",
+    glutes = "glutes",
+    biceps = "biceps"
 }
 export enum Unit {
-    KG = "KG",
-    MIN = "MIN",
-    BODYWEIGHT = "BODYWEIGHT"
+    kg = "kg",
+    min = "min",
+    bodyweight = "bodyweight"
 }

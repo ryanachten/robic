@@ -16,7 +16,7 @@ export const DefinitionDetail = ({
     history,
     primaryMuscleGroup,
     latestSession,
-    // lastImprovement, // TODO: return as part of detail response
+    lastImprovement,
     personalBest: pb,
   } = definition;
 
@@ -32,7 +32,7 @@ export const DefinitionDetail = ({
               exercise={latestSession}
             />
           )}
-          {pb && pb.topNetExercise && (
+          {pb?.topNetExercise && (
             <ExerciseCard
               icon="star-outline"
               title="Personal Best"
@@ -49,12 +49,12 @@ export const DefinitionDetail = ({
         </View>
       )}
       <View style={styles.itemWrapper}>
-        {primaryMuscleGroup && (
+        {primaryMuscleGroup.length > 0 && (
           <Item label="Muscles groups" value={primaryMuscleGroup.join(", ")} />
         )}
-        {/* {lastImprovement ? (
+        {lastImprovement ? (
           <Item label="Last improvement" value={`${lastImprovement}%`} />
-        ) : null} */}
+        ) : null}
       </View>
       {pb && <ExerciseDetailAnalytics history={history} />}
     </>

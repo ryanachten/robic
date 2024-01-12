@@ -482,6 +482,10 @@ components:
             $ref: '#/components/schemas/MuscleGroup'
         latestSession:
           $ref: '#/components/schemas/Exercise'
+        lastImprovement:
+          type: number
+          format: double
+          nullable: true
         personalBest:
           $ref: '#/components/schemas/PersonalBest'
       additionalProperties: false
@@ -564,21 +568,21 @@ components:
       additionalProperties: false
     MuscleGroup:
       enum:
-        - CHEST
-        - FOREARMS
-        - LATS
-        - BACK
-        - NECK
-        - HAMSTRINGS
-        - QUADRICEPS
-        - CALVES
-        - TRICEPS
-        - TRAPS
-        - SHOULDERS
-        - ABDOMINALS
-        - OBLIQUES
-        - GLUTES
-        - BICEPS
+        - chest
+        - forearms
+        - lats
+        - back
+        - neck
+        - hamstrings
+        - quadriceps
+        - calves
+        - triceps
+        - traps
+        - shoulders
+        - abdominals
+        - obliques
+        - glutes
+        - biceps
       type: string
     PersonalBest:
       required:
@@ -654,9 +658,9 @@ components:
       additionalProperties: false
     Unit:
       enum:
-        - KG
-        - MIN
-        - BODYWEIGHT
+        - kg
+        - min
+        - bodyweight
       type: string
     UpdateExerciseDefinitionDto:
       required:
