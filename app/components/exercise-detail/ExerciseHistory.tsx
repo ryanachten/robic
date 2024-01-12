@@ -10,17 +10,18 @@ import {
   Text,
 } from "@ui-kitten/components/ui";
 import React, { useContext, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ImageProps, StyleSheet, TextProps, View } from "react-native";
 import { ModalBackground } from "../../constants/Colors";
 import { Margin } from "../../constants/Sizes";
 import { ExerciseContext } from "../../services/context";
 import { formatRelativeDate } from "../../utilities/dateHelpers";
 import { Button } from "../Button";
 import { ErrorToast } from "../ErrorToast";
+import { Set } from "../../api";
 
-export const ExerciseHistory = ({ definitionId }: { definitionId: number }) => {
+export const ExerciseHistory = () => {
   const {
-    state: { exercises: allExercises, error, loadingDeleteExercise },
+    state: { exercises, error, loadingDeleteExercise },
     actions: { deleteExercise },
   } = useContext(ExerciseContext);
 
@@ -28,30 +29,67 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: number }) => {
     new IndexPath(0)
   );
   const [visible, setVisible] = useState(false);
-  const [deleteId, setDeleteId] = useState("");
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const toggleModal = (active: Boolean, id?: string) => {
+  const toggleModal = (active: boolean, id: number | null = null) => {
     if (active && id) {
       setVisible(true);
       setDeleteId(id);
     } else {
       setVisible(false);
-      setDeleteId("");
+      setDeleteId(null);
     }
   };
 
-  const exercises = allExercises.filter(
-    (e) => e.definition === definitionId.toString()
-  ); // TODO: update later
-
-  const deleteExerciseById = async (id: string) => {
-    await deleteExercise(id);
+  const deleteExerciseById = async (id: number | null = null) => {
+    if (id !== undefined && id !== null) {
+      await deleteExercise(id);
+    }
     toggleModal(false);
   };
 
   if (!exercises || exercises.length === 0) {
     return null;
   }
+
+  const renderHistoryIcon = (props: Partial<ImageProps> | undefined) => (
+    <Icon {...props} name="clock-outline" />
+  );
+
+  const renderTitle = (
+    props: Partial<TextProps> | undefined,
+    sets: Set[],
+    date: string
+  ) => (
+    <View style={styles.itemContent}>
+      <Text {...props} category="s1" style={[props?.style, styles.itemTitle]}>
+        {formatRelativeDate(date)}
+      </Text>
+      <View style={styles.setWrapper}>
+        {sets.map(({ reps, value }, j) => (
+          <Text
+            {...props}
+            key={j}
+            style={[props?.style, styles.setText]}
+            category="p2"
+          >
+            {`${reps} reps x ${value} kg`}
+          </Text>
+        ))}
+      </View>
+    </View>
+  );
+
+  const renderDeleteIcon = (
+    props: Partial<ImageProps> | undefined,
+    exerciseId: number
+  ) => (
+    <Icon
+      {...props}
+      name="slash-outline"
+      onPress={() => toggleModal(true, exerciseId)}
+    />
+  );
 
   return (
     <>
@@ -86,45 +124,14 @@ export const ExerciseHistory = ({ definitionId }: { definitionId: number }) => {
         onSelect={(index) => setSelectedIndex(index)}
         style={styles.menu}
       >
-        <MenuGroup
-          title="History"
-          accessoryLeft={(props) => <Icon {...props} name="clock-outline" />}
-        >
+        <MenuGroup title="History" accessoryLeft={renderHistoryIcon}>
           {exercises
             .sort((a, b) => (new Date(a.date) > new Date(b.date) ? -1 : 1))
             .map(({ id, date, sets }, i) => (
               <MenuItem
                 key={i}
-                title={(props) => (
-                  <View style={styles.itemContent}>
-                    <Text
-                      {...props}
-                      category="s1"
-                      style={[props?.style, styles.itemTitle]}
-                    >
-                      {formatRelativeDate(date)}
-                    </Text>
-                    <View style={styles.setWrapper}>
-                      {sets.map(({ reps, value }, j) => (
-                        <Text
-                          {...props}
-                          key={j}
-                          style={[props?.style, styles.setText]}
-                          category="p2"
-                        >
-                          {`${reps} reps x ${value} kg`}
-                        </Text>
-                      ))}
-                    </View>
-                  </View>
-                )}
-                accessoryRight={(props) => (
-                  <Icon
-                    {...props}
-                    name="slash-outline"
-                    onPress={() => toggleModal(true, id)}
-                  />
-                )}
+                title={(props) => renderTitle(props, sets, date)}
+                accessoryRight={(props) => renderDeleteIcon(props, id)}
               />
             ))}
         </MenuGroup>
