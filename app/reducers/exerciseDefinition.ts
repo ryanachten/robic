@@ -1,21 +1,11 @@
-import { ExerciseDefinition, MuscleGroup, Unit } from "../constants/Interfaces";
-import Axios, { AxiosResponse } from "axios";
-import { EXERCISE_DEFINITION_URL } from "../constants/Api";
+import {
+  apiClient,
+  ExerciseDefinition,
+  ExerciseDefinitionSummary,
+  UpdateExerciseDefinition,
+} from "../api";
 import { BaseState, BaseActions, baseTypes } from "./base";
-
-export type ExerciseDefinitionForCreate = {
-  title: string;
-  unit: Unit;
-  user: string;
-  primaryMuscleGroup: MuscleGroup[];
-};
-
-export type ExerciseDefinitionForEdit = {
-  id: string;
-  title: string;
-  unit: Unit;
-  primaryMuscleGroup: MuscleGroup[];
-};
+import { getErrorDetail } from "../utilities";
 
 export enum exerciseDefinitionTypes {
   LOADING_DEFINITIONS = "LOADING_DEFINITIONS",
@@ -29,7 +19,8 @@ export enum exerciseDefinitionTypes {
 }
 
 export type ExerciseDefinitionState = BaseState & {
-  definitions: ExerciseDefinition[];
+  definitionSummaries: ExerciseDefinitionSummary[];
+  definitionDetail: ExerciseDefinition | null;
   loadingDefinitions: boolean;
   loadingDefinition: boolean;
   loadingSavingDefinition: boolean;
@@ -41,7 +32,7 @@ export type ExerciseDefinitionAction =
   | { type: exerciseDefinitionTypes.LOADING_DEFINITIONS }
   | {
       type: exerciseDefinitionTypes.GET_DEFINITIONS;
-      definitions: ExerciseDefinition[];
+      definitions: ExerciseDefinitionSummary[];
     }
   | { type: exerciseDefinitionTypes.LOADING_DEFINITION }
   | {
@@ -61,17 +52,19 @@ export type ExerciseDefinitionAction =
 
 export type ExerciseDefinitionActions = {
   getDefinitions: () => Promise<void>;
-  getDefinitionById: (id: string) => Promise<void>;
+  getDefinitionById: (id: number) => Promise<void>;
   createDefinition: (
-    definition: ExerciseDefinitionForCreate
+    definition: UpdateExerciseDefinition
   ) => Promise<ExerciseDefinition | null>;
   editDefinition: (
-    definition: ExerciseDefinitionForEdit
+    id: number,
+    definition: UpdateExerciseDefinition
   ) => Promise<ExerciseDefinition | null>;
 };
 
 export const initialExerciseDefinitionState: ExerciseDefinitionState = {
-  definitions: [],
+  definitionSummaries: [],
+  definitionDetail: null,
   loadingDefinitions: false,
   loadingDefinition: false,
   loadingSavingDefinition: false,
@@ -86,72 +79,96 @@ export const exerciseDefinitionActions = (
     dispatch({
       type: exerciseDefinitionTypes.LOADING_DEFINITIONS,
     });
-    try {
-      const { data }: AxiosResponse<ExerciseDefinition[]> = await Axios.get(
-        EXERCISE_DEFINITION_URL
-      );
-      dispatch({
-        type: exerciseDefinitionTypes.GET_DEFINITIONS,
-        definitions: data,
-      });
-    } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+    const { data, error } = await apiClient.GET("/api/ExerciseDefinition");
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
+      return;
     }
+
+    dispatch({
+      type: exerciseDefinitionTypes.GET_DEFINITIONS,
+      definitions: data,
+    });
   },
-  getDefinitionById: async (id: string) => {
+  getDefinitionById: async (id: number) => {
     dispatch({
       type: exerciseDefinitionTypes.LOADING_DEFINITION,
     });
-    try {
-      const { data }: AxiosResponse<ExerciseDefinition> = await Axios.get(
-        `${EXERCISE_DEFINITION_URL}/${id}`
-      );
 
-      dispatch({
-        type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID,
-        definition: data,
-      });
-    } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+    const { data, error } = await apiClient.GET(
+      "/api/ExerciseDefinition/{id}",
+      {
+        params: {
+          path: {
+            id,
+          },
+        },
+      }
+    );
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
+      return;
     }
+
+    dispatch({
+      type: exerciseDefinitionTypes.GET_DEFINITION_BY_ID,
+      definition: data,
+    });
   },
-  createDefinition: async (definition: ExerciseDefinitionForCreate) => {
+  createDefinition: async (definition: UpdateExerciseDefinition) => {
     dispatch({
       type: exerciseDefinitionTypes.LOADING_CREATE_DEFINITION,
     });
-    try {
-      const { data }: AxiosResponse<ExerciseDefinition> = await Axios.post(
-        EXERCISE_DEFINITION_URL,
-        definition
-      );
-      dispatch({
-        type: exerciseDefinitionTypes.CREATE_DEFINITION,
-        definition: data,
-      });
-      return data;
-    } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+
+    const { data, error } = await apiClient.POST("/api/ExerciseDefinition", {
+      body: definition,
+    });
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
       return null;
     }
+
+    dispatch({
+      type: exerciseDefinitionTypes.CREATE_DEFINITION,
+      definition: data,
+    });
+
+    return data;
   },
-  editDefinition: async (definition: ExerciseDefinitionForEdit) => {
+  editDefinition: async (id: number, definition: UpdateExerciseDefinition) => {
     dispatch({
       type: exerciseDefinitionTypes.LOADING_UPDATE_DEFINITION,
     });
-    try {
-      const { data }: AxiosResponse<ExerciseDefinition> = await Axios.put(
-        `${EXERCISE_DEFINITION_URL}/${definition.id}`,
-        definition
-      );
-      dispatch({
-        type: exerciseDefinitionTypes.UPDATE_DEFINITION,
-        definition: data,
-      });
-      return data;
-    } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+
+    const { data, error } = await apiClient.PUT(
+      "/api/ExerciseDefinition/{id}",
+      {
+        params: {
+          path: {
+            id,
+          },
+        },
+        body: definition,
+      }
+    );
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
       return null;
     }
+
+    dispatch({
+      type: exerciseDefinitionTypes.UPDATE_DEFINITION,
+      definition: data,
+    });
+    return data;
   },
 });
 
@@ -178,7 +195,7 @@ export const exerciseDefinitionReducer = (
       return {
         ...state,
         loadingDefinitions: false,
-        definitions: [...action.definitions],
+        definitionSummaries: [...action.definitions],
       };
     case exerciseDefinitionTypes.LOADING_DEFINITION:
       return {
@@ -186,23 +203,10 @@ export const exerciseDefinitionReducer = (
         loadingDefinition: true,
       };
     case exerciseDefinitionTypes.GET_DEFINITION_BY_ID:
-      const fullDefinition = action.definition;
-      const definitionIndex = state.definitions.findIndex(
-        (def) => def.id === fullDefinition.id
-      );
-      if (!state.definitions.length || definitionIndex === -1) {
-        return {
-          ...state,
-          loadingDefinition: false,
-          definitions: [fullDefinition],
-        };
-      }
-      const definitions = [...state.definitions];
-      definitions[definitionIndex] = fullDefinition as ExerciseDefinition;
       return {
         ...state,
         loadingDefinition: false,
-        definitions,
+        definitionDetail: action.definition,
       };
     case exerciseDefinitionTypes.LOADING_CREATE_DEFINITION:
       return {
@@ -213,7 +217,7 @@ export const exerciseDefinitionReducer = (
       return {
         ...state,
         loadingSavingDefinition: false,
-        definitions: [...state.definitions, action.definition],
+        definitionDetail: action.definition,
       };
     case exerciseDefinitionTypes.LOADING_UPDATE_DEFINITION:
       return {
@@ -221,22 +225,10 @@ export const exerciseDefinitionReducer = (
         loadingUpdateDefinition: true,
       };
     case exerciseDefinitionTypes.UPDATE_DEFINITION:
-      const existingDefintions = [...state.definitions];
-      const { title, unit, primaryMuscleGroup } = action.definition;
-      existingDefintions.forEach((e, i) => {
-        if (e.id === action.definition.id) {
-          existingDefintions[i] = {
-            ...existingDefintions[i],
-            title,
-            unit,
-            primaryMuscleGroup,
-          };
-        }
-      });
       return {
         ...state,
         loadingUpdateDefinition: false,
-        definitions: existingDefintions,
+        definitionDetail: action.definition,
       };
     default:
       return state;

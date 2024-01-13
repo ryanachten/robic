@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { ExercisesParamList } from "../navigation/types";
-import { MuscleGroup, Unit } from "../constants/Interfaces";
+import { MuscleGroup, Unit, UpdateExerciseDefinition } from "../api";
 import { StackScreenProps } from "@react-navigation/stack";
 import { ErrorToast } from "../components/ErrorToast";
-import {
-  ExerciseDefinitionForCreate,
-  ExerciseDefinitionForEdit,
-} from "../reducers/exerciseDefinition";
 import { ExerciseDefinitionContext, UserContext } from "../services/context";
 import { Background, Button } from "../components";
 import { Colors } from "../constants/Colors";
@@ -68,10 +64,10 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
   }, []);
 
   const createExercise = async () => {
-    const exercise: ExerciseDefinitionForCreate = {
+    const exercise: UpdateExerciseDefinition = {
+      userId: user.id,
       title,
       unit,
-      user: user.id,
       primaryMuscleGroup: muscleGroups,
     };
 
@@ -90,14 +86,14 @@ export default function ExerciseEditScreen({ navigation, route }: Props) {
     if (!existingDefinition) {
       return;
     }
-    const exercise: ExerciseDefinitionForEdit = {
-      id: existingDefinition.id,
+    const exercise: UpdateExerciseDefinition = {
+      userId: user.id,
       title,
       unit,
       primaryMuscleGroup: muscleGroups,
     };
 
-    const definition = await editDefinition(exercise);
+    const definition = await editDefinition(existingDefinition.id, exercise);
 
     if (!error) {
       if (definition) {

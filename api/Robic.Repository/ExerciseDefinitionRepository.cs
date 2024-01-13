@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using MySqlConnector;
+using Robic.Repository.Helpers;
 using Robic.Repository.Models;
 using Robic.Repository.Models.DTOs.ExerciseDefinition;
+using Robic.Repository.Models.Enums;
 
 namespace Robic.Repository;
 
@@ -12,8 +14,39 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         using var connection = await database.OpenConnectionAsync();
 
         var sql = @"
-            SELECT Id, Title, Unit, UserId
-            FROM ExerciseDefinition
+            SELECT 
+                 Id, 
+                 Title,
+                 Unit,
+                 UserId,
+                 -- get latest improvement by comparing the net value of the last two exercise sessions
+                 (
+                     SELECT 
+                         (latest.NetValue - previous.NetValue) / previous.NetValue * 100 AS ImprovementPercentage
+                     FROM (
+                         SELECT 
+                             Exercise.Id AS ExerciseId,
+                             SUM(ExerciseSet.Reps * ExerciseSet.Value) AS NetValue
+                         FROM Exercise
+                         JOIN ExerciseSet ON Exercise.Id = ExerciseSet.ExerciseId
+                         WHERE Exercise.DefinitionId = @exerciseDefinitionId
+                         GROUP BY Exercise.Id
+                         ORDER BY Exercise.Date DESC
+                         LIMIT 1
+                     ) AS latest
+                     JOIN (
+                         SELECT 
+                             Exercise.Id AS ExerciseId,
+                             SUM(ExerciseSet.Reps * ExerciseSet.Value) AS NetValue
+                         FROM Exercise
+                         JOIN ExerciseSet ON Exercise.Id = ExerciseSet.ExerciseId
+                         WHERE Exercise.DefinitionId = @exerciseDefinitionId
+                         GROUP BY Exercise.Id
+                         ORDER BY Exercise.Date DESC
+                         LIMIT 1, 1
+                     ) AS previous ON latest.ExerciseId <> previous.ExerciseId
+                 ) as LastImprovement
+             FROM ExerciseDefinition
             WHERE Id = @exerciseDefinitionId;
         ";
         var definitions = await connection.QueryAsync<ExerciseDefinition>(sql, new
@@ -84,12 +117,15 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         await connection.ExecuteAsync(sql, createExerciseDefinition);
     }
 
-    public async Task<IEnumerable<ExerciseDefinitionSummary>> GetDefinitionSummaries(int userId)
+    public async Task<IEnumerable<ExerciseDefinitionSummary>> GetDefinitionSummaries(int userId, ExerciseDefinitionSortField sortField, SortDirection sortDirection)
     {
         using var connection = await database.OpenConnectionAsync();
 
-        var sql = @"
-            SELECT 
+        var sortBy = sortField.GetDescription();
+        var direction = sortDirection.GetDescription();
+
+        var sql = $@"
+           SELECT 
                 D.Id as Id,
                 D.Title as Title,
                 COUNT(E.Id) as SessionCount,
@@ -107,7 +143,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
                         WHERE Exercise.DefinitionId = D.Id
                         GROUP BY Exercise.Id
                         ORDER BY Exercise.Date DESC
-                        LIMIT 2
+                        LIMIT 1
                     ) AS latest
                     JOIN (
                         SELECT 
@@ -118,14 +154,14 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
                         WHERE Exercise.DefinitionId = D.Id
                         GROUP BY Exercise.Id
                         ORDER BY Exercise.Date DESC
-                        LIMIT 2, 1
+                        LIMIT 1, 1
                     ) AS previous ON latest.ExerciseId <> previous.ExerciseId
                 ) as LastImprovement
             FROM ExerciseDefinition as D
             LEFT JOIN Exercise AS E ON D.Id = E.DefinitionId
             WHERE D.UserId = @userId
             GROUP BY D.Id
-            ORDER BY D.Title;
+            ORDER BY {sortBy} {direction};
         ";
         return await connection.QueryAsync<ExerciseDefinitionSummary>(sql, new
         {
@@ -133,7 +169,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         });
     }
 
-    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionFrequencies(int userId)
+    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionFrequencies(int userId, int maxResults)
     {
         using var connection = await database.OpenConnectionAsync();
 
@@ -145,15 +181,17 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
             JOIN Exercise as E on D.Id = E.DefinitionId 
             WHERE D.UserId = @userId
             GROUP BY D.Id
-            ORDER BY Count DESC, Marker;
+            ORDER BY Count DESC, Marker
+            LIMIT @maxResults;
         ";
         return await connection.QueryAsync<AnalyticsItem>(sql, new
         {
-            userId
+            userId,
+            maxResults
         });
     }
 
-    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionProgress(int userId)
+    public async Task<IEnumerable<AnalyticsItem>> GetDefinitionProgress(int userId, int maxResults)
     {
         using var connection = await database.OpenConnectionAsync();
 
@@ -191,11 +229,13 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
             JOIN Exercise AS E ON D.Id = E.DefinitionId
             WHERE D.UserId = @userId
             GROUP BY D.Id
-            ORDER BY Count DESC, Marker;
+            ORDER BY Count DESC, Marker
+            LIMIT @maxResults;
         ";
         return await connection.QueryAsync<AnalyticsItem>(sql, new
         {
-            userId
+            userId,
+            maxResults
         });
     }
 }

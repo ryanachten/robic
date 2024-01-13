@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { StyleSheet, RefreshControl } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
@@ -22,13 +22,16 @@ import { useIsFocused } from "@react-navigation/native";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
-export default function ExerciseDetailScreen({ route, navigation }: Props) {
+export default function ExerciseDetailScreen({
+  route,
+  navigation,
+}: Readonly<Props>) {
   const definitionId = route.params ? route.params.definitionId : null;
 
   const isFocused = useIsFocused();
 
   const {
-    state: { definitions, error, loadingDefinition },
+    state: { definitionDetail, error, loadingDefinition },
     actions: { getDefinitionById },
   } = useContext(ExerciseDefinitionContext);
 
@@ -43,11 +46,6 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
     }
   }, [isFocused]);
 
-  const exercise = useMemo(
-    () => definitions.find((def) => def.id === definitionId),
-    [definitionId, loadingDefinition]
-  );
-
   const fetchExercise = useCallback(
     () => definitionId && getDefinitionById(definitionId),
     [definitionId, loadingDefinition]
@@ -56,25 +54,27 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   const navigateToEditScreen = useCallback(
     () =>
       navigation.navigate("ExerciseEditScreen", {
-        definition: exercise,
+        definition: definitionDetail,
       }),
     [definitionId, loadingDefinition]
   );
 
+  const renderEditIcon = () => (
+    <Icon fill={Colors.orange} name="edit-outline" size="sm" />
+  );
+
   return (
     <Background>
-      <Text style={styles.title}>{exercise?.title}</Text>
+      <Text style={styles.title}>{definitionDetail?.title}</Text>
       <Button
         appearance="outline"
         onPress={navigateToEditScreen}
         style={styles.editButton}
-        accessoryRight={() => (
-          <Icon fill={Colors.orange} name="edit-outline" size="sm" />
-        )}
+        accessoryRight={renderEditIcon}
       >
         Edit
       </Button>
-      {exercise && (
+      {definitionDetail && (
         <FlatList
           refreshControl={
             <RefreshControl
@@ -82,12 +82,12 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
               onRefresh={fetchExercise}
             />
           }
-          keyExtractor={(item) => item.id}
-          data={[exercise]}
+          keyExtractor={(item) => item.id.toString()}
+          data={[definitionDetail]}
           renderItem={({ item }) => (
             <>
               <DefinitionDetail definition={item} />
-              <ExerciseHistory definitionId={item.id} />
+              <ExerciseHistory />
             </>
           )}
         />

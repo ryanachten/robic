@@ -6,5 +6,5 @@ public class Exercise
     public required int DefinitionId { get; set; }
     public required int UserId { get; set; }
     public required DateTime Date { get; set; }
-    public DateTime TimeTaken { get; set; }
+    public DateTime? TimeTaken { get; set; }
 }

@@ -3,6 +3,8 @@ using Robic.Service.Models;
 using Robic.Service.Models.DTOs.Exercise;
 using Robic.Service.Models.DTOs.ExerciseDefinition;
 using Robic.Service.Models.DTOs.User;
+using Robic.Service.Models.Enums;
+using RepositoryEnums = Robic.Repository.Models.Enums;
 using RepositoryModel = Robic.Repository.Models;
 
 namespace Robic.Service.Helpers;
@@ -26,6 +28,8 @@ public class AutoMapperProfile : Profile
         CreateMap<User, UserDetailDto>();
         CreateMap<UpdateExerciseDefinitionDto, RepositoryModel.ExerciseDefinition>();
         CreateMap<UpdateExerciseDto, RepositoryModel.DTOs.Exercise.UpdateExerciseDto>();
+        CreateMap<SortDirection, RepositoryEnums.SortDirection>();
+        CreateMap<ExerciseDefinitionSortField, RepositoryEnums.ExerciseDefinitionSortField>();
         CreateMap<UpdateExerciseDto, Exercise>()
             .ForMember(
                 dest => dest.Sets,

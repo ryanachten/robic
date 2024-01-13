@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Card, Text } from "@ui-kitten/components";
-import { FormSet, Set } from "../../constants/Interfaces";
+import { Set } from "../../api";
 import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
@@ -9,24 +9,21 @@ import { Colors } from "../../constants/Colors";
 const netWeightReducer = (accumulator: number, { reps, value }: Set) =>
   (accumulator += reps * value);
 
-const netWeightFormReducer = (accumulator: number, { reps, value }: FormSet) =>
-  (accumulator += parseFloat(reps) * parseFloat(value));
+const netWeightFormReducer = (accumulator: number, { reps, value }: Set) =>
+  (accumulator += reps * value);
 
 const totalRepReducer = (accumulator: number, { reps }: Set) =>
   (accumulator += reps);
 
 export const EffortTillPersonalBest = ({
-  id,
   currentSets,
   definitionState,
 }: {
-  id: string;
-  currentSets: FormSet[];
+  currentSets: Set[];
   definitionState: ExerciseDefinitionState;
 }) => {
-  const { definitions } = definitionState;
-  const definition = definitions.find((def) => def.id === id);
-  const pb = definition?.personalBest?.topNetExercise;
+  const { definitionDetail } = definitionState;
+  const pb = definitionDetail?.personalBest?.topNetExercise;
   if (!pb) {
     return null;
   }

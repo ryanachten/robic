@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Robic.Service.Query;
 
-public class GetAnalyticsHandler(
+public class GetUserAnalyticsHandler(
     IExerciseMuscleGroupRepository exerciseMuscleGroupRepository,
     IExerciseDefinitionRepository exerciseDefinitionRepository,
-    IMapper mapper) : IRequestHandler<GetAnalytics, Analytics>
+    IMapper mapper) : IRequestHandler<GetUserAnalytics, UserAnalytics>
 {
-    public async Task<Analytics> Handle(GetAnalytics request, CancellationToken cancellationToken)
+    public async Task<UserAnalytics> Handle(GetUserAnalytics request, CancellationToken cancellationToken)
     {
         var muscleGroupFrequenciesResponse = exerciseMuscleGroupRepository.GetMuscleGroupFrequencies(request.UserId);
-        var definitionFrequenciesResponse = exerciseDefinitionRepository.GetDefinitionFrequencies(request.UserId);
-        var definitionProgressResponse = exerciseDefinitionRepository.GetDefinitionProgress(request.UserId);
+        var definitionFrequenciesResponse = exerciseDefinitionRepository.GetDefinitionFrequencies(request.UserId, request.MaxResults);
+        var definitionProgressResponse = exerciseDefinitionRepository.GetDefinitionProgress(request.UserId, request.MaxResults);
 
         await Task.WhenAll(
             muscleGroupFrequenciesResponse,
@@ -30,7 +30,7 @@ public class GetAnalyticsHandler(
         var definitionFrequencies = mapper.Map<List<AnalyticsItem>>(definitionFrequenciesResponse.Result);
         var definitionProgress = mapper.Map<List<AnalyticsItem>>(definitionProgressResponse.Result);
 
-        return new Analytics()
+        return new UserAnalytics()
         {
             MostFrequentMuscleGroup = muscleGroupFrequencies.FirstOrDefault(),
             MuscleGroupFrequency = muscleGroupFrequencies,

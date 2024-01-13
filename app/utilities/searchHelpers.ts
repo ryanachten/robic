@@ -1,17 +1,24 @@
-import { ExerciseDefinition } from "../constants/Interfaces";
+import { ExerciseDefinitionSummary } from "../api";
 
-// Alphbetical sort fallback
-export const sortAlpha = (a: ExerciseDefinition, b: ExerciseDefinition) =>
-  a.title > b.title ? 1 : -1;
+// Alphabetical sort fallback
+export const sortAlpha = (
+  a: ExerciseDefinitionSummary,
+  b: ExerciseDefinitionSummary
+) => (a.title > b.title ? 1 : -1);
 
-export const sortByImprovment = (
-  a: ExerciseDefinition,
-  b: ExerciseDefinition
+export const sortByImprovement = (
+  a: ExerciseDefinitionSummary,
+  b: ExerciseDefinitionSummary
 ): 1 | -1 => {
   const improvementA = a.lastImprovement;
   const improvementB = b.lastImprovement;
 
-  if (improvementA !== null && improvementB !== null) {
+  if (
+    improvementA !== null &&
+    improvementA !== undefined &&
+    improvementB !== null &&
+    improvementB !== undefined
+  ) {
     if (improvementA === improvementB) {
       return sortAlpha(a, b);
     }
@@ -28,12 +35,12 @@ export const sortByImprovment = (
 };
 
 export const sortByDate = (
-  a: ExerciseDefinition,
-  b: ExerciseDefinition
+  a: ExerciseDefinitionSummary,
+  b: ExerciseDefinitionSummary
 ): 1 | -1 => {
   // Handle date sorting
-  const dateA = a.lastSession && new Date(a.lastSession.date);
-  const dateB = b.lastSession && new Date(b.lastSession.date);
+  const dateA = a.lastSessionDate && new Date(a.lastSessionDate);
+  const dateB = b.lastSessionDate && new Date(b.lastSessionDate);
   if (dateA instanceof Date && dateB instanceof Date) {
     if (dateA.getMilliseconds() === dateB.getMilliseconds()) {
       return sortAlpha(a, b);
@@ -51,11 +58,11 @@ export const sortByDate = (
 };
 
 export const sortByNumberOfSessions = (
-  a: ExerciseDefinition,
-  b: ExerciseDefinition
+  a: ExerciseDefinitionSummary,
+  b: ExerciseDefinitionSummary
 ): 1 | -1 => {
-  const sessionsA = a.history.length;
-  const sessionsB = b.history.length;
+  const sessionsA = a.sessionCount;
+  const sessionsB = b.sessionCount;
 
   if (sessionsA === sessionsB) {
     return sortAlpha(a, b);
@@ -64,6 +71,6 @@ export const sortByNumberOfSessions = (
 };
 
 export const filterBySearchTerm = (
-  exercise: ExerciseDefinition,
+  exercise: ExerciseDefinitionSummary,
   searchTerm: string
 ) => exercise.title.toLowerCase().includes(searchTerm.toLowerCase());
