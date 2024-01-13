@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { StyleSheet, RefreshControl } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { ExercisesParamList } from "../navigation/types";
@@ -22,7 +22,10 @@ import { useIsFocused } from "@react-navigation/native";
 
 type Props = StackScreenProps<ExercisesParamList, "ExerciseDetailScreen">;
 
-export default function ExerciseDetailScreen({ route, navigation }: Props) {
+export default function ExerciseDetailScreen({
+  route,
+  navigation,
+}: Readonly<Props>) {
   const definitionId = route.params ? route.params.definitionId : null;
 
   const isFocused = useIsFocused();
@@ -39,7 +42,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
   useEffect(() => {
     if (definitionId && isFocused) {
       getDefinitionById(definitionId);
-      getExercisesByDefinition(definitionId.toString()); // TODO: update later
+      getExercisesByDefinition(definitionId);
     }
   }, [isFocused]);
 
@@ -56,6 +59,10 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
     [definitionId, loadingDefinition]
   );
 
+  const renderEditIcon = () => (
+    <Icon fill={Colors.orange} name="edit-outline" size="sm" />
+  );
+
   return (
     <Background>
       <Text style={styles.title}>{definitionDetail?.title}</Text>
@@ -63,9 +70,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
         appearance="outline"
         onPress={navigateToEditScreen}
         style={styles.editButton}
-        accessoryRight={() => (
-          <Icon fill={Colors.orange} name="edit-outline" size="sm" />
-        )}
+        accessoryRight={renderEditIcon}
       >
         Edit
       </Button>
@@ -82,7 +87,7 @@ export default function ExerciseDetailScreen({ route, navigation }: Props) {
           renderItem={({ item }) => (
             <>
               <DefinitionDetail definition={item} />
-              <ExerciseHistory definitionId={item.id} />
+              <ExerciseHistory />
             </>
           )}
         />

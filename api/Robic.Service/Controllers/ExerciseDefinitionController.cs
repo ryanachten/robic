@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Robic.Service.Command;
 using Robic.Service.Models;
 using Robic.Service.Models.DTOs.ExerciseDefinition;
+using Robic.Service.Models.Enums;
 using Robic.Service.Query;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,11 +18,13 @@ public class ExerciseDefinitionController(IMediator mediator) : BaseController
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<ExerciseDefinitionSummary>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetDefinitions()
+    public async Task<IActionResult> GetDefinitions([FromQuery] ExerciseDefinitionSortField? sortBy, [FromQuery] SortDirection? direction)
     {
         var response = await mediator.Send(new GetExerciseDefinitions
         {
-            UserId = UserId
+            UserId = UserId,
+            Direction = direction,
+            SortField = sortBy,
         });
 
         return Ok(response);

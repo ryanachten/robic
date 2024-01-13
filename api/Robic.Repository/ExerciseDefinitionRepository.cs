@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using MySqlConnector;
+using Robic.Repository.Helpers;
 using Robic.Repository.Models;
 using Robic.Repository.Models.DTOs.ExerciseDefinition;
+using Robic.Repository.Models.Enums;
 
 namespace Robic.Repository;
 
@@ -115,11 +117,14 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
         await connection.ExecuteAsync(sql, createExerciseDefinition);
     }
 
-    public async Task<IEnumerable<ExerciseDefinitionSummary>> GetDefinitionSummaries(int userId)
+    public async Task<IEnumerable<ExerciseDefinitionSummary>> GetDefinitionSummaries(int userId, ExerciseDefinitionSortField sortField, SortDirection sortDirection)
     {
         using var connection = await database.OpenConnectionAsync();
 
-        var sql = @"
+        var sortBy = sortField.GetDescription();
+        var direction = sortDirection.GetDescription();
+
+        var sql = $@"
            SELECT 
                 D.Id as Id,
                 D.Title as Title,
@@ -156,7 +161,7 @@ public class ExerciseDefinitionRepository(MySqlDataSource database) : IExerciseD
             LEFT JOIN Exercise AS E ON D.Id = E.DefinitionId
             WHERE D.UserId = @userId
             GROUP BY D.Id
-            ORDER BY D.Title;
+            ORDER BY {sortBy} {direction};
         ";
         return await connection.QueryAsync<ExerciseDefinitionSummary>(sql, new
         {

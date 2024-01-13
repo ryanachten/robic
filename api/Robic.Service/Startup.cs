@@ -46,7 +46,7 @@ public class Startup(IConfiguration configuration)
             });
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         services.AddControllers().AddJsonOptions(opts =>
-            opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+            opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
         ));
         services.AddSwaggerGen(options =>
         {

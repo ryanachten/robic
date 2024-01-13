@@ -214,6 +214,15 @@ paths:
       tags:
         - ExerciseDefinition
       summary: Retrieves list of user exercise definitions
+      parameters:
+        - name: sortBy
+          in: query
+          schema:
+            $ref: '#/components/schemas/ExerciseDefinitionSortField'
+        - name: direction
+          in: query
+          schema:
+            $ref: '#/components/schemas/SortDirection'
       responses:
         '200':
           description: Success
@@ -489,6 +498,13 @@ components:
         personalBest:
           $ref: '#/components/schemas/PersonalBest'
       additionalProperties: false
+    ExerciseDefinitionSortField:
+      enum:
+        - title
+        - last_active
+        - last_improvement
+        - number_of_sessions
+      type: string
     ExerciseDefinitionSummary:
       required:
         - id
@@ -656,6 +672,11 @@ components:
           type: integer
           format: int32
       additionalProperties: false
+    SortDirection:
+      enum:
+        - asc
+        - desc
+      type: string
     Unit:
       enum:
         - kg

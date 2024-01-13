@@ -290,7 +290,10 @@ export interface paths {
         /** Retrieves list of user exercise definitions */
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    sortBy?: components["schemas"]["ExerciseDefinitionSortField"];
+                    direction?: components["schemas"]["SortDirection"];
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -573,6 +576,8 @@ export interface components {
             lastImprovement?: number | null;
             personalBest: components["schemas"]["PersonalBest"];
         };
+        /** @enum {string} */
+        ExerciseDefinitionSortField: ExerciseDefinitionSortField;
         ExerciseDefinitionSummary: {
             /** Format: int32 */
             id: number;
@@ -638,6 +643,8 @@ export interface components {
             /** Format: int32 */
             reps: number;
         };
+        /** @enum {string} */
+        SortDirection: SortDirection;
         /** @enum {string} */
         Unit: Unit;
         UpdateExerciseDefinitionDto: {
@@ -781,6 +788,12 @@ export interface operations {
         };
     };
 }
+export enum ExerciseDefinitionSortField {
+    title = "title",
+    last_active = "last_active",
+    last_improvement = "last_improvement",
+    number_of_sessions = "number_of_sessions"
+}
 export enum MuscleGroup {
     chest = "chest",
     forearms = "forearms",
@@ -797,6 +810,10 @@ export enum MuscleGroup {
     obliques = "obliques",
     glutes = "glutes",
     biceps = "biceps"
+}
+export enum SortDirection {
+    asc = "asc",
+    desc = "desc"
 }
 export enum Unit {
     kg = "kg",
