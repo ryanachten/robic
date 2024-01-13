@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Robic.Migrator": {
+      "commandName": "Project",
+      "commandLineArgs": "--userId=\"1\""
+    }
+  }
+}
