@@ -25,6 +25,7 @@ internal static class Program
 
         builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
         builder.Services.AddScoped<IExerciseDefinitionRepository, ExerciseDefinitionRepository>();
+        builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IMigrationService, MigrationService>();
 
