@@ -2,7 +2,11 @@
   "profiles": {
     "Robic.Migrator": {
       "commandName": "Project",
-      "commandLineArgs": "--userId=\"1\""
+      "commandLineArgs": "--userId=\"6033217a6e6f91416f1db53e\"",
+      "environmentVariables": {
+        "MongoConnectionString": "",
+        "MongoDatabaseName": ""
+      }
     }
   }
 }
