@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Robic.Repository;
+using Robic.Repository.Models.Enums;
 using Robic.Service.Models;
 using System.Linq;
 using System.Threading;
@@ -26,7 +27,7 @@ public class UpdateExerciseDefinitionHandler(
         var updatedMuscleGroups = request.UpdatedDefinition.PrimaryMuscleGroup;
         await exerciseMuscleGroupRepository.AddDefinitionMuscleGroups(
             request.DefinitionId,
-            updatedMuscleGroups.Select(mg => mg.ToString())
+            updatedMuscleGroups.Select(mg => mapper.Map<MuscleGroup>(mg))
         );
 
         var definitionResult = await exerciseDefinitionRepository.GetDefinitionById(request.DefinitionId);

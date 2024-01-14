@@ -3,7 +3,6 @@ using MediatR;
 using Robic.Repository;
 using Robic.Service.Models;
 using Robic.Service.Models.Enums;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -43,7 +42,7 @@ public class GetExerciseDefinitionByIdHandler(
     private async Task<List<MuscleGroup>> GetPrimaryMuscleGroups(int definitionId)
     {
         var muscleGroupResponse = await exerciseMuscleGroupRepository.GetDefinitionMuscleGroups(definitionId);
-        return muscleGroupResponse.Select(mg => Enum.Parse<MuscleGroup>(mg)).ToList();
+        return muscleGroupResponse.Select(mg => mapper.Map<MuscleGroup>(mg)).ToList();
     }
 
     private async Task<List<ExerciseHistoryItem>> GetExerciseHistory(int definitionId)

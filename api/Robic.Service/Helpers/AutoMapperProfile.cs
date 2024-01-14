@@ -30,6 +30,8 @@ public class AutoMapperProfile : Profile
         CreateMap<UpdateExerciseDto, RepositoryModel.DTOs.Exercise.UpdateExerciseDto>();
         CreateMap<SortDirection, RepositoryEnums.SortDirection>();
         CreateMap<ExerciseDefinitionSortField, RepositoryEnums.ExerciseDefinitionSortField>();
+        CreateMap<MuscleGroup, RepositoryEnums.MuscleGroup>();
+        CreateMap<Unit, RepositoryEnums.Unit>();
         CreateMap<UpdateExerciseDto, Exercise>()
             .ForMember(
                 dest => dest.Sets,

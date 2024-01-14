@@ -1,17 +1,18 @@
 ﻿using Dapper;
 using MySqlConnector;
 using Robic.Repository.Models;
+using Robic.Repository.Models.Enums;
 
 namespace Robic.Repository;
 
 public class ExerciseMuscleGroupRepository(MySqlDataSource database) : IExerciseMuscleGroupRepository
 {
-    public async Task AddDefinitionMuscleGroups(int definitionId, IEnumerable<string> primaryMuscleGroups)
+    public async Task AddDefinitionMuscleGroups(int definitionId, IEnumerable<MuscleGroup> primaryMuscleGroups)
     {
         var insertStatements = primaryMuscleGroups.Select(muscleCode => new
         {
             definitionId,
-            muscleCode
+            muscleCode = muscleCode.ToString(),
         });
 
         using var connection = await database.OpenConnectionAsync();
@@ -24,7 +25,7 @@ public class ExerciseMuscleGroupRepository(MySqlDataSource database) : IExercise
         await connection.ExecuteAsync(sql, insertStatements);
     }
 
-    public async Task<IEnumerable<string>> GetDefinitionMuscleGroups(int definitionId)
+    public async Task<IEnumerable<MuscleGroup>> GetDefinitionMuscleGroups(int definitionId)
     {
         using var connection = await database.OpenConnectionAsync();
 
@@ -33,10 +34,12 @@ public class ExerciseMuscleGroupRepository(MySqlDataSource database) : IExercise
             WHERE DefinitionId = @definitionId;
         ";
 
-        return await connection.QueryAsync<string>(sql, new
+        var results = await connection.QueryAsync<string>(sql, new
         {
             definitionId
         });
+
+        return results.Select(mg => Enum.Parse<MuscleGroup>(mg));
     }
 
     public async Task DeleteDefinitionMuscleGroups(int definitionId)
