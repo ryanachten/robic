@@ -3,6 +3,6 @@ namespace Robic.Migrator.Services
 {
     public interface IMigrationService
     {
-        Task MigrateUserResources(string userId);
+        Task MigrateUserResources(string mongoDbUserId, int mySqlUserId);
     }
 }
