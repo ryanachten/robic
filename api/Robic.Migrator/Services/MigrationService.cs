@@ -3,6 +3,7 @@ using Robic.Repository;
 using Robic.Repository.Models;
 using Robic.Repository.Models.DTOs.Exercise;
 using Robic.Repository.Models.Enums;
+using System.Diagnostics;
 using Mongo = Robic.Migrator.Models;
 using MongoRepository = Robic.Migrator.Data;
 
@@ -20,17 +21,26 @@ public class MigrationService(
 {
     public async Task MigrateUserResources(string mongoDbUserId, int mySqlUserId)
     {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        logger.LogInformation("Starting migration");
+
         var mongoDefinitions = await mongoExerciseDefinitionRepository.GetUserDefinitions(mongoDbUserId);
 
-        foreach (var mongoDefinition in mongoDefinitions)
+        for (int i = 0; i < mongoDefinitions.Count(); i++)
         {
-            logger.LogInformation("Migrating definition: {Title}", mongoDefinition.Title);
+            var mongoDefinition = mongoDefinitions.ElementAt(i);
+
+            logger.LogInformation("({i}/{Count}) Migrating definition: {Title}", i + 1, mongoDefinitions.Count(), mongoDefinition.Title);
             var definition = await CreateDefinition(mySqlUserId, mongoDefinition);
             if (definition == null) continue;
 
             var mongoExercises = await mongoExerciseRepository.GetDefinitionExercises(mongoDefinition.Id);
             await CreateExercises(mySqlUserId, definition.Id, mongoExercises);
         }
+
+        stopwatch.Stop();
+        logger.LogInformation("Completed migration in {ElapsedMilliseconds}ms", stopwatch.ElapsedMilliseconds);
     }
 
     private async Task<ExerciseDefinition?> CreateDefinition(int mySqlUserId, Mongo.ExerciseDefinition mongoDefinition)
@@ -68,14 +78,12 @@ public class MigrationService(
             );
         }
 
-
         return definition;
     }
 
     private async Task CreateExercises(int mySqlUserId, int definitionId, IEnumerable<Mongo.Exercise> mongoExercises)
     {
-        logger.LogInformation("> Creating {Count} exercises", mongoExercises.Count());
-        foreach (var mongoExercise in mongoExercises)
+        var exerciseTasks = mongoExercises.Select(mongoExercise => Task.Run(async () =>
         {
             var exercise = await exerciseRepository.CreateExercise(new Exercise()
             {
@@ -91,8 +99,13 @@ public class MigrationService(
                 Value = (int)s.Value!
             });
 
-            logger.LogInformation("> Creating {Count} sets", sets.Count());
+            logger.LogInformation("> Creating {Count} sets for exercise", sets.Count());
+
             await exerciseSetRepository.CreateSet(exercise.Id, definitionId, sets);
-        }
+        }));
+
+        logger.LogInformation("> Creating {Count} exercises for definition", exerciseTasks.Count());
+
+        await Task.WhenAll(exerciseTasks);
     }
 }
