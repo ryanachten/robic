@@ -138,44 +138,46 @@ export default function ExercisesScreen({ navigation }: Props) {
               lastSessionDate,
               lastImprovement,
               sessionCount,
-            }: ExerciseDefinitionSummary) => (
-              <Card
-                style={styles.exerciseItem}
-                key={id}
-                onPress={() =>
-                  navigation.navigate("ExerciseDetailScreen", {
-                    definitionId: id,
-                  })
-                }
-              >
-                <Text style={styles.exerciseTitle}>{title}</Text>
-                <View style={styles.exerciseMeta}>
-                  {lastSessionDate && (
-                    <Text style={styles.exerciseDate}>
-                      {formatRelativeDate(lastSessionDate)}
+            }: ExerciseDefinitionSummary) => {
+              return (
+                <Card
+                  style={styles.exerciseItem}
+                  key={id}
+                  onPress={() =>
+                    navigation.navigate("ExerciseDetailScreen", {
+                      definitionId: id,
+                    })
+                  }
+                >
+                  <Text style={styles.exerciseTitle}>{title}</Text>
+                  <View style={styles.exerciseMeta}>
+                    {lastSessionDate && (
+                      <Text style={styles.exerciseDate}>
+                        {formatRelativeDate(lastSessionDate)}
+                      </Text>
+                    )}
+                    {lastImprovement ? (
+                      <Text
+                        style={[
+                          styles.exerciseImprovement,
+                          {
+                            color:
+                              lastImprovement > 0 ? Colors.green : Colors.red,
+                          },
+                        ]}
+                      >
+                        {`${lastImprovement > 0 ? "+" : ""}${lastImprovement}%`}
+                      </Text>
+                    ) : null}
+                    <Text style={styles.exerciseImprovement}>
+                      {sessionCount === 0
+                        ? "Unattempted!"
+                        : `Sessions: ${sessionCount}`}
                     </Text>
-                  )}
-                  {lastImprovement ? (
-                    <Text
-                      style={[
-                        styles.exerciseImprovement,
-                        {
-                          color:
-                            lastImprovement > 0 ? Colors.green : Colors.red,
-                        },
-                      ]}
-                    >
-                      {`${lastImprovement > 0 ? "+" : ""}${lastImprovement}%`}
-                    </Text>
-                  ) : null}
-                  <Text style={styles.exerciseImprovement}>
-                    {sessionCount === 0
-                      ? "Unattempted!"
-                      : `Sessions: ${sessionCount}`}
-                  </Text>
-                </View>
-              </Card>
-            )
+                  </View>
+                </Card>
+              );
+            }
           )}
       </ScrollView>
     </Background>

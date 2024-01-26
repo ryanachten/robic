@@ -41,8 +41,9 @@ export const sortByDate = (
   // Handle date sorting
   const dateA = a.lastSessionDate && new Date(a.lastSessionDate);
   const dateB = b.lastSessionDate && new Date(b.lastSessionDate);
+
   if (dateA instanceof Date && dateB instanceof Date) {
-    if (dateA.getMilliseconds() === dateB.getMilliseconds()) {
+    if (dateA.valueOf() === dateB.valueOf()) {
       return sortAlpha(a, b);
     }
     return dateA < dateB ? 1 : -1;
