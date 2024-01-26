@@ -110,8 +110,8 @@ public class ExerciseSetRepository(MySqlDataSource database) : IExerciseSetRepos
             FROM (
                 SELECT 
                     COUNT(Id) AS SetCount,
-                    SUM(Reps) AS RepCount,
-                    SUM(Reps * Value) / COUNT(Id) AS AvgValue
+                    MAX(Reps) AS RepCount, -- TODO: this should really be called AvgReps
+                    SUM(Reps * Value) / SUM(Reps) AS AvgValue
                 FROM ExerciseSet
                 WHERE DefinitionId = @definitionId
                 GROUP BY ExerciseId
