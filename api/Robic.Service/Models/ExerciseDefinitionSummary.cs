@@ -11,5 +11,5 @@ public class ExerciseDefinitionSummary
     public DateTime? LastSessionDate { get; set; }
 
     [Range(0, 100, ErrorMessage = "Value for {0} must be a percentage between {1} and {2}")]
-    public double? LastImprovement { get; set; }
+    public int? LastImprovement { get; set; }
 }

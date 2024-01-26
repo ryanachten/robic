@@ -12,6 +12,6 @@ public class ExerciseDefinition
     public List<ExerciseHistoryItem> History { get; set; } = [];
     public List<MuscleGroup> PrimaryMuscleGroup { get; set; } = [];
     public Exercise? LatestSession { get; set; }
-    public double? LastImprovement { get; set; }
+    public int? LastImprovement { get; set; }
     public PersonalBest? PersonalBest { get; set; }
 }
