@@ -17,7 +17,7 @@ export default function SettingsScreen() {
 
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
 
-  const appVersionNumber = Constants.manifest.version;
+  const appVersionNumber = Constants.expoConfig?.version;
 
   return (
     <Background>
