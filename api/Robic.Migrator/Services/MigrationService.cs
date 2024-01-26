@@ -83,29 +83,39 @@ public class MigrationService(
 
     private async Task CreateExercises(int mySqlUserId, int definitionId, IEnumerable<Mongo.Exercise> mongoExercises)
     {
-        var exerciseTasks = mongoExercises.Select(mongoExercise => Task.Run(async () =>
+        var exerciseTasks = new List<Task>();
+        foreach (var mongoExercise in mongoExercises)
         {
-            var exercise = await exerciseRepository.CreateExercise(new Exercise()
-            {
-                DefinitionId = definitionId,
-                UserId = mySqlUserId,
-                Date = mongoExercise.Date,
-                TimeTaken = mongoExercise.TimeTaken,
-            });
 
-            var sets = mongoExercise.Sets.Where(s => s.Reps != null && s.Value != null).Select(s => new CreateExerciseSetDto()
-            {
-                Reps = (int)s.Reps!,
-                Value = (int)s.Value!
-            });
-
-            logger.LogInformation("> Creating {Count} sets for exercise", sets.Count());
-
-            await exerciseSetRepository.CreateSet(exercise.Id, definitionId, sets);
-        }));
-
-        logger.LogInformation("> Creating {Count} exercises for definition", exerciseTasks.Count());
+            exerciseTasks.Add(CreateExercise(mySqlUserId, definitionId, mongoExercise));
+        }
 
         await Task.WhenAll(exerciseTasks);
+
+        logger.LogInformation("> Creating {Count} exercises for {MongoCount} Mongo exercises", exerciseTasks.Count, mongoExercises.Count());
+
+    }
+
+    private async Task CreateExercise(int mySqlUserId, int definitionId, Mongo.Exercise mongoExercise)
+    {
+        logger.LogInformation("> Creating exercise for Mongo exercise {Id}", mongoExercise.Id);
+
+        var exercise = await exerciseRepository.CreateExercise(new Exercise()
+        {
+            DefinitionId = definitionId,
+            UserId = mySqlUserId,
+            Date = mongoExercise.Date,
+            TimeTaken = mongoExercise.TimeTaken,
+        });
+
+        var sets = mongoExercise.Sets.Where(s => s.Reps != null && s.Value != null).Select(s => new CreateExerciseSetDto()
+        {
+            Reps = (int)s.Reps!,
+            Value = (int)s.Value!
+        });
+
+        logger.LogInformation("> Creating {Count} sets for exercise {Id}", sets.Count(), exercise.Id);
+
+        await exerciseSetRepository.CreateSet(exercise.Id, definitionId, sets);
     }
 }
