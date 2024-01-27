@@ -4,13 +4,8 @@ variable "token_key" {
   sensitive   = true
 }
 
-variable "database_name" {
-  description = "MongoDB database name"
-  type        = string
-}
-
 variable "connection_string" {
-  description = "MongoDB connection string"
+  description = "MySQL connection string"
   type        = string
   sensitive   = true
 }

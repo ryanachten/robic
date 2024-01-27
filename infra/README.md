@@ -6,9 +6,9 @@
 ```bash
 # Terraform environment variables
 $env:TF_VAR_token_key="Token for signing JWT token"
-$env:TF_VAR_database_name="MongoDB database name"
-$env:TF_VAR_connection_string="MongoDB connection string"
+$env:TF_VAR_connection_string="MySQL connection string"
 ```
+
 - Assume role with AWS account credentials
   - i.e. using [awsume](https://awsu.me/) where a profile `robic` declared in `.aws/config` and `.aws/credentials` with necessary credentials can be assumed via `awsume robic`
 - Initialise TF: `terraform init`
