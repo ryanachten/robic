@@ -7,7 +7,8 @@ Robic is a mobile application for simple exercise tracking and analysis.
 Robic helps athletes and enthusiasts track their workouts and provides analytics to follow their progress.
 
 ### Get started!
-- Download for Android at the [Google Play Store](https://play.google.com/store/apps/details?id=com.app.robic) 
+
+- Download for Android at the [Google Play Store](https://play.google.com/store/apps/details?id=com.app.robic)
 - View our [Privacy Policy](./docs/PrivacyPolicy.md)
 
 ![Robic Workout User Flow](./docs/images/Robic_Flow_1.jpg "Robic Workout User Flow")
@@ -31,13 +32,15 @@ Built using React Native, Expo, TypeScript and UI Kitten.
 
 **Robic API**
 
-Built using .NET and MongoDB.
+Built using .NET and MySQL.
 
 ![Robic Exercise User Flow](./docs/images/Robic_Flow_2.jpg "Robic Exercise User Flow")
 
 ## Developing with Robic
+
 Documentation specific to different aspects of Robic development can be found in their respective directories.
 Of specific note are:
+
 - [Developing the Robic App](./app/README.md)
 - [Developing the Robic API](./api/README.md)
 - [Developing the Robic Infrastructure](./infra/README.md)
