@@ -110,8 +110,8 @@ public class MigrationService(
 
         var sets = mongoExercise.Sets.Where(s => s.Reps != null && s.Value != null).Select(s => new CreateExerciseSetDto()
         {
-            Reps = (int)s.Reps!,
-            Value = (int)s.Value!
+            Reps = s.Reps ?? 0,
+            Value = s.Value ?? 0.0
         });
 
         logger.LogInformation("> Creating {Count} sets for exercise {Id}", sets.Count(), exercise.Id);
