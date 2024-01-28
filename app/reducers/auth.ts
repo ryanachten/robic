@@ -1,11 +1,9 @@
-import axios, { AxiosResponse } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { User } from "../constants/Interfaces";
-import { LOGIN_URL, REGISTER_URL } from "../constants/Api";
 import { UserAction, userTypes } from "./user";
 import { StorageKeys } from "../constants/StorageKeys";
 import { BaseState, baseTypes, BaseActions } from "./base";
-import Axios from "axios";
+import { apiClient, apiClientHeaders } from "../api";
+import { getErrorDetail, getErrorMessage } from "../utilities";
 
 export enum authTypes {
   LOADING_RESTORE_TOKEN = "LOADING_RESTORE_TOKEN",
@@ -70,37 +68,38 @@ export const authActions = (
     try {
       // TODO: After restoring token, we may need to validate it in production apps
       token = await AsyncStorage.getItem(StorageKeys.Token);
-      axios.defaults.headers.common["Authorization"] = `bearer ${token}`;
+      apiClientHeaders.Authorization = `bearer ${token}`;
       dispatch({ type: authTypes.RESTORE_TOKEN, token });
     } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+      const error = getErrorMessage(e);
+      dispatch({ type: baseTypes.ERROR, error });
     }
   },
   signIn: async (email, password) => {
     dispatch({ type: authTypes.LOADING_SIGN_IN });
-    try {
-      const {
-        data,
-      }: AxiosResponse<{
-        token: string;
-        userDetails: User;
-      }> = await Axios.post(LOGIN_URL, {
+    const { data, error } = await apiClient.POST("/api/Auth/login", {
+      body: {
         email,
         password,
-      });
-      const { token, userDetails } = data;
+      },
+    });
 
-      // Dispatch and serialise token
-      await AsyncStorage.setItem(StorageKeys.Token, token);
-      axios.defaults.headers.common["Authorization"] = `bearer ${token}`;
-      dispatch({ type: authTypes.SIGN_IN, token });
-
-      // Dispatch and serialise user
-      await AsyncStorage.setItem(StorageKeys.User, JSON.stringify(userDetails));
-      userDispatch({ type: userTypes.LOGIN_USER, user: userDetails });
-    } catch (error) {
-      dispatch({ type: baseTypes.ERROR, error: error.message });
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
+      return;
     }
+
+    const { token, userDetails } = data;
+
+    // Dispatch and serialise token
+    await AsyncStorage.setItem(StorageKeys.Token, token);
+    apiClientHeaders.Authorization = `bearer ${token}`;
+    dispatch({ type: authTypes.SIGN_IN, token });
+
+    // Dispatch and serialise user
+    await AsyncStorage.setItem(StorageKeys.User, JSON.stringify(userDetails));
+    userDispatch({ type: userTypes.LOGIN_USER, user: userDetails });
   },
   signOut: () => {
     AsyncStorage.multiRemove([StorageKeys.Token, StorageKeys.User]);
@@ -108,17 +107,22 @@ export const authActions = (
   },
   signUp: async ({ firstName, lastName, email, password }: UserForRegister) => {
     dispatch({ type: authTypes.LOADING_SIGN_UP });
-    try {
-      await Axios.post(REGISTER_URL, {
+    const { error } = await apiClient.POST("/api/Auth/register", {
+      body: {
         firstName,
         lastName,
         email,
         password,
-      });
-      dispatch({ type: authTypes.SIGN_UP });
-    } catch (error) {
-      dispatch({ type: baseTypes.ERROR, error: error.message });
+      },
+    });
+
+    if (error) {
+      const errorDetail = getErrorDetail(error);
+      dispatch({ type: baseTypes.ERROR, error: errorDetail });
+      return;
     }
+
+    dispatch({ type: authTypes.SIGN_UP });
   },
 });
 

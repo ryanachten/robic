@@ -5,51 +5,80 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Protocols.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Robic.Service.Data;
+using Microsoft.OpenApi.Models;
+using MySqlConnector;
+using Robic.Service.Helpers;
+using Robic.Service.StartupExtensions;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Robic.Service;
 
 public class Startup(IConfiguration configuration)
 {
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddCors();
-        services.AddAutoMapper(typeof(AuthRepository).Assembly);
+        var tokenKey = Environment.GetEnvironmentVariable("TokenKey") ?? throw new InvalidConfigurationException("Missing token key");
+        var connectionString = Environment.GetEnvironmentVariable("MySQLConnectionString") ?? throw new InvalidConfigurationException("Missing connection string");
 
-        services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
-        services.AddScoped<IExerciseRepository, ExerciseRepository>();
-        services.AddScoped<IExerciseDefinitionRepository, ExerciseDefinitionRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddCors();
+        services.AddMySqlDataSource(connectionString);
+
+        services.AddSingleton(AutoMapperProfile.CreateMapper());
+        services.AddRepositories();
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                        .GetBytes(Environment.GetEnvironmentVariable("TokenKey"))),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenKey)),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(opts =>
+            opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
+        ));
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Robic",
+                Description = "Simple exercise tracking and analysis API",
+            });
+
+            options.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
+            options.SupportNonNullableReferenceTypes();
+
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        });
     }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.yaml", "Robic API");
+            });
         }
 
-        app.UseHttpsRedirection();
+        // TODO: breaks local development for Android. Ensure this works in production and remove associated redirect code
+        //app.UseHttpsRedirection();
 
         app.UseRouting();
 

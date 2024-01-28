@@ -4,7 +4,6 @@ resource "aws_instance" "server" {
   associate_public_ip_address = true
   user_data = base64encode(templatefile("${path.module}/launch-instance.tftpl", {
     token_key         = var.token_key
-    database_name     = var.database_name
     connection_string = var.connection_string
   }))
   user_data_replace_on_change = true # ensures instance is recreated when launch data changes

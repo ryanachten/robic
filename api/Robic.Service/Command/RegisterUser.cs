@@ -5,6 +5,6 @@ namespace Robic.Service.Command;
 
 public class RegisterUser : IRequest<User>
 {
-    public User User { get; set; }
-    public string Password { get; set; }
+    public required User User { get; set; }
+    public required string Password { get; set; }
 }

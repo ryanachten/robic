@@ -1,7 +1,13 @@
 // Based on https://codersera.com/blog/first-react-native-app-stopwatch/ implementation
 
 import React, { Component } from "react";
-import { View, StyleSheet, AppState, AppStateStatus } from "react-native";
+import {
+  View,
+  StyleSheet,
+  AppState,
+  AppStateStatus,
+  NativeEventSubscription,
+} from "react-native";
 import { Colors } from "../constants/Colors";
 import { Text } from "@ui-kitten/components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,11 +21,11 @@ let padToTwo = (number: number) => (number <= 9 ? `0${number}` : number);
 type Props = {};
 
 type State = {
-  started: Boolean;
+  started: boolean;
   msec: number;
   sec: number;
   min: number;
-  shouldRestoreStopwatch: Boolean;
+  shouldRestoreStopwatch: boolean;
 };
 
 export class Stopwatch extends Component<Props, State> {
@@ -27,7 +33,8 @@ export class Stopwatch extends Component<Props, State> {
   framesPerMillisecond: number;
   fpsInterval: number;
   then: number;
-  startTime: number;
+  eventSubscription: NativeEventSubscription;
+
   initState: State = {
     shouldRestoreStopwatch: false,
     started: false,
@@ -35,27 +42,26 @@ export class Stopwatch extends Component<Props, State> {
     sec: 0,
     min: 0,
   };
+
   constructor(props: Props) {
     super(props);
     this.animationRequest = null;
     this.framesPerMillisecond = 1000;
     this.fpsInterval = this.framesPerMillisecond;
     this.then = Date.now();
-    this.startTime = this.then;
     this.state = {
       ...this.initState,
     };
 
-    AppState.addEventListener("change", (nextAppState) =>
-      this.handleAppStateChange(nextAppState)
+    this.eventSubscription = AppState.addEventListener(
+      "change",
+      (nextAppState) => this.handleAppStateChange(nextAppState)
     );
   }
 
   componentWillUnmount() {
     this.stop();
-    AppState.removeEventListener("change", (nextAppState) =>
-      this.handleAppStateChange(nextAppState)
-    );
+    this.eventSubscription.remove();
   }
 
   start() {
@@ -159,15 +165,13 @@ export class Stopwatch extends Component<Props, State> {
   }
 
   render() {
-    const { started, msec, sec, min } = this.state;
+    const { started, sec, min } = this.state;
     return (
       <View>
         <View style={styles.container}>
           <View style={styles.textWrapper}>
             <Text style={styles.text}>{padToTwo(min) + " : "}</Text>
             <Text style={styles.text}>{padToTwo(sec)}</Text>
-            {/* <Text style={styles.child}>{padToTwo(sec) + " : "}</Text>
-          <Text style={styles.child}>{padToTwo(msec)}</Text> */}
           </View>
           <Icon
             name={!started ? "play-circle-outline" : "stop-circle-outline"}

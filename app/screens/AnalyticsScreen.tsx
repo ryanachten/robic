@@ -10,7 +10,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { Background, BarChart, ErrorToast, PieChart } from "../components";
-import { AnalyticsItem } from "../constants/Interfaces";
+import { AnalyticsItem } from "../api";
 import { Margin } from "../constants/Sizes";
 import { AnalyticsContext } from "../services/context";
 
@@ -19,8 +19,6 @@ export default function AnalyticsScreen() {
     state: { analytics, loadingAnalytics, error },
     actions: { getAnalytics },
   } = useContext(AnalyticsContext);
-
-  const resultsPerChart = 5;
 
   return (
     <Background style={{ padding: 0 }}>
@@ -56,29 +54,11 @@ export default function AnalyticsScreen() {
             />
             <AnalyticsChart
               title="Most frequent exercises"
-              data={analytics.exerciseFrequency.splice(0, resultsPerChart)}
-            />
-            <AnalyticsChart
-              title="Least frequent exercises"
-              data={analytics.exerciseFrequency.splice(
-                analytics.exerciseFrequency.length - resultsPerChart,
-                analytics.exerciseFrequency.length
-              )}
+              data={analytics.exerciseFrequency}
             />
             <AnalyticsChart
               title="Most exercise progress"
-              data={analytics.exerciseProgress.splice(0, resultsPerChart)}
-            />
-            <AnalyticsChart
-              containerStyle={{
-                marginTop: Margin.lg,
-                marginBottom: Margin.lg,
-              }}
-              title="Least exercise progress"
-              data={analytics.exerciseProgress.splice(
-                analytics.exerciseProgress.length - resultsPerChart,
-                analytics.exerciseProgress.length
-              )}
+              data={analytics.exerciseProgress}
             />
           </>
         ) : (

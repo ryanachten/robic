@@ -16,6 +16,9 @@
       },
       "ios": {
         "autoIncrement": true
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://35.174.97.134"
       }
     }
   },

@@ -2,13 +2,17 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
 	<nullable>Enable</nullable>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />
+    <PackageReference Include="MySqlConnector" Version="2.3.1" />
+    <PackageReference Include="MySqlConnector.DependencyInjection" Version="2.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
   </ItemGroup>
@@ -17,5 +21,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="C:\dev\Robic\api\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Robic.Repository\Robic.Repository.csproj" />
   </ItemGroup>
 </Project>

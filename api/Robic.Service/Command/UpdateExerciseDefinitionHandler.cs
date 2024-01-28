@@ -1,17 +1,40 @@
 using AutoMapper;
 using MediatR;
-using Robic.Service.Data;
+using Robic.Repository;
+using Robic.Repository.Models.Enums;
 using Robic.Service.Models;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Robic.Service.Command;
 
-public class UpdateExerciseDefinitionHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateExerciseDefinition, ExerciseDefinition>
+public class UpdateExerciseDefinitionHandler(
+    IExerciseDefinitionRepository exerciseDefinitionRepository,
+    IExerciseMuscleGroupRepository exerciseMuscleGroupRepository,
+    IMapper mapper) : IRequestHandler<UpdateExerciseDefinition, ExerciseDefinition?>
 {
-    public async Task<ExerciseDefinition> Handle(UpdateExerciseDefinition request, CancellationToken cancellationToken)
+    public async Task<ExerciseDefinition?> Handle(UpdateExerciseDefinition request, CancellationToken cancellationToken)
     {
-        var definition = mapper.Map<ExerciseDefinition>(request.UpdatedDefinition);
-        return await unitOfWork.ExerciseDefinitionRepo.UpdateDefinition(request.ExistingDefinition, definition);
+        await exerciseDefinitionRepository.UpdateDefinition(new()
+        {
+            Id = request.DefinitionId,
+            Title = request.UpdatedDefinition.Title,
+            Unit = request.UpdatedDefinition.Unit,
+        });
+
+        await exerciseMuscleGroupRepository.DeleteDefinitionMuscleGroups(request.DefinitionId);
+        var updatedMuscleGroups = request.UpdatedDefinition.PrimaryMuscleGroup;
+        await exerciseMuscleGroupRepository.AddDefinitionMuscleGroups(
+            request.DefinitionId,
+            updatedMuscleGroups.Select(mg => mapper.Map<MuscleGroup>(mg))
+        );
+
+        var definitionResult = await exerciseDefinitionRepository.GetDefinitionById(request.DefinitionId);
+
+        var definition = mapper.Map<ExerciseDefinition>(definitionResult);
+        definition.PrimaryMuscleGroup = updatedMuscleGroups;
+
+        return definition;
     }
 }

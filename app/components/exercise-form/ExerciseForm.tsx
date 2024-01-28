@@ -7,8 +7,7 @@ import React, {
 } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ExerciseForPost } from "../../reducers/exercise";
-import { ExerciseDefinition, FormSet, Set } from "../../constants/Interfaces";
+import { ExerciseDefinitionSummary, Set, UpdateExercise } from "../../api";
 import { ErrorToast } from "../ErrorToast";
 import { Button } from "../Button";
 import { Stopwatch } from "../Stopwatch";
@@ -26,10 +25,10 @@ import { SetList } from "./SetList";
 export const ExerciseForm = ({
   definition: { id },
 }: {
-  definition: ExerciseDefinition;
+  definition: ExerciseDefinitionSummary;
 }) => {
-  const initialSet: FormSet[] = [{ reps: "1", value: "5" }];
-  const [sets, setSets] = useState<FormSet[]>(initialSet);
+  const initialSet: Set[] = [{ reps: 1, value: 5 }];
+  const [sets, setSets] = useState<Set[]>(initialSet);
 
   const {
     state: { loadingCreateExercise, error },
@@ -52,7 +51,7 @@ export const ExerciseForm = ({
 
   const updateSet = (index: number, field: "reps" | "value", value: string) => {
     const updatedSets = [...sets];
-    updatedSets[index][field] = value;
+    updatedSets[index][field] = parseFloat(value);
     setSets(updatedSets);
   };
 
@@ -68,13 +67,10 @@ export const ExerciseForm = ({
   };
 
   const submitExercise = async () => {
-    const setsForSumission: Set[] = sets.map(({ reps, value }) => ({
-      reps: parseFloat(reps),
-      value: parseFloat(value),
-    }));
-    const exercise: ExerciseForPost = {
-      sets: setsForSumission,
-      definition: id,
+    const exercise: UpdateExercise = {
+      date: new Date().toISOString(),
+      sets,
+      definitionId: id,
     };
     if (!stopwatchRef.current) {
       return;
@@ -126,9 +122,8 @@ export const ExerciseForm = ({
         </Button>
       </View>
       <ScrollView>
-        <PreviousAttempts id={id} definitionState={definitionState} />
+        <PreviousAttempts definitionState={definitionState} />
         <EffortTillPersonalBest
-          id={id}
           currentSets={sets}
           definitionState={definitionState}
         />

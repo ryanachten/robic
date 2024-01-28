@@ -1,0 +1,8 @@
+CREATE TABLE Exercise (
+  Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  DefinitionId INT NOT NULL,
+  UserId INT NOT NULL,
+  Date DATETIME NOT NULL,
+  TimeTaken DATETIME NULL,
+  FOREIGN KEY (DefinitionId) REFERENCES ExerciseDefinition(Id)
+);

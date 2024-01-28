@@ -2,7 +2,7 @@ import { Card, Text } from "@ui-kitten/components/ui";
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Colors } from "../../constants/Colors";
-import { ExerciseDefinition } from "../../constants/Interfaces";
+import { ExerciseDefinition } from "../../api";
 import { Margin } from "../../constants/Sizes";
 import { ExerciseCard } from "../ExerciseCard";
 import { ExerciseDetailAnalytics } from "./ExerciseDetailAnalytics";
@@ -13,26 +13,26 @@ export const DefinitionDetail = ({
   definition: ExerciseDefinition;
 }) => {
   const {
-    type,
+    history,
     primaryMuscleGroup,
-    lastSession,
+    latestSession,
     lastImprovement,
     personalBest: pb,
   } = definition;
 
   return (
     <>
-      {(lastSession || pb) && (
+      {(latestSession || pb) && (
         <Card style={styles.exerciseCards}>
-          {lastSession && (
+          {latestSession && (
             <ExerciseCard
               icon="clock-outline"
               containerStyle={styles.exerciseCard}
               title="Latest Exercise"
-              exercise={lastSession}
+              exercise={latestSession}
             />
           )}
-          {pb && pb.topNetExercise && (
+          {pb?.topNetExercise && (
             <ExerciseCard
               icon="star-outline"
               title="Personal Best"
@@ -43,29 +43,34 @@ export const DefinitionDetail = ({
       )}
       {pb && (
         <View style={styles.itemWrapper}>
-          <Item label="Top Weight (Avg)" value={pb.topAvgValue.toString()} />
-          <Item label="Top Reps" value={pb.topReps.toString()} />
-          <Item label="Top Sets" value={pb.topSets.toString()} />
+          <Item label="Top Weight (Avg)" value={pb.topAvgValue} />
+          <Item label="Top Reps" value={pb.topReps} />
+          <Item label="Top Sets" value={pb.topSets} />
         </View>
       )}
       <View style={styles.itemWrapper}>
-        {type && <Item label="Type" value={type} />}
-        {primaryMuscleGroup && (
+        {primaryMuscleGroup.length > 0 && (
           <Item label="Muscles groups" value={primaryMuscleGroup.join(", ")} />
         )}
         {lastImprovement ? (
           <Item label="Last improvement" value={`${lastImprovement}%`} />
         ) : null}
       </View>
-      {pb && <ExerciseDetailAnalytics history={pb.history} />}
+      {pb && <ExerciseDetailAnalytics history={history} />}
     </>
   );
 };
 
-const Item = ({ label, value }: { label: string; value: string }) => (
+const Item = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number | null | undefined;
+}) => (
   <View style={styles.item}>
     <Text style={styles.label}>{label}</Text>
-    <Text>{value}</Text>
+    <Text>{value ?? "--"}</Text>
   </View>
 );
 

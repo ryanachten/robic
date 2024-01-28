@@ -6,6 +6,6 @@ namespace Robic.Service.Command;
 
 public class CreateExercise : IRequest<Exercise>
 {
-    public required ExerciseDefinition Definition { get; set; }
+    public required int UserId { get; set; }
     public required UpdateExerciseDto Exercise { get; set; }
 }

@@ -10,11 +10,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Background, Button, ErrorToast, Icon } from "../components";
 import { ExercisesParamList } from "../navigation/types";
-import { ExerciseDefinition } from "../constants/Interfaces";
+import { ExerciseDefinitionSummary } from "../api";
 import {
   filterBySearchTerm,
   sortByDate,
-  sortByImprovment,
+  sortByImprovement,
   sortByNumberOfSessions,
 } from "../utilities/searchHelpers";
 import { FontSize, Margin } from "../constants/Sizes";
@@ -46,7 +46,7 @@ type Props = StackScreenProps<ExercisesParamList, "ExercisesScreen">;
 
 export default function ExercisesScreen({ navigation }: Props) {
   const {
-    state: { definitions, error, loadingDefinitions },
+    state: { definitionSummaries, error, loadingDefinitions },
     actions: { getDefinitions },
   } = useContext(ExerciseDefinitionContext);
 
@@ -62,11 +62,13 @@ export default function ExercisesScreen({ navigation }: Props) {
     () => sortOptions[selectedIndex.row],
     [selectedIndex.row]
   );
+
+  // TODO: sort on the backend
   const sortExercises = useCallback(
-    (a, b) => {
+    (a: ExerciseDefinitionSummary, b: ExerciseDefinitionSummary) => {
       switch (sortBy.value) {
         case SortBy.mostImprovement:
-          return sortByImprovment(a, b);
+          return sortByImprovement(a, b);
         case SortBy.numberOfSessions:
           return sortByNumberOfSessions(a, b);
         default:
@@ -76,12 +78,12 @@ export default function ExercisesScreen({ navigation }: Props) {
     [sortBy.value]
   );
   const filterExercises = useCallback(
-    (e) => filterBySearchTerm(e, searchTerm),
+    (e: ExerciseDefinitionSummary) => filterBySearchTerm(e, searchTerm),
     [searchTerm]
   );
 
   const navigateToEdit = useCallback(
-    () => navigation.navigate("ExerciseEditScreen", {}),
+    () => navigation.navigate("ExerciseEditScreen", { definition: null }),
     []
   );
 
@@ -126,54 +128,56 @@ export default function ExercisesScreen({ navigation }: Props) {
           />
         }
       >
-        {definitions
+        {definitionSummaries
           ?.sort(sortExercises)
           .filter(filterExercises)
           .map(
             ({
               id,
               title,
-              lastSession,
+              lastSessionDate,
               lastImprovement,
-              history,
-            }: ExerciseDefinition) => (
-              <Card
-                style={styles.exerciseItem}
-                key={id}
-                onPress={() =>
-                  navigation.navigate("ExerciseDetailScreen", {
-                    definitionId: id,
-                  })
-                }
-              >
-                <Text style={styles.exerciseTitle}>{title}</Text>
-                <View style={styles.exerciseMeta}>
-                  {lastSession && (
-                    <Text style={styles.exerciseDate}>
-                      {formatRelativeDate(lastSession.date)}
+              sessionCount,
+            }: ExerciseDefinitionSummary) => {
+              return (
+                <Card
+                  style={styles.exerciseItem}
+                  key={id}
+                  onPress={() =>
+                    navigation.navigate("ExerciseDetailScreen", {
+                      definitionId: id,
+                    })
+                  }
+                >
+                  <Text style={styles.exerciseTitle}>{title}</Text>
+                  <View style={styles.exerciseMeta}>
+                    {lastSessionDate && (
+                      <Text style={styles.exerciseDate}>
+                        {formatRelativeDate(lastSessionDate)}
+                      </Text>
+                    )}
+                    {lastImprovement ? (
+                      <Text
+                        style={[
+                          styles.exerciseImprovement,
+                          {
+                            color:
+                              lastImprovement > 0 ? Colors.green : Colors.red,
+                          },
+                        ]}
+                      >
+                        {`${lastImprovement > 0 ? "+" : ""}${lastImprovement}%`}
+                      </Text>
+                    ) : null}
+                    <Text style={styles.exerciseImprovement}>
+                      {sessionCount === 0
+                        ? "Unattempted!"
+                        : `Sessions: ${sessionCount}`}
                     </Text>
-                  )}
-                  {lastImprovement ? (
-                    <Text
-                      style={[
-                        styles.exerciseImprovement,
-                        {
-                          color:
-                            lastImprovement > 0 ? Colors.green : Colors.red,
-                        },
-                      ]}
-                    >
-                      {`${lastImprovement > 0 ? "+" : ""}${lastImprovement}%`}
-                    </Text>
-                  ) : null}
-                  <Text style={styles.exerciseImprovement}>
-                    {!history || history.length === 0
-                      ? "Unattempted!"
-                      : `Sessions: ${history.length}`}
-                  </Text>
-                </View>
-              </Card>
-            )
+                  </View>
+                </Card>
+              );
+            }
           )}
       </ScrollView>
     </Background>

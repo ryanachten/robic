@@ -33,4 +33,4 @@ sudo usermod -a -G docker ec2-user # ec2-user is the default username used for r
 
 # Run Docker container
 docker pull ryanachten/robic:latest
-docker run -p 80:80 -e TokenKey="${token_key}" -e DatabaseName="${database_name}" -e ConnectionString="${connection_string}" ryanachten/robic
+docker run -p 80:80 -e TokenKey="${token_key}" -e MySQLConnectionString="${connection_string}" ryanachten/robic

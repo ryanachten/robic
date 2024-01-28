@@ -1,73 +1,86 @@
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Robic.Service.Command;
+using Robic.Service.Models;
 using Robic.Service.Models.DTOs.Exercise;
 using Robic.Service.Query;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Robic.Service.Controllers;
 
 public class ExerciseController(IMediator mediator) : BaseController
 {
+    /// <summary>
+    /// Retrieves list of exercises for a definition
+    /// </summary>
     [HttpGet]
-    public async Task<IActionResult> GetDefinitionExercises([FromQuery(Name = "definition")] string definitionId)
+    [ProducesResponseType(typeof(IEnumerable<Exercise>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetDefinitionExercises([FromQuery(Name = "definition")] int definitionId)
     {
-        var definition = await mediator.Send(new GetExerciseDefinitionById
-        {
-            DefinitionId = definitionId
-        });
-
-        if (definition == null) return NotFound();
-        if (definition.User != UserId) return Unauthorized();
-
         var exercises = await mediator.Send(new GetExercisesByDefinition
         {
-            DefinitionId = definitionId
+            DefinitionId = definitionId,
+            UserId = UserId
         });
 
         return Ok(exercises);
     }
 
-    [HttpGet("{id:length(24)}", Name = "GetExercise")]
-    public async Task<IActionResult> GetExerciseById(string id)
+    /// <summary>
+    /// Retrieves exercise details
+    /// </summary>
+    [HttpGet("{id}", Name = "GetExercise")]
+    [ProducesResponseType(typeof(Exercise), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetExerciseById(int id)
     {
         var exercise = await mediator.Send(new GetExerciseById
         {
-            ExerciseId = id
+            ExerciseId = id,
         });
 
         if (exercise == null) return NotFound();
 
-        var isUserExercise = await IsUsersDefinition(exercise.Definition);
-        if (!isUserExercise) return Unauthorized();
+        var isUserDefinition = await IsUserDefinition(exercise.DefinitionId);
+        if (!isUserDefinition) return Forbid();
 
         return Ok(exercise);
     }
 
+    /// <summary>
+    /// Creates an exercise
+    /// </summary>
     [HttpPost]
+    [ProducesResponseType(typeof(Exercise), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateExercise(UpdateExerciseDto exercise)
     {
-        var definition = await mediator.Send(new GetExerciseDefinitionById
-        {
-            DefinitionId = exercise.Definition
-        });
-
-        if (definition == null || definition.User != UserId) return Unauthorized();
+        var isUserDefinition = await IsUserDefinition(exercise.DefinitionId);
+        if (!isUserDefinition) return Forbid();
 
         var createdExercise = await mediator.Send(new CreateExercise
         {
-            Definition = definition,
+            UserId = UserId,
             Exercise = exercise
         });
 
         return CreatedAtRoute("GetExercise", new { id = createdExercise.Id }, createdExercise);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> UpdateExercise(string id, UpdateExerciseDto updatedExercise)
+    /// <summary>
+    /// Updates exercise details
+    /// </summary>
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(Exercise), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateExercise(int id, UpdateExerciseDto updatedExercise)
     {
-        var isUserExercise = await IsUsersDefinition(updatedExercise.Definition);
-        if (!isUserExercise) return Unauthorized();
+        var isUserDefinition = await IsUserDefinition(updatedExercise.DefinitionId);
+        if (!isUserDefinition) return Forbid();
 
         var exercise = await mediator.Send(new GetExerciseById
         {
@@ -77,14 +90,22 @@ public class ExerciseController(IMediator mediator) : BaseController
 
         var result = await mediator.Send(new UpdateExercise
         {
+            ExerciseId = exercise.Id,
+            DefinitionId = exercise.DefinitionId,
             Exercise = updatedExercise
         });
 
         return Ok(result);
     }
 
-    [HttpDelete("{id:length(24)}")]
-    public async Task<IActionResult> DeleteExercise(string id)
+    /// <summary>
+    /// Deletes an exercise and related resources
+    /// </summary>
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteExercise(int id)
     {
         var exercise = await mediator.Send(new GetExerciseById
         {
@@ -92,30 +113,24 @@ public class ExerciseController(IMediator mediator) : BaseController
         });
         if (exercise == null) return NotFound();
 
-        var definition = await mediator.Send(new GetExerciseDefinitionById
-        {
-            DefinitionId = exercise.Definition
-        });
-
-        if (definition == null || definition.User != UserId)
-            return Unauthorized();
+        var isUserExercise = await IsUserDefinition(exercise.DefinitionId);
+        if (!isUserExercise) return Forbid();
 
         await mediator.Send(new DeleteExercise
         {
             ExerciseId = id,
-            Definition = definition
         });
 
         return NoContent();
     }
 
-    private async Task<bool> IsUsersDefinition(string definitionId)
+    private async Task<bool> IsUserDefinition(int definitionId)
     {
         var definition = await mediator.Send(new GetExerciseDefinitionById
         {
             DefinitionId = definitionId
         });
 
-        return definition != null && definition.User == UserId;
+        return definition != null && definition.UserId == UserId;
     }
 }

@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { User } from "../constants/Interfaces";
+import { User } from "../api";
 import { StorageKeys } from "../constants/StorageKeys";
 import { BaseActions, BaseState, baseTypes } from "./base";
+import { getErrorMessage } from "../utilities";
 
 export enum userTypes {
   LOADING_LOGIN_USER = "LOADING_LOGIN_USER",
@@ -35,11 +36,10 @@ export type UserState = BaseState & {
 
 export const initialUserState: UserState = {
   user: {
-    id: "",
+    id: 0,
     firstName: "",
     lastName: "",
     email: "",
-    exercises: [],
   },
   loadingLoginUser: false,
   loadingRestoreUser: false,
@@ -57,7 +57,8 @@ export const userActions = (
         dispatch({ type: userTypes.RESTORE_USER, user });
       }
     } catch (e) {
-      dispatch({ type: baseTypes.ERROR, error: e.message });
+      const error = getErrorMessage(e);
+      dispatch({ type: baseTypes.ERROR, error });
     }
   },
 });

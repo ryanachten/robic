@@ -1,17 +1,29 @@
 using AutoMapper;
 using MediatR;
-using Robic.Service.Data;
+using Robic.Repository;
 using Robic.Service.Models;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using RepositoryExerciseDtos = Robic.Repository.Models.DTOs.Exercise;
 
 namespace Robic.Service.Command;
 
-public class UpdateExerciseHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateExercise, Exercise>
+public class UpdateExerciseHandler(
+    IExerciseRepository exerciseRepository,
+    IExerciseSetRepository exerciseSetRepository,
+    IMapper mapper) : IRequestHandler<UpdateExercise, Exercise>
 {
-    public Task<Exercise> Handle(UpdateExercise request, CancellationToken cancellationToken)
+    public async Task<Exercise> Handle(UpdateExercise request, CancellationToken cancellationToken)
     {
-        var exercise = mapper.Map<Exercise>(request.Exercise);
-        return unitOfWork.ExerciseRepo.UpdateExercise(exercise);
+        var updatedExercise = mapper.Map<RepositoryExerciseDtos.UpdateExerciseDto>(request.Exercise);
+        await exerciseRepository.UpdateExercise(request.ExerciseId, updatedExercise);
+
+        await exerciseSetRepository.DeleteExerciseSets(request.ExerciseId);
+
+        var updatedSets = mapper.Map<List<RepositoryExerciseDtos.CreateExerciseSetDto>>(request.Exercise.Sets);
+        await exerciseSetRepository.CreateSet(request.ExerciseId, request.DefinitionId, updatedSets);
+
+        return mapper.Map<Exercise>(request.Exercise);
     }
 }

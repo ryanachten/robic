@@ -1,14 +1,15 @@
 using MediatR;
-using Robic.Service.Data;
+using Robic.Repository;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Robic.Service.Command;
 
-public class DeleteExerciseDefinitionHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteExerciseDefinition>
+public class DeleteExerciseDefinitionHandler(IExerciseDefinitionRepository exerciseDefinitionRepository) : IRequestHandler<DeleteExerciseDefinition>
 {
+    // TODO: clean up associated resources
     public async Task Handle(DeleteExerciseDefinition request, CancellationToken cancellationToken)
     {
-        await unitOfWork.ExerciseDefinitionRepo.DeleteDefinition(request.Definition);
+        await exerciseDefinitionRepository.DeleteDefinitionById(request.DefinitionId);
     }
 }
