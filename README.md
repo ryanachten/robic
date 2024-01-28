@@ -22,7 +22,7 @@ Some of the features Robic provides are:
 
 More features to come!
 
-![Robic Stack](./docs/images/Robic_Stack.jpg "Robic Stack")
+![Robic Stack](./docs/images/Robic_Stack_1.jpg "Robic Stack")
 
 ## Robic Stack
 
