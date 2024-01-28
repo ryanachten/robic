@@ -20,7 +20,7 @@
     ],
     "android": {
       "package": "com.app.robic",
-      "versionCode": 5
+      "versionCode": 19
     },
     "ios": {
       "bundleIdentifier": "com.app.robic",
@@ -33,6 +33,16 @@
       "eas": {
         "projectId": "5e5029ac-39dd-4985-8e79-b56d2a9b952a"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
   }
 }
