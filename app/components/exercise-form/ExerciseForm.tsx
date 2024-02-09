@@ -21,14 +21,15 @@ import {
 import { PreviousAttempts } from "./PreviousAttempts";
 import { EffortTillPersonalBest } from "./EffortTillPersonalBest";
 import { SetList } from "./SetList";
+import { ActiveSets } from "../../constants/Interfaces";
 
 export const ExerciseForm = ({
   definition: { id },
 }: {
   definition: ExerciseDefinitionSummary;
 }) => {
-  const initialSet: Set[] = [{ reps: 1, value: 5 }];
-  const [sets, setSets] = useState<Set[]>(initialSet);
+  const initialSet: ActiveSets[] = [{ reps: "1", value: "5" }];
+  const [sets, setSets] = useState<ActiveSets[]>(initialSet);
 
   const {
     state: { loadingCreateExercise, error },
@@ -51,7 +52,7 @@ export const ExerciseForm = ({
 
   const updateSet = (index: number, field: "reps" | "value", value: string) => {
     const updatedSets = [...sets];
-    updatedSets[index][field] = parseFloat(value);
+    updatedSets[index][field] = value;
     setSets(updatedSets);
   };
 
@@ -67,9 +68,14 @@ export const ExerciseForm = ({
   };
 
   const submitExercise = async () => {
+    const formattedSets: Set[] = sets.map((s) => ({
+      reps: parseInt(s.reps),
+      value: parseFloat(s.value),
+    }));
+
     const exercise: UpdateExercise = {
       date: new Date().toISOString(),
-      sets,
+      sets: formattedSets,
       definitionId: id,
     };
     if (!stopwatchRef.current) {
@@ -99,6 +105,10 @@ export const ExerciseForm = ({
     }
   };
 
+  const addIcon = (
+    <Icon fill={Colors.orange} name="plus-circle-outline" size="sm" />
+  );
+
   return (
     <View style={styles.container}>
       <Stopwatch ref={stopwatchRef} />
@@ -107,9 +117,7 @@ export const ExerciseForm = ({
           appearance="outline"
           onPress={addSet}
           style={[styles.button, styles.addButton]}
-          accessoryRight={() => (
-            <Icon fill={Colors.orange} name="plus-circle-outline" size="sm" />
-          )}
+          accessoryRight={addIcon}
         >
           Add Set
         </Button>

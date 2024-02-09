@@ -5,21 +5,24 @@ import { Set } from "../../api";
 import { ExerciseDefinitionState } from "../../reducers/exerciseDefinition";
 import { Margin } from "../../constants/Sizes";
 import { Colors } from "../../constants/Colors";
+import { ActiveSets } from "../../constants/Interfaces";
 
 const netWeightReducer = (accumulator: number, { reps, value }: Set) =>
-  (accumulator += reps * value);
+  accumulator + reps * value;
 
-const netWeightFormReducer = (accumulator: number, { reps, value }: Set) =>
-  (accumulator += reps * value);
+const netWeightFormReducer = (
+  accumulator: number,
+  { reps, value }: ActiveSets
+) => accumulator + parseInt(reps) * parseFloat(value);
 
 const totalRepReducer = (accumulator: number, { reps }: Set) =>
-  (accumulator += reps);
+  accumulator + reps;
 
 export const EffortTillPersonalBest = ({
   currentSets,
   definitionState,
 }: {
-  currentSets: Set[];
+  currentSets: ActiveSets[];
   definitionState: ExerciseDefinitionState;
 }) => {
   const { definitionDetail } = definitionState;
