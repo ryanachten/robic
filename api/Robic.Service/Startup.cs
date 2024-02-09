@@ -9,6 +9,9 @@ using Microsoft.IdentityModel.Protocols.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Robic.Service.Helpers;
 using Robic.Service.StartupExtensions;
 using System;
@@ -29,6 +32,22 @@ public class Startup(IConfiguration configuration)
 
         services.AddCors();
         services.AddMySqlDataSource(connectionString);
+
+        // TODO: move into extension method and only enable in production
+        var assemblyName = Assembly.GetEntryAssembly()?.GetName();
+        services.AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService(
+                serviceName: assemblyName?.Name ?? "Robic",
+                serviceVersion: assemblyName?.Version?.ToString() ?? "1.0",
+                serviceInstanceId: Environment.MachineName
+            ))
+            .WithTracing(tracing => tracing.AddAspNetCoreInstrumentation()
+                .AddConsoleExporter()
+                .AddOtlpExporter())
+            .WithMetrics(metrics => metrics.AddAspNetCoreInstrumentation()
+                .AddRuntimeInstrumentation()
+                .AddConsoleExporter()
+                .AddOtlpExporter());
 
         services.AddSingleton(AutoMapperProfile.CreateMapper());
         services.AddRepositories();
