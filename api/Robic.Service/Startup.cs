@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using Robic.Service.Helpers;
 using Robic.Service.StartupExtensions;
+using Serilog;
 using System;
 using System.IO;
 using System.Reflection;
@@ -77,8 +78,7 @@ public class Startup(IConfiguration configuration)
             });
         }
 
-        // TODO: breaks local development for Android. Ensure this works in production and remove associated redirect code
-        //app.UseHttpsRedirection();
+        app.UseSerilogRequestLogging();
 
         app.UseRouting();
 
