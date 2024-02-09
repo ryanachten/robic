@@ -31,7 +31,7 @@ public class ExerciseController(IMediator mediator) : BaseController
     /// <summary>
     /// Retrieves exercise details
     /// </summary>
-    [HttpGet("{id}", Name = "GetExercise")]
+    [HttpGet("{id:int}", Name = "GetExercise")]
     [ProducesResponseType(typeof(Exercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -73,7 +73,7 @@ public class ExerciseController(IMediator mediator) : BaseController
     /// <summary>
     /// Updates exercise details
     /// </summary>
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     [ProducesResponseType(typeof(Exercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -101,7 +101,7 @@ public class ExerciseController(IMediator mediator) : BaseController
     /// <summary>
     /// Deletes an exercise and related resources
     /// </summary>
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

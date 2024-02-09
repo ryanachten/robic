@@ -15,7 +15,7 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
     /// <summary>
     /// Retrieves a user
     /// </summary>
-    [HttpGet("{id}", Name = "GetUser")]
+    [HttpGet("{id:int}", Name = "GetUser")]
     public async Task<IActionResult> GetUser(int id)
     {
         if (UserId != id) return Unauthorized();
@@ -35,7 +35,7 @@ public class UserController(IMapper mapper, IMediator mediator) : BaseController
     /// <summary>
     /// Deletes a user and associated resources
     /// </summary>
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
         if (UserId != id) return Unauthorized();
