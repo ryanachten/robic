@@ -1,0 +1,41 @@
+version: "3.4"
+
+services:
+  robic.service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - buildType=Debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+    ports:
+      - 5000:80
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    env_file:
+      - robic.env # excluded from version control
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    env_file:
+      - grafana.env # excluded from version control
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+volumes:
+  prom_data:
