@@ -1,0 +1,22 @@
+# Default values for robic.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# These default values are designed to fail unless overwritten.
+name: robic
+image:
+  tag: latest
+  repo: ryanachten/robic
+replicaCount: 2
+ingress:
+  enabled: true
+  hosts:
+    - www.chart-example.com
+containerPort: 80
+# resources: # TODO: look at enabling resources
+#   requests:
+#     cpu: 10m
+#     memory: 20Mi
+#   limits:
+#     cpu: 20m
+#     memory: 30Mi
