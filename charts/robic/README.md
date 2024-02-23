@@ -17,5 +17,13 @@
 ### Updating deployment
 
 - Ensure you're in the `\charts\robic\` directory
-- Set `TokenKey` and `MySQLConnectionString` environment variables
-- Run Helm upgrade to reference these environment variables, i.e. for Windows using `$env`: `helm upgrade --install --set tokenKey=$env:TokenKey --set mySQLConnectionString=$env:MySQLConnectionString robic .`
+- Set `TokenKey`, `MySQLConnectionString`, `GrafanaUsername` and `GrafanaPassword` environment variables
+- Run Helm upgrade to reference these environment variables, i.e. for Windows in Powershell:
+```bash
+helm upgrade --install `
+  --set robic-service.tokenKey=$env:TokenKey `
+  --set robic-service.mySQLConnectionString=$env:MySQLConnectionString `
+  --set grafana.username=$env:GrafanaUsername `
+  --set grafana.password=$env:GrafanaPassword `
+  robic . 
+```

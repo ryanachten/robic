@@ -7,5 +7,5 @@ spec:
     app: {{ .Values.name }}
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: {{ .Values.servicePort }}
+      targetPort: {{ .Values.containerPort }}
