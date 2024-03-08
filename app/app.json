@@ -20,7 +20,7 @@
     ],
     "android": {
       "package": "com.app.robic",
-      "versionCode": 20
+      "versionCode": 21
     },
     "ios": {
       "bundleIdentifier": "com.app.robic",
