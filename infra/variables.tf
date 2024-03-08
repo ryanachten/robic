@@ -4,8 +4,19 @@ variable "token_key" {
   sensitive   = true
 }
 
-variable "connection_string" {
-  description = "MySQL connection string"
+variable "mysql_password" {
+  description = "MySQL password"
   type        = string
   sensitive   = true
+}
+
+variable "mysql_username" {
+  description = "MySQL password"
+  type        = string
+}
+
+variable "mysql_database_name" {
+  description = "MySQL password"
+  default     = "robic"
+  type        = string
 }

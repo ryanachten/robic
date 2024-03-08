@@ -4,10 +4,11 @@ resource "aws_instance" "server" {
   associate_public_ip_address = true
   user_data = base64encode(templatefile("${path.module}/launch-instance.tftpl", {
     token_key         = var.token_key
-    connection_string = var.connection_string
+    connection_string = "Server=${aws_db_instance.robic.address};Database=${var.mysql_database_name};user=${var.mysql_username};password=${var.mysql_password};"
   }))
   user_data_replace_on_change = true # ensures instance is recreated when launch data changes
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
+  depends_on                  = [aws_db_instance.robic]
 }
 
 // Elastic IP to create a static IP for the EC2

@@ -6,7 +6,8 @@
 ```bash
 # Terraform environment variables
 $env:TF_VAR_token_key="Token for signing JWT token"
-$env:TF_VAR_connection_string="MySQL connection string"
+$env:TF_VAR_mysql_username="MySQL DB username"
+$env:TF_VAR_mysql_password="MySQL DB password"
 ```
 
 - Assume role with AWS account credentials
