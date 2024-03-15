@@ -40,7 +40,7 @@ cd /api
 docker build -t ryanachten/robic -f .\Dockerfile .
 
 # run Docker container available on http://localhost:5000/
-docker run -it --rm -e TokenKey="token key" -e MySQLConnectionString="MySQL connection string" -p 5000:80 ryanachten/robic
+docker run -it --rm -e TokenKey=$env:TokenKey -e MySQLConnectionString=$env:MySQLConnectionString -p 5000:80 ryanachten/robic
 
 # push changes to Docker Hub if things are looking good (requires Docker Hub login)
 docker login

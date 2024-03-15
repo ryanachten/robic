@@ -11,10 +11,8 @@ public class Program
     {
         CreateHostBuilder(args).UseSerilog(
             (context, services, configuration) => configuration
-                .ReadFrom.Configuration(context.Configuration)
-                .ReadFrom.Services(services)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
+            .ReadFrom.Configuration(context.Configuration)
+            .ReadFrom.Services(services)
             ).Build().Run();
     }
 
