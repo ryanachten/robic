@@ -5,8 +5,11 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Robic.Service", "Robic.Service\Robic.Service.csproj", "{94EC0D7E-1BB2-4959-8F71-ACD25460C969}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robic.Repository", "Robic.Repository\Robic.Repository.csproj", "{1C5F0A6A-D18D-4676-B17B-2E84BB007B64}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robic.Migrator", "Robic.Migrator\Robic.Migrator.csproj", "{02FFCD5E-B8E5-4CF7-92A0-666EC2D3EBFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Robic.Repository", "Robic.Repository\Robic.Repository.csproj", "{1C5F0A6A-D18D-4676-B17B-2E84BB007B64}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Robic.Migrator", "Robic.Migrator\Robic.Migrator.csproj", "{02FFCD5E-B8E5-4CF7-92A0-666EC2D3EBFA}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FEF955D9-7695-498F-999C-60EA7C990B0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +29,10 @@ Global
 		{02FFCD5E-B8E5-4CF7-92A0-666EC2D3EBFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02FFCD5E-B8E5-4CF7-92A0-666EC2D3EBFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02FFCD5E-B8E5-4CF7-92A0-666EC2D3EBFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEF955D9-7695-498F-999C-60EA7C990B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEF955D9-7695-498F-999C-60EA7C990B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEF955D9-7695-498F-999C-60EA7C990B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEF955D9-7695-498F-999C-60EA7C990B0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,11 @@
+version: "3.4"
+
+services:
+  robic.service:
+    image: ${DOCKER_REGISTRY-}robicservice
+    build:
+      context: .
+      dockerfile: Robic.Service/Dockerfile
+    environment:
+      - TokenKey=${TokenKey}
+      - MySQLConnectionString=${MySQLConnectionString}
