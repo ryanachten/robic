@@ -22,8 +22,8 @@ Content-Disposition: attachment; filename="userdata.txt"
 
 # Startup script for Linux:
 # - Installs Docker
-# - Pulls server Docker image
-# - Runs the Docker container
+# - Pulls Robic repository
+# - Runs the Docker Compose
 
 # Update and install Docker
 sudo yum update -y
@@ -31,6 +31,12 @@ sudo yum install -y docker
 sudo service docker start
 sudo usermod -a -G docker ec2-user # ec2-user is the default username used for remote instance connect
 
-# Run Docker container
-docker pull ryanachten/robic:latest
-docker run -p 80:80 -e TokenKey="${token_key}" -e MySQLConnectionString="${connection_string}" ryanachten/robic
+# Install git and close robic
+sudo yum install -y git
+git clone https://github.com/ryanachten/robic.git
+cd /robic/api
+
+# Run Docker Compose
+TokenKey=${token_key}
+MySQLConnectionString=${connection_string}
+# docker compose up -f .\docker-compose.yml -f .\docker-compose.production.yml

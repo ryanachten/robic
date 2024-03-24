@@ -8,9 +8,16 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["18.206.107.24/29"] # IP for us-east-1 EC2_INSTANCE_CONNECT service as per https://ip-ranges.amazonaws.com/ip-ranges.json
   }
   ingress {
-    description = "Public Internet Ingress"
+    description = "Public HTTP Internet Ingress"
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "Public HTTPS Internet Ingress"
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

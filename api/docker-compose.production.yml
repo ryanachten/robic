@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+  robic.service:
+    environment:
+      - TokenKey=${TokenKey}
+      - MySQLConnectionString=${MySQLConnectionString}
