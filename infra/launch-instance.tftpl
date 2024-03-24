@@ -22,6 +22,7 @@ Content-Disposition: attachment; filename="userdata.txt"
 
 # Startup script for Linux:
 # - Installs Docker
+# - Installs Git
 # - Pulls Robic repository
 # - Runs the Docker Compose
 
@@ -31,12 +32,19 @@ sudo yum install -y docker
 sudo service docker start
 sudo usermod -a -G docker ec2-user # ec2-user is the default username used for remote instance connect
 
+# Install Docker Compose
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
 # Install git and close robic
 sudo yum install -y git
 git clone https://github.com/ryanachten/robic.git
 cd /robic/api
+sudo git config --global --add safe.directory /robic
+sudo git fetch origin
+sudo git checkout feature/https-nginx
 
 # Run Docker Compose
 TokenKey=${token_key}
 MySQLConnectionString=${connection_string}
-# docker compose up -f .\docker-compose.yml -f .\docker-compose.production.yml
+docker-compose -f ./docker-compose.yml -f ./docker-compose.production.yml up --detach

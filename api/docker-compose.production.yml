@@ -5,3 +5,7 @@ services:
     environment:
       - TokenKey=${TokenKey}
       - MySQLConnectionString=${MySQLConnectionString}
+  nginx:
+    ports:
+      - 80:80
+      - 80:443
