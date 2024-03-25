@@ -45,6 +45,6 @@ sudo git fetch origin
 sudo git checkout feature/https-nginx
 
 # Run Docker Compose
-TokenKey=${token_key}
-MySQLConnectionString=${connection_string}
+export TokenKey="${token_key}"
+export MySQLConnectionString="${connection_string}"
 docker-compose -f ./docker-compose.yml -f ./docker-compose.production.yml up --detach
