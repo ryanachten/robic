@@ -20,3 +20,8 @@ variable "mysql_database_name" {
   default     = "robic"
   type        = string
 }
+
+variable "domain_email_address" {
+  description = "Email address associated with the domain used for HTTPS"
+  type        = string
+}

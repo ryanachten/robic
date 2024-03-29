@@ -20,12 +20,6 @@ Content-Disposition: attachment; filename="userdata.txt"
 #! /bin/bash
 # The text preceding the shebang is a directive to ensure the user-data is relaunched when an EC2 container restarts.
 
-# Startup script for Linux:
-# - Installs Docker
-# - Installs Git
-# - Pulls Robic repository
-# - Runs the Docker Compose
-
 # Update and install Docker
 sudo yum update -y
 sudo yum install -y docker
@@ -44,7 +38,14 @@ sudo git config --global --add safe.directory /robic
 sudo git fetch origin
 sudo git checkout feature/https-nginx
 
-# Run Docker Compose
+# Run HTTP server Docker Compose
 export TokenKey="${token_key}"
 export MySQLConnectionString="${connection_string}"
-docker-compose -f ./docker-compose.yml -f ./docker-compose.production.yml up --detach
+docker-compose -f ./docker-compose.yml -f ./docker-compose.http.yml up --detach
+
+# Generate certificates
+docker-compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d robic-api.com --agree-tos --email ${domain_email_address} -n
+docker-compose -f ./docker-compose.yml -f ./docker-compose.https.yml up --detach
+
+# Run HTTPS server Docker Compose
+docker-compose -f ./docker-compose.yml -f ./docker-compose.https.yml up --detach

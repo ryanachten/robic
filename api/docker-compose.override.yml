@@ -9,3 +9,5 @@ services:
     ports:
       - 5000:80
       - 5001:443
+    volumes:
+      - ./nginx/conf/http/:/etc/nginx/conf.d/:ro

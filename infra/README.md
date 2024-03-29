@@ -8,6 +8,7 @@
 $env:TF_VAR_token_key="Token for signing JWT token"
 $env:TF_VAR_mysql_username="MySQL DB username"
 $env:TF_VAR_mysql_password="MySQL DB password"
+$env:TF_VAR_domain_email_address="Email address associated domain"
 ```
 
 - Assume role with AWS account credentials
