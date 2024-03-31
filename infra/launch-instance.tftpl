@@ -50,4 +50,4 @@ docker-compose -p robic -f ./docker-compose.yml -f ./docker-compose.http.yml up 
 docker-compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d robic-api.com --agree-tos --email ${domain_email_address} -n
 
 # Run HTTPS server Docker Compose
-# docker-compose -p robic -f ./docker-compose.yml -f ./docker-compose.https.yml up --detach
+docker-compose -p robic -f ./docker-compose.yml -f ./docker-compose.https.yml up --detach

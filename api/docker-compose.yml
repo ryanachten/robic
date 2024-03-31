@@ -18,6 +18,7 @@ services:
     image: certbot/certbot:latest
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
+      - certificates:/etc/letsencrypt/:rw
 volumes:
   certificates:
     driver: local

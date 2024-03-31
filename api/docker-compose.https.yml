@@ -9,5 +9,5 @@ services:
       - 443:443
     volumes:
       - ./nginx/conf/https/:/etc/nginx/conf.d/:ro
-      - certificates:/etc/letsencrypt/live/robic-api.com/
+      - certificates:/etc/nginx/ssl/:ro
       - ./certbot/www:/var/www/certbot/:ro
